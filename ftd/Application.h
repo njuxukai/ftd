@@ -26,6 +26,9 @@ namespace FTD
 	{
 	public:
 		virtual ~Application() {};
+
+		virtual void OnFtdcMessage(const std::string&, const SessionID&) {}
+
 		/// Notification of a session begin created
 		virtual void onCreate(const SessionID&) = 0;
 		/// Notification of a session successfully logging on
@@ -33,9 +36,9 @@ namespace FTD
 		/// Notification of a session logging off or disconnecting
 		virtual void onLogout(const SessionID&) = 0;
 		/// Notification of admin message being sent to target
-		virtual void toAdmin(Package&, const SessionID&) = 0;
+		virtual void toAdmin(std::string&, const SessionID&) = 0;
 		/// Notification of app message being sent to target
-		virtual void toApp(Package&, const SessionID&)
+		virtual void toApp(std::string&, const SessionID&)
 			throw(DoNotSend) = 0;
 		/// Notification of admin message being received from target
 		virtual void fromAdmin(const Package&, const SessionID&)
@@ -47,58 +50,6 @@ namespace FTD
 		virtual void onHeartBeat() = 0;
 	};
 
-	/**
-	* This is a special implementation of the Application interface that takes
-	* in another Application interface and synchronizes all of its callbacks. This
-	* will guarantee that only one thread will access the applications code at a time.
-	*
-	* This class is a great convenience for writing applications where you
-	* don't want to worry about synchronization. There is of course a tradeoff
-	* in that you may be synchronizing more than you need to. There is also a very
-	* minor performance penalty due to the extra virtual table lookup.
-	*/
-	class SynchronizedApplication : public Application
-	{
-	public:
-		SynchronizedApplication(Application& app) : m_app(app) {}
-
-		void onCreate(const SessionID& sessionID)
-		{
-			Locker l(m_mutex); app().onCreate(sessionID);
-		}
-		void onLogon(const SessionID& sessionID)
-		{
-			Locker l(m_mutex); app().onLogon(sessionID);
-		}
-		void onLogout(const SessionID& sessionID)
-		{
-			Locker l(m_mutex); app().onLogout(sessionID);
-		}
-		void toAdmin(Package& message, const SessionID& sessionID)
-		{
-			Locker l(m_mutex); app().toAdmin(message, sessionID);
-		}
-		void toApp(Package& message, const SessionID& sessionID)
-			throw(DoNotSend)
-		{
-			Locker l(m_mutex); app().toApp(message, sessionID);
-		}
-		void fromAdmin(const Package& message, const SessionID& sessionID)
-			throw(FieldNotFound, IncorrectDataFormat, IncorrectTagValue, RejectLogon)
-		{
-			Locker l(m_mutex); app().fromAdmin(message, sessionID);
-		}
-		void fromApp(const Package& message, const SessionID& sessionID)
-			throw(FieldNotFound, IncorrectDataFormat, IncorrectTagValue, UnsupportedMessageType)
-		{
-			Locker l(m_mutex); app().fromApp(message, sessionID);
-		}
-
-		Mutex m_mutex;
-
-		Application& app() { return m_app; }
-		Application& m_app;
-	};
 
 	/**
 	* An empty implementation of an Application. This can be used if you
