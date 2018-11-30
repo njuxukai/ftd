@@ -33,6 +33,7 @@
 #include "Utility.h"
 #include "Mutex.h"
 #include <set>
+#include "FTD20/Packages.h"
 
 namespace FTD
 {
@@ -91,6 +92,7 @@ private:
   char m_buffer[BUFSIZ];
 
   Parser m_parser;
+  PackageBuffer m_packageBuffer;
   Queue m_sendQueue;
   unsigned m_sendLength;
   Sessions m_sessions;

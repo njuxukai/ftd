@@ -140,8 +140,10 @@ bool SocketConnection::read( SocketAcceptor& a, SocketServer& s )
         else if( result < 0 )
           return false;
       }
-
-      m_pSession = Session::lookupSession( msg, true );
+	  Package* package = m_packageBuffer.OnFtdcMessage(msg);
+	  if (package == nullptr)
+		  return false;
+      m_pSession = Session::lookupSession( package );
       if( !isValidSession() )
       {
         m_pSession = 0;
@@ -154,7 +156,7 @@ bool SocketConnection::read( SocketAcceptor& a, SocketServer& s )
       if( m_pSession )
         m_pSession = a.getSession( msg, *this );
       if( m_pSession )
-        m_pSession->next( msg, UtcTimeStamp() );
+        m_pSession->next( *package, UtcTimeStamp() );
       if( !m_pSession )
       {
         s.getMonitor().drop( m_socket );
@@ -206,7 +208,7 @@ bool SocketConnection::readMessage( std::string& msg )
 {
   try
   {
-    return m_parser.readFixMessage( msg );
+    return m_parser.readFtdMessage( msg );
   }
   catch ( MessageParseError& ) {}
   return true;

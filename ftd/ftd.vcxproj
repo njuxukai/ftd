@@ -140,10 +140,12 @@ del /F EXCLUDE
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Acceptor.cpp" />
+    <ClCompile Include="Parser.cpp" />
     <ClCompile Include="Session.cpp" />
     <ClCompile Include="SessionFactory.cpp" />
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="SocketAcceptor.cpp" />
+    <ClCompile Include="SocketConnection.cpp" />
     <ClCompile Include="SocketMonitor.cpp" />
     <ClCompile Include="SocketServer.cpp" />
     <ClCompile Include="stdafx.cpp">

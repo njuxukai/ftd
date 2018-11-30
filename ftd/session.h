@@ -68,6 +68,7 @@ public:
 
   static std::set<SessionID> getSessions();
   static bool doesSessionExist( const SessionID& );
+  static Session* lookupSession(const Package* package);
   static Session* lookupSession( const SessionID& );
   static Session* lookupSession( const std::string&, bool reverse = false );
   static bool isSessionRegistered( const SessionID& );
