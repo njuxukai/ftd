@@ -33,6 +33,7 @@
 #include "Utility.h"
 #include "Mutex.h"
 #include <set>
+#include "FTD20/Packages.h"
 
 namespace FTD
 {
@@ -43,16 +44,17 @@ class SocketInitiator;
 class Session;
 
 /// Encapsulates a socket file descriptor (single-threaded).
-class SocketConnection : Responder
+class SocketConnection : public Responder
 {
 public:
   typedef std::set<SessionID> Sessions;
 
-  SocketConnection( int s, Sessions sessions, SocketMonitor* pMonitor );
+  SocketConnection( int s, Sessions sessions, SocketMonitor* pMonitor, bool isReceiveReq);
   SocketConnection( SocketInitiator&, const SessionID&, int, SocketMonitor* );
   virtual ~SocketConnection();
 
   int getSocket() const { return m_socket; }
+  void setSession(Session* session) { m_pSession = session; }
   Session* getSession() const { return m_pSession; }
 
   bool read( SocketConnector& s );
@@ -91,6 +93,7 @@ private:
   char m_buffer[BUFSIZ];
 
   Parser m_parser;
+  PackageBuffer m_packageBuffer;
   Queue m_sendQueue;
   unsigned m_sendLength;
   Sessions m_sessions;

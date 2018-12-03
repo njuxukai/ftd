@@ -27,7 +27,7 @@ namespace FTD
 {
 /// Unique session id consists of BeginString, SenderCompID and TargetCompID.
 	typedef int SessionID;
-
+	typedef int ClientID;
 }
 #endif //FTD_SESSIONID_H
 

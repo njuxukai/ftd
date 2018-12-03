@@ -15,6 +15,7 @@
 #include <utility>
 #include <map>
 #include <queue>
+#include <set>
 
 namespace FTD
 {
@@ -24,8 +25,8 @@ class Session
 public:
   Session( Application&, PackageStoreFactory&,
            const SessionID&,
-           int,
-           LogFactory* pLogFactory );
+           LogFactory* pLogFactory,
+	       bool receiveReq);
   virtual ~Session();
 
   void logon() 
@@ -53,7 +54,7 @@ public:
   const int& getSessionID() const
   { return m_sessionID; }
 
-
+  static SessionID allocateNextSessionID();
 
 
 
@@ -68,6 +69,7 @@ public:
 
   static std::set<SessionID> getSessions();
   static bool doesSessionExist( const SessionID& );
+  static Session* lookupSession(const Package* package);
   static Session* lookupSession( const SessionID& );
   static Session* lookupSession( const std::string&, bool reverse = false );
   static bool isSessionRegistered( const SessionID& );
@@ -105,6 +107,7 @@ public:
   void next( const UtcTimeStamp& timeStamp );
   void next( const std::string&, const UtcTimeStamp& timeStamp, bool queued = false );
   void next( const Package&, const UtcTimeStamp& timeStamp, bool queued = false );
+  bool send(const std::string & string);
   void disconnect();
 
 
@@ -133,7 +136,7 @@ private:
   LogFactory* m_pLogFactory;
   Responder* m_pResponder;
   Mutex m_mutex;
-
+  bool m_receiveReq;
   static Sessions s_sessions;
   static SessionIDs s_sessionIDs;
   static Sessions s_registered;

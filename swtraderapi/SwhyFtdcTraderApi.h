@@ -44,6 +44,7 @@ public:
 	///@param pSpi 派生自回调接口类的实例
 	virtual void RegisterSpi(CSwhyFtdcTraderSpi *pSpi) = 0;
 
+	virtual void RegisterFront(const char* frontAddr) = 0;
 
 	virtual void SubscribePrivateTopic() = 0;
 

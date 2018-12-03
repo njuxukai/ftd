@@ -32,15 +32,18 @@
 
 namespace FTD
 {
+
 SocketConnection::SocketConnection( int s, Sessions sessions,
-                                    SocketMonitor* pMonitor )
+                                    SocketMonitor* pMonitor,
+	bool isReceiveReq)
 : m_socket( s ), m_sendLength( 0 ),
-  m_sessions(sessions), m_pSession( 0 ), m_pMonitor( pMonitor )
+  m_sessions(sessions), m_pSession( 0 ), m_pMonitor( pMonitor ),m_packageBuffer(PackageBuffer(isReceiveReq))
 {
   FD_ZERO( &m_fds );
   FD_SET( m_socket, &m_fds );
 }
 
+/*
 SocketConnection::SocketConnection( SocketInitiator& i,
                                     const SessionID& sessionID, int s,
                                     SocketMonitor* pMonitor )
@@ -52,6 +55,7 @@ SocketConnection::SocketConnection( SocketInitiator& i,
   FD_SET( m_socket, &m_fds );
   m_sessions.insert( sessionID );
 }
+*/
 
 SocketConnection::~SocketConnection()
 {
@@ -140,10 +144,13 @@ bool SocketConnection::read( SocketAcceptor& a, SocketServer& s )
         else if( result < 0 )
           return false;
       }
-
-      m_pSession = Session::lookupSession( msg, true );
+	  Package* package = m_packageBuffer.OnFtdcMessage(msg);
+	  if (package == nullptr)
+		  return false;
+      //m_pSession = a.lookupSession( m_socket );
       if( !isValidSession() )
       {
+		//memory leaking?
         m_pSession = 0;
         if( a.getLog() )
         {
@@ -151,10 +158,12 @@ bool SocketConnection::read( SocketAcceptor& a, SocketServer& s )
           a.getLog()->onIncoming( msg );
         }
       }
+	  /*
+	  if( m_pSession)
+	  m_pSession = a.getSession( *package, *this );
+	  */      
       if( m_pSession )
-        m_pSession = a.getSession( msg, *this );
-      if( m_pSession )
-        m_pSession->next( msg, UtcTimeStamp() );
+        m_pSession->next( *package, UtcTimeStamp() );
       if( !m_pSession )
       {
         s.getMonitor().drop( m_socket );
@@ -206,7 +215,7 @@ bool SocketConnection::readMessage( std::string& msg )
 {
   try
   {
-    return m_parser.readFixMessage( msg );
+    return m_parser.readFtdMessage( msg );
   }
   catch ( MessageParseError& ) {}
   return true;

@@ -25,7 +25,6 @@
 
 #include "Utility.h"
 #include "SessionFactory.h"
-#include "SessionSetting.h"
 #include "Session.h"
 
 #include <memory>
@@ -38,10 +37,10 @@ SessionFactory::~SessionFactory()
 
 Session* SessionFactory::create( const SessionID& sessionID,
 							     const Dictionary& settings,
-                                 const int& socket ) throw( ConfigError )
+	bool receiveReq) throw( ConfigError )
 {
   return new Session(m_application, m_packageStoreFactory,
-    sessionID,  socket, m_pLogFactory );
+    sessionID, m_pLogFactory, receiveReq );
 }
 
 void SessionFactory::destroy( Session* pSession )
