@@ -33,13 +33,13 @@ namespace FTD
 {
 SocketAcceptor::SocketAcceptor( Application& application,
                                 PackageStoreFactory& factory,
-                                const SessionSettings& settings ) throw( ConfigError )
+                                const PortSettings& settings ) throw( ConfigError )
 : Acceptor( application, factory, settings ),
   m_pServer( 0 ) {}
 
 SocketAcceptor::SocketAcceptor( Application& application,
 	PackageStoreFactory& factory,
-                                const SessionSettings& settings,
+                                const PortSettings& settings,
                                 LogFactory& logFactory ) throw( ConfigError )
 : Acceptor( application, factory, settings, logFactory ),
   m_pServer( 0 ) 
@@ -53,12 +53,12 @@ SocketAcceptor::~SocketAcceptor()
     delete iter->second;
 }
 
-void SocketAcceptor::onConfigure( const SessionSettings& s )
+void SocketAcceptor::onConfigure( const PortSettings& s )
 throw ( ConfigError )
 {
-  std::set<SessionID> sessions = s.getSessions();
-  std::set<SessionID>::iterator i;
-  for( i = sessions.begin(); i != sessions.end(); ++i )
+  std::set<int> ports = s.getPorts();
+  std::set<int>::iterator i;
+  for( i = ports.begin(); i != ports.end(); ++i )
   {
     const Dictionary& settings = s.get( *i );
     settings.getInt( SOCKET_ACCEPT_PORT );
@@ -69,7 +69,7 @@ throw ( ConfigError )
   }
 }
 
-void SocketAcceptor::onInitialize( const SessionSettings& s )
+void SocketAcceptor::onInitialize( const PortSettings& s )
 throw ( RuntimeError )
 {
   short port = 0;
@@ -78,9 +78,9 @@ throw ( RuntimeError )
   {
     m_pServer = new SocketServer( 1 );
 
-    std::set<SessionID> sessions = s.getSessions();
-    std::set<SessionID>::iterator i = sessions.begin();
-    for( ; i != sessions.end(); ++i )
+    std::set<int> ports = s.getPorts();
+    std::set<int>::iterator i = ports.begin();
+    for( ; i != ports.end(); ++i )
     {
       const Dictionary& settings = s.get( *i );
       port = (short)settings.getInt( SOCKET_ACCEPT_PORT );
@@ -97,7 +97,7 @@ throw ( RuntimeError )
       const int rcvBufSize = settings.has( SOCKET_RECEIVE_BUFFER_SIZE ) ?
         settings.getInt( SOCKET_RECEIVE_BUFFER_SIZE ) : 0;
 
-      m_portToSessions[port].insert( *i );
+	  m_portToSessions[*i] = Sessions();
       m_pServer->add( port, reuseAddress, noDelay, sendBufSize, rcvBufSize );      
     }    
   }
@@ -169,9 +169,21 @@ void SocketAcceptor::onConnect( SocketServer& server, int a, int s )
   SocketConnections::iterator i = m_connections.find( s );
   if ( i != m_connections.end() ) return;
   int port = server.socketToPort( a );
+  /*
+  TODO
+  socketConnection 
+  session ÐÂ½¨
+  */
+  SessionID id = allocateNextSessionID();
+  Dictionary settings = m_setting.get(port);
   Sessions sessions = m_portToSessions[port];
+  Session* pSession = createSession(id, settings);
+  if (!pSession)
+  {
+	  return;
+  }
   m_connections[ s ] = new SocketConnection( s, sessions, &server.getMonitor() );
-
+  m_socketSessionIDMap[s] = id;
   std::stringstream stream;
   stream << "Accepted connection from " << socket_peername( s ) << " on port " << port;
 

@@ -17,21 +17,22 @@ class SocketAcceptor : public Acceptor, SocketServer::Strategy
   friend class SocketConnection;
 public:
   SocketAcceptor( Application&, PackageStoreFactory&,
-                  const SessionSettings& ) throw( ConfigError );
+                  const PortSettings& ) throw( ConfigError );
   SocketAcceptor( Application&, PackageStoreFactory&,
-                  const SessionSettings&, LogFactory& ) throw( ConfigError );
+                  const PortSettings&, LogFactory& ) throw( ConfigError );
 
   virtual ~SocketAcceptor();
 
 private:
-  bool readSettings( const SessionSettings& );
+  bool readSettings( const PortSettings& );
 
   typedef std::set < SessionID > Sessions;
   typedef std::map < int, Sessions > PortToSessions;
   typedef std::map < int, SocketConnection* > SocketConnections;
-
-  void onConfigure( const SessionSettings& ) throw ( ConfigError );
-  void onInitialize( const SessionSettings& ) throw ( RuntimeError );
+  typedef std::map < int, SessionID> SocketSessionIDMap;
+  typedef std::map <ClientID, Sessions> ClientIDToSessions;
+  void onConfigure( const PortSettings& ) throw ( ConfigError );
+  void onInitialize( const PortSettings& ) throw ( RuntimeError );
 
   void onStart();
   bool onPoll( double timeout );
@@ -47,6 +48,8 @@ private:
   SocketServer* m_pServer;
   PortToSessions m_portToSessions;
   SocketConnections m_connections;
+  ClientIDToSessions m_clientIDToSessions;
+  SocketSessionIDMap m_socketSessionIDMap;
 };
 /*! @} */
 }

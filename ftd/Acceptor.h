@@ -30,8 +30,9 @@
 #include "PackageStore.h"
 #include "Log.h"
 #include "Responder.h"
-#include "SessionSetting.h"
+#include "PortSettings.h"
 #include "Exceptions.h"
+#include "SessionFactory.h"
 #include <map>
 #include <string>
 
@@ -50,9 +51,9 @@ namespace FTD
 	{
 	public:
 		Acceptor(Application&, PackageStoreFactory&,
-			const SessionSetting&) throw(ConfigError);
+			const PortSettings&) throw(ConfigError);
 		Acceptor(Application&, PackageStoreFactory&,
-			const SessionSetting&, LogFactory&) throw(ConfigError);
+			const PortSettings&, LogFactory&) throw(ConfigError);
 
 		virtual ~Acceptor();
 
@@ -75,11 +76,11 @@ namespace FTD
 		/// Check to see if any sessions are currently logged on
 		bool isLoggedOn();
 
-		Session* getSession(const std::string& msg, Responder&);
+		Session* getSession(const Package& msg, Responder&);
 
 		const std::set<SessionID>& getSessions() const { return m_sessionIDs; }
 		Session* getSession(const SessionID& sessionID) const;
-		const Dictionary* const getSessionSettings(const SessionID& sessionID) const;
+		const Dictionary* const getPortSettings(const int& port) const;
 
 		bool has(const SessionID& id)
 		{
@@ -93,15 +94,16 @@ namespace FTD
 		{
 			return m_packageStoreFactory;
 		}
-
+	protected:
+		///fix:initialize create all sessions ftd:a new socket accepted,new session created
+		Session* createSession(const SessionID& id, const Dictionary& settings);
+		int allocateNextSessionID();
 	private:
 		void initialize() throw (ConfigError);
-		///fix:initialize create all sessions ftd:a new socket accepted,new session created
-		void createSession(const SessionID& id, const int& socket);
 		/// Implemented to configure acceptor
-		virtual void onConfigure(const SessionSetting&) throw (ConfigError) {};
+		virtual void onConfigure(const PortSettings&) throw (ConfigError) {};
 		/// Implemented to initialize acceptor
-		virtual void onInitialize(const SessionSetting&) throw (RuntimeError) {};
+		virtual void onInitialize(const PortSettings&) throw (RuntimeError) {};
 		/// Implemented to start listening for connections.
 		virtual void onStart() = 0;
 		/// Implemented to connect and poll for events.
@@ -120,13 +122,14 @@ namespace FTD
 		Application& m_application;
 		PackageStoreFactory& m_packageStoreFactory;
 	protected:
-		SessionSetting m_setting;
+		PortSettings m_setting;
 	private:
 		LogFactory* m_pLogFactory;
 		Log* m_pLog;
 		NullLog m_nullLog;
 		bool m_firstPoll;
 		bool m_stop;
+		SessionFactory* m_sessionFactory;
 	};
 	/*! @} */
 }

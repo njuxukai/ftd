@@ -34,7 +34,7 @@ namespace FTD
 {
 Acceptor::Acceptor( Application& application,
                     PackageStoreFactory& packageStoreFactory,
-                    const SessionSetting& setting )
+                    const PortSettings& setting )
 throw( ConfigError )
   : m_threadid( 0 ),
   m_application( application ),
@@ -50,7 +50,7 @@ throw( ConfigError )
 
 Acceptor::Acceptor( Application& application,
 					PackageStoreFactory& packageStoreFactory,
-                    const SessionSetting& setting,
+                    const PortSettings& setting,
                     LogFactory& logFactory )
 throw( ConfigError )
 : m_threadid( 0 ),
@@ -89,6 +89,7 @@ void Acceptor::initialize() throw ( ConfigError )
   if ( !m_sessions.size() )
   throw ConfigError( "No sessions defined for acceptor" );
   */
+	m_sessionFactory = new SessionFactory(m_application, m_packageStoreFactory, m_pLogFactory);
   
 }
 
@@ -100,6 +101,10 @@ Acceptor::~Acceptor()
 
   if( m_pLogFactory && m_pLog )
     m_pLogFactory->destroy( m_pLog );
+
+  if (m_sessionFactory)
+	  delete m_sessionFactory;
+  m_sessionFactory = nullptr;
 }
 
 /*
@@ -113,6 +118,28 @@ Session* Acceptor::getSession( const SessionID& sessionID ) const
 }
 
 */
+
+Session* Acceptor::createSession(const SessionID& id, const Dictionary& settings)
+{
+	if (!m_sessionFactory)
+		return nullptr;
+	Session* pSession = m_sessionFactory->create(id, settings);
+	m_sessions[id] = pSession;
+	m_sessionIDs.insert(id);
+	return pSession;
+}
+
+///效率不高
+int Acceptor::allocateNextSessionID()
+{
+	int nextSessionID = 1;
+	for (auto it = m_sessionIDs.begin(); it != m_sessionIDs.end(); it++)
+	{
+		if (*it >= nextSessionID)
+			nextSessionID = *it + 1;
+	}
+	return nextSessionID;
+}
 
 void Acceptor::start() throw ( ConfigError, RuntimeError )
 {

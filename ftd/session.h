@@ -24,7 +24,6 @@ class Session
 public:
   Session( Application&, PackageStoreFactory&,
            const SessionID&,
-           int,
            LogFactory* pLogFactory );
   virtual ~Session();
 
