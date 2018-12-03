@@ -27,7 +27,7 @@ namespace FTD
 	public:
 		virtual ~Application() {};
 
-		virtual void OnFtdcMessage(const std::string&, const SessionID&) {}
+		virtual void onFtdcMessage(const std::string&, const SessionID&) {}
 
 		/// Notification of a session begin created
 		virtual void onCreate(const SessionID&) = 0;

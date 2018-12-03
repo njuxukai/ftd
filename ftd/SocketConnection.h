@@ -44,7 +44,7 @@ class SocketInitiator;
 class Session;
 
 /// Encapsulates a socket file descriptor (single-threaded).
-class SocketConnection : Responder
+class SocketConnection : public Responder
 {
 public:
   typedef std::set<SessionID> Sessions;
@@ -54,6 +54,7 @@ public:
   virtual ~SocketConnection();
 
   int getSocket() const { return m_socket; }
+  void setSession(Session* session) { m_pSession = session; }
   Session* getSession() const { return m_pSession; }
 
   bool read( SocketConnector& s );

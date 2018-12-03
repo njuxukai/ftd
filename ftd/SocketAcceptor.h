@@ -22,7 +22,7 @@ public:
                   const PortSettings&, LogFactory& ) throw( ConfigError );
 
   virtual ~SocketAcceptor();
-
+  Session* lookupSession(int socket);
 private:
   bool readSettings( const PortSettings& );
 
@@ -49,7 +49,6 @@ private:
   PortToSessions m_portToSessions;
   SocketConnections m_connections;
   ClientIDToSessions m_clientIDToSessions;
-  SocketSessionIDMap m_socketSessionIDMap;
 };
 /*! @} */
 }

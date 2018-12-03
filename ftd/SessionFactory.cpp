@@ -36,10 +36,11 @@ SessionFactory::~SessionFactory()
 }
 
 Session* SessionFactory::create( const SessionID& sessionID,
-							     const Dictionary& settings) throw( ConfigError )
+							     const Dictionary& settings,
+	bool receiveReq) throw( ConfigError )
 {
   return new Session(m_application, m_packageStoreFactory,
-    sessionID, m_pLogFactory );
+    sessionID, m_pLogFactory, receiveReq );
 }
 
 void SessionFactory::destroy( Session* pSession )

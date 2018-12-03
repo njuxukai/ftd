@@ -147,9 +147,10 @@ bool SocketConnection::read( SocketAcceptor& a, SocketServer& s )
 	  Package* package = m_packageBuffer.OnFtdcMessage(msg);
 	  if (package == nullptr)
 		  return false;
-      m_pSession = Session::lookupSession( package );
+      //m_pSession = a.lookupSession( m_socket );
       if( !isValidSession() )
       {
+		//memory leaking?
         m_pSession = 0;
         if( a.getLog() )
         {
@@ -157,8 +158,10 @@ bool SocketConnection::read( SocketAcceptor& a, SocketServer& s )
           a.getLog()->onIncoming( msg );
         }
       }
-      if( m_pSession )
-        m_pSession = a.getSession( msg, *this );
+	  /*
+	  if( m_pSession)
+	  m_pSession = a.getSession( *package, *this );
+	  */      
       if( m_pSession )
         m_pSession->next( *package, UtcTimeStamp() );
       if( !m_pSession )

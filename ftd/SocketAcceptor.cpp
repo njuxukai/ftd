@@ -182,8 +182,12 @@ void SocketAcceptor::onConnect( SocketServer& server, int a, int s )
   {
 	  return;
   }
-  m_connections[ s ] = new SocketConnection( s, sessions, &server.getMonitor() );
-  m_socketSessionIDMap[s] = id;
+   
+  SocketConnection *pSocketConnection = new SocketConnection( s, sessions, &server.getMonitor(), true);
+  m_connections[s] = pSocketConnection;
+  pSession->setResponder(pSocketConnection);
+  pSocketConnection->setSession(pSession);
+
   std::stringstream stream;
   stream << "Accepted connection from " << socket_peername( s ) << " on port " << port;
 
