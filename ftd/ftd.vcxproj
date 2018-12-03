@@ -170,6 +170,7 @@ del /F EXCLUDE
     <ClInclude Include="SessionState.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="SocketAcceptor.h" />
+    <ClInclude Include="SocketConnection.h" />
     <ClInclude Include="SocketInitiator.h" />
     <ClInclude Include="SocketMonitor.h" />
     <ClInclude Include="SocketServer.h" />

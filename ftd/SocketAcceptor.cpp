@@ -174,7 +174,7 @@ void SocketAcceptor::onConnect( SocketServer& server, int a, int s )
   socketConnection 
   session ÐÂ½¨
   */
-  SessionID id = allocateNextSessionID();
+  SessionID id = Session::allocateNextSessionID();
   Dictionary settings = m_setting.get(port);
   Sessions sessions = m_portToSessions[port];
   Session* pSession = createSession(id, settings);

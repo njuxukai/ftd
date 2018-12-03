@@ -130,6 +130,7 @@ Session* Acceptor::createSession(const SessionID& id, const Dictionary& settings
 }
 
 ///效率不高
+/*
 int Acceptor::allocateNextSessionID()
 {
 	int nextSessionID = 1;
@@ -140,6 +141,7 @@ int Acceptor::allocateNextSessionID()
 	}
 	return nextSessionID;
 }
+*/
 
 void Acceptor::start() throw ( ConfigError, RuntimeError )
 {

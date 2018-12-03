@@ -52,7 +52,7 @@ public:
   const int& getSessionID() const
   { return m_sessionID; }
 
-
+  static SessionID allocateNextSessionID();
 
 
 

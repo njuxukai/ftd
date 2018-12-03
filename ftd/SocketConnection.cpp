@@ -32,15 +32,18 @@
 
 namespace FTD
 {
+
 SocketConnection::SocketConnection( int s, Sessions sessions,
-                                    SocketMonitor* pMonitor )
+                                    SocketMonitor* pMonitor,
+	bool isReceiveReq)
 : m_socket( s ), m_sendLength( 0 ),
-  m_sessions(sessions), m_pSession( 0 ), m_pMonitor( pMonitor )
+  m_sessions(sessions), m_pSession( 0 ), m_pMonitor( pMonitor ),m_packageBuffer(PackageBuffer(isReceiveReq))
 {
   FD_ZERO( &m_fds );
   FD_SET( m_socket, &m_fds );
 }
 
+/*
 SocketConnection::SocketConnection( SocketInitiator& i,
                                     const SessionID& sessionID, int s,
                                     SocketMonitor* pMonitor )
@@ -52,6 +55,7 @@ SocketConnection::SocketConnection( SocketInitiator& i,
   FD_SET( m_socket, &m_fds );
   m_sessions.insert( sessionID );
 }
+*/
 
 SocketConnection::~SocketConnection()
 {
