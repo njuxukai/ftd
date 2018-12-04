@@ -208,6 +208,7 @@ private:
   bool m_enabled;
   bool m_receivedLogon;
   bool m_sentLogout;
+  
   bool m_sentLogon;
   bool m_sentReset;
   bool m_receivedReset;
@@ -225,6 +226,27 @@ private:
   Log* m_pLog;
   NullLog m_nullLog;
   mutable Mutex m_mutex;
+
+  bool m_receivedPrivateLogon;
+  bool m_receivedDialogLogon;
+  bool m_receivedBoardcastLogon;
+  bool m_sentPrivateLogon;
+  bool m_sentDialogLogon;
+  bool m_sentBoardcastLogon;
+  bool m_receivedPrivateLogout;
+  bool m_receivedDialogLogout;
+  bool m_receivedBoardcastLogout;
+  bool m_sentPrivateLogout;
+  bool m_sentDialogLogout;
+  bool m_sentBoardcastLogout;
+
+  int m_clientID;
+  int m_nextPrivateSendSequenceNum;
+  int m_nextPrivateReceiveSequenceNum;
+  int m_nextDialogSendSequenceNum;
+  int m_nextDialogReceiveSequenceNum;
+  int m_nextBoardcastSendSequenceNum;
+  int m_nextBoardcastReceiveSequenceNum;
 };
 }
 

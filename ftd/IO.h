@@ -4,41 +4,41 @@
 #include "Utility.h"
 #include "ftd.h"
 
-int readUInt32(const char* buffer, uint32_t& result)
+static int readUInt32(const char* buffer, uint32_t& result)
 {
 	memcpy(&result, buffer, 4);
 	result = ntohl(result);
 	return 4;
 }
 
-int readInt32(const char* buffer, int32_t& result)
+static int readInt32(const char* buffer, int32_t& result)
 {
 	memcpy(&result, buffer, 4);
 	result = ntohl(result);
 	return 4;
 }
 
-int readUInt16(const char* buffer, uint16_t & result)
+static int readUInt16(const char* buffer, uint16_t & result)
 {
 	memcpy(&result, buffer, 2);
 	result = ntohs(result);
 	return 2;
 }
 
-int readInt16(const char* buffer, int16_t & result)
+static int readInt16(const char* buffer, int16_t & result)
 {
 	memcpy(&result, buffer, 2);
 	result = ntohs(result);
 	return 2;
 }
 
-int readChar(const char* buffer, char& result)
+static int readChar(const char* buffer, char& result)
 {
 	memcpy(&result, buffer, 1);
 	return 1;
 }
 
-int readUInt8(const char* buffer, uint8_t& result)
+static int readUInt8(const char* buffer, uint8_t& result)
 {
 	memcpy(&result, buffer, 1);
 	return 1;
@@ -46,48 +46,48 @@ int readUInt8(const char* buffer, uint8_t& result)
 }
 
 
-int writeUInt32(const uint32_t& result, char* buffer)
+static int writeUInt32(const uint32_t& result, char* buffer)
 {
 	uint32_t nvalue = htonl(result);
 	memcpy(buffer, &nvalue, 4);
 	return 4;
 }
 
-int writeInt32(const int32_t& result, char* buffer)
+static int writeInt32(const int32_t& result, char* buffer)
 {
 	int32_t nvalue = htonl(result);
 	memcpy(buffer, &nvalue, 4);
 	return 4;
 }
 
-int writeUInt16(const uint16_t & result, char* buffer)
+static int writeUInt16(const uint16_t & result, char* buffer)
 {
 	uint16_t nvalue = htons(result);
 	memcpy(buffer, &nvalue, 2);
 	return 2;
 }
 
-int writeInt16(const int16_t & result, char* buffer)
+static int writeInt16(const int16_t & result, char* buffer)
 {
 	int16_t nvalue = htons(result);
 	memcpy(buffer, &nvalue, 2);
 	return 2;
 }
 
-int writeChar(const char& result, char* buffer)
+static int writeChar(const char& result, char* buffer)
 {
 	memcpy(buffer, &result, 1);
 	return 1;
 }
 
-int writeUInt8(const uint8_t& result, char* buffer)
+static int writeUInt8(const uint8_t& result, char* buffer)
 {
 	memcpy(buffer, &result, 1);
 	return 1;
 
 }
 
-int readFtdHeader(const char* buffer, FtdHeader& header)
+static int readFtdHeader(const char* buffer, FtdHeader& header)
 {
 	int readLen = 0;
 
@@ -104,7 +104,7 @@ int readFtdHeader(const char* buffer, FtdHeader& header)
 }
 
 
-int readFtdcHeader(const char* buffer, FtdcHeader& header)
+static int readFtdcHeader(const char* buffer, FtdcHeader& header)
 {
 	int readLen = 0;
 	const char* pos = buffer;
@@ -131,7 +131,7 @@ int readFtdcHeader(const char* buffer, FtdcHeader& header)
 	return readLen;
 }
 
-int readFtdcFieldHeader(const char* buffer, FtdcFieldHeader& header)
+static int readFtdcFieldHeader(const char* buffer, FtdcFieldHeader& header)
 {
 	int readLen = 0;
 	const char* pos = buffer;
@@ -142,7 +142,7 @@ int readFtdcFieldHeader(const char* buffer, FtdcFieldHeader& header)
 	return readLen;
 }
 
-int writeFtdcHeader(const FtdcHeader& header, char* buffer)
+static int writeFtdcHeader(const FtdcHeader& header, char* buffer)
 {
 	int writeLen = 0;
 
@@ -170,7 +170,7 @@ int writeFtdcHeader(const FtdcHeader& header, char* buffer)
 	return writeLen;
 }
 
-int writeFtdcFieldHeader(const FtdcFieldHeader& header, char* buffer)
+static int writeFtdcFieldHeader(const FtdcFieldHeader& header, char* buffer)
 {
 	int writeLen = 0;
 	char* pos = buffer;

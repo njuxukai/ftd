@@ -82,9 +82,9 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\include;</AdditionalIncludeDirectories>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <AdditionalIncludeDirectories>$(SolutionDir)\include\ftd;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderOutputFile>.\Debug/ftd.pch</PrecompiledHeaderOutputFile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -141,7 +141,10 @@ del /F EXCLUDE
   <ItemGroup>
     <ClCompile Include="Acceptor.cpp" />
     <ClCompile Include="Parser.cpp" />
-    <ClCompile Include="Session.cpp" />
+    <ClCompile Include="Session.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="SessionFactory.cpp" />
     <ClCompile Include="PortSettings.cpp" />
     <ClCompile Include="Settings.cpp" />
@@ -160,8 +163,8 @@ del /F EXCLUDE
     <ClInclude Include="Acceptor.h" />
     <ClInclude Include="ftd.h" />
     <ClInclude Include="ID.h" />
-    <ClInclude Include="Initiator.h" />
     <ClInclude Include="IO.h" />
+    <ClInclude Include="package.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="session.h" />
     <ClInclude Include="SessionFactory.h" />
@@ -171,7 +174,6 @@ del /F EXCLUDE
     <ClInclude Include="Settings.h" />
     <ClInclude Include="SocketAcceptor.h" />
     <ClInclude Include="SocketConnection.h" />
-    <ClInclude Include="SocketInitiator.h" />
     <ClInclude Include="SocketMonitor.h" />
     <ClInclude Include="SocketServer.h" />
     <ClInclude Include="stdafx.h" />

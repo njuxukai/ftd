@@ -30,7 +30,7 @@
 #include "PackageStore.h"
 #include "Log.h"
 #include "Responder.h"
-#include "SessionSetting.h"
+#include "PortSettings.h"
 #include "Exceptions.h"
 #include "Mutex.h"
 #include "Session.h"

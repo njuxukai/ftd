@@ -54,9 +54,18 @@ struct FtdExt
 
 };
 
-#define DIALOG 0
-#define PRIVATE 1
-#define BROADCAST 2
+#define SEQ_SERIES_DIALOG 0
+#define SEQ_SERIES_PRIVATE 1
+#define SEQ_SERIES_BROADCAST 2
+
+#define FTD_MODE_NONE 0x10
+#define FTD_MODE_NONE_REQUEST 0x11
+#define FTD_MODE_NONE_RESPONSE 0x12
+#define FTD_MODE_DIALOG 0x20
+#define FTD_MODE_DIALOG_REQUEST 0x21
+#define FTD_MODE_DIALOG_RESPONSE 0x22
+#define FTD_MODE_PRIVATE 0x30
+#define FTD_MODE_BROADCAST 0x40
 
 struct FtdcHeader
 {

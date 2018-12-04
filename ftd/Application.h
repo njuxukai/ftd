@@ -27,8 +27,6 @@ namespace FTD
 	public:
 		virtual ~Application() {};
 
-		virtual void onFtdcMessage(const std::string&, const SessionID&) {}
-
 		/// Notification of a session begin created
 		virtual void onCreate(const SessionID&) = 0;
 		/// Notification of a session successfully logging on
@@ -36,9 +34,9 @@ namespace FTD
 		/// Notification of a session logging off or disconnecting
 		virtual void onLogout(const SessionID&) = 0;
 		/// Notification of admin message being sent to target
-		virtual void toAdmin(std::string&, const SessionID&) = 0;
+		virtual void toAdmin(Package&, const SessionID&) = 0;
 		/// Notification of app message being sent to target
-		virtual void toApp(std::string&, const SessionID&)
+		virtual void toApp(Package&, const SessionID&)
 			throw(DoNotSend) = 0;
 		/// Notification of admin message being received from target
 		virtual void fromAdmin(const Package&, const SessionID&)

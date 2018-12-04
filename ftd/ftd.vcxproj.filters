@@ -18,48 +18,93 @@
     <ClInclude Include="ftd.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="session.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Acceptor.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Exceptions.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="FTDDataTypes.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Parser.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Utility.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="FTDProperties.h">
+    <ClInclude Include="ID.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="FTD20\FTDProperties.h">
+    <ClInclude Include="IO.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="FTDFields.h">
+    <ClInclude Include="session.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="FTD20\FTDFields.h">
+    <ClInclude Include="SessionID.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="FTD20\BulletinField.h">
+    <ClInclude Include="SessionState.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Acceptor.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SocketAcceptor.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SocketServer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Settings.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SocketMonitor.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="PortSettings.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SessionFactory.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SocketConnection.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="package.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Parser.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Utility.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Session.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SessionFactory.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SocketServer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SocketAcceptor.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Acceptor.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Settings.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SocketMonitor.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SocketConnection.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Parser.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="PortSettings.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

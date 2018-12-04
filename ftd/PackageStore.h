@@ -29,6 +29,7 @@
 #include "Package.h"
 #include "SessionID.h"
 #include "FixTypes.h"
+#include "Exceptions.h"
 #include <map>
 #include <vector>
 #include <string>
@@ -72,7 +73,7 @@ public:
   virtual ~PackageStore() {}
 
   virtual bool set( int, const std::string& )
-  throw ( IOException ) = 0;
+  = 0;
   virtual void get( int, int, std::vector < std::string > & ) const
   throw ( IOException ) = 0;
 

@@ -293,9 +293,9 @@ else"""
             d['judge_expression'] = ''
         else:
             if package.name.startswith('Req'):
-                d['judge_expression'] = ' && package.m_mode == '+ package.model.upper() + '_REQUEST'
+                d['judge_expression'] = ' && package.m_mode == '+ 'FTD_MODE_' + package.model.upper() + '_REQUEST'
             else:
-                d['judge_expression'] = ' && package.m_mode == ' + package.model.upper() + '_RESPONSE'
+                d['judge_expression'] = ' && package.m_mode == ' + 'FTD_MODE_' + package.model.upper() + '_RESPONSE'
         if_else_sections.append(if_else_section_template.format_map(d))
         const_if_else_sections.append(const_if_else_section_template.format_map(d))
 

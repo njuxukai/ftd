@@ -2,7 +2,7 @@
 import os
 
 path = '../spec/'
-target_path = '../ftd/'
+target_path = '../include/ftd/'
 files = ['ftd_2_0.xml',]
 
 import gen_type_df

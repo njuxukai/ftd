@@ -12,30 +12,31 @@ Version={version}
 
 namespace FTD
 {{
+class SessionID;
 {class_pre_def}
 
 class PackageCracker
 {{
 public:
     virtual ~PackageCracker() {{}}
-	virtual void onPackage(const Package&, const FTD::Session&)
+	virtual void onPackage(const Package&, const FTD::SessionID&)
 	{{
 		throw FTD::UnsupportedMessageType();
 	}}
-	virtual void OnPackage(Package&, const FTD::Session&)
+	virtual void OnPackage(Package&, const FTD::SessionID&)
 	{{
 		throw FTD::UnsupportedMessageType();
 	}}
 {default_on_const_package_section}
 {default_on_package_section}
 
-	void crack(const Package& package, const SessionID& id)
+	void crack(const Package& package, const SessionID& sessionID)
 	{{
 {const_if_else_sections}		
-		    onPackage(message, sessionID);	
+		    onPackage(package, sessionID);	
 	}}
 
-	void crack(Package& package, const SessionID& id)
+	void crack(Package& package, const SessionID& sessionID)
 	{{
 {if_else_sections}
 		    OnPackage(package, sessionID);

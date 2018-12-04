@@ -103,11 +103,12 @@ public:
   }
 
   bool send( Package& );
+  
   void next();
   void next( const UtcTimeStamp& timeStamp );
   void next( const std::string&, const UtcTimeStamp& timeStamp, bool queued = false );
   void next( const Package&, const UtcTimeStamp& timeStamp, bool queued = false );
-  bool send(const std::string & string);
+  
   void disconnect();
 
 
@@ -122,6 +123,8 @@ private:
   static bool addSession( Session& );
   static void removeSession( Session& );
 
+  bool sendRaw(Package& package, int num);
+  bool send(const std::string & string);
 
 
   Package * newPackage(int transaction_id) const;

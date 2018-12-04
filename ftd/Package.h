@@ -68,6 +68,26 @@ namespace FTD
 			std::string ftdcContent(ftdcBegin, header.contentLength);
 			return mergeFtdcMessage(header, ftdcContent);
 		}
+		
+		bool isPrivteMode()const
+		{
+			return (m_mode & FTD_MODE_PRIVATE) == FTD_MODE_PRIVATE;
+		}
+
+		bool isBoardcastMode()const
+		{
+			return (m_mode & FTD_MODE_BROADCAST) == FTD_MODE_BROADCAST;
+		}
+
+		bool isDialogMode()const
+		{
+			return (m_mode & FTD_MODE_DIALOG) == FTD_MODE_DIALOG;
+		}
+
+		bool isNoneMode()const
+		{
+			return (m_mode & FTD_MODE_NONE) == FTD_MODE_NONE;
+		}
 
 	protected:
 		virtual bool mergeFieldMessage(const FtdcFieldHeader& header, const char* msg) = 0;

@@ -123,7 +123,7 @@ Session* Acceptor::createSession(const SessionID& id, const Dictionary& settings
 {
 	if (!m_sessionFactory)
 		return nullptr;
-	Session* pSession = m_sessionFactory->create(id, settings);
+	Session* pSession = m_sessionFactory->create(id, settings, true);
 	m_sessions[id] = pSession;
 	m_sessionIDs.insert(id);
 	return pSession;

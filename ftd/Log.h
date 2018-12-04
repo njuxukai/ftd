@@ -28,7 +28,7 @@
 
 #include "Package.h"
 #include "Mutex.h"
-#include "SessionSetting.h"
+#include "PortSettings.h"
 #include "FixConvertors.h"
 #include <iostream>
 #include <sstream>
@@ -59,7 +59,7 @@ public:
 class ScreenLogFactory : public LogFactory
 {
 public:
-  ScreenLogFactory( const SessionSettings& settings )
+  ScreenLogFactory( const PortSettings& settings )
 : m_useSettings( true ), m_settings( settings ) {};
   ScreenLogFactory( bool incoming, bool outgoing, bool event )
 : m_incoming( incoming ), m_outgoing( outgoing ), m_event( event ), m_useSettings( false ) {}
@@ -75,7 +75,7 @@ private:
   bool m_outgoing;
   bool m_event;
   bool m_useSettings;
-  SessionSettings m_settings;
+  PortSettings m_settings;
 };
 
 /**

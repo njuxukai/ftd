@@ -38,7 +38,7 @@ public:
 
   Session* create( const SessionID& sessionID,
 	               const Dictionary& settings,
-                   const int& socket ) throw( ConfigError );
+	  bool receiveReq) throw( ConfigError );
   void destroy( Session* pSession );
 
 private:

@@ -25,7 +25,7 @@
 
 #include "Session.h"
 #include "Values.h"
-#include "ftd/ID.h"
+#include "ID.h"
 #include <algorithm>
 #include <iostream>
 
@@ -83,6 +83,31 @@ void Session::next( const UtcTimeStamp& timeStamp )
 
 }
 
+bool Session::send(Package& package)
+{
+	return sendRaw(package, 0);
+}
+
+
+bool Session::sendRaw(Package& package, int num)
+{
+	Locker l(m_mutex);
+	if (num > 0)
+	{
+		package.header.sequenceSeries = num;
+	}
+	if (package.isNoneMode())
+	{
+		m_application.toAdmin(package, m_sessionID);
+	}
+	else
+	{
+		if (!isLoggedOn())
+			return false;
+		m_application.toApp(package, m_sessionID);
+	}
+	return true;
+}
 
 bool Session::send( const std::string& string )
 {
@@ -131,7 +156,7 @@ void Session::next( const std::string& msg, const UtcTimeStamp& timeStamp, bool 
 void Session::next( const Package& package, const UtcTimeStamp& timeStamp, bool queued )
 {
 	int tid = package.header.transactionId;
-	if (!isLoggedOn() && tid != TID_UserLogin)
+	if (!isLoggedOn() && !package.isNoneMode())
 	{
 		return;
 	}
@@ -140,52 +165,31 @@ void Session::next( const Package& package, const UtcTimeStamp& timeStamp, bool 
 	UnsupportedMessageType
 	InvalidMessage
 	*/
-	m_application.OnFtdcMessage;
 
-  if( isLoggedOn() )
-    next();
+	//from callback
+	if (package.isNoneMode())
+	{
+		m_application.fromAdmin(package, m_sessionID);
+	}
+	else
+	{
+		m_application.fromApp(package, m_sessionID);
+	}
+
+	if( isLoggedOn() )
+		next();
 }
 
-bool Session::sendToTarget( Message& message, const std::string& qualifier )
-throw( SessionNotFound )
-{
-  try
-  {
-    SessionID sessionID = message.getSessionID( qualifier );
-    return sendToTarget( message, sessionID );
-  }
-  catch ( FieldNotFound& ) { throw SessionNotFound(); }
-}
 
-bool Session::sendToTarget( Message& message, const SessionID& sessionID )
+bool Session::sendToTarget( Package& message, const SessionID& sessionID )
 throw( SessionNotFound )
 {
-  message.setSessionID( sessionID );
   Session* pSession = lookupSession( sessionID );
   if ( !pSession ) throw SessionNotFound();
   return pSession->send( message );
 }
 
-bool Session::sendToTarget
-( Message& message,
-  const SenderCompID& senderCompID,
-  const TargetCompID& targetCompID,
-  const std::string& qualifier )
-throw( SessionNotFound )
-{
-  message.getHeader().setField( senderCompID );
-  message.getHeader().setField( targetCompID );
-  return sendToTarget( message, qualifier );
-}
 
-bool Session::sendToTarget
-( Message& message, const std::string& sender, const std::string& target,
-  const std::string& qualifier )
-throw( SessionNotFound )
-{
-  return sendToTarget( message, SenderCompID( sender ),
-                       TargetCompID( target ), qualifier );
-}
 
 std::set<SessionID> Session::getSessions()
 {
@@ -208,30 +212,6 @@ Session* Session::lookupSession( const SessionID& sessionID )
     return 0;
 }
 
-Session* Session::lookupSession( const std::string& string, bool reverse )
-{
-  Message message;
-  if ( !message.setStringHeader( string ) )
-    return 0;
-
-  try
-  {
-    const Header& header = message.getHeader();
-    const BeginString& beginString = FIELD_GET_REF( header, BeginString );
-    const SenderCompID& senderCompID = FIELD_GET_REF( header, SenderCompID );
-    const TargetCompID& targetCompID = FIELD_GET_REF( header, TargetCompID );
-
-    if ( reverse )
-    {
-      return lookupSession( SessionID( beginString, SenderCompID( targetCompID ),
-                                     TargetCompID( senderCompID ) ) );
-    }
-
-    return lookupSession( SessionID( beginString, senderCompID,
-                          targetCompID ) );
-  }
-  catch ( FieldNotFound& ) { return 0; }
-}
 
 bool Session::isSessionRegistered( const SessionID& sessionID )
 {
