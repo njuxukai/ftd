@@ -69,8 +69,19 @@ throw( ConfigError )
   {
     dict = section[ session ];
     dict.merge( def );
-	int port = dict.getInt(SOCKET_ACCEPT_PORT);
-    s.set( port, dict );
+	std::string protocal = PROTOCAL_TCP;
+	std::string host = "127.0.0.1";
+	int port = 38888;
+	port = dict.getInt(SOCKET_ACCEPT_PORT);
+	if (dict.has(SOCKET_CONNECT_HOST))
+	{
+		host = dict.getString(SOCKET_CONNECT_HOST);
+	}
+	if (dict.has(SOCKET_PROTOCAL))
+	{
+		protocal = dict.getString(SOCKET_PROTOCAL);
+	}
+    s.set( PortID(protocal, host, port), dict );
   }
   return stream;
 }
@@ -87,8 +98,8 @@ std::ostream& operator<<( std::ostream& stream, const PortSettings& s )
     stream << std::endl;
   }
 
-  std::set<int> ports = s.getPorts();
-  std::set<int>::iterator i;
+  std::set<PortID> ports = s.getPorts();
+  std::set<PortID>::iterator i;
   for( i = ports.begin(); i != ports.end(); ++i )
   {
     stream << "[PORT]" << std::endl;
@@ -108,12 +119,12 @@ std::ostream& operator<<( std::ostream& stream, const PortSettings& s )
   return stream;
 }
 
-const bool PortSettings::has( const int& port ) const
+const bool PortSettings::has( const PortID& port ) const
 {
   return m_settings.find(port) != m_settings.end();
 }
 
-const Dictionary& PortSettings::get( const int& port ) const
+const Dictionary& PortSettings::get( const PortID& port ) const
 throw( ConfigError )
 {
   Dictionaries::const_iterator i;
@@ -122,15 +133,15 @@ throw( ConfigError )
   return i->second;
 }
 
-void PortSettings::set( const int& port,
+void PortSettings::set( const PortID& port,
                            Dictionary settings )
 throw( ConfigError )
 {
   //TODO string + int
   if( has(port) )
-    throw ConfigError( "Duplicate Port " + port );
+    throw ConfigError( "Duplicate Port " + port.toStringFrozen() );
 
-  settings.setInt(SOCKET_ACCEPT_PORT, port);
+  settings.setInt(SOCKET_ACCEPT_PORT, port.getPort());
   settings.merge( m_defaults );
   
   validate( settings );
@@ -145,9 +156,9 @@ void PortSettings::set( const Dictionary& defaults ) throw( ConfigError )
     i->second.merge( defaults );
 }
 
-std::set < int > PortSettings::getPorts() const
+std::set < PortID > PortSettings::getPorts() const
 {
-  std::set < int > result;
+  std::set < PortID > result;
   Dictionaries::const_iterator i;
   for ( i = m_settings.begin(); i != m_settings.end(); ++i )
     result.insert( i->first );
@@ -157,13 +168,15 @@ std::set < int > PortSettings::getPorts() const
 void PortSettings::validate( const Dictionary& dictionary ) const
 throw( ConfigError )
 {
-
+  /*
   std::string connectionType = dictionary.getString( CONNECTION_TYPE );
   if( connectionType != "initiator" &&
-      connectionType != "acceptor" )
+  connectionType != "acceptor" )
   {
-    throw ConfigError( std::string(CONNECTION_TYPE) + " must be 'initiator' or 'acceptor'" );
+  throw ConfigError( std::string(CONNECTION_TYPE) + " must be 'initiator' or 'acceptor'" );
   }
+  */
+  
 }
 
 }

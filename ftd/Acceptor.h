@@ -122,7 +122,8 @@ namespace FTD
 		Application& m_application;
 		PackageStoreFactory& m_packageStoreFactory;
 	protected:
-		PortSettings m_setting;
+		PortSettings m_portSettings;
+		std::map<int, Dictionary> m_setting;
 	private:
 		LogFactory* m_pLogFactory;
 		Log* m_pLog;

@@ -26,6 +26,7 @@
 #pragma warning( disable : 4503 4355 4786 4290 )
 #endif
 
+#include "PortID.h"
 #include "Dictionary.h"
 #include "SessionID.h"
 #include "Exceptions.h"
@@ -61,6 +62,7 @@ const char MAX_LATENCY[] = "MaxLatency";
 const char HEARTBTINT[] = "HeartBtInt";
 const char SOCKET_ACCEPT_PORT[] = "SocketAcceptPort";
 const char SOCKET_REUSE_ADDRESS[] = "SocketReuseAddress";
+const char SOCKET_PROTOCAL[] = "SocketProtocal";
 const char SOCKET_CONNECT_HOST[] = "SocketConnectHost";
 const char SOCKET_CONNECT_PORT[] = "SocketConnectPort";
 const char SOCKET_CONNECT_SOURCE_HOST[] = "SocketConnectSourceHost";
@@ -225,12 +227,12 @@ public:
   PortSettings( const std::string& file, bool resolveEnvVars = false ) throw( ConfigError );
 
   /// Check if session setings are present
-  const bool has( const int& ) const;
+  const bool has( const PortID& ) const;
 
   /// Get a dictionary for a session.
-  const Dictionary& get( const int& ) const throw( ConfigError );
+  const Dictionary& get( const PortID& ) const throw( ConfigError );
   /// Set a dictionary for a session
-  void set( const int&, Dictionary ) throw( ConfigError );
+  void set( const PortID&, Dictionary ) throw( ConfigError );
 
   /// Get global default settings
   const Dictionary& get() const { return m_defaults; }
@@ -240,8 +242,8 @@ public:
   /// Number of session settings
   size_t size() const { return m_settings.size(); }
 
-  typedef std::map < int, Dictionary > Dictionaries;
-  std::set < int > getPorts() const;
+  typedef std::map < PortID, Dictionary > Dictionaries;
+  std::set < PortID > getPorts() const;
 
 private:
   void validate( const Dictionary& ) const throw( ConfigError );

@@ -52,9 +52,9 @@ class Initiator
 {
 public:
   Initiator( Application&, PackageStoreFactory&,
-             const SessionSettings& ) throw( ConfigError );
+             const PortSettings& ) throw( ConfigError );
   Initiator( Application&, PackageStoreFactory&,
-             const SessionSettings&, LogFactory& ) throw( ConfigError );
+             const PortSettings&, LogFactory& ) throw( ConfigError );
 
   virtual ~Initiator();
 
@@ -107,9 +107,9 @@ private:
   void initialize() throw ( ConfigError );
 
   /// Implemented to configure acceptor
-  virtual void onConfigure( const SessionSettings& ) throw ( ConfigError ) {};
+  virtual void onConfigure( const PortSettings& ) throw ( ConfigError ) {};
   /// Implemented to initialize initiator
-  virtual void onInitialize( const SessionSettings& ) throw ( RuntimeError ) {};
+  virtual void onInitialize( const PortSettings& ) throw ( RuntimeError ) {};
   /// Implemented to start connecting to targets.
   virtual void onStart() = 0;
   /// Implemented to connect and poll for events.
@@ -117,12 +117,12 @@ private:
   /// Implemented to stop a running initiator.
   virtual void onStop() = 0;
   /// Implemented to connect a session to its target.
-  virtual void doConnect( const SessionID&, const Dictionary& ) = 0;
+  virtual void doConnect( const PortID&, const Dictionary& ) = 0;
 
   static THREAD_PROC startThread( void* p );
 
-  typedef std::set < SessionID > SessionIDs;
-  typedef std::map < SessionID, int > SessionState;
+  typedef std::set < PortID > PortIDs;
+  typedef std::map < PortID, SessionID > SessionState;
   typedef std::map < SessionID, Session* > Sessions;
 
   Sessions m_sessions;
@@ -130,13 +130,13 @@ private:
   SessionIDs m_pending;
   SessionIDs m_connected;
   SessionIDs m_disconnected;
-  SessionState m_sessionState;
+  PortIDs m_badPorts;
 
   thread_id m_threadid;
   Application& m_application;
   PackageStoreFactory& m_packageStoreFactory;
 protected:
-  SessionSettings m_settings;
+  PortSettings m_settings;
 private:
   LogFactory* m_pLogFactory;
   Log* m_pLog;

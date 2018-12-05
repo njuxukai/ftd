@@ -5,11 +5,11 @@
 #include "config.h"
 #endif
 
-#include <BaseType.h>
+#include <ftd/BaseType.h>
 #include <UnitTest++.h>
-#include <FTD20/Fields.h>
-#include <FTD20/Packages.h>
-#include <FTD20/Error.h>
+#include <ftd/FTD20/Fields.h>
+#include <ftd/FTD20/Packages.h>
+#include <ftd/FTD20/Error.h>
 using namespace FTD;
 
 SUITE(FTDTest)
@@ -66,7 +66,7 @@ SUITE(FTDTest)
 		FTD::Field field;
 		memcpy(&field.errorField, &errorField, sizeof(FTD::ErrorField));
 
-		int len = 1000000;
+		int len = 10000;
 		//package.errorFields.reserve(len);
 		for (int i = 0; i < len; i++)
 		{
