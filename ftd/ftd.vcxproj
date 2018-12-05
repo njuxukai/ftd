@@ -143,6 +143,7 @@ del /F EXCLUDE
     <ClCompile Include="Dictionary.cpp" />
     <ClCompile Include="FixConvertors.cpp" />
     <ClCompile Include="FixTypes.cpp" />
+    <ClCompile Include="Initiator.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="Session.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -154,6 +155,7 @@ del /F EXCLUDE
     <ClCompile Include="SocketAcceptor.cpp" />
     <ClCompile Include="SocketConnection.cpp" />
     <ClCompile Include="SocketConnector.cpp" />
+    <ClCompile Include="SocketInitiator.cpp" />
     <ClCompile Include="SocketMonitor.cpp" />
     <ClCompile Include="SocketServer.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -174,6 +176,7 @@ del /F EXCLUDE
     <ClInclude Include="FixTypes.h" />
     <ClInclude Include="ftd.h" />
     <ClInclude Include="ID.h" />
+    <ClInclude Include="Initiator.h" />
     <ClInclude Include="IO.h" />
     <ClInclude Include="log.h" />
     <ClInclude Include="Mutex.h" />
@@ -191,6 +194,7 @@ del /F EXCLUDE
     <ClInclude Include="SocketAcceptor.h" />
     <ClInclude Include="SocketConnection.h" />
     <ClInclude Include="SocketConnector.h" />
+    <ClInclude Include="SocketInitiator.h" />
     <ClInclude Include="SocketMonitor.h" />
     <ClInclude Include="SocketServer.h" />
     <ClInclude Include="stdafx.h" />

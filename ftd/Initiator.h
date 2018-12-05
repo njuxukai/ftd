@@ -117,12 +117,12 @@ private:
   /// Implemented to stop a running initiator.
   virtual void onStop() = 0;
   /// Implemented to connect a session to its target.
-  virtual void doConnect( const SessionID&, const Dictionary& ) = 0;
+  virtual void doConnect( const PortID&, const Dictionary& ) = 0;
 
   static THREAD_PROC startThread( void* p );
 
-  typedef std::set < SessionID > SessionIDs;
-  typedef std::map < SessionID, int > SessionState;
+  typedef std::set < PortID > PortIDs;
+  typedef std::map < PortID, SessionID > SessionState;
   typedef std::map < SessionID, Session* > Sessions;
 
   Sessions m_sessions;
@@ -130,7 +130,7 @@ private:
   SessionIDs m_pending;
   SessionIDs m_connected;
   SessionIDs m_disconnected;
-  SessionState m_sessionState;
+  PortIDs m_badPorts;
 
   thread_id m_threadid;
   Application& m_application;
