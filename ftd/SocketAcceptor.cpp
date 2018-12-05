@@ -56,8 +56,8 @@ SocketAcceptor::~SocketAcceptor()
 void SocketAcceptor::onConfigure( const PortSettings& s )
 throw ( ConfigError )
 {
-  std::set<int> ports = s.getPorts();
-  std::set<int>::iterator i;
+  std::set<PortID> ports = s.getPorts();
+  std::set<PortID>::iterator i;
   for( i = ports.begin(); i != ports.end(); ++i )
   {
     const Dictionary& settings = s.get( *i );
@@ -78,12 +78,12 @@ throw ( RuntimeError )
   {
     m_pServer = new SocketServer( 1 );
 
-    std::set<int> ports = s.getPorts();
-    std::set<int>::iterator i = ports.begin();
+    std::set<PortID> ports = s.getPorts();
+    std::set<PortID>::iterator i = ports.begin();
     for( ; i != ports.end(); ++i )
     {
       const Dictionary& settings = s.get( *i );
-      port = (short)settings.getInt( SOCKET_ACCEPT_PORT );
+      port = i->getPort();
 
       const bool reuseAddress = settings.has( SOCKET_REUSE_ADDRESS ) ? 
         settings.getBool( SOCKET_REUSE_ADDRESS ) : true;
@@ -97,7 +97,7 @@ throw ( RuntimeError )
       const int rcvBufSize = settings.has( SOCKET_RECEIVE_BUFFER_SIZE ) ?
         settings.getInt( SOCKET_RECEIVE_BUFFER_SIZE ) : 0;
 
-	  m_portToSessions[*i] = Sessions();
+	  m_portToSessions[port] = Sessions();
       m_pServer->add( port, reuseAddress, noDelay, sendBufSize, rcvBufSize );      
     }    
   }
@@ -175,7 +175,7 @@ void SocketAcceptor::onConnect( SocketServer& server, int a, int s )
   session ÐÂ½¨
   */
   SessionID id = Session::allocateNextSessionID();
-  Dictionary settings = m_setting.get(port);
+  Dictionary settings = m_setting[port];
   Sessions sessions = m_portToSessions[port];
   Session* pSession = createSession(id, settings);
   if (!pSession)

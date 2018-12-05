@@ -39,7 +39,7 @@ throw( ConfigError )
   : m_threadid( 0 ),
   m_application( application ),
   m_packageStoreFactory(packageStoreFactory),
-  m_setting( setting ),
+  m_portSettings( setting ),
   m_pLogFactory( 0 ),
   m_pLog( 0 ),
   m_firstPoll( true ),
@@ -56,7 +56,7 @@ throw( ConfigError )
 : m_threadid( 0 ),
   m_application( application ),
   m_packageStoreFactory(packageStoreFactory),
-  m_setting(setting),
+  m_portSettings(setting),
   m_pLogFactory( &logFactory ),
   m_pLog( logFactory.create() ),
   m_firstPoll( true ),
@@ -67,28 +67,11 @@ throw( ConfigError )
 
 void Acceptor::initialize() throw ( ConfigError )
 {
-  /*
-  std::set < SessionID > sessions = m_settings.getSessions();
-  std::set < SessionID > ::iterator i;
-
-  if ( !sessions.size() )
-  throw ConfigError( "No sessions defined" );
-
-  SessionFactory factory( m_application, m_messageStoreFactory,
-  m_pLogFactory );
-
-  for ( i = sessions.begin(); i != sessions.end(); ++i )
-  {
-  if ( m_settings.get( *i ).getString( CONNECTION_TYPE ) == "acceptor" )
-  {
-  m_sessionIDs.insert( *i );
-  m_sessions[ *i ] = factory.create( *i, m_settings.get( *i ) );
-  }
-  }
-
-  if ( !m_sessions.size() )
-  throw ConfigError( "No sessions defined for acceptor" );
-  */
+	std::set<PortID> ids = m_portSettings.getPorts();
+	for (auto it = ids.begin(); it != ids.end(); it++)
+	{
+		m_setting[it->getPort()] = m_portSettings.get(*it);
+	}
 	m_sessionFactory = new SessionFactory(m_application, m_packageStoreFactory, m_pLogFactory);
   
 }
@@ -146,8 +129,8 @@ int Acceptor::allocateNextSessionID()
 void Acceptor::start() throw ( ConfigError, RuntimeError )
 {
   m_stop = false;
-  onConfigure( m_setting );
-  onInitialize( m_setting );
+  onConfigure( m_portSettings );
+  onInitialize(m_portSettings);
 
 
   if( !thread_spawn( &startThread, this, m_threadid ) )
@@ -157,8 +140,8 @@ void Acceptor::start() throw ( ConfigError, RuntimeError )
 void Acceptor::block() throw ( ConfigError, RuntimeError )
 {
   m_stop = false;
-  onConfigure( m_setting );
-  onInitialize( m_setting );
+  onConfigure(m_portSettings);
+  onInitialize(m_portSettings);
 
   startThread(this);
 }
@@ -168,8 +151,8 @@ bool Acceptor::poll( double timeout ) throw ( ConfigError, RuntimeError )
   if( m_firstPoll )
   {
     m_stop = false;
-    onConfigure( m_setting );
-    onInitialize( m_setting );
+    onConfigure(m_portSettings);
+    onInitialize(m_portSettings);
     m_firstPoll = false;
   }
 

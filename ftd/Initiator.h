@@ -52,9 +52,9 @@ class Initiator
 {
 public:
   Initiator( Application&, PackageStoreFactory&,
-             const SessionSettings& ) throw( ConfigError );
+             const PortSettings& ) throw( ConfigError );
   Initiator( Application&, PackageStoreFactory&,
-             const SessionSettings&, LogFactory& ) throw( ConfigError );
+             const PortSettings&, LogFactory& ) throw( ConfigError );
 
   virtual ~Initiator();
 
@@ -107,9 +107,9 @@ private:
   void initialize() throw ( ConfigError );
 
   /// Implemented to configure acceptor
-  virtual void onConfigure( const SessionSettings& ) throw ( ConfigError ) {};
+  virtual void onConfigure( const PortSettings& ) throw ( ConfigError ) {};
   /// Implemented to initialize initiator
-  virtual void onInitialize( const SessionSettings& ) throw ( RuntimeError ) {};
+  virtual void onInitialize( const PortSettings& ) throw ( RuntimeError ) {};
   /// Implemented to start connecting to targets.
   virtual void onStart() = 0;
   /// Implemented to connect and poll for events.
@@ -136,7 +136,7 @@ private:
   Application& m_application;
   PackageStoreFactory& m_packageStoreFactory;
 protected:
-  SessionSettings m_settings;
+  PortSettings m_settings;
 private:
   LogFactory* m_pLogFactory;
   Log* m_pLog;

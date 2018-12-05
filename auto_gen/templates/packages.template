@@ -6,8 +6,8 @@ Version={version}
 #ifndef {version}_PACKAGES_H
 #define {version}_PACKAGES_H
 
-#include "ID.h"
-#include "Declare.h"
+#include "../ID.h"
+#include "../Declare.h"
 
 {include_file_headers}
 

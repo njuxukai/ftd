@@ -6,8 +6,8 @@ Version={version}
 #ifndef {version}_FIELDS_H
 #define {version}_FIELDS_H
 
-#include "ID.h"
-#include "Declare.h"
+#include "../ID.h"
+#include "../Declare.h"
 
 {include_file_headers}
 
@@ -21,7 +21,7 @@ union Field
 {field_members}
 }};
 
-bool readField(const char* buffer, int fid, union Field& field, int& readLen)
+inline bool readField(const char* buffer, int fid, union Field& field, int& readLen)
 {{
 	bool read_result = true;
 	switch(fid)

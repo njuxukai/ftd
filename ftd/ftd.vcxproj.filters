@@ -69,6 +69,48 @@
     <ClInclude Include="package.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Mutex.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="FixConvertors.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="FixTypes.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Application.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseType.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Declare.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Dictionary.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Exceptions.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="log.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="packagestore.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Responder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SocketConnector.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Values.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="PortID.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -105,6 +147,18 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="PortSettings.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Dictionary.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="FixConvertors.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="FixTypes.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SocketConnector.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

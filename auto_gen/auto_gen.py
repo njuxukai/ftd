@@ -2,7 +2,7 @@
 import os
 
 path = '../spec/'
-target_path = '../include/ftd/'
+target_path = '../ftd/'
 files = ['ftd_2_0.xml',]
 
 import gen_type_df
@@ -39,3 +39,4 @@ def generate_ftd(path, file, target_path):
 if __name__ == "__main__":
     for file in files:
         generate_ftd(path, file, target_path)
+        #generate_ftd(path, file, target_path2)
