@@ -72,7 +72,7 @@ void Acceptor::initialize() throw ( ConfigError )
 	{
 		m_setting[it->getPort()] = m_portSettings.get(*it);
 	}
-	m_sessionFactory = new SessionFactory(m_application, m_packageStoreFactory, m_pLogFactory);
+	m_pSessionFactory = new SessionFactory(m_application, m_packageStoreFactory, m_pLogFactory);
   
 }
 
@@ -85,9 +85,9 @@ Acceptor::~Acceptor()
   if( m_pLogFactory && m_pLog )
     m_pLogFactory->destroy( m_pLog );
 
-  if (m_sessionFactory)
-	  delete m_sessionFactory;
-  m_sessionFactory = nullptr;
+  if (m_pSessionFactory)
+	  delete m_pSessionFactory;
+  m_pSessionFactory = nullptr;
 }
 
 /*
@@ -104,12 +104,24 @@ Session* Acceptor::getSession( const SessionID& sessionID ) const
 
 Session* Acceptor::createSession(const SessionID& id, const Dictionary& settings)
 {
-	if (!m_sessionFactory)
+	if (!m_pSessionFactory)
 		return nullptr;
-	Session* pSession = m_sessionFactory->create(id, settings, true);
+	Session* pSession = m_pSessionFactory->create(id, settings, true);
 	m_sessions[id] = pSession;
 	m_sessionIDs.insert(id);
 	return pSession;
+}
+
+void Acceptor::destroySession(Session* pSession)
+{
+	if (!pSession)
+		return;
+	m_sessions.erase(pSession->getSessionID());
+	m_sessionIDs.erase(pSession->getSessionID());
+	if (m_pSessionFactory)
+	{
+		m_pSessionFactory->destroy(pSession);
+	}
 }
 
 ///效率不高

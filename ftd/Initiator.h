@@ -41,6 +41,7 @@
 namespace FTD
 {
 class Client;
+class SessionFactory;
 
 /**
  * Base for classes which act as an initiator for establishing connections.
@@ -75,7 +76,7 @@ public:
 
   const std::set<SessionID>& getSessions() const { return m_sessionIDs; }
   Session* getSession( const SessionID& sessionID ) const;
-  const Dictionary* const getSessionSettings( const SessionID& sessionID ) const;
+  const Dictionary* const getPortSettings( const PortID& portID ) const;
 
   bool has( const SessionID& id )
   { return m_sessions.find( id ) != m_sessions.end(); }
@@ -102,7 +103,9 @@ protected:
   bool isConnected( const SessionID& );
   bool isDisconnected( const SessionID& );
   void connect();
-
+  
+  Session* createSession(const SessionID& id, const Dictionary& settings);
+  void destroySession(Session* pSession);
 private:
   void initialize() throw ( ConfigError );
 
@@ -117,26 +120,30 @@ private:
   /// Implemented to stop a running initiator.
   virtual void onStop() = 0;
   /// Implemented to connect a session to its target.
-  virtual void doConnect( const PortID&, const Dictionary& ) = 0;
+  virtual int doConnect( const PortID&, const Dictionary& ) = 0;
 
   static THREAD_PROC startThread( void* p );
 
-  typedef std::set < PortID > PortIDs;
-  typedef std::map < PortID, SessionID > SessionState;
-  typedef std::map < SessionID, Session* > Sessions;
-
-  Sessions m_sessions;
-  SessionIDs m_sessionIDs;
-  SessionIDs m_pending;
-  SessionIDs m_connected;
-  SessionIDs m_disconnected;
-  PortIDs m_badPorts;
+  
 
   thread_id m_threadid;
   Application& m_application;
   PackageStoreFactory& m_packageStoreFactory;
 protected:
+	typedef std::set < PortID > PortIDs;
+	typedef std::set < SessionID> SessionIDs;
+	typedef std::map < PortID, SessionID > PortIDSessionIDMap;
+	typedef std::map < SessionID, Session* > Sessions;
+
+
+	Sessions m_sessions;
+	SessionIDs m_sessionIDs;
+	SessionIDs m_pending;
+	SessionIDs m_connected;
+	PortIDs m_ports;
+	PortIDs m_badPorts;
   PortSettings m_settings;
+  SessionFactory* m_pSessionFactory;
 private:
   LogFactory* m_pLogFactory;
   Log* m_pLog;

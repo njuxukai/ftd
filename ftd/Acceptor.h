@@ -97,7 +97,7 @@ namespace FTD
 	protected:
 		///fix:initialize create all sessions ftd:a new socket accepted,new session created
 		Session* createSession(const SessionID& id, const Dictionary& settings);
-		int allocateNextSessionID();
+		void destroySession(Session* pSession);
 	private:
 		void initialize() throw (ConfigError);
 		/// Implemented to configure acceptor
@@ -123,6 +123,7 @@ namespace FTD
 		PackageStoreFactory& m_packageStoreFactory;
 	protected:
 		PortSettings m_portSettings;
+		SessionFactory* m_pSessionFactory;
 		std::map<int, Dictionary> m_setting;
 	private:
 		LogFactory* m_pLogFactory;
@@ -130,7 +131,7 @@ namespace FTD
 		NullLog m_nullLog;
 		bool m_firstPoll;
 		bool m_stop;
-		SessionFactory* m_sessionFactory;
+		
 	};
 	/*! @} */
 }

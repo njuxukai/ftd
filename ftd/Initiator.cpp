@@ -34,7 +34,7 @@ namespace FTD
 {
 Initiator::Initiator( Application& application,
                       PackageStoreFactory& packageStoreFactory,
-                      const SessionSettings& settings ) throw( ConfigError )
+                      const PortSettings& settings ) throw( ConfigError )
 : m_threadid( 0 ),
   m_application( application ),
   m_packageStoreFactory( packageStoreFactory ),
@@ -47,7 +47,7 @@ Initiator::Initiator( Application& application,
 
 Initiator::Initiator( Application& application,
 					  PackageStoreFactory& messageStoreFactory,
-                      const SessionSettings& settings,
+                      const PortSettings& settings,
                       LogFactory& logFactory ) throw( ConfigError )
 : m_threadid( 0 ),
   m_application( application ),
@@ -61,27 +61,16 @@ Initiator::Initiator( Application& application,
 
 void Initiator::initialize() throw ( ConfigError )
 {
-  std::set < SessionID > sessions = m_settings.getSessions();
-  std::set < SessionID > ::iterator i;
+  
 
-  if ( !sessions.size() )
-    throw ConfigError( "No sessions defined" );
-
-  SessionFactory factory( m_application, m_packageStoreFactory,
+  m_pSessionFactory = new SessionFactory( m_application, m_packageStoreFactory,
                           m_pLogFactory );
 
-  for ( i = sessions.begin(); i != sessions.end(); ++i )
-  {
-    if ( m_settings.get( *i ).getString( "ConnectionType" ) == "initiator" )
-    {
-      m_sessionIDs.insert( *i );
-      m_sessions[ *i ] = factory.create( *i, m_settings.get( *i ) );
-      setDisconnected( *i );
-    }
-  }
+  m_ports = m_settings.getPorts();
+  std::set < SessionID > ::iterator i;
 
   if ( !m_sessions.size() )
-    throw ConfigError( "No sessions defined for initiator" );
+    throw ConfigError( "No portid defined for initiator" );
 }
 
 Initiator::~Initiator()
@@ -90,6 +79,11 @@ Initiator::~Initiator()
   for ( i = m_sessions.begin(); i != m_sessions.end(); ++i )
     delete i->second;
 
+  if (m_pSessionFactory)
+  {
+	  delete m_pSessionFactory;
+	  m_pSessionFactory = nullptr;
+  }
   if( m_pLogFactory && m_pLog )
     m_pLogFactory->destroy( m_pLog );
 }
@@ -115,11 +109,11 @@ Session* Initiator::getSession( const SessionID& sessionID ) const
     return 0;
 }
 
-const Dictionary* const Initiator::getSessionSettings( const SessionID& sessionID ) const
+const Dictionary* const Initiator::getPortSettings( const PortID& portID ) const
 {
   try
   {
-    return &m_settings.get( sessionID );
+    return &m_settings.get(portID);
   }
   catch( ConfigError& )
   {
@@ -131,13 +125,21 @@ void Initiator::connect()
 {
   Locker l(m_mutex);
 
-  SessionIDs disconnected = m_disconnected;
-  SessionIDs::iterator i = disconnected.begin();
+  PortIDs disconnected = m_ports;
+  PortIDs::iterator i = disconnected.begin();
   for ( ; i != disconnected.end(); ++i )
   {
-    Session* pSession = Session::lookupSession( *i );
-    if ( pSession->isEnabled() && pSession->isSessionTime(UtcTimeStamp()) )
-      doConnect( *i, m_settings.get( *i ));
+	  if (m_badPorts.find(*i) != m_badPorts.end())
+		  continue;
+      int socket = doConnect( *i, m_settings.get( *i ));
+	  if (socket > 0)
+	  {
+		  return;
+	  }
+	  else
+	  {
+		  m_badPorts.insert(*i);
+	  }
   }
 }
 
@@ -147,7 +149,7 @@ void Initiator::setPending( const SessionID& sessionID )
 
   m_pending.insert( sessionID );
   m_connected.erase( sessionID );
-  m_disconnected.erase( sessionID );
+  //m_disconnected.erase( sessionID );
 }
 
 void Initiator::setConnected( const SessionID& sessionID )
@@ -156,7 +158,7 @@ void Initiator::setConnected( const SessionID& sessionID )
 
   m_pending.erase( sessionID );
   m_connected.insert( sessionID );
-  m_disconnected.erase( sessionID );
+  //m_disconnected.erase( sessionID );
 }
 
 void Initiator::setDisconnected( const SessionID& sessionID )
@@ -165,7 +167,7 @@ void Initiator::setDisconnected( const SessionID& sessionID )
 
   m_pending.erase( sessionID );
   m_connected.erase( sessionID );
-  m_disconnected.insert( sessionID );
+  //m_disconnected.insert( sessionID );
 }
 
 bool Initiator::isPending( const SessionID& sessionID )
@@ -180,11 +182,6 @@ bool Initiator::isConnected( const SessionID& sessionID )
   return m_connected.find( sessionID ) != m_connected.end();
 }
 
-bool Initiator::isDisconnected( const SessionID& sessionID )
-{
-  Locker l(m_mutex);
-  return m_disconnected.find( sessionID ) != m_disconnected.end();
-}
 
 void Initiator::start() throw ( ConfigError, RuntimeError )
 {
@@ -289,4 +286,27 @@ THREAD_PROC Initiator::startThread( void* p )
   pInitiator->onStart();
   return 0;
 }
+
+Session* Initiator::createSession(const SessionID& id, const Dictionary& settings)
+{
+	if (!m_pSessionFactory)
+		return nullptr;
+	Session* pSession = m_pSessionFactory->create(id, settings, false);
+	m_sessions[id] = pSession;
+	m_sessionIDs.insert(id);
+	setPending(id);
+	return pSession;
+}
+
+void Initiator::destroySession(Session* pSession)
+{
+	if (!pSession)
+		return;
+	m_connected.erase(pSession->getSessionID());
+	m_pending.erase(pSession->getSessionID());
+	m_sessionIDs.erase(pSession->getSessionID());
+	m_sessions.erase(pSession->getSessionID());
+	m_pSessionFactory->destroy(pSession);
+}
+
 }
