@@ -54,3 +54,6 @@ include/*
 /ftd/FTDItemType.h
 /build/Debug/ftd/ftd.tlog
 /build/Debug/ftd
+/ftd/DerivativeType.h
+/ftd/ItemType.h
+/ftd/Id.h
