@@ -65,7 +65,6 @@ private:
 
   void getHost( const PortID&, const Dictionary&, std::string&, short&, std::string&, short& );
 
-  SessionToHostNum m_sessionToHostNum;
   SocketConnector m_connector;
   SocketConnections m_pendingConnections;
   SocketConnections m_connections;

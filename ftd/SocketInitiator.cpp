@@ -246,50 +246,13 @@ void SocketInitiator::getHost( const PortID& s, const Dictionary& d,
                                std::string& address, short& port,
                                std::string& sourceAddress, short& sourcePort)
 {
-  int num = 0;
-  SessionToHostNum::iterator i = m_sessionToHostNum.find( s );
-  if ( i != m_sessionToHostNum.end() ) num = i->second;
+	address = d.getString(SOCKET_CONNECT_HOST);
+	port = (short)d.getInt(SOCKET_CONNECT_PORT);
 
-  std::stringstream hostStream;
-  hostStream << SOCKET_CONNECT_HOST << num;
-  std::string hostString = hostStream.str();
-
-  std::stringstream portStream;
-  portStream << SOCKET_CONNECT_PORT << num;
-  std::string portString = portStream.str();
-
-  sourcePort = 0;
-  sourceAddress.empty();
-
-  if( d.has(hostString) && d.has(portString) )
-  {
-    address = d.getString( hostString );
-    port = ( short ) d.getInt( portString );
-
-    std::stringstream sourceHostStream;
-    sourceHostStream << SOCKET_CONNECT_SOURCE_HOST << num;
-    hostString = sourceHostStream.str();
-    if( d.has(hostString) )
-      sourceAddress = d.getString( hostString );
-
-    std::stringstream sourcePortStream;
-    sourcePortStream << SOCKET_CONNECT_SOURCE_PORT << num;
-    portString = sourcePortStream.str();
-    if( d.has(portString) )
-      sourcePort = ( short ) d.getInt( portString );
-  }
-  else
-  {
-    num = 0;
-    address = d.getString( SOCKET_CONNECT_HOST );
-    port = ( short ) d.getInt( SOCKET_CONNECT_PORT );
-
-    if( d.has(SOCKET_CONNECT_SOURCE_HOST) )
-      sourceAddress = d.getString( SOCKET_CONNECT_SOURCE_HOST );
-    if( d.has(SOCKET_CONNECT_SOURCE_PORT) )
-      sourcePort = ( short ) d.getInt( SOCKET_CONNECT_SOURCE_PORT );
-  }
-
-  m_sessionToHostNum[ s ] = ++num;
+	if (d.has(SOCKET_CONNECT_SOURCE_HOST))
+		sourceAddress = d.getString(SOCKET_CONNECT_SOURCE_HOST);
+	if (d.has(SOCKET_CONNECT_SOURCE_PORT))
+		sourcePort = (short)d.getInt(SOCKET_CONNECT_SOURCE_PORT);
 }
+
 }
