@@ -49,8 +49,7 @@ class SocketConnection : public Responder
 public:
   typedef std::set<SessionID> Sessions;
 
-  SocketConnection( int s, Sessions sessions, SocketMonitor* pMonitor, bool isReceiveReq);
-  SocketConnection( SocketInitiator&, const SessionID&, int, SocketMonitor* );
+  SocketConnection( int s, Session* pSession, SocketMonitor* pMonitor, bool isReceiveReq);
   virtual ~SocketConnection();
 
   int getSocket() const { return m_socket; }

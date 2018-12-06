@@ -26,12 +26,13 @@
 #include "SocketInitiator.h"
 #include "Session.h"
 #include "Settings.h"
+#include "SessionFactory.h"
 
 namespace FTD
 {
 SocketInitiator::SocketInitiator( Application& application,
                                   PackageStoreFactory& factory,
-                                  const SessionSettings& settings )
+                                  const PortSettings& settings )
 throw( ConfigError )
 : Initiator( application, factory, settings ),
   m_connector( 1 ), m_lastConnect( 0 ),
@@ -42,7 +43,7 @@ throw( ConfigError )
 
 SocketInitiator::SocketInitiator( Application& application,
                                   PackageStoreFactory& factory,
-                                  const SessionSettings& settings,
+                                  const PortSettings& settings,
                                   LogFactory& logFactory )
 throw( ConfigError )
 : Initiator( application, factory, settings, logFactory ),
@@ -64,7 +65,7 @@ SocketInitiator::~SocketInitiator()
     delete i->second;
 }
 
-void SocketInitiator::onConfigure( const SessionSettings& s )
+void SocketInitiator::onConfigure( const PortSettings& s )
 throw ( ConfigError )
 {
   const Dictionary& dict = s.get();
@@ -79,7 +80,7 @@ throw ( ConfigError )
     m_rcvBufSize = dict.getInt( SOCKET_RECEIVE_BUFFER_SIZE );
 }
 
-void SocketInitiator::onInitialize( const SessionSettings& s )
+void SocketInitiator::onInitialize( const PortSettings& s )
 throw ( RuntimeError )
 {
 }
@@ -128,8 +129,9 @@ void SocketInitiator::onStop()
 {
 }
 
-void SocketInitiator::doConnect( const SessionID& s, const Dictionary& d )
+int SocketInitiator::doConnect( const PortID& p, const Dictionary& d )
 {
+	int result = -1;
   try
   {
     std::string address;
@@ -137,21 +139,28 @@ void SocketInitiator::doConnect( const SessionID& s, const Dictionary& d )
     std::string sourceAddress;
     short sourcePort = 0;
 
-    Session* session = Session::lookupSession( s );
-    if( !session->isSessionTime(UtcTimeStamp()) ) return;
 
-    Log* log = session->getLog();
 
-    getHost( s, d, address, port, sourceAddress, sourcePort );
 
-    log->onEvent( "Connecting to " + address + " on port " + IntConvertor::convert((unsigned short)port) + " (Source " + sourceAddress + ":" + IntConvertor::convert((unsigned short)sourcePort) + ")");
-    int result = m_connector.connect( address, port, m_noDelay, m_sendBufSize, m_rcvBufSize, sourceAddress, sourcePort );
-    setPending( s );
+    getHost( p, d, address, port, sourceAddress, sourcePort );
 
-    m_pendingConnections[ result ] 
-      = new SocketConnection( *this, s, result, &m_connector.getMonitor() );
+    getLog()->onEvent( "Connecting to " + address + " on port " + IntConvertor::convert((unsigned short)port) + " (Source " + sourceAddress + ":" + IntConvertor::convert((unsigned short)sourcePort) + ")");
+
+	
+	int socket;
+    int result = m_connector.connect(socket, address, port, m_noDelay, m_sendBufSize, m_rcvBufSize, sourceAddress, sourcePort );
+	if (result < 0)
+	{
+		return result;
+	}
+
+	SessionID s = Session::allocateNextSessionID();
+	Session* pSession = createSession(s, d);
+    m_pendingConnections[ socket ] 
+      = new SocketConnection(socket, pSession, &m_connector.getMonitor(), false);
   }
-  catch ( std::exception& ) {}
+  catch (std::exception&) { result = -1; }
+  return result;
 }
 
 void SocketInitiator::onConnect( SocketConnector&, int s )
@@ -164,6 +173,8 @@ void SocketInitiator::onConnect( SocketConnector&, int s )
   m_pendingConnections.erase( i );
   setConnected( pSocketConnection->getSession()->getSessionID() );
   pSocketConnection->onTimeout();
+  //·¢ËÍµÇÂ¼ÐÅÏ¢
+  //pSocketConnection->getSession()
 }
 
 void SocketInitiator::onWrite( SocketConnector& connector, int s )
@@ -196,18 +207,18 @@ void SocketInitiator::onDisconnect( SocketConnector&, int s )
   if( !pSocketConnection )
     return;
 
-  setDisconnected( pSocketConnection->getSession()->getSessionID() );
-
   Session* pSession = pSocketConnection->getSession();
   if ( pSession )
   {
     pSession->disconnect();
     setDisconnected( pSession->getSessionID() );
+	m_sessions.erase( pSession->getSessionID() );
+	m_pSessionFactory->destroy(pSession);
   }
 
-  delete pSocketConnection;
   m_connections.erase( s );
   m_pendingConnections.erase( s );
+  delete pSocketConnection;
 }
 
 void SocketInitiator::onError( SocketConnector& connector )
@@ -231,7 +242,7 @@ void SocketInitiator::onTimeout( SocketConnector& )
     i->second->onTimeout();
 }
 
-void SocketInitiator::getHost( const SessionID& s, const Dictionary& d,
+void SocketInitiator::getHost( const PortID& s, const Dictionary& d,
                                std::string& address, short& port,
                                std::string& sourceAddress, short& sourcePort)
 {

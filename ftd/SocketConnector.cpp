@@ -82,11 +82,11 @@ private:
 SocketConnector::SocketConnector( int timeout )
 : m_monitor( timeout ) {}
 
-int SocketConnector::connect( const std::string& address, int port, bool noDelay,
+int SocketConnector::connect( int& socket, const std::string& address, int port, bool noDelay,
                               int sendBufSize, int rcvBufSize,
                               const std::string& sourceAddress, int sourcePort)
 {
-  int socket = socket_createConnector();
+  socket = socket_createConnector();
 
   if ( socket != -1 )
   {
@@ -99,7 +99,7 @@ int SocketConnector::connect( const std::string& address, int port, bool noDelay
     if ( !sourceAddress.empty() || sourcePort )
           socket_bind( socket, sourceAddress.c_str(), sourcePort );
     m_monitor.addConnect( socket );
-    socket_connect( socket, address.c_str(), port );
+    return socket_connect( socket, address.c_str(), port );
   }
   return socket;
 }

@@ -169,28 +169,20 @@ void SocketAcceptor::onConnect( SocketServer& server, int a, int s )
   SocketConnections::iterator i = m_connections.find( s );
   if ( i != m_connections.end() ) return;
   int port = server.socketToPort( a );
-  /*
-  TODO
-  socketConnection 
-  session ÐÂ½¨
-  */
+
   SessionID id = Session::allocateNextSessionID();
   Dictionary settings = m_setting[port];
   Sessions sessions = m_portToSessions[port];
   Session* pSession = createSession(id, settings);
   if (!pSession)
-  {
-	  return;
-  }
-   
-  SocketConnection *pSocketConnection = new SocketConnection( s, sessions, &server.getMonitor(), true);
+	  return;   
+  SocketConnection *pSocketConnection = new SocketConnection( s, pSession, &server.getMonitor(), true);
   m_connections[s] = pSocketConnection;
   pSession->setResponder(pSocketConnection);
-  pSocketConnection->setSession(pSession);
+
 
   std::stringstream stream;
   stream << "Accepted connection from " << socket_peername( s ) << " on port " << port;
-
   if( getLog() )
     getLog()->onEvent( stream.str() );
 }
@@ -219,7 +211,11 @@ void SocketAcceptor::onDisconnect( SocketServer&, int s )
   SocketConnection* pSocketConnection = i->second;
 
   Session* pSession = pSocketConnection->getSession();
-  if ( pSession ) pSession->disconnect();
+  if (pSession)
+  {
+	  pSession->disconnect();
+	  destroySession(pSession);
+  }
 
   delete pSocketConnection;
   m_connections.erase( s );

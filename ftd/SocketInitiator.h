@@ -30,31 +30,32 @@
 #include "SocketConnector.h"
 #include "SocketConnection.h"
 
-namespace FIX
+namespace FTD
 {
 /// Socket implementation of Initiator.
 class SocketInitiator : public Initiator, SocketConnector::Strategy
 {
 public:
-  SocketInitiator( Application&, MessageStoreFactory&,
-                   const SessionSettings& ) throw( ConfigError );
-  SocketInitiator( Application&, MessageStoreFactory&,
-                   const SessionSettings&, LogFactory& ) throw( ConfigError );
+  SocketInitiator( Application&, PackageStoreFactory&,
+                   const PortSettings& ) throw( ConfigError );
+  SocketInitiator( Application&, PackageStoreFactory&,
+                   const PortSettings&, LogFactory& ) throw( ConfigError );
 
   virtual ~SocketInitiator();
 
 private:
   typedef std::map < int, SocketConnection* > SocketConnections;
+  typedef std::map < int, SessionID > SocketSessionMap;
   typedef std::map < SessionID, int > SessionToHostNum;
 
-  void onConfigure( const SessionSettings& ) throw ( ConfigError );
-  void onInitialize( const SessionSettings& ) throw ( RuntimeError );
+  void onConfigure( const PortSettings& ) throw ( ConfigError );
+  void onInitialize( const PortSettings& ) throw ( RuntimeError );
 
   void onStart();
   bool onPoll( double timeout );
   void onStop();
 
-  void doConnect( const SessionID&, const Dictionary& d );
+  int doConnect( const PortID&, const Dictionary& d );
   void onConnect( SocketConnector&, int );
   void onWrite( SocketConnector&, int );
   bool onData( SocketConnector&, int );
@@ -62,9 +63,8 @@ private:
   void onError( SocketConnector& );
   void onTimeout( SocketConnector& );
 
-  void getHost( const SessionID&, const Dictionary&, std::string&, short&, std::string&, short& );
+  void getHost( const PortID&, const Dictionary&, std::string&, short&, std::string&, short& );
 
-  SessionSettings m_settings;
   SessionToHostNum m_sessionToHostNum;
   SocketConnector m_connector;
   SocketConnections m_pendingConnections;
