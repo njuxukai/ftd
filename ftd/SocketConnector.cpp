@@ -104,11 +104,10 @@ int SocketConnector::connect( int& socket, const std::string& address, int port,
   return socket;
 }
 
-int SocketConnector::connect( const std::string& address, int port, bool noDelay, 
+int SocketConnector::connect( int& socket, const std::string& address, int port, bool noDelay, 
                               int sendBufSize, int rcvBufSize, Strategy& strategy )
 {
-  int socket = connect( address, port, noDelay, sendBufSize, rcvBufSize, "", 0);
-  return socket;
+  return connect( socket, address, port, noDelay, sendBufSize, rcvBufSize, "", 0);
 }
 
 void SocketConnector::block( Strategy& strategy, bool poll, double timeout )

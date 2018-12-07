@@ -1,4 +1,6 @@
 #include "SwhyFtdcTraderApiImpl.h"
+#include <ftd/SocketInitiator.h>
+//#include <ftd/Port.h>
 
 CSwhyFtdcTraderApiImpl::CSwhyFtdcTraderApiImpl(const char* pswDir)
 {
@@ -10,7 +12,8 @@ CSwhyFtdcTraderApiImpl::CSwhyFtdcTraderApiImpl(const char* pswDir)
 
 CSwhyFtdcTraderApiImpl::~CSwhyFtdcTraderApiImpl()
 {
-
+	Release();
+		
 }
 
 const char* CSwhyFtdcTraderApiImpl::GetApiVersion()
@@ -20,21 +23,43 @@ const char* CSwhyFtdcTraderApiImpl::GetApiVersion()
 
 void CSwhyFtdcTraderApiImpl::Release()
 {
+	m_pSpi = 0;
+	if (m_pInitiator)
+	{
+		m_pInitiator->stop();
+		delete m_pInitiator;
+		m_pInitiator = 0;
+	}
 }
 
 void CSwhyFtdcTraderApiImpl::Init()
 {
-	//create initiator 
-	m_pInitiator = new FTD::SocketInitator((FTD::Application&)*this, );
+	//1 create initiator 
+	FTD::PortSettings settings;
+	FTD::Dictionary defaultDictionary;
+	//TODO default setting
+	settings.set(defaultDictionary);
+	for (auto it = m_frontAddresses.begin(); it != m_frontAddresses.end(); it++)
+	{
+		FTD::PortID id;
+		id.fromString(*it);
+		FTD::Dictionary d;
+		d.setString(FTD::SOCKET_CONNECT_HOST, id.getAddress());
+		d.setInt(FTD::SOCKET_CONNECT_PORT, id.getPort());
+		settings.set(id, d);
+	}
+	FTD::ScreenLogFactory logFactory(settings);
+	FTD::MemoryStoreFactory storeFactory;
+	m_pInitiator = new FTD::SocketInitiator((FTD::Application&)*this, storeFactory, settings, logFactory);
+	m_pInitiator->start();
 }
 
-int CSwhyFtdcTraderApiImpl::Join()
+void CSwhyFtdcTraderApiImpl::Join()
 {
 	if (m_pInitiator != nullptr)
 	{
-		return 0;
+		m_pInitiator->join();
 	}
-	return -1;
 }
 
 const char* CSwhyFtdcTraderApiImpl::GetTradingDay()
@@ -56,8 +81,10 @@ void CSwhyFtdcTraderApiImpl::RegisterFront(const char* frontAddr)
 }
 
 void CSwhyFtdcTraderApiImpl::SubscribePrivateTopic()
-{}
+{
+}
 
 
 void CSwhyFtdcTraderApiImpl::SubscribePublicTopic()
-{}
+{
+}

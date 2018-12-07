@@ -69,6 +69,9 @@ public:
   /// Stop initiator.
   void stop( bool force = false );
 
+  //join thread 
+  void join();
+
   /// Check to see if any sessions are currently logged on
   bool isLoggedOn();
 
@@ -121,6 +124,8 @@ private:
   virtual void onStop() = 0;
   /// Implemented to connect a session to its target.
   virtual int doConnect( const PortID&, const Dictionary& ) = 0;
+
+
 
   static THREAD_PROC startThread( void* p );
 

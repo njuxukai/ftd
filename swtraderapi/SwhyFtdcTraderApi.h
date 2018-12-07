@@ -35,7 +35,7 @@ public:
 
 	virtual void Init() = 0;
 
-	virtual int Join() = 0;
+	virtual void Join() = 0;
 
 	virtual const char* GetTradingDay() = 0;
 

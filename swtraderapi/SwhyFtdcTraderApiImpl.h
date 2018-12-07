@@ -2,9 +2,9 @@
 #define SWHY_FTDC_TRADER_API_IMPL_H
 
 #include "SwhyFtdcTraderApi.h"
-#include "Initiator.h"
-#include "Application.h"
-#include "FTD20/PackageCracker.h"
+#include <ftd/Application.h>
+#include <ftd/Initiator.h>
+#include <ftd/FTD20/PackageCracker.h>
 
 class CSwhyFtdcTraderApiImpl : public CSwhyFtdcTraderApi, 
 	public FTD::Application, public FTD::PackageCracker
@@ -18,7 +18,7 @@ public:
 
 	virtual void Init();
 
-	virtual int Join();
+	virtual void Join();
 
 	virtual const char* GetTradingDay();
 
@@ -31,13 +31,16 @@ public:
 
 	virtual void SubscribePrivateTopic();
 
-
 	virtual void SubscribePublicTopic();
+
+    //
+
+
+	//
 private:
 	std::string m_pswDir;
 	std::vector<std::string> m_frontAddresses;
 	CSwhyFtdcTraderSpi* m_pSpi;
 	FTD::Initiator* m_pInitiator;
-	FTD::Session* m_pSession;
 };
 #endif

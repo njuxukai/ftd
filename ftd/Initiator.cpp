@@ -194,6 +194,13 @@ void Initiator::start() throw ( ConfigError, RuntimeError )
     throw RuntimeError("Unable to spawn thread");
 }
 
+void Initiator::join()
+{
+	if (m_threadid)
+		thread_join(m_threadid);
+	m_threadid = 0;
+}
+
 
 void Initiator::block() throw ( ConfigError, RuntimeError )
 {
