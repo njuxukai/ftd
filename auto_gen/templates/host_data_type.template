@@ -1,0 +1,6 @@
+#ifndef {project_code_upper}_FTDCDATATYPE_H
+#define {project_code_upper}_FTDCDATATYPE_H
+
+{data_type_def_lines}
+
+#endif

@@ -15,7 +15,12 @@ def generate_item_df(version, items, target_path):
     def_ttype_statements = []
     for item in items:
         def_type_statments.append(item.get_t_item_define())
+
+        def_ttype_statements.append('/' *80)
+        def_ttype_statements.append('///TTItem{0} {1}'.format(item.name,item.comment))
+        def_ttype_statements.append('/' *80)
         def_ttype_statements.append(item.get_tt_item_define())
+        def_ttype_statements.append('')
     d['version'] = version
     d['t_type_def'] = '\n'.join(def_type_statments)
     d['tt_type_def'] = '\n'.join(def_ttype_statements)

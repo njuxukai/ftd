@@ -11,6 +11,7 @@
 #define TRADER_API_EXPORT 
 #endif
 
+#include "XcpFtdcUserApiStruct.h"
 class CSwhyFtdcTraderSpi
 {
 	virtual void OnFrontConnected() {}

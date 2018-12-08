@@ -57,3 +57,8 @@ include/*
 /ftd/DerivativeType.h
 /ftd/ItemType.h
 /ftd/Id.h
+/ftd/double-conversion
+/build/Debug/test_unit/test_unit.tlog
+/build/Debug/test_unit/test_unit.log
+*.idb
+*.pdb

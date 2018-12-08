@@ -13,6 +13,14 @@ def load_type_node(node):
     type.base_type_name = get_ftd_type_spec(node.get('baseType'))
     type.length = int(node.get('length'))
     type.precision = int(node.get('precision'))
+    type.comment = node.get('comment')
+    if type.comment is None:
+        type.comment = ''
+    for enum_node in node.findall('enumValue'):
+        enum_dict = {}
+        for k, v in enum_node.items():
+            enum_dict[k] = v
+        type.enum_value_dicts.append(enum_dict)
     return type
 
 def load_item_node(node):
@@ -20,6 +28,8 @@ def load_item_node(node):
     item.name = node.get('name')
     item.type_name = node.get('type')
     item.comment = node.get('comment')
+    if item.comment is None:
+        item.comment = ''
     return item
 
 def load_package_node(node):
@@ -56,7 +66,10 @@ def load_field_node(f):
     field.comment = f.get('comment')
     for child in list(f.iter()):
         if child.tag == 'item':
-            field.item_names.append(child.get('name'))
+            d = {}
+            for k,v in child.items():
+                d[k] = v
+            field.item_dicts.append(d)
     return field
 
 def load_tid_node(t):

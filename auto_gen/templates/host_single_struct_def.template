@@ -1,0 +1,5 @@
+///{field_comment}
+struct {struct_prefix}{field_name}
+{{
+{item_lines}
+}};

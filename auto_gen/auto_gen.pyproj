@@ -35,6 +35,12 @@
     <Compile Include="gen_field_df.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="gen_host_data_type.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="gen_host_struct.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="gen_id_def.py">
       <SubType>Code</SubType>
     </Compile>
@@ -54,6 +60,15 @@
   <ItemGroup>
     <Content Include="templates\fields.template" />
     <Content Include="templates\field_struct.template" />
+    <Content Include="templates\host_data_type.template">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="templates\host_single_struct_def.template">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="templates\host_struct.template">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="templates\id_def.template" />
     <Content Include="templates\item_def.template" />
     <Content Include="templates\packages.template">

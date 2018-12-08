@@ -2,14 +2,24 @@
 import os
 
 path = '../spec/'
-target_path = '../ftd/'
 files = ['ftd_2_0.xml',]
+target_path = '../ftd/'
+host_targe_path = '../include/xcp'
+
+project_code = 'Xcp'
+data_type_prefix = 'T%sFtdc' % project_code
+data_type_file_name = '%sFtdcUserApiDataType.h' % project_code
+
+struct_type_prefix = 'C%sFtdc' % project_code
+struct_file_name = '%sFtdcUserApiStruct.h' % project_code
 
 import gen_type_df
 import gen_item_df
 import gen_field_df
 import gen_package_df
 import gen_id_def
+import gen_host_data_type
+import gen_host_struct
 
 from dtd_parse import *
 
@@ -34,9 +44,17 @@ def generate_ftd(path, file, target_path):
     gen_package_df.generate_package_include(version, list(packages.values()), target_path)
     gen_package_df.generate_package_cracker(version, list(packages.values()), target_path)
     
-
+def generate_host_files(path, file, target_path):
+    types,items,fields, packages, tids = load_dtd_file_fields(path, file)
+    data_type_fpath = '%s/%s' %(host_targe_path, data_type_file_name)
+    struct_fpath = '%s/%s' %(host_targe_path, struct_file_name)
+    gen_host_data_type.generate_host_data_type_file(types, items, project_code, 
+                                                    data_type_prefix, data_type_fpath)
+    gen_host_struct.generate_host_struct_file(fields, project_code,data_type_file_name,
+                                              data_type_prefix, struct_type_prefix, struct_fpath)
 
 if __name__ == "__main__":
     for file in files:
         generate_ftd(path, file, target_path)
+        generate_host_files(path, file, host_targe_path)
         #generate_ftd(path, file, target_path2)

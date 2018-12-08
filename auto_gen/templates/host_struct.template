@@ -1,0 +1,12 @@
+#if !defined({project_code_upper}_FTDCSTRUCT_H)
+#define {project_code_upper}_FTDCSTRUCT_H
+
+#if _MSC_VER > 1000
+#pragma once
+#endif // _MSC_VER > 1000
+
+#include "{api_data_type_file_name}"
+
+{stuct_define_entrys}
+
+#endif

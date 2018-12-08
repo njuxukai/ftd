@@ -29,10 +29,14 @@ def generate_field_struct(version, field_info, target_path):
     field_name_upper = field_info.name.upper()
     property_type_var_pair_list= []
     declare_statment_template = "{0} {1};"
-    for property in field_info.item_names:
+    for property in field_info.item_dicts:
+        if 'comment' not in property:
+            a = 2
+        property_type_var_pair_list.append('///%s' % property['comment'])
         property_type_var_pair_list.append(
-            declare_statment_template.format(get_true_type_name(property),
-                                         get_field_item_var_name(property)))
+            
+            declare_statment_template.format(get_true_type_name(property['name']),
+                                         get_field_item_var_name(property['name'])))
 
     item_var_pair_list_string = add_whitespaces('\n'.join(property_type_var_pair_list),4)
 
@@ -40,7 +44,8 @@ def generate_field_struct(version, field_info, target_path):
     write_line2 = "buffer += {0}::getMsgLength();"
     write_line3 = "data_length += {0}::getMsgLength();"
     write_lines = []
-    for property in field_info.item_names:
+    for d in field_info.item_dicts:
+        property = d['name']
         write_lines.append(write_line1.format(get_ftd_type_name(property), get_field_item_var_name(property)))
         write_lines.append(write_line2.format(get_ftd_type_name(property)))
         write_lines.append(write_line3.format(get_ftd_type_name(property)))
@@ -51,7 +56,8 @@ def generate_field_struct(version, field_info, target_path):
     read_line2 = "buffer += {0}::getMsgLength();"
     read_line3 = "data_length += {0}::getMsgLength();"
     read_lines = []
-    for property in field_info.item_names:
+    for node in field_info.item_dicts:
+        propery = node['name']
         read_lines.append(read_line1.format(get_ftd_type_name(property), get_field_item_var_name(property)))
         read_lines.append(read_line2.format(get_ftd_type_name(property)))
         read_lines.append(read_line3.format(get_ftd_type_name(property)))

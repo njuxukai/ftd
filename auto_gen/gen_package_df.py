@@ -23,7 +23,9 @@ def generate_package_struct(version, package, target_path, version_number):
     member_merge_lines = []
     member_write_sections = []
     for field_info in package.fields:
+        member_def_lines.append('///%s' % field_info.comment)
         member_def_lines.append(_format_member_def_line(field_info))
+
         member_clear_lines.append(_format_member_clear_lines(field_info))
         member_merge_lines.append(_format_member_merge_lines(field_info))
         member_write_sections.append(_format_member_write_lines(field_info))
@@ -38,6 +40,7 @@ def generate_package_struct(version, package, target_path, version_number):
     d['member_merge_lines'] = add_whitespaces('\n'.join(member_merge_lines), 8)
     d['member_write_sections'] = add_whitespaces('\n'.join(member_write_sections), 8)
     d['version_number'] = version_number
+    d['package_comment'] = package.comment
     if package.same_as_id:
         d['mode'] = 'FTD_MODE_'+ package.model.upper()
     else:

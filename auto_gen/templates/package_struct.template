@@ -18,6 +18,7 @@
 namespace FTD
 {{
 
+///{package_comment}
 struct {package_name} : public Package
 {{
 

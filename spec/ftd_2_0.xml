@@ -280,7 +280,7 @@
 			<item name="TimeStamp" comment="时间戳"/>
 		</fieldDefine>
 		<fieldDefine name="ErrorTargetOrderField" fid="FID_ErrorTargetOrderField" fidValue="0x002D" comment="错误报单号域">
-			<item name="OrderSysId" commnet="合同编号"/>
+			<item name="OrderSysId" comment="合同编号"/>
 			<item name="OrderLocalId" comment="委托编号"/>
 		</fieldDefine>
 		<fieldDefine name="ErrorTargetSequenceField" fid="FID_ErrorTargetSequenceField" fidValue="0x002E" comment="错误序列号域">
@@ -1016,8 +1016,8 @@
 			<enumValue name="5" comment="撤单"/>
 		</typeDefine>
 		<typeDefine name="FTDOrderType" baseType="FTDCharType" length="1" precision="0">
-			<enumValue name="0" comment="限价"/>
-			<enumValue name="1" comment="市价"/>
+			<enumValue name="0" comment="限价" enname="Limit"/>
+			<enumValue name="1" comment="市价" enname="Market"/>
 			<enumValue name="2" comment="止损限价"/>
 			<enumValue name="3" comment="止损市价"/>
 			<enumValue name="4" comment="市价转限价"/>
