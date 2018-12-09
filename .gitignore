@@ -62,3 +62,4 @@ include/*
 /build/Debug/test_unit/test_unit.log
 *.idb
 *.pdb
+/ftd/FTD30

@@ -2,7 +2,7 @@
 import os
 
 path = '../spec/'
-files = ['ftd_2_0.xml',]
+files = ['ftd_3_0.xml',]
 target_path = '../ftd/'
 host_targe_path = '../include/xcp'
 

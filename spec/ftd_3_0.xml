@@ -1,0 +1,668 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE FTD SYSTEM "ftd.1.dtd">
+<ftd>
+	<packages>
+		<packageDefine name="Error" tid="TID_Error" model="dialog" comment="错误响应">
+			<field name="ErrorField" maxOccur="任意" minOccur="1" comment="错误域"/>
+		</packageDefine>
+		
+		<packageDefine name="ReqUserLogin" tid="TID_UserLogin" model="none" comment="交易员登录请求">
+			<field name="ReqUserLoginField" maxOccur="1" minOccur="1" comment="交易员登录请求域"/>
+			<field name="DissenminationstartField" maxOccur="任意" minOccur="0" comment="发送信息起始说明域"/>
+		</packageDefine>
+		
+		<packageDefine name="RspUserLogin" tid="TID_UserLogin" model="none" comment="交易员登录应答">
+			<field name="RspUserLoginField" maxOccur="1" minOccur="1" comment="交易员登录响应域"/>
+			<field name="SecurityAccountField" maxOccur="任意" minOccur="0" comment="股东账号域"/>
+			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
+		</packageDefine>		
+		
+		<packageDefine name="ReqUserLogout" tid="TID_UserLogout" model="none" comment="交易员登录退出请求">
+			<field name="ReqUserLogoutField" maxOccur="1" minOccur="1" comment="交易员退出登录请求域"/>
+		</packageDefine>	
+		
+		<packageDefine name="RspUserLogout" tid="TID_UserLogout" model="none" comment="交易员登录退出应答">
+			<field name="RspUserLogoutField" maxOccur="1" minOccur="1" comment="交易员退出登录响应域"/>
+			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
+		</packageDefine>
+
+		<packageDefine name="ForceExit" tid="TID_ForceExit" model="none" comment="强制退出">
+			<field name="ForceExitField" maxOccur="1" minOccur="1" comment="强制退出域"/>
+		</packageDefine>
+		
+		<packageDefine name="ReqOrderInsert" tid="TID_OrderInsert" model="dialog" comment="报单录入">
+			<field name="OrderInsertField" maxOccur="1" minOccur="1" comment="报单信息域"/>
+		</packageDefine>
+		
+		<packageDefine name="RspOrderInsert" tid="TID_OrderInsert" model="none" comment="强制退出">
+			<field name="OrderInsertField" maxOccur="1" minOccur="1" comment="报单信息域"/>
+			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
+		</packageDefine>
+		
+		<packageDefine name="ReqOrderAction" tid="TID_OrderAction" model="dialog" comment="报单操作请求">
+			<field name="OrderActionField" maxOccur="1" minOccur="1" comment="报单操作域"/>
+		</packageDefine>
+		
+		<packageDefine name="RspOrderAction" tid="TID_OrderAction" model="dialog" comment="报单操作应答">
+			<field name="OrderActionField" maxOccur="1" minOccur="1" comment="报单操作域"/>
+			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
+		</packageDefine>
+		
+		<packageDefine name="ReqFundTransfer" tid="TID_FundTransfer" model="dialog" comment="资金划转请求">
+			<field name="FundTransferField" maxOccur="1" minOccur="1" comment="资金划转域"/>
+		</packageDefine>
+		
+		<packageDefine name="RspFundTransfer" tid="TID_FundTransfer" model="dialog" comment="资金划转应答">
+			<field name="FundTransferField" maxOccur="1" minOccur="1" comment="资金划转域"/>
+			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
+		</packageDefine>
+		
+		
+		<packageDefine name="ReqQryOrder" tid="TID_QryOrder" model="dialog" comment="报单查询请求">
+			<field name="ReqQryOrderField" maxOccur="任意" minOccur="1" comment="报单查询请求域"/>
+		</packageDefine>
+		
+		<packageDefine name="RspQryOrder" tid="TID_QryOrder" model="dialog" comment="报单查询应答">
+			<field name="OrderStatusField" maxOccur="任意" minOccur="0" comment="报单状态域"/>
+			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
+		</packageDefine>
+		
+		<packageDefine name="ReqQryTrade" tid="TID_QryTrade" model="dialog" comment="报单成交查询请求">
+			<field name="ReqQryTradeField" maxOccur="任意" minOccur="1" comment="报单成交查询请求域"/>
+		</packageDefine>
+		
+		<packageDefine name="RspQryTrade" tid="TID_QryTrade" model="dialog" comment="报单成交查询应答">
+			<field name="TradeField" maxOccur="任意" minOccur="0" comment="报单成交域"/>
+			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
+		</packageDefine>
+		
+		<packageDefine name="ReqQryFundTransfer" tid="TID_QryFundTransfer" model="dialog" comment="资金划转查询请求">
+			<field name="ReqQryFundTransferField" maxOccur="任意" minOccur="1" comment="资金划转查询请求域"/>
+		</packageDefine>
+		
+		<packageDefine name="RspQryFundTransfer" tid="TID_QryFundTransfer" model="dialog" comment="资金划转查询应答">
+			<field name="FundTransferField" maxOccur="任意" minOccur="0" comment="资金划转域"/>
+			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
+		</packageDefine>
+		
+		<packageDefine name="ReqQryHisOrder" tid="TID_QryHisOrder" model="dialog" comment="历史报单查询请求">
+			<field name="ReqQryHisOrderField" maxOccur="任意" minOccur="1" comment="历史报单查询请求域"/>
+		</packageDefine>
+		
+		<packageDefine name="RspQryHisOrder" tid="TID_QryHisOrder" model="dialog" comment="历史报单查询应答">
+			<field name="OrderStatusField" maxOccur="任意" minOccur="0" comment="历史报单状态域"/>
+			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
+		</packageDefine>
+		
+		<packageDefine name="ReqQryHisTrade" tid="TID_QryHisTrade" model="dialog" comment="历史报单成交查询请求">
+			<field name="ReqQryHisTradeField" maxOccur="任意" minOccur="1" comment="报单成交查询请求域"/>
+		</packageDefine>
+		
+		<packageDefine name="RspQryHisTrade" tid="TID_QryHisTrade" model="dialog" comment="历史报单成交查询应答">
+			<field name="TradeField" maxOccur="任意" minOccur="0" comment="报单成交域"/>
+			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
+		</packageDefine>
+		
+		<packageDefine name="ReqQryHisFundTransfer" tid="TID_QryHisFundTransfer" model="dialog" comment="历史资金划转查询请求">
+			<field name="ReqQryHisFundTransferField" maxOccur="任意" minOccur="1" comment="资金划转查询请求域"/>
+		</packageDefine>
+		
+		<packageDefine name="RspQryHisFundTransfer" tid="TID_QryHisFundTransfer" model="dialog" comment="历史资金划转查询应答">
+			<field name="FundTransferField" maxOccur="任意" minOccur="0" comment="资金划转域"/>
+			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
+		</packageDefine>
+		
+		<packageDefine name="ReqQryInstrument" tid="TID_QryInstrument" model="dialog" comment="证券查询请求">
+			<field name="ReqQryInstrumentField" maxOccur="1" minOccur="1" comment="证券查询请求请求域"/>
+		</packageDefine>
+		
+		<packageDefine name="RspQryInstrument" tid="TID_QryInstrument" model="dialog" comment="证券查询应答">
+			<field name="InstrumentField" maxOccur="任意" minOccur="1" comment="证券信息域"/>
+			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
+		</packageDefine>
+		
+		<packageDefine name="ReqQryStructuredFund" tid="TID_QryStructuredFund" model="dialog" comment="分级基金查询请求">
+			<field name="ReqQryStructuredFundField" maxOccur="1" minOccur="1" comment="分级基金查询请求域"/>
+		</packageDefine>
+		
+		<packageDefine name="RspQryStructuredFund" tid="TID_QryStructuredFund" model="dialog" comment="分级基金查询应答">
+			<field name="StructuredFundField" maxOccur="任意" minOccur="1" comment="分级信息信息域"/>
+			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
+		</packageDefine>
+		
+		<packageDefine name="ReqQryETF" tid="TID_QryETF" model="dialog" comment="ETF查询请求">
+			<field name="ReqQryETFField" maxOccur="1" minOccur="1" comment="ETF查询请求请求域"/>
+		</packageDefine>
+		
+		<packageDefine name="RspQryETF" tid="TID_QryETF" model="dialog" comment="ETF查询应答">
+			<field name="ETFField" maxOccur="任意" minOccur="1" comment="ETF信息域"/>
+			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
+		</packageDefine>
+		
+		<packageDefine name="ReqQryETFComposition" tid="TID_QryETFComposition" model="dialog" comment="ETF成分股查询请求">
+			<field name="ReqQryQryETFComposition" maxOccur="1" minOccur="1" comment="ETF成分股查询请求请求域"/>
+		</packageDefine>
+		
+		<packageDefine name="RspQryETFComposition" tid="TID_QryETFComposition" model="dialog" comment="ETF成分股查询请求应答">
+			<field name="ETFCompositionField" maxOccur="任意" minOccur="1" comment="ETF成分股信息域"/>
+			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
+		</packageDefine>
+		
+		<packageDefine name="ReqQryPurchasableNewIssueSecurity" tid="TID_QryPurchasableNewIssueSecurity" model="dialog" comment="当日可申购新发行证券信息查询请求">
+			<field name="ReqQryPurchasableNewSecurityField" maxOccur="1" minOccur="1" comment="证券查询请求请求域"/>
+		</packageDefine>
+		
+		<packageDefine name="RspQryPurchasableNewIssueSecurity" tid="TID_QryPurchasableNewIssueSecurity" model="dialog" comment="当日可申购新发行证券信息查询应答">
+			<field name="PurchasableNewIssueSecurityField" maxOccur="任意" minOccur="0" comment="当日可申购新发行证券信息域"/>
+			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
+		</packageDefine>
+		
+		<packageDefine name="ReqQryPurchaseQuota" tid="TID_QryPurchaseQuota" model="dialog" comment="新股申购额度信息查询请求">
+			<field name="ReqQryPurchaseQuotaField" maxOccur="1" minOccur="1" comment="新股申购额度信息查询请求域"/>
+		</packageDefine>
+		
+		<packageDefine name="RspQryPurchaseQuota" tid="TID_QryPurchaseQuota" model="dialog" comment="新股申购额度信息查询应答">
+			<field name="PurchaseQuotaField" maxOccur="任意" minOccur="0" comment="新股申购额度信息域"/>
+			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
+		</packageDefine>
+		
+		<packageDefine name="ExecutionReportIncData" tid="TID_ExecutionReportIncData" model="dialog" comment="报单执行报告">
+			<field name="ExecutionReportField" maxOccur="任意" minOccur="0" comment="报单执行报告域"/>
+			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
+		</packageDefine>
+		
+	</packages>
+	
+	<tids>
+		<tidDefine name="TID_Error" value="0x0001"/>
+		<tidDefine name="TID_UserLogin" value="0x0002"/>
+		<tidDefine name="TID_UserLogout" value="0x0003"/>
+		<tidDefine name="TID_ForceExit" value="0x0004"/>
+		
+		<tidDefine name="TID_OrderInsert" value="0x1001"/>
+		<tidDefine name="TID_OrderAction" value="0x1002"/>
+		<tidDefine name="TID_FundTransfer" value="0x1003"/>
+		
+		<tidDefine name="TID_QryOrder" value="0x2001"/>		
+		<tidDefine name="TID_QryFundTransfer" value="0x2002"/>
+		<tidDefine name="TID_QryTrade" value="0x2003"/>
+		<tidDefine name="TID_QryHisOrder" value="0x2004"/>		
+		<tidDefine name="TID_QryHisFundTransfer" value="0x2005"/>
+		<tidDefine name="TID_QryHisTrade" value="0x2006"/>
+		<tidDefine name="TID_QryInstrument" value="0x2007"/>
+        <tidDefine name="TID_QryStructuredFund" value="0x2008"/>		
+		<tidDefine name="TID_QryETF" value="0x2009"/>		
+		<tidDefine name="TID_QryETFComposition" value="0x200A"/>
+		<tidDefine name="TID_QryPurchasableNewIssueSecurity" value="0x200B"/>
+		<tidDefine name="TID_QryPurchaseQuota" value="0x200C"/>
+		
+		<tidDefine name="TID_ExecutionReportIncData" value="0x3001"/>
+	</tids>
+	
+		<fields>
+		
+		
+	
+		
+		<fieldDefine name="ErrorField" fid="FID_ErrorField" fidValue="0x0001" comment="错误域">
+		</fieldDefine>
+	
+		<fieldDefine name="ReqUserLoginField" fid="FID_ReqUserLoginField" fidValue="0x0002"  comment="交易员登录请求域">
+		</fieldDefine>
+		
+		<fieldDefine name="DissenminationstartField" fid="FID_DissenminationstartField" fidValue="0x0003" comment="发送信息起始说明域">
+		</fieldDefine>
+	
+		<fieldDefine name="RspUserLoginField" fid="FID_RspUserLoginField" fidValue="0x0004" comment="交易员登录响应域">
+		
+		</fieldDefine>
+		
+		<fieldDefine name="SecurityAccountField" fid="FID_SecurityAccountField" fidValue="0x0005" comment="股东账号域">		
+		</fieldDefine>
+		
+		<fieldDefine name="ReqUserLogoutField" fid="FID_ReqUserLogoutField" fidValue="0x0006" comment="交易员退出登录请求域">	
+		</fieldDefine>
+		
+		<fieldDefine name="RspUserLogoutField" fid="FID_RspUserLogoutField" fidValue="0x0007" comment="交易员退出登录响应域">
+		</fieldDefine>
+		
+		<fieldDefine name="ForceExitField" fid="FID_ForceExitField" fidValue="0x0008" comment="强制退出域">
+		</fieldDefine>
+		
+		<fieldDefine name="OrderInsertField" fid="FID_OrderInsertField" fidValue="0x0009" comment="报单信息域">	
+		</fieldDefine>
+		
+		<fieldDefine name="OrderActionField" fid="FID_OrderActionField" fidValue="0x000A" comment="报单操作域">		
+		</fieldDefine>
+		
+		<fieldDefine name="FundTransferField" fid="FID_FundTransferField" fidValue="0x000B" comment="资金划转域">
+		</fieldDefine>
+		
+		<fieldDefine name="ReqQryOrderField" fid="FID_ReqQryOrderField" fidValue="0x000C" comment="报单查询请求域">		
+		</fieldDefine>
+		
+		<fieldDefine name="OrderStatusField" fid="FID_OrderStatusField" fidValue="0x000D" comment="报单状态域">
+		</fieldDefine>
+		
+		<fieldDefine name="ReqQryTradeField" fid="FID_ReqQryTradeField" fidValue="0x000E" comment="报单成交查询请求域">
+		</fieldDefine>
+		
+		<fieldDefine name="TradeField" fid="FID_TradeField" fidValue="0x000F" comment="报单成交域">		
+		</fieldDefine>
+		
+		<fieldDefine name="ReqQryFundTransferField" fid="FID_ReqQryFundTransferField" fidValue="0x0010" comment="资金划转查询请求域">
+		</fieldDefine>
+		
+		<fieldDefine name="ReqQryHisOrderField" fid="FID_ReqQryHisOrderField" fidValue="0x0011" comment="历史报单查询请求域">
+		</fieldDefine>
+		
+		<fieldDefine name="ReqQryHisTradeField" fid="FID_ReqQryHisTradeField" fidValue="0x0012" comment="报单成交查询请求域">
+		</fieldDefine>
+		
+		<fieldDefine name="ReqQryHisFundTransferField" fid="FID_ReqQryHisFundTransferField" fidValue="0x0013" comment="资金划转查询请求域">
+		</fieldDefine>
+		
+		<fieldDefine name="ReqQryInstrumentField" fid="FID_ReqQryInstrumentField" fidValue="0x0014" comment="证券查询请求请求域">
+		</fieldDefine>
+		
+		<fieldDefine name="InstrumentField" fid="FID_InstrumentField" fidValue="0x0015" comment="证券信息域">
+		</fieldDefine>
+		
+		<fieldDefine name="ReqQryStructuredFundField" fid="FID_ReqQryStructuredFundField" fidValue="0x0016" comment="分级基金查询请求域">
+		</fieldDefine>
+		
+		<fieldDefine name="StructuredFundField" fid="FID_StructuredFundField" fidValue="0x0017" comment="分级信息信息域">		
+		</fieldDefine>
+		
+		<fieldDefine name="ReqQryETFField" fid="FID_ReqQryETFField" fidValue="0x0018" comment="ETF查询请求请求域">
+		</fieldDefine>
+		
+		<fieldDefine name="ETFField" fid="FID_ETFField" fidValue="0x0019" comment="ETF信息域">
+		</fieldDefine>
+		
+		<fieldDefine name="ReqQryQryETFComposition" fid="FID_ReqQryQryETFComposition" fidValue="0x0020" comment="ETF成分股查询请求请求域">
+		</fieldDefine>
+		
+		<fieldDefine name="ETFCompositionField" fid="FID_ETFCompositionField" fidValue="0x0021" comment="ETF成分股信息域">		
+		</fieldDefine>
+		
+		<fieldDefine name="ReqQryPurchasableNewSecurityField" fid="FID_ReqQryPurchasableNewSecurityField" fidValue="0x0022" comment="证券查询请求请求域">
+		</fieldDefine>
+		
+		<fieldDefine name="PurchasableNewIssueSecurityField" fid="FID_PurchasableNewIssueSecurityField" fidValue="0x0023" comment="当日可申购新发行证券信息域">
+		</fieldDefine>
+		
+		<fieldDefine name="ReqQryPurchaseQuotaField" fid="FID_ReqQryPurchaseQuotaField" fidValue="0x0024" comment="新股申购额度信息查询请求域">
+		</fieldDefine>
+		
+		<fieldDefine name="PurchaseQuotaField" fid="FID_PurchaseQuotaField" fidValue="0x0025" comment="新股申购额度信息域">		
+		</fieldDefine>
+		
+		<fieldDefine name="ExecutionReportField" fid="FID_ExecutionReportField" fidValue="0x0026" comment="报单执行报告域">
+		</fieldDefine>
+		
+	</fields>
+	
+	<items>
+		<itemDefine name="Abstract" type="FTDStringType&lt;80&gt;" comment="摘要&#47;说明"/>
+		<itemDefine name="ActionLocalId" type="FTDLocalId" comment="报单操作本地编号"/>
+		<itemDefine name="ActiveTime" type="FTDTime" comment="激活时间"/>
+		<itemDefine name="ActiveUserId" type="FTDUserId" comment="操作交易员编码"/>
+		<itemDefine name="AddValue" type="FTDValue" comment="本交易日新增资金"/>
+		<itemDefine name="AskLot" type="FTDVolume" comment="卖出数量"/>
+		<itemDefine name="AskPrice" type="FTDPrice" comment="卖出价"/>
+		<itemDefine name="AutoSuspend" type="FTDBoolFlag" comment="自动挂起标志"/>
+		<itemDefine name="AveragePrice" type="FTDPrice" comment="均价"/>
+		<itemDefine name="BalanceValue" type="FTDValue" comment="可用保证金余额"/>
+		<itemDefine name="BidLot" type="FTDVolume" comment="买入数量"/>
+		<itemDefine name="BidPrice" type="FTDPrice" comment="买入价格"/>
+		<itemDefine name="BuyHedgeOffsetMargin" type="FTDValue" comment="买保平仓返回保证金"/>
+		<itemDefine name="BuyHedgeOffsetProfit" type="FTDValue" comment="买保平仓盈亏"/>
+		<itemDefine name="BuyHedgeOpenFrozMargin" type="FTDValue" comment="买保开仓冻结保证金"/>
+		<itemDefine name="BuyHedgeOpenUsedMargin" type="FTDValue" comment="买保开仓使用保证金"/>
+		<itemDefine name="BuyHedgePosition" type="FTDVolume" comment="买开仓量(保)"/>
+		<itemDefine name="BuyHedgeTurnOver" type="FTDValue" comment="买保成交额"/>
+		<itemDefine name="BuyHedgeVolume" type="FTDVolume" comment="买成交量(保)"/>
+		<itemDefine name="BuyOffsHPosition" type="FTDVolume" comment="买平今量(保)"/>
+		<itemDefine name="BuyOffsSPosition" type="FTDVolume" comment="买平今量(投)"/>
+		<itemDefine name="BuySpecOffsetMargin" type="FTDValue" comment="买投平仓返回保证金"/>
+		<itemDefine name="BuySpecOffsetProfit" type="FTDValue" comment="买投平仓盈亏"/>
+		<itemDefine name="BuySpecOpenFrozMargin" type="FTDValue" comment="买投开仓冻结保证金"/>
+		<itemDefine name="BuySpecOpenUsedMargin" type="FTDValue" comment="买投开仓使用保证金"/>
+		<itemDefine name="BuySpecPosition" type="FTDVolume" comment="买开仓量(投)"/>
+		<itemDefine name="BuySpecTurnOver" type="FTDValue" comment="买投成交额"/>
+		<itemDefine name="BuySpecVolume" type="FTDVolume" comment="买成交量(投)"/>
+		<itemDefine name="CancelDate" type="FTDDate" comment="取消日期"/>
+		<itemDefine name="CancelFlag" type="FTDBoolFlag" comment="成交是否被取消。"/>
+		<itemDefine name="CancelTime" type="FTDTime" comment="取消时间"/>
+		<itemDefine name="ClearDate" type="FTDDate" comment="清算日期"/>
+		<itemDefine name="ClearPrice" type="FTDPrice" comment="清算价"/>
+		<itemDefine name="ClientId" type="FTDClientId" comment="客户编码"/>
+		<itemDefine name="ClientName" type="FTDName" comment="客户名称"/>
+		<itemDefine name="ClientType" type="FTDClientType" comment="客户类别"/>
+		<itemDefine name="ClosePrice" type="FTDPrice" comment="收盘价"/>
+		<itemDefine name="ComeFrom" type="FTDStringType&lt;20&gt;" comment="消息来源"/>
+		<itemDefine name="ConnectionReference" type="FTDConnectionReference" comment="链路标示"/>
+		<itemDefine name="Content" type="FTDStringType&lt;500&gt;" comment="消息正文"/>
+		<itemDefine name="Currency" type="FTDStringType&lt;3&gt;" comment="交易用的货币"/>
+		<itemDefine name="DataFlowFlag" type="FTDDataFlowFlag" comment="数据流名称"/>
+		<itemDefine name="DelValue" type="FTDValue" comment="本交易日提出资金"/>
+		<itemDefine name="Direction" type="FTDDirection" comment="买卖方向"/>
+		<itemDefine name="EndDelvDate" type="FTDDate" comment="最后交割日"/>
+		<itemDefine name="EndTrdDate" type="FTDDate" comment="最后交易日"/>
+		<itemDefine name="ErrorCode" type="FTDErrorCode" comment="错误代码"/>
+		<itemDefine name="ErrorText" type="FTDStringType&lt;100&gt;" comment="错误正文"/>
+		<itemDefine name="ExchangeDateTime" type="FTDDateTime" comment="交易所系统时间"/>
+		<itemDefine name="Forcedistime" type="FTDIntType" comment="强平的撮合间隔"/>
+		<itemDefine name="ForceExitCode" type="FTDForceExitCode" comment="强制退出号"/>
+		<itemDefine name="ForceExitMsg" type="FTDStringType&lt;100&gt;" comment="强制退出原因"/>
+		<itemDefine name="ForceGroupId" type="FTDLocalId" comment="强平组号"/>
+		<itemDefine name="FrontId" type="FTDStringType&lt;20&gt;" comment="前置机标识"/>
+		<itemDefine name="FuseFlag" type="FTDBoolFlag" comment="熔断标记"/>
+		<itemDefine name="Fuselimit" type="FTDPrice" comment="熔断限额"/>
+		<itemDefine name="Fusepersisttime" type="FTDIntType" comment="熔断最大持续时间"/>
+		<itemDefine name="Fusepoint" type="FTDStringType&lt;6&gt;" comment="在该时间点后不可熔断"/>
+		<itemDefine name="FuseRights" type="FTDBoolFlag" comment="可否熔断"/>
+		<itemDefine name="HedgeFlag" type="FTDHedgeFlag" comment="投保标记"/>
+		<itemDefine name="HighLimit" type="FTDPrice" comment="涨停板"/>
+		<itemDefine name="HighLimitRate" type="FTDPercent" comment="涨停板率"/>
+		<itemDefine name="HighPrice" type="FTDPrice" comment="最高价"/>
+		<itemDefine name="InitMargin" type="FTDValue" comment="初始保证金"/>
+		<itemDefine name="InsertTime" type="FTDDateTime" comment="录入时间"/>
+		<itemDefine name="InstrStopCode" type="FTDStopCode" comment="停止交易原因"/>
+		<itemDefine name="InstrumentId" type="FTDInstrumentId" comment="合约编码"/>
+		<itemDefine name="InstrumentName" type="FTDName" comment="合约名称"/>
+		<itemDefine name="InstrumentStatus" type="FTDInstrumentStatus" comment="合约交易状态"/>
+		<itemDefine name="InstrumentType" type="FTDInstrumentType" comment="合约类型"/>
+		<itemDefine name="InstrumentVersion" type="FTDInstrumentVersion" comment="合约版本号"/>
+		<itemDefine name="IpAddr" type="FTDStringType&lt;20&gt;" comment="登录者的IP地址"/>
+		<itemDefine name="IsLogin" type="FTDBoolFlag" comment="是否登录"/>
+		<itemDefine name="LastLot" type="FTDVolume" comment="最后一笔成交手数，双向计算"/>
+		<itemDefine name="LastPrice" type="FTDPrice" comment="最新价"/>
+		<itemDefine name="LifeHigh" type="FTDPrice" comment="历史最高成交价格"/>
+		<itemDefine name="LifeLow" type="FTDPrice" comment="历史最低成交价格"/>
+		<itemDefine name="LimitPrice" type="FTDPrice" comment="限价"/>
+		<itemDefine name="IpAddr" type="FTDStringType&lt;20&gt;" comment="登录者的IP地址"/>
+		<itemDefine name="LongOffsFrozHPosition" type="FTDVolume" comment="多头平仓冻结持仓手(保)"/>
+		<itemDefine name="LongOffsFrozSPosition" type="FTDVolume" comment="多头平仓冻结持仓手(投)"/>
+		<itemDefine name="LongOpenFrozHPosition" type="FTDVolume" comment="多头开仓冻结持仓手（保）"/>
+		<itemDefine name="LongOpenFrozSPosition" type="FTDVolume" comment="多头开仓冻结持仓手（投）"/>
+		<itemDefine name="LowLimit" type="FTDPrice" comment="跌停板"/>
+		<itemDefine name="LowLimitRate" type="FTDPercent" comment="跌停板率"/>
+		<itemDefine name="LowPrice" type="FTDPrice" comment="最低价"/>
+		<itemDefine name="Margin" type="FTDPrice" comment="保证金"/>
+		<itemDefine name="MarketId" type="FTDMarketId" comment="市场编码"/>
+		<itemDefine name="BroadcastLoginTime" type="FTDDateTime" comment="最后一次广播模式登录时间"/>
+		<itemDefine name="BroadcastLogOutTime" type="FTDDateTime" comment="最后一次广播模式退出时间"/>
+		<itemDefine name="MarketName" type="FTDName" comment="市场名称"/>
+		<itemDefine name="BroadcastSequenceNo" type="FTDIntType" comment="广播模式中的数据序列号"/>
+		<itemDefine name="BroadcastSequenceSeries" type="FTDWordType" comment="广播模式序列类别号"/>
+		<itemDefine name="MarketStatusId" type="FTDMarketStatus" comment="市场交易状态编码"/>
+		<itemDefine name="BroadcastStreamStatus" type="FTDBoolFlag" comment="广播模式在线状态"/>
+		<itemDefine name="MatchCondition" type="FTDMatchCondition" comment="报单成交属性"/>
+		<itemDefine name="MatchDate" type="FTDDate" comment="成交日期"/>
+		<itemDefine name="MatchSession" type="FTDMatchSession" comment="报单成交时间"/>
+		<itemDefine name="MatchTime" type="FTDTime" comment="成交时间"/>
+		<itemDefine name="MaxLot" type="FTDVolume" comment="最大可下单手数"/>
+		<itemDefine name="MaxOrderLocalId" type="FTDLocalId" comment="最大报单本地编号"/>
+		<itemDefine name="MatchFlag" type="FTDMatchFlag" comment="成交双方的性质"/>
+		<itemDefine name="MessageReference" type="FTDMsgRef" comment="用户自定义数据。可打印ASCII字符"/>
+		<itemDefine name="MinLot" type="FTDVolume" comment="最小可下单手数"/>
+		<itemDefine name="MinimalVolume" type="FTDVolume" comment="最小成交量"/>
+		<itemDefine name="Name" type="FTDStringType&lt;20&gt;" comment="名称"/>
+		<itemDefine name="NewPassword" type="FTDPassword" comment="新口令"/>
+		<itemDefine name="NewsType" type="FTDNewsType" comment="消息类型"/>
+		<itemDefine name="NewsUrgency" type="FTDNewsUrgency" comment="紧急程度"/>
+		<itemDefine name="OffsetFlag" type="FTDOffsetFlag" comment="开平仓标记"/>
+		<itemDefine name="OldPassword" type="FTDPassword" comment="旧口令"/>
+		<itemDefine name="OpenInterest" type="FTDVolume" comment="持仓量"/>
+		<itemDefine name="OpenPrice" type="FTDPrice" comment="开盘价"/>
+		<itemDefine name="OrderActionCode" type="FTDActionFlag" comment="报单操作类型码"/>
+		<itemDefine name="OrderLocalId" type="FTDLocalId" comment="委托编号"/>
+		<itemDefine name="OrderStatus" type="FTDOrderStatus" comment="报单状态"/>
+		<itemDefine name="OrderSysId" type="FTDSysOrderId" comment="合同编号"/>
+		<itemDefine name="OrderType" type="FTDOrderType" comment="报单类型"/>
+		<itemDefine name="ParticipantId" type="FTDParticipantId" comment="交易会员编码"/>
+		<itemDefine name="ParticipantName" type="FTDName" comment="会员名称"/>
+		<itemDefine name="ParticipantType" type="FTDParticipantType" comment="会员类型"/>
+		<itemDefine name="PartiTrdRight" type="FTDTradeRight" comment="会员权限"/>
+		<itemDefine name="Password" type="FTDPassword" comment="口令"/>
+		<itemDefine name="PreClose" type="FTDPrice" comment="前收盘价格"/>
+		<itemDefine name="PreOpenInterest" type="FTDVolume" comment="前最后持仓量，双向计算"/>
+		<itemDefine name="PreSettle" type="FTDPrice" comment="前结算价格"/>
+		<itemDefine name="Price" type="FTDPrice" comment="价格"/>
+		<itemDefine name="PrivateLoginTime" type="FTDDateTime" comment="最后一次私有模式登录时间"/>
+		<itemDefine name="PrivateLogoutTime" type="FTDDateTime" comment="最后一次私有模式退出时间"/>
+		<itemDefine name="PrivateStreamStatus" type="FTDBoolFlag" comment="私有模式的状态"/>
+		<itemDefine name="ProtocolVersion" type="FTDProtocolVersion" comment="使用FTD版本号"/>
+		<itemDefine name="Pubstyle" type="FTDPubStyle" comment="竞价阶段合约行情发布方式"/>
+		<itemDefine name="MarketMatchDataStatus" type="FTDBoolFlag" comment="是否主动发送成交行情"/>
+		<itemDefine name="SellHedgeOffsetMargin" type="FTDValue" comment="卖保平仓返回保证金"/>
+		<itemDefine name="SellHedgeOffsetProfit" type="FTDValue" comment="卖保平仓盈亏"/>
+		<itemDefine name="SellHedgeOpenFrozMargin" type="FTDValue" comment="卖保开仓冻结保证金"/>
+		<itemDefine name="SellHedgeOpenUsedMargin" type="FTDValue" comment="卖保开仓使用保证金"/>
+		<itemDefine name="SellHedgePosition" type="FTDVolume" comment="卖开仓量(保)"/>
+		<itemDefine name="SellHedgeTurnOver" type="FTDValue" comment="卖保成交额"/>
+		<itemDefine name="SellHedgeVolume" type="FTDVolume" comment="卖成交量(保)"/>
+		<itemDefine name="SellOffsHPosition" type="FTDVolume" comment="卖平今量(保)"/>
+		<itemDefine name="SellOffsSPosition" type="FTDVolume" comment="卖平今量(投)"/>
+		<itemDefine name="SellSpecOffsetMargin" type="FTDValue" comment="卖投平仓返回保证金"/>
+		<itemDefine name="SellSpecOffsetProfit" type="FTDValue" comment="卖投平仓盈亏"/>
+		<itemDefine name="SellSpecOpenFrozMargin" type="FTDValue" comment="卖投开仓冻结保证金"/>
+		<itemDefine name="SellSpecOpenUsedMargin" type="FTDValue" comment="卖投开仓使用保证金"/>
+		<itemDefine name="SellSpecPosition" type="FTDVolume" comment="卖开仓量(投)"/>
+		<itemDefine name="SellSpecTurnOver" type="FTDValue" comment="卖投成交额"/>
+		<itemDefine name="SellSpecVolume" type="FTDVolume" comment="卖成交量(投)"/>
+		<itemDefine name="SendTime" type="FTDTime" comment="发送时间"/>
+		<itemDefine name="SequenceNo" type="FTDSequenceNo" comment="序列号"/>
+		<itemDefine name="SequenceSeries" type="FTDSequenceSeries" comment="序列类别号"/>
+		<itemDefine name="ServerAppName" type="FTDServerAppName" comment="会员应用系统名称"/>
+		<itemDefine name="SettlePrice" type="FTDPrice" comment="结算价"/>
+		<itemDefine name="ShortCutKey" type="FTDCharType" comment="输入快捷键"/>
+		<itemDefine name="ShortOffsFrozHPosition" type="FTDVolume" comment="空头平仓冻结持仓手(保)"/>
+		<itemDefine name="ShortOffsFrozSPosition" type="FTDVolume" comment="空头平仓冻结持仓手(投)"/>
+		<itemDefine name="ShortOpenFrozHPosition" type="FTDVolume" comment="空头开仓冻结持仓手（保）"/>
+		<itemDefine name="ShortOpenFrozSPosition" type="FTDVolume" comment="空头开仓冻结持仓手（投）"/>
+		<itemDefine name="StartDelvDate" type="FTDDate" comment="开始交割日"/>
+		<itemDefine name="StartTime" type="FTDTime" comment="开始时间"/>
+		<itemDefine name="StartTrdDate" type="FTDDate" comment="开始交易日"/>
+		<itemDefine name="StopPrice" type="FTDPrice" comment="止损价格"/>
+		<itemDefine name="SuspendTime" type="FTDTime" comment="挂起时间"/>
+		<itemDefine name="ThroughTime" type="FTDTime" comment="直到时间"/>
+		<itemDefine name="Tick" type="FTDPrice" comment="最小价位"/>
+		<itemDefine name="TimeOut" type="FTDTimeOut" comment="发送监测信号时间间隔"/>
+		<itemDefine name="TimeSpan" type="FTDNumberType&lt;3&gt;" comment="时区"/>
+		<itemDefine name="TimeStamp" type="FTDTimeStamp" comment="时间戳"/>
+		<itemDefine name="TotalMarketMatchData" type="FTDIntType" comment="发送成交行情记录总数，网络序"/>
+		<itemDefine name="TotalVolume" type="FTDVolume" comment="总成交量"/>
+		<itemDefine name="TradeDate" type="FTDDate" comment="交易委托日期"/>
+		<itemDefine name="TradeId" type="FTDTradeId" comment="成交编号"/>
+		<itemDefine name="DialogLoginTime" type="FTDDateTime" comment="最后一次对话模式登录时间"/>
+		<itemDefine name="DialogLogoutTime" type="FTDDateTime" comment="最后一次对话模式退出时间"/>
+		<itemDefine name="TradeLot" type="FTDIntType" comment="总成交手数，双向计算"/>
+		<itemDefine name="TradePrice" type="FTDPrice" comment="最新成交价格"/>
+		<itemDefine name="UserId" type="FTDUserId" comment="交易员编码"/>
+		<itemDefine name="TradeRights" type="FTDTradeRight" comment="交易权限"/>
+		<itemDefine name="UserStatus" type="FTDUserStatus" comment="交易员状态"/>
+		<itemDefine name="UserType" type="FTDUserType" comment="交易员类别"/>
+		<itemDefine name="DialogStreamStatus" type="FTDBoolFlag" comment="对话模式在线状态"/>
+		<itemDefine name="TradeTurnover" type="FTDVolume" comment="总成交金额，双向计算"/>
+		<itemDefine name="TradeType" type="FTDTradeType" comment="市场交易类型"/>
+		<itemDefine name="TradeVolume" type="FTDIntType" comment="今成交量"/>
+		<itemDefine name="Unit" type="FTDIntType" comment="每手乘数"/>
+		<itemDefine name="UpdateTime" type="FTDTime" comment="最后修改时间"/>
+		<itemDefine name="URLLink" type="FTDStringType&lt;200&gt;" comment="此消息的WEB联结"/>
+		<itemDefine name="ValidThrough" type="FTDDate" comment="有效时间约束"/>
+		<itemDefine name="Volume" type="FTDVolume" comment="数量"/>
+		<itemDefine name="VolumeTotal" type="FTDIntType" comment="剩余总申报数量（以手为单位）"/>
+		<itemDefine name="VolumeTotalOrginal" type="FTDIntType" comment="原始总申报数量（以手为单位）"/>
+		<itemDefine name="VolumeType" type="FTDVolumeType" comment="数量类型"/>
+		<itemDefine name="YdBuyHedgePosition" type="FTDVolume" comment="前买持仓量(保)"/>
+		<itemDefine name="YdBuyOffsHPosition" type="FTDVolume" comment="买平昨量(保)"/>
+		<itemDefine name="YdBuyOffsSPosition" type="FTDVolume" comment="买平昨量(投)"/>
+		<itemDefine name="YdBuySpecPosition" type="FTDVolume" comment="前买持仓量(投)"/>
+		<itemDefine name="YdLongOffsFrozHPosition" type="FTDVolume" comment="上日多头平仓冻结持仓手(保)"/>
+		<itemDefine name="YdLongOffsFrozSPosition" type="FTDVolume" comment="上日多头平仓冻结持仓手(投)"/>
+		<itemDefine name="YdSellHedgePosition" type="FTDVolume" comment="前卖持仓量(保)"/>
+		<itemDefine name="YdSellOffsHPosition" type="FTDVolume" comment="卖平昨量(保)"/>
+		<itemDefine name="YdSellOffsSPosition" type="FTDVolume" comment="卖平昨量(投)"/>
+		<itemDefine name="YdSellSpecPosition" type="FTDVolume" comment="前卖持仓量(投)"/>
+		<itemDefine name="YdShortOffsFrozHPosition" type="FTDVolume" comment="上日空头平仓冻结持仓手(保)"/>
+		<itemDefine name="YdShortOffsFrozSPosition" type="FTDVolume" comment="上日空头平仓冻结持仓手(投)"/>
+	</items>
+	<types>
+		<typeDefine name="FTDActionFlag" baseType="FTDCharType" length="1" precision="0">
+			<enumValue name="0" comment="删除"/>
+			<enumValue name="1" comment="挂起"/>
+			<enumValue name="2" comment="激活"/>
+		</typeDefine>
+		<typeDefine name="FTDBoolFlag" baseType="FTDCharType" length="1" precision="0">
+			<enumValue name="1" comment="真"/>
+			<enumValue name="0" comment="假"/>
+		</typeDefine>
+		<typeDefine name="FTDClientId" baseType="FTDStringType&lt;8&gt;" length="8" precision="0"/>
+		<typeDefine name="FTDClientType" baseType="FTDCharType" length="1" precision="0">
+			<enumValue name="0" comment="自然人"/>
+			<enumValue name="1" comment="法人"/>
+		</typeDefine>
+		<typeDefine name="FTDConnectionReference" baseType="FTDStringType&lt;5&gt;" length="5" precision="0"/>
+		<typeDefine name="FTDDataFlowFlag" baseType="FTDCharType" length="1" precision="0">
+			<enumValue name="0" comment="对话流"/>
+			<enumValue name="1" comment="私有流"/>
+			<enumValue name="2" comment="广播流"/>
+		</typeDefine>
+		<typeDefine name="FTDDate" baseType="FTDStringType&lt;8&gt;" comment="yyyymmdd" length="8" precision="0"/>
+		<typeDefine name="FTDDateTime" baseType="FTDStringType&lt;20&gt;" comment="yyyymmddhh24nnsscc" length="20" precision="0"/>
+		<typeDefine name="FTDDirection" baseType="FTDCharType" length="1" precision="0">
+			<enumValue name="0" comment="买"/>
+			<enumValue name="1" comment="卖"/>
+		</typeDefine>
+		<typeDefine name="FTDErrorCode" baseType="FTDStringType&lt;10&gt;" length="10" precision="0"/>
+		<typeDefine name="FTDForceExitCode" baseType="FTDCharType" length="1" precision="0">
+			<enumValue name="0" comment="目前应该为0"/>
+		</typeDefine>
+		<typeDefine name="FTDHedgeFlag" baseType="FTDCharType" length="1" precision="0">
+			<enumValue name="1" comment="投机"/>
+			<enumValue name="3" comment="套期保值"/>
+		</typeDefine>
+		<typeDefine name="FTDInstrumentId" baseType="FTDStringType&lt;10&gt;" length="10" precision="0"/>
+		<typeDefine name="FTDInstrumentStatus" baseType="FTDCharType" length="1" precision="0">
+			<enumValue name="0" comment="连续交易"/>
+			<enumValue name="1" comment="开盘集合竞价"/>
+			<enumValue name="2" comment="收盘集合竞价"/>
+			<enumValue name="3" comment="暂停"/>
+			<enumValue name="4" comment="非交易"/>
+		</typeDefine>
+		<typeDefine name="FTDInstrumentType" baseType="FTDCharType" length="1" precision="0">
+			<enumValue name="0" comment="目前应该为0"/>
+		</typeDefine>
+		<typeDefine name="FTDInstrumentVersion" baseType="FTDCharType" length="1" precision="0">
+			<enumValue name="0" comment="目前应该为0"/>
+		</typeDefine>
+		<typeDefine name="FTDLocalId" baseType="FTDStringType&lt;15&gt;" length="15" precision="0"/>
+		<typeDefine name="FTDMarketId" baseType="FTDStringType&lt;10&gt;" length="10" precision="0"/>
+		<typeDefine name="FTDMarketStatus" baseType="FTDCharType" length="1" precision="0">
+			<enumValue name="0" comment="连续交易"/>
+			<enumValue name="1" comment="开盘集合竞价"/>
+			<enumValue name="2" comment="收盘集合竞价"/>
+			<enumValue name="3" comment="暂停"/>
+			<enumValue name="4" comment="非交易"/>
+		</typeDefine>
+		<typeDefine name="FTDMatchCondition" baseType="FTDCharType" length="1" precision="0">
+			<enumValue name="1" comment="即时全部成交"/>
+			<enumValue name="2" comment="即时部分成交"/>
+			<enumValue name="3" comment="当日有效"/>
+			<enumValue name="4" comment="取消前有效"/>
+			<enumValue name="5" comment="指定日期前有效"/>
+		</typeDefine>
+		<typeDefine name="FTDMatchSession" baseType="FTDCharType" length="1" precision="0">
+			<enumValue name="1" comment="开盘集合竞价"/>
+			<enumValue name="2" comment="连续交易"/>
+			<enumValue name="3" comment="开盘集合竞价和连续交易"/>
+			<enumValue name="4" comment="收盘集合竞价"/>
+			<enumValue name="5" comment="开盘集合竞价和收盘集合竞价"/>
+			<enumValue name="6" comment="连续交易和收盘集合竞价"/>
+			<enumValue name="7" comment="开盘集合竞价，连续交易和收盘集合竞价"/>
+		</typeDefine>
+		<typeDefine name="FTDMatchFlag" baseType="FTDCharType" length="1" precision="0">
+			<enumValue name="0" comment="同为开仓"/>
+			<enumValue name="1" comment="同为平仓"/>
+			<enumValue name="2" comment="不同"/>
+		</typeDefine>
+		<typeDefine name="FTDMsgRef" baseType="FTDStringType&lt;6&gt;" length="6" precision="0"/>
+		<typeDefine name="FTDName" baseType="FTDStringType&lt;20&gt;" length="20" precision="0"/>
+		<typeDefine name="FTDNewsType" baseType="FTDStringType&lt;2&gt;" length="2" precision="0"/>
+		<typeDefine name="FTDNewsUrgency" baseType="FTDCharType" length="1" precision="0"/>
+		<typeDefine name="FTDOffsetFlag" baseType="FTDCharType" length="1" precision="0">
+			<enumValue name="0" comment="开仓"/>
+			<enumValue name="1" comment="平仓"/>
+			<enumValue name="2" comment="强平"/>
+			<enumValue name="3" comment="强减"/>
+		</typeDefine>
+		<typeDefine name="FTDOrderStatus" baseType="FTDCharType" length="1" precision="0">
+			<enumValue name="0" comment="全部成交"/>
+			<enumValue name="1" comment="部分成交还在队列中"/>
+			<enumValue name="2" comment="部分成交不在队列中"/>
+			<enumValue name="3" comment="未成交还在队列中"/>
+			<enumValue name="4" comment="未成交不在队列中"/>
+			<enumValue name="5" comment="撤单"/>
+		</typeDefine>
+		<typeDefine name="FTDOrderType" baseType="FTDCharType" length="1" precision="0">
+			<enumValue name="0" comment="限价" enname="Limit"/>
+			<enumValue name="1" comment="市价" enname="Market"/>
+			<enumValue name="2" comment="止损限价"/>
+			<enumValue name="3" comment="止损市价"/>
+			<enumValue name="4" comment="市价转限价"/>
+			<enumValue name="5" comment="最好价格"/>
+			<enumValue name="6" comment="均价"/>
+		</typeDefine>
+		<typeDefine name="FTDParticipantId" baseType="FTDStringType&lt;8&gt;" length="8" precision="0"/>
+		<typeDefine name="FTDParticipantType" baseType="FTDCharType" length="1" precision="0">
+			<enumValue name="0" comment="自营"/>
+			<enumValue name="1" comment="经纪"/>
+			<enumValue name="2" comment="综合"/>
+			<enumValue name="3" comment="特别"/>
+			<enumValue name="4" comment="做市商"/>
+		</typeDefine>
+		<typeDefine name="FTDPassword" baseType="FTDStringType&lt;40&gt;" length="40" precision="0"/>
+		<typeDefine name="FTDPercent" baseType="FTDFloatType&lt;4,2&gt;" length="4" precision="2"/>
+		<typeDefine name="FTDPrice" baseType="FTDFloatType&lt;10,2&gt;" length="10" precision="2"/>
+		<typeDefine name="FTDProtocolVersion" baseType="FTDStringType&lt;8&gt;" length="8" precision="0"/>
+		<typeDefine name="FTDPubStyle" baseType="FTDCharType" length="1" precision="0">
+			<enumValue name="0" comment="不发布"/>
+			<enumValue name="1" comment="发布"/>
+		</typeDefine>
+		<typeDefine name="FTDSequenceNo" baseType="FTDIntType" length="4" precision="0"/>
+		<typeDefine name="FTDSequenceSeries" baseType="FTDWordType" length="2" precision="0"/>
+		<typeDefine name="FTDServerAppName" baseType="FTDStringType&lt;20&gt;" length="20" precision="0"/>
+		<typeDefine name="FTDStopCode" baseType="FTDCharType" length="1" precision="0">
+			<enumValue name="0" comment="目前应该为0"/>
+		</typeDefine>
+		<typeDefine name="FTDSysOrderId" baseType="FTDStringType&lt;20&gt;" length="20" precision="0"/>
+		<typeDefine name="FTDTime" baseType="FTDStringType&lt;8&gt;" comment="hh24nnsscc" length="8" precision="0"/>
+		<typeDefine name="FTDTimeOut" baseType="FTDNumberType&lt;3&gt;" length="3" precision="0"/>
+		<typeDefine name="FTDTimeStamp" baseType="FTDStringType&lt;20&gt;" comment="Unix系统UTC时间" length="20" precision="0"/>
+		<typeDefine name="FTDUserId" baseType="FTDStringType&lt;15&gt;" length="15" precision="0"/>
+		<typeDefine name="FTDTradeId" baseType="FTDStringType&lt;20&gt;" length="20" precision="0"/>
+		<typeDefine name="FTDTradeRight" baseType="FTDCharType" length="1" precision="0">
+			<enumValue name="0" comment="完全"/>
+			<enumValue name="1" comment="只可平"/>
+			<enumValue name="2" comment="不准交易"/>
+		</typeDefine>
+		<typeDefine name="FTDUserStatus" baseType="FTDCharType" length="1" precision="0">
+			<enumValue name="0" comment="目前应该为0"/>
+		</typeDefine>
+		<typeDefine name="FTDUserType" baseType="FTDCharType" length="1" precision="0">
+			<enumValue name="0" comment="目前应该为0"/>
+		</typeDefine>
+		<typeDefine name="FTDTradeType" baseType="FTDCharType" length="1" precision="0">
+			<enumValue name="0" comment="目前应该为0"/>
+		</typeDefine>
+		<typeDefine name="FTDValue" baseType="FTDFloatType&lt;14,2&gt;" length="14" precision="2"/>
+		<typeDefine name="FTDVolume" baseType="FTDIntType" length="4" precision="0"/>
+		<typeDefine name="FTDVolumeType" baseType="FTDCharType" length="1" precision="0">
+			<enumValue name="0" comment="增量"/>
+			<enumValue name="1" comment="绝对量"/>
+		</typeDefine>
+	</types>
+</ftd>

@@ -4,6 +4,9 @@
 #include <memory.h>
 #include <string>
 #include "Utility.h"
+#define htonll(x) ((1==htonl(1)) ? (x) : ((uint64_t)htonl((x) & 0xFFFFFFFF) << 32) | htonl((x) >> 32))
+#define ntohll(x) ((1==ntohl(1)) ? (x) : ((uint64_t)ntohl((x) & 0xFFFFFFFF) << 32) | ntohl((x) >> 32))
+
 namespace FTD
 {
 
@@ -210,6 +213,37 @@ namespace FTD
 		}
 
 		int16_t value;
+	};
+
+	struct FTDInt64Type
+	{
+		int64_t getValue() const
+		{
+			return value;
+		}
+
+		void loadData(const char* buffer)
+		{
+			readBuffer(buffer, value);
+		}
+		int64_t value;
+
+		static void writeBuffer(int64_t value, char* buffer)
+		{
+			value = htonll(value);
+			memcpy(buffer, &value, sizeof(value));
+		}
+
+		static void readBuffer(const char* buffer, int64_t& value)
+		{
+			memcpy(&value, buffer, 8);
+			value = ntohll(value);
+		}
+
+		static int getMsgLength()
+		{
+			return  8;
+		}
 	};
 }
 #endif
