@@ -275,6 +275,15 @@
 		</fieldDefine>
 		
 		<fieldDefine name="ReqQryOrderField" fid="FID_ReqQryOrderField" fidValue="0x000C" comment="报单查询请求域">		
+			<item name="UserID" comment="用户代码"/>
+			<item name="InvestorID" comment="投资者代码"/>
+			<item name="RequestID" comment="请求编号"/>
+			<item name="FrontID" comment="前置编号">
+			<item name="SessionID" comment="会话编号">
+			<item name="OrderRef" comment="报单引用">
+			<item name="ExchangeCode" comment="交易所代码"/>
+			<item name="OrderExchangeID" comment="报单在交易所编号"/>
+			<item name="OrderSysID" comment="报单在柜台编号"/>
 		</fieldDefine>
 		
 		<fieldDefine name="OrderField" fid="FID_OrderField" fidValue="0x000D" comment="报单状态域">
@@ -282,6 +291,8 @@
 			<item name="InvestorID" comment="投资者代码"/>
 			<item name="InstrumentCode" comment="证券代码"/>
 			<item name="ExchangeCode" comment="交易所代码"/>
+			<item name="FrontID" comment="前置编号">
+			<item name="SessionID" comment="会话编号">
 			<item name="OrderRef" comment="报单引用">
 			<item name="RequestID" comment="请求编号"/>
 			<item name="UserID" comment="用户代码"/>
@@ -305,7 +316,9 @@
 		</fieldDefine>
 		
 		<fieldDefine name="ReqQryTradeField" fid="FID_ReqQryTradeField" fidValue="0x000E" comment="报单成交查询请求域">
-		
+			<item name="UserID" comment="用户代码"/>
+			<item name="InvestorID" comment="投资者代码"/>
+			<item name="RequestID" comment="请求编号"/>
 		</fieldDefine>
 		
 		<fieldDefine name="TradeField" fid="FID_TradeField" fidValue="0x000F" comment="报单成交域">	
@@ -331,21 +344,40 @@
 		</fieldDefine>
 		
 		<fieldDefine name="ReqQryFundTransferField" fid="FID_ReqQryFundTransferField" fidValue="0x0010" comment="资金划转查询请求域">
+			<item name="UserID" comment="用户代码"/>
+			<item name="InvestorID" comment="投资者代码"/>
+			<item name="RequestID" comment="请求编号"/>
 		</fieldDefine>
 		
 		<fieldDefine name="ReqQryHisOrderField" fid="FID_ReqQryHisOrderField" fidValue="0x0011" comment="历史报单查询请求域">
+			<item name="UserID" comment="用户代码"/>
+			<item name="InvestorID" comment="投资者代码"/>
+			<item name="RequestID" comment="请求编号"/>
+			<item name="BeginDate" comment="开始日期"/>
+			<item name="EndDate" comment="结束日期"/>
 		</fieldDefine>
 		
 		<fieldDefine name="ReqQryHisTradeField" fid="FID_ReqQryHisTradeField" fidValue="0x0012" comment="报单成交查询请求域">
+			<item name="UserID" comment="用户代码"/>
+			<item name="InvestorID" comment="投资者代码"/>
+			<item name="RequestID" comment="请求编号"/>
+			<item name="BeginDate" comment="开始日期"/>
+			<item name="EndDate" comment="结束日期"/>
 		</fieldDefine>
 		
 		<fieldDefine name="ReqQryHisFundTransferField" fid="FID_ReqQryHisFundTransferField" fidValue="0x0013" comment="资金划转查询请求域">
+			<item name="UserID" comment="用户代码"/>
+			<item name="InvestorID" comment="投资者代码"/>
+			<item name="RequestID" comment="请求编号"/>
+			<item name="BeginDate" comment="开始日期"/>
+			<item name="EndDate" comment="结束日期"/>
 		</fieldDefine>
 		
 		<fieldDefine name="ReqQryInstrumentField" fid="FID_ReqQryInstrumentField" fidValue="0x0014" comment="证券查询请求请求域">
 		</fieldDefine>
 		
 		<fieldDefine name="InstrumentField" fid="FID_InstrumentField" fidValue="0x0015" comment="证券信息域">
+		
 		</fieldDefine>
 		
 		<fieldDefine name="ReqQryStructuredFundField" fid="FID_ReqQryStructuredFundField" fidValue="0x0016" comment="分级基金查询请求域">
