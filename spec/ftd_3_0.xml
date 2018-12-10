@@ -13,7 +13,6 @@
 		
 		<packageDefine name="RspUserLogin" tid="TID_UserLogin" model="none" comment="交易员登录应答">
 			<field name="RspUserLoginField" maxOccur="1" minOccur="1" comment="交易员登录响应域"/>
-			<field name="SecurityAccountField" maxOccur="任意" minOccur="0" comment="股东账号域"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>		
 		
@@ -148,21 +147,21 @@
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
-		<packageDefine name="ReqQryPurchasableNewIssueSecurity" tid="TID_QryPurchasableNewIssueSecurity" model="dialog" comment="当日可申购新发行证券信息查询请求">
-			<field name="ReqQryPurchasableNewSecurityField" maxOccur="1" minOccur="1" comment="证券查询请求请求域"/>
+		<packageDefine name="ReqQryPurchasableNewIssueSecurity" tid="TID_QryPurchasableNewIssueSecurity" model="dialog" comment="可申购新发行证券信息查询请求">
+			<field name="ReqQryPurchasableNewSecurityField" maxOccur="1" minOccur="1" comment="当日可申购新发行证券信息查询请求域"/>
 		</packageDefine>
 		
-		<packageDefine name="RspQryPurchasableNewIssueSecurity" tid="TID_QryPurchasableNewIssueSecurity" model="dialog" comment="当日可申购新发行证券信息查询应答">
-			<field name="PurchasableNewIssueSecurityField" maxOccur="任意" minOccur="0" comment="当日可申购新发行证券信息域"/>
+		<packageDefine name="RspQryPurchasableNewIssueSecurity" tid="TID_QryPurchasableNewIssueSecurity" model="dialog" comment="可申购新发行证券信息查询应答">
+			<field name="PurchasableNewIssueSecurityField" maxOccur="任意" minOccur="0" comment="可申购新发行证券信息域"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
 		<packageDefine name="ReqQryPurchaseQuota" tid="TID_QryPurchaseQuota" model="dialog" comment="新股申购额度信息查询请求">
-			<field name="ReqQryPurchaseQuotaField" maxOccur="1" minOccur="1" comment="新股申购额度信息查询请求域"/>
+			<field name="ReqQryPurchaseQuotaField" maxOccur="1" minOccur="1" comment="客户新股申购额度信息查询请求域"/>
 		</packageDefine>
 		
 		<packageDefine name="RspQryPurchaseQuota" tid="TID_QryPurchaseQuota" model="dialog" comment="新股申购额度信息查询应答">
-			<field name="PurchaseQuotaField" maxOccur="任意" minOccur="0" comment="新股申购额度信息域"/>
+			<field name="PurchaseQuotaField" maxOccur="任意" minOccur="0" comment="客户新股申购额度信息域"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
@@ -205,16 +204,40 @@
 	
 		
 		<fieldDefine name="ErrorField" fid="FID_ErrorField" fidValue="0x0001" comment="错误域">
+			<item name="ErrorCode" comment="错误代码"/>
+			<item name="ErrorText" comment="错误正文"/>
+			<item name="TimeStamp" comment="时间戳"/>
 		</fieldDefine>
 	
 		<fieldDefine name="ReqUserLoginField" fid="FID_ReqUserLoginField" fidValue="0x0002"  comment="交易员登录请求域">
+			<item name="TradingDay" comment="交易日"/>
+			<item name="BrokerID" comment="经纪公司代码"/>
+			<item name="UserID" comment="用户代码"/>
+			<item name="Password" comment="密码"/>
+			<item name="UserProductInfo" comment="用户端产品信息"/>
+			<item name="InterfaceProductInfo" comment="接口端产品信息"/>
+			<item name="ProtocolInfo" comment="协议信息"/>
+			<item name="MacAddress" comment="Mac地址"/>
+			<item name="OneTimePassword" comment="动态密码"/>
+			<item name="ClientIPAddress" comment="终端IP地址"/>
+			<item name="LoginMark" comment="登录备注"/>
 		</fieldDefine>
 		
 		<fieldDefine name="DissenminationstartField" fid="FID_DissenminationstartField" fidValue="0x0003" comment="发送信息起始说明域">
+			<item name="SequenceSeries" comment="序列类别号"/>
+			<item name="SequenceNo" comment="序列号"/>
 		</fieldDefine>
 	
 		<fieldDefine name="RspUserLoginField" fid="FID_RspUserLoginField" fidValue="0x0004" comment="交易员登录响应域">
-		
+		    <item name="TradingDay" comment="交易日"/>
+			<item name="LoginTime" comment="登录成功时间"/>
+			<item name="BrokerID" comment="经纪公司代码"/>
+			<item name="UserID" comment="用户代码"/>
+			<item name="SystemName" comment="交易系统名称"/>
+			<item name="FrontID" comment="前置编号"/>
+			<item name="SessionID" comment="会话编号"/>
+			<item name="MaxOrderRef" comment="最大报单引用">
+			<item name="RandomString" comment="随机串"/>
 		</fieldDefine>
 		
 		<fieldDefine name="SecurityAccountField" fid="FID_SecurityAccountField" fidValue="0x0005" comment="股东账号域">		
@@ -229,7 +252,20 @@
 		<fieldDefine name="ForceExitField" fid="FID_ForceExitField" fidValue="0x0008" comment="强制退出域">
 		</fieldDefine>
 		
-		<fieldDefine name="OrderInsertField" fid="FID_OrderInsertField" fidValue="0x0009" comment="报单信息域">	
+		<fieldDefine name="OrderInsertField" fid="FID_OrderInsertField" fidValue="0x0009" comment="报单信息域">
+		<item name="BrokerID" comment="经纪公司代码"/>
+		<item name="InvestorID" comment="投资者代码"/>
+		<item name="InstrumentCode" comment="证券代码"/>
+		<item name="ExchangeCode" comment="交易所代码"/>
+		<item name="OrderRef" comment="报单引用">
+		<item name="RequestID" comment="请求编号"/>
+		<item name="UserID" comment="用户代码"/>
+		<item name="Direction" comment="报单价格方向"/>
+		<item name="PriceType" comment="报单价格条件"/>
+		<item name="LimitPrice" comment="限制价格"/>
+		<item name="VolumeTotalOrginal" comment="报单数量"/>
+		<item name="IPAddress" comment="IP地址"/>
+		<item name="MacAddress" comment="Mac地址"/>
 		</fieldDefine>
 		
 		<fieldDefine name="OrderActionField" fid="FID_OrderActionField" fidValue="0x000A" comment="报单操作域">		
@@ -241,13 +277,57 @@
 		<fieldDefine name="ReqQryOrderField" fid="FID_ReqQryOrderField" fidValue="0x000C" comment="报单查询请求域">		
 		</fieldDefine>
 		
-		<fieldDefine name="OrderStatusField" fid="FID_OrderStatusField" fidValue="0x000D" comment="报单状态域">
+		<fieldDefine name="OrderField" fid="FID_OrderField" fidValue="0x000D" comment="报单状态域">
+			<item name="BrokerID" comment="经纪公司代码"/>
+			<item name="InvestorID" comment="投资者代码"/>
+			<item name="InstrumentCode" comment="证券代码"/>
+			<item name="ExchangeCode" comment="交易所代码"/>
+			<item name="OrderRef" comment="报单引用">
+			<item name="RequestID" comment="请求编号"/>
+			<item name="UserID" comment="用户代码"/>
+			<item name="Direction" comment="报单价格方向"/>
+			<item name="PriceType" comment="报单价格条件"/>
+			<item name="LimitPrice" comment="限制价格"/>
+			<item name="VolumeTotalOrginal" comment="报单数量"/>
+			<item name="VolumeTraded" comment="成交数量"/>
+			<item name="VolumeTotal" comment="剩余数量"/>
+			<item name="OrderSysID" comment="报单在柜台系统编号"/>
+			<item name="OrderExchangeID" comment="报单在交易所编号"/>
+			<item name="TradingDay" comment="交易日"/>
+			<item name="InsertDate" comment="报单日期"/>
+			<item name="InsertTime" comment="报单时间"/>
+			<item name="UpdateTime" comment="最后修改时间"/>
+			<item name="CancelTime" comment="撤销时间"/>
+			<item name="BranchID" comment="营业部编号"/>
+			<item name="InvestUnitID" comment="席位编号"/>
+			<item name="IPAddress" comment="IP地址"/>
+			<item name="MacAddress" comment="Mac地址"/>
 		</fieldDefine>
 		
 		<fieldDefine name="ReqQryTradeField" fid="FID_ReqQryTradeField" fidValue="0x000E" comment="报单成交查询请求域">
+		
 		</fieldDefine>
 		
-		<fieldDefine name="TradeField" fid="FID_TradeField" fidValue="0x000F" comment="报单成交域">		
+		<fieldDefine name="TradeField" fid="FID_TradeField" fidValue="0x000F" comment="报单成交域">	
+			<item name="BrokerID" comment="经纪公司代码"/>
+			<item name="InvestorID" comment="投资者代码"/>
+			<item name="InstrumentCode" comment="证券代码"/>
+			<item name="ExchangeCode" comment="交易所代码"/>
+			<item name="OrderRef" comment="报单引用">
+			<item name="UserID" comment="用户代码"/>
+			<item name="Direction" comment="报单价格方向"/>
+			<item name="PriceType" comment="报单价格条件"/>
+			<item name="LimitPrice" comment="限制价格"/>
+			<item name="VolumeTotalOrginal" comment="报单数量"/>
+			<item name="CancelFlag" comment="成交&#47;撤单标记"/>
+			<item name="VolumeTrade" comment="成交数量"/>
+			<item name="PriceTrade" comment="成交价格"/>
+			<item name="TradeDate" comment="成交日期"/>
+			<item name="TradeTime" comment="成交时间"/>
+			<item name="TradeSysID" comment="成交回报在柜台编号"/>
+			<item name="TradeExchangeID" comment="成交在交易所编号"/>
+			<item name="BranchID" comment="营业部编号"/>
+			<item name="InvestUnitID" comment="席位编号"/>
 		</fieldDefine>
 		
 		<fieldDefine name="ReqQryFundTransferField" fid="FID_ReqQryFundTransferField" fidValue="0x0010" comment="资金划转查询请求域">
@@ -286,10 +366,10 @@
 		<fieldDefine name="ETFCompositionField" fid="FID_ETFCompositionField" fidValue="0x0021" comment="ETF成分股信息域">		
 		</fieldDefine>
 		
-		<fieldDefine name="ReqQryPurchasableNewSecurityField" fid="FID_ReqQryPurchasableNewSecurityField" fidValue="0x0022" comment="证券查询请求请求域">
+		<fieldDefine name="ReqQryPurchasableNewSecurityField" fid="FID_ReqQryPurchasableNewSecurityField" fidValue="0x0022" comment="可申购新发行证券信息查询请求域">
 		</fieldDefine>
 		
-		<fieldDefine name="PurchasableNewIssueSecurityField" fid="FID_PurchasableNewIssueSecurityField" fidValue="0x0023" comment="当日可申购新发行证券信息域">
+		<fieldDefine name="PurchasableNewIssueSecurityField" fid="FID_PurchasableNewIssueSecurityField" fidValue="0x0023" comment="可申购新发行证券信息域">
 		</fieldDefine>
 		
 		<fieldDefine name="ReqQryPurchaseQuotaField" fid="FID_ReqQryPurchaseQuotaField" fidValue="0x0024" comment="新股申购额度信息查询请求域">

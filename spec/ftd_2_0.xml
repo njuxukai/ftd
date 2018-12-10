@@ -278,7 +278,7 @@
 			<item name="ErrorCode" comment="错误代码"/>
 			<item name="ErrorText" comment="错误正文"/>
 			<item name="TimeStamp" comment="时间戳"/>
-		</fieldDefine>
+		</fieldDefine>ReqUserLoginField
 		<fieldDefine name="ErrorTargetOrderField" fid="FID_ErrorTargetOrderField" fidValue="0x002D" comment="错误报单号域">
 			<item name="OrderSysId" comment="合同编号"/>
 			<item name="OrderLocalId" comment="委托编号"/>
