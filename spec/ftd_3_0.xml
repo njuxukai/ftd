@@ -35,37 +35,61 @@
 		</packageDefine>
 		
 		<packageDefine name="ReqOrderInsert" tid="TID_OrderInsert" model="dialog" comment="报单录入">
-			<field name="OrderInsertField" maxOccur="1" minOccur="1" comment="报单信息域"/>
+			<field name="InputOrderField" maxOccur="1" minOccur="1" comment="报单信息域"/>
 			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 		</packageDefine>
 		
 		<packageDefine name="RspOrderInsert" tid="TID_OrderInsert" model="none" comment="强制退出">
-			<field name="OrderInsertField" maxOccur="1" minOccur="1" comment="报单信息域"/>
+			<field name="InputOrderField" maxOccur="1" minOccur="1" comment="报单信息域"/>
 			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
 		<packageDefine name="ReqOrderAction" tid="TID_OrderAction" model="dialog" comment="报单操作请求">
-			<field name="OrderActionField" maxOccur="1" minOccur="1" comment="报单操作域"/>
+			<field name="InputOrderActionField" maxOccur="1" minOccur="1" comment="输入报单操作域"/>
 			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 		</packageDefine>
 		
 		<packageDefine name="RspOrderAction" tid="TID_OrderAction" model="dialog" comment="报单操作应答">
-			<field name="OrderActionField" maxOccur="1" minOccur="1" comment="报单操作域"/>
+			<field name="InputOrderActionField" maxOccur="1" minOccur="1" comment="报单操作域"/>
 			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
-		<packageDefine name="ReqQryFundTransfer" tid="TID_FundTransfer" model="dialog" comment="资金划转请求">
-			<field name="QryFundTransferField" maxOccur="1" minOccur="1" comment="资金划转域"/>
+		<packageDefine name="ReqFundTransfer" tid="TID_FundTransfer" model="dialog" comment="资金划转请求">
+			<field name="InputFundTransferField" maxOccur="1" minOccur="1" comment="输入资金划转域"/>
 			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 		</packageDefine>
 		
 		<packageDefine name="RspFundTransfer" tid="TID_FundTransfer" model="dialog" comment="资金划转应答">
-			<field name="FundTransferField" maxOccur="1" minOccur="1" comment="资金划转域"/>
+			<field name="InputFundTransferField" maxOccur="1" minOccur="1" comment="输入资金划转域"/>
 			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
+		
+		<packageDefine name="ReqQryFund" tid="TID_QryFund" model="dialog" comment="资金余额查询请求">
+			<field name="QryFundField" maxOccur="1" minOccur="1" comment="资金余额查询请求域"/>
+			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
+		</packageDefine>
+		
+		<packageDefine name="RspQryFund" tid="TID_QryFund" model="dialog" comment="资金余额查询应答">
+			<field name="FundField" maxOccur="1" minOccur="1" comment="资金余额域"/>
+			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
+			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
+		</packageDefine>
+		
+		<packageDefine name="ReqQryPosition" tid="TID_QryPosition" model="dialog" comment="仓位查询请求">
+			<field name="QryPositionField" maxOccur="1" minOccur="1" comment="证券仓位域"/>
+			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
+		</packageDefine>
+		
+		<packageDefine name="RspQryPosition" tid="TID_QryPosition" model="dialog" comment="仓位查询应答">
+			<field name="PositionField" maxOccur="1" minOccur="1" comment="证券仓位域"/>
+			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
+			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
+		</packageDefine>
+		
+		
 		
 		
 		<packageDefine name="ReqQryOrder" tid="TID_QryOrder" model="dialog" comment="报单查询请求">
@@ -214,26 +238,29 @@
 		<tidDefine name="TID_UserLogout" value="0x0003"/>
 		<tidDefine name="TID_ForceExit" value="0x0004"/>
 		
-		<tidDefine name="TID_QryPrivateInitialData" value="0x1001"/>
-		<tidDefine name="TID_OrderInsert" value="0x1002"/>
-		<tidDefine name="TID_OrderAction" value="0x1003"/>
-		<tidDefine name="TID_FundTransfer" value="0x1004"/>
 		
-		<tidDefine name="TID_QryOrder" value="0x2001"/>		
-		<tidDefine name="TID_QryFundTransfer" value="0x2002"/>
-		<tidDefine name="TID_QryTrade" value="0x2003"/>
-		<tidDefine name="TID_QryHisOrder" value="0x2004"/>		
-		<tidDefine name="TID_QryHisFundTransfer" value="0x2005"/>
-		<tidDefine name="TID_QryHisTrade" value="0x2006"/>
-		<tidDefine name="TID_QryInstrument" value="0x2007"/>
-        <tidDefine name="TID_QryStructuredFund" value="0x2008"/>		
-		<tidDefine name="TID_QryETF" value="0x2009"/>		
-		<tidDefine name="TID_QryETFComposition" value="0x200A"/>
-		<tidDefine name="TID_QryPurchasableNewIssueSecurity" value="0x200B"/>
-		<tidDefine name="TID_QryPurchaseQuota" value="0x200C"/>
+		<tidDefine name="TID_OrderInsert" value="0x1001"/>
+		<tidDefine name="TID_OrderAction" value="0x1002"/>
+		<tidDefine name="TID_FundTransfer" value="0x1003"/>
+		
+		<tidDefine name="TID_QryPrivateInitialData" value="0x2000"/>
+		<tidDefine name="TID_QryFund" value="0x2001"/>
+		<tidDefine name="TID_QryPosition" value="0x2002"/>
+		<tidDefine name="TID_QryOrder" value="0x2003"/>		
+		<tidDefine name="TID_QryFundTransfer" value="0x2004"/>
+		<tidDefine name="TID_QryTrade" value="0x2005"/>
+		<tidDefine name="TID_QryHisOrder" value="0x2006"/>		
+		<tidDefine name="TID_QryHisFundTransfer" value="0x2007"/>
+		<tidDefine name="TID_QryHisTrade" value="0x2008"/>
+		<tidDefine name="TID_QryInstrument" value="0x2009"/>
+        <tidDefine name="TID_QryStructuredFund" value="0x200A"/>		
+		<tidDefine name="TID_QryETF" value="0x200B"/>		
+		<tidDefine name="TID_QryETFComposition" value="0x200C"/>
+		<tidDefine name="TID_QryPurchasableNewIssueSecurity" value="0x200D"/>
+		<tidDefine name="TID_QryPurchaseQuota" value="0x200E"/>
 		
 		
-		<tidDefine name="TID_IncExecutionReports" value="0x3002"/>
+		<tidDefine name="TID_IncExecutionReports" value="0x3001"/>
 	</tids>
 	
 		<fields>
@@ -247,7 +274,13 @@
 			<item name="TimeStamp" comment="时间戳"/>
 		</fieldDefine>
 	
-		<fieldDefine name="ReqUserLoginField" fid="FID_ReqUserLoginField" fidValue="0x0002"  comment="交易员登录请求域">
+		<fieldDefine name="RequestSourceField" fid="FID_RequestField" fidValue="0x0002" comment="请求源信息域">
+			<item name="FrontID" comment="Front编号"/>
+			<item name="SessionID" comment="会话编号"/>
+			<item name="RequestID" comment="请求编号"/>
+		</fieldDefine>
+		
+		<fieldDefine name="ReqUserLoginField" fid="FID_ReqUserLoginField" fidValue="0x0003"  comment="交易员登录请求域">
 			<item name="TradingDay" comment="交易日"/>
 			<item name="BrokerID" comment="经纪公司代码"/>
 			<item name="UserID" comment="用户代码"/>
@@ -261,12 +294,12 @@
 			<item name="LoginMark" comment="登录备注"/>
 		</fieldDefine>
 		
-		<fieldDefine name="DissenminationstartField" fid="FID_DissenminationstartField" fidValue="0x0003" comment="发送信息起始说明域">
+		<fieldDefine name="DissenminationstartField" fid="FID_DissenminationstartField" fidValue="0x0004" comment="发送信息起始说明域">
 			<item name="SequenceSeries" comment="序列类别号"/>
 			<item name="SequenceNo" comment="序列号"/>
 		</fieldDefine>
 	
-		<fieldDefine name="RspUserLoginField" fid="FID_RspUserLoginField" fidValue="0x0004" comment="交易员登录响应域">
+		<fieldDefine name="RspUserLoginField" fid="FID_RspUserLoginField" fidValue="0x0005" comment="交易员登录响应域">
 		    <item name="TradingDay" comment="交易日"/>
 			<item name="LoginTime" comment="登录成功时间"/>
 			<item name="BrokerID" comment="经纪公司代码"/>
@@ -278,41 +311,60 @@
 			<item name="RandomString" comment="随机串"/>
 		</fieldDefine>
 		
-		<fieldDefine name="SecurityAccountField" fid="FID_SecurityAccountField" fidValue="0x0005" comment="股东账号域">		
+		<fieldDefine name="SecurityAccountField" fid="FID_SecurityAccountField" fidValue="0x0006" comment="股东账号域">		
 		</fieldDefine>
 		
-		<fieldDefine name="ReqUserLogoutField" fid="FID_ReqUserLogoutField" fidValue="0x0006" comment="交易员退出登录请求域">	
+		<fieldDefine name="ReqUserLogoutField" fid="FID_ReqUserLogoutField" fidValue="0x0007" comment="交易员退出登录请求域">	
 		</fieldDefine>
 		
-		<fieldDefine name="RspUserLogoutField" fid="FID_RspUserLogoutField" fidValue="0x0007" comment="交易员退出登录响应域">
+		<fieldDefine name="RspUserLogoutField" fid="FID_RspUserLogoutField" fidValue="0x0008" comment="交易员退出登录响应域">
 		</fieldDefine>
 		
-		<fieldDefine name="ForceExitField" fid="FID_ForceExitField" fidValue="0x0008" comment="强制退出域">
+		<fieldDefine name="ForceExitField" fid="FID_ForceExitField" fidValue="0x0009" comment="强制退出域">
 		</fieldDefine>
 		
-		<fieldDefine name="OrderInsertField" fid="FID_OrderInsertField" fidValue="0x0009" comment="报单信息域">
-		<item name="BrokerID" comment="经纪公司代码"/>
-		<item name="InvestorID" comment="投资者代码"/>
-		<item name="InstrumentCode" comment="证券代码"/>
-		<item name="ExchangeCode" comment="交易所代码"/>
-		<item name="OrderRef" comment="报单引用">
-		<item name="RequestID" comment="请求编号"/>
-		<item name="UserID" comment="用户代码"/>
-		<item name="Direction" comment="报单价格方向"/>
-		<item name="PriceType" comment="报单价格条件"/>
-		<item name="LimitPrice" comment="限制价格"/>
-		<item name="VolumeTotalOrginal" comment="报单数量"/>
-		<item name="IPAddress" comment="IP地址"/>
-		<item name="MacAddress" comment="Mac地址"/>
+		<fieldDefine name="InputOrderField" fid="FID_InputOrderField" fidValue="0x000A" comment="报单信息域">
+			<item name="BrokerID" comment="经纪公司编码"/>
+			<item name="InvestorID" comment="投资者编码"/>
+			<item name="InstrumentCode" comment="证券代码"/>
+			<item name="ExchangeCode" comment="交易所代码"/>
+			<item name="OrderRef" comment="报单引用">
+			<item name="RequestID" comment="请求编码"/>
+			<item name="UserID" comment="用户编码"/>
+			<item name="Direction" comment="报单价格方向"/>
+			<item name="PriceType" comment="报单价格条件"/>
+			<item name="LimitPrice" comment="限制价格"/>
+			<item name="VolumeTotalOrginal" comment="报单数量"/>
+			<item name="IPAddress" comment="IP地址"/>
+			<item name="MacAddress" comment="Mac地址"/>
 		</fieldDefine>
 		
-		<fieldDefine name="OrderActionField" fid="FID_OrderActionField" fidValue="0x000A" comment="报单操作域">		
+		<fieldDefine name="InputOrderActionField" fid="FID_InputOrderActionField" fidValue="0x000B" comment="报单操作域">		
+			<item name="BrokerID" comment="经纪公司编码"/>
+			<item name="UserID" comment="用户编码"/>
+			<item name="InvestorID" comment="投资者编码"/>
+			<item name="RequestID" comment="请求编号"/>
+			<item name="InstrumentCode" comment="证券代码"/>
+			<item name="ExchangeCode" comment="交易所代码"/>
+     		<item name="FrontID" comment="用户代码"/>
+			<item name="SessionID" comment="会话代码"/>
+			<item name="OrderRef" comment="报单引用">
+			<item name="ActionFlag" comment="操作标志">			
+			<item name="ExchangeCode" comment="交易所代码"/>
+			<item name="OrderExchangeID" comment="报单交易所编码"/>
+			<item name="BranchID" comment="营业部编码"/>
+			<item name="OrderSysID" comment="报单系统编码"/>
+			<item name="ActionDate" comment="操作日期"/>
+			<item name="ActionTime" comment="操作时间"/>
+			<item name="InvestUnitID" comment="投资单元编号"/>			
+			<item name="IPAddress" comment="IP地址"/>
+			<item name="MacAddress" comment="Mac地址"/>
 		</fieldDefine>
 		
-		<fieldDefine name="FundTransferField" fid="FID_FundTransferField" fidValue="0x000B" comment="资金划转域">
+		<fieldDefine name="FundTransferField" fid="FID_FundTransferField" fidValue="0x000C" comment="资金划转域">
 		</fieldDefine>
 		
-		<fieldDefine name="QryOrderField" fid="FID_QryOrderField" fidValue="0x000C" comment="报单查询请求域">		
+		<fieldDefine name="QryOrderField" fid="FID_QryOrderField" fidValue="0x000D" comment="报单查询请求域">		
 			<item name="UserID" comment="用户代码"/>
 			<item name="InvestorID" comment="投资者代码"/>
 			<item name="RequestID" comment="请求编号"/>
@@ -324,7 +376,7 @@
 			<item name="OrderSysID" comment="报单在柜台编号"/>
 		</fieldDefine>
 		
-		<fieldDefine name="OrderField" fid="FID_OrderField" fidValue="0x000D" comment="报单状态域">
+		<fieldDefine name="OrderField" fid="FID_OrderField" fidValue="0x000E" comment="报单状态域">
 			<item name="BrokerID" comment="经纪公司代码"/>
 			<item name="InvestorID" comment="投资者代码"/>
 			<item name="InstrumentCode" comment="证券代码"/>
@@ -353,13 +405,13 @@
 			<item name="MacAddress" comment="Mac地址"/>
 		</fieldDefine>
 		
-		<fieldDefine name="QryTradeField" fid="FID_QryTradeField" fidValue="0x000E" comment="报单成交查询请求域">
+		<fieldDefine name="QryTradeField" fid="FID_QryTradeField" fidValue="0x000F" comment="报单成交查询请求域">
 			<item name="UserID" comment="用户代码"/>
 			<item name="InvestorID" comment="投资者代码"/>
 			<item name="RequestID" comment="请求编号"/>
 		</fieldDefine>
 		
-		<fieldDefine name="TradeField" fid="FID_TradeField" fidValue="0x000F" comment="报单成交域">	
+		<fieldDefine name="TradeField" fid="FID_TradeField" fidValue="0x0010" comment="报单成交域">	
 			<item name="BrokerID" comment="经纪公司代码"/>
 			<item name="InvestorID" comment="投资者代码"/>
 			<item name="InstrumentCode" comment="证券代码"/>
@@ -381,21 +433,13 @@
 			<item name="InvestUnitID" comment="席位编号"/>
 		</fieldDefine>
 		
-		<fieldDefine name="QryFundTransferField" fid="FID_QryFundTransferField" fidValue="0x0010" comment="资金划转查询请求域">
+		<fieldDefine name="QryFundTransferField" fid="FID_QryFundTransferField" fidValue="0x0011" comment="资金划转查询请求域">
 			<item name="UserID" comment="用户代码"/>
 			<item name="InvestorID" comment="投资者代码"/>
 			<item name="RequestID" comment="请求编号"/>
 		</fieldDefine>
 		
-		<fieldDefine name="QryHisOrderField" fid="FID_QryHisOrderField" fidValue="0x0011" comment="历史报单查询请求域">
-			<item name="UserID" comment="用户代码"/>
-			<item name="InvestorID" comment="投资者代码"/>
-			<item name="RequestID" comment="请求编号"/>
-			<item name="BeginDate" comment="开始日期"/>
-			<item name="EndDate" comment="结束日期"/>
-		</fieldDefine>
-		
-		<fieldDefine name="QryHisTradeField" fid="FID_QryHisTradeField" fidValue="0x0012" comment="报单成交查询请求域">
+		<fieldDefine name="QryHisOrderField" fid="FID_QryHisOrderField" fidValue="0x0012" comment="历史报单查询请求域">
 			<item name="UserID" comment="用户代码"/>
 			<item name="InvestorID" comment="投资者代码"/>
 			<item name="RequestID" comment="请求编号"/>
@@ -403,7 +447,7 @@
 			<item name="EndDate" comment="结束日期"/>
 		</fieldDefine>
 		
-		<fieldDefine name="QryHisFundTransferField" fid="FID_QryHisFundTransferField" fidValue="0x0013" comment="历史资金划转查询请求域">
+		<fieldDefine name="QryHisTradeField" fid="FID_QryHisTradeField" fidValue="0x0013" comment="报单成交查询请求域">
 			<item name="UserID" comment="用户代码"/>
 			<item name="InvestorID" comment="投资者代码"/>
 			<item name="RequestID" comment="请求编号"/>
@@ -411,31 +455,39 @@
 			<item name="EndDate" comment="结束日期"/>
 		</fieldDefine>
 		
-		<fieldDefine name="QryInstrumentField" fid="FID_QryInstrumentField" fidValue="0x0014" comment="证券查询请求请求域">
+		<fieldDefine name="QryHisFundTransferField" fid="FID_QryHisFundTransferField" fidValue="0x0014" comment="历史资金划转查询请求域">
+			<item name="UserID" comment="用户代码"/>
+			<item name="InvestorID" comment="投资者代码"/>
+			<item name="RequestID" comment="请求编号"/>
+			<item name="BeginDate" comment="开始日期"/>
+			<item name="EndDate" comment="结束日期"/>
+		</fieldDefine>
+		
+		<fieldDefine name="QryInstrumentField" fid="FID_QryInstrumentField" fidValue="0x0015" comment="证券查询请求请求域">
 			<item name="RequestID" comment="请求编号"/>
 			<item name="InstrumentCode" comment="证券代码"/>
 			<item name="ExchangeCode" comment="交易所代码"/>
 		</fieldDefine>
 		
-		<fieldDefine name="InstrumentField" fid="FID_InstrumentField" fidValue="0x0015" comment="证券信息域">
+		<fieldDefine name="InstrumentField" fid="FID_InstrumentField" fidValue="0x0016" comment="证券信息域">
 			<item name="RequestID" comment="请求编号"/>
 			<item name="InstrumentCode" comment="证券代码"/>
 			<item name="ExchangeCode" comment="交易所代码"/>
 		</fieldDefine>
 		
-		<fieldDefine name="QryStructuredFundField" fid="FID_QryStructuredFundField" fidValue="0x0016" comment="分级基金查询请求域">
+		<fieldDefine name="QryStructuredFundField" fid="FID_QryStructuredFundField" fidValue="0x0017" comment="分级基金查询请求域">
 			<item name="RequestID" comment="请求编号"/>
 			<item name="InstrumentCode" comment="证券代码"/>
 			<item name="ExchangeCode" comment="交易所代码"/>
 		</fieldDefine>
 		
-		<fieldDefine name="StructuredFundField" fid="FID_StructuredFundField" fidValue="0x0017" comment="分级信息信息域">
+		<fieldDefine name="StructuredFundField" fid="FID_StructuredFundField" fidValue="0x0018" comment="分级信息信息域">
 			<item name="RequestID" comment="请求编号"/>
 			<item name="InstrumentCode" comment="证券代码"/>
 			<item name="ExchangeCode" comment="交易所代码"/>		
 		</fieldDefine>
 		
-		<fieldDefine name="QryETFField" fid="FID_QryETFField" fidValue="0x0018" comment="ETF查询请求请求域">
+		<fieldDefine name="QryETFField" fid="FID_QryETFField" fidValue="0x0019" comment="ETF查询请求请求域">
 			<item name="RequestID" comment="请求编号"/>
 			<item name="InstrumentCode" comment="证券代码"/>
 			<item name="ExchangeCode" comment="交易所代码"/>
@@ -444,25 +496,60 @@
 		<fieldDefine name="ETFField" fid="FID_ETFField" fidValue="0x0019" comment="ETF信息域">
 		</fieldDefine>
 		
-		<fieldDefine name="QryETFCompositionField" fid="FID_QryQryETFComposition" fidValue="0x0020" comment="ETF成分股查询请求请求域">
+		<fieldDefine name="QryETFCompositionField" fid="FID_QryQryETFComposition" fidValue="0x001A" comment="ETF成分股查询请求请求域">
 		</fieldDefine>
 		
-		<fieldDefine name="ETFCompositionField" fid="FID_ETFCompositionField" fidValue="0x0021" comment="ETF成分股信息域">		
+		<fieldDefine name="ETFCompositionField" fid="FID_ETFCompositionField" fidValue="0x001B" comment="ETF成分股信息域">		
 		</fieldDefine>
 		
-		<fieldDefine name="QryPurchasableNewSecurityField" fid="FID_QryPurchasableNewSecurityField" fidValue="0x0022" comment="可申购新发行证券信息查询请求域">
+		<fieldDefine name="QryPurchasableNewSecurityField" fid="FID_QryPurchasableNewSecurityField" fidValue="0x001C" comment="可申购新发行证券信息查询请求域">
 		</fieldDefine>
 		
-		<fieldDefine name="PurchasableNewIssueSecurityField" fid="FID_PurchasableNewIssueSecurityField" fidValue="0x0023" comment="可申购新发行证券信息域">
+		<fieldDefine name="PurchasableNewIssueSecurityField" fid="FID_PurchasableNewIssueSecurityField" fidValue="0x001D" comment="可申购新发行证券信息域">
 		</fieldDefine>
 		
-		<fieldDefine name="QryPurchaseQuotaField" fid="FID_QryPurchaseQuotaField" fidValue="0x0024" comment="新股申购额度信息查询请求域">
+		<fieldDefine name="QryPurchaseQuotaField" fid="FID_QryPurchaseQuotaField" fidValue="0x001E" comment="新股申购额度信息查询请求域">
+			<item name="BrokerID" comment="经纪公司代码"/>
+			<item name="UserID" comment="用户代码"/>
+			<item name="InvestorID" comment="投资者代码"/>
+			<item name="RequestID" comment="请求编码"/>
 		</fieldDefine>
 		
-		<fieldDefine name="PurchaseQuotaField" fid="FID_PurchaseQuotaField" fidValue="0x0025" comment="新股申购额度信息域">		
+		<fieldDefine name="PurchaseQuotaField" fid="FID_PurchaseQuotaField" fidValue="0x001F" comment="新股申购额度信息域">		
+			<item name="BrokerID" comment="经纪公司代码"/>
+			<item name="UserID" comment="用户代码"/>
+			<item name="InvestorID" comment="投资者代码"/>
+			<item name="ExchangeCode" comment="交易所编码"/>
+			<item name="PurchaseQuota" comment="新股申购额度"/>
 		</fieldDefine>
 		
-		<fieldDefine name="ExecutionReportField" fid="FID_ExecutionReportField" fidValue="0x0026" comment="报单执行报告域">
+		<fieldDefine name="ExecutionReportField" fid="FID_ExecutionReportField" fidValue="0x0020" comment="报单执行报告域">
+			<item name="BrokerID" comment="经纪公司代码"/>
+			<item name="UserID" comment="用户代码"/>
+			<item name="InvestorID" comment="投资者代码"/>
+			<item name="InstrumentCode" comment="证券代码"/>
+			<item name="ExchangeCode" comment="交易所代码"/>
+			<item name="FrontID" comment="前置编号">
+			<item name="SessionID" comment="会话编号">
+			<item name="OrderRef" comment="报单引用">
+			<item name="RequestID" comment="请求编号"/>			
+			<item name="Direction" comment="报单价格方向"/>
+			<item name="PriceType" comment="报单价格条件"/>
+			<item name="LimitPrice" comment="限制价格"/>
+			<item name="VolumeTotalOrginal" comment="报单数量"/>
+			<item name="VolumeTraded" comment="成交数量"/>
+			<item name="AmountTraded" comment="成交金额"/>
+			<item name="VolumeTotal" comment="剩余数量"/>
+			<item name="OrderSysID" comment="报单在柜台系统编号"/>
+			<item name="OrderExchangeID" comment="报单在交易所编号"/>
+			<item name="TradingDay" comment="交易日"/>
+			<item name="VolumeTrade" comment="新增成交数量"/>
+			<item name="PriceTrade" comment="新增成交价格"/>
+			<item name="AmountTrade" comment="新增成交金额"/>
+			<item name="ReportDate" comment="成交日期"/>
+			<item name="ReportTime" comment="成交时间"/>
+			<item name="ReportSysID" comment="成交回报在柜台编号"/>
+			<item name="BranchID" comment="营业部编号"/>
 		</fieldDefine>
 		
 	</fields>
