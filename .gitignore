@@ -62,4 +62,8 @@ include/*
 /build/Debug/test_unit/test_unit.log
 *.idb
 *.pdb
-/ftd/FTD30
+/ftd/FTD30/*
+/include/*
+/test_unit/TestXcpStructTestCase.cpp
+/test_unit/TestFTDFieldWriteReadTestCase.cpp
+

@@ -46,6 +46,8 @@ def generate_field_struct(version, field_info, target_path):
     write_lines = []
     for d in field_info.item_dicts:
         property = d['name']
+        a = get_ftd_type_name(property)
+        b = get_field_item_var_name(property)
         write_lines.append(write_line1.format(get_ftd_type_name(property), get_field_item_var_name(property)))
         write_lines.append(write_line2.format(get_ftd_type_name(property)))
         write_lines.append(write_line3.format(get_ftd_type_name(property)))
@@ -57,11 +59,16 @@ def generate_field_struct(version, field_info, target_path):
     read_line3 = "data_length += {0}::getMsgLength();"
     read_lines = []
     for node in field_info.item_dicts:
-        propery = node['name']
-        read_lines.append(read_line1.format(get_ftd_type_name(property), get_field_item_var_name(property)))
-        read_lines.append(read_line2.format(get_ftd_type_name(property)))
-        read_lines.append(read_line3.format(get_ftd_type_name(property)))
-    read_lines = [line for line in read_lines]
+        property = node['name']
+        a = get_ftd_type_name(property)
+        b = get_field_item_var_name(property)
+        line1 = read_line1.format(a, b)
+        line2 = read_line2.format(a)
+        line3 = read_line3.format(a)
+        read_lines.append(line1)
+        read_lines.append(line2)
+        read_lines.append(line3)
+    #read_lines = [line for line in read_lines]
     read_items_string = add_whitespaces('\n'.join(read_lines), 8)
 
     d = {}

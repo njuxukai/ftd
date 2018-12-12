@@ -7,11 +7,52 @@
 
 #include <ftd/BaseType.h>
 #include <UnitTest++.h>
+#include <ftd/FTD30/Fields.h>
+#include <ftd/FTD30/Packages.h>
+#include <ftd/FTD30/Error.h>
+using namespace FTD;
+
+SUITE(FTDTEST)
+{
+	
+
+	TEST(OrderFieldTest)
+	{
+		OrderField field = {0};
+		char* buffer = new char[4096];
+		int writeLen = 20;
+		int readLen = 10;
+		FTD::OrderFieldHelper::writeBuffer(field, buffer, writeLen);
+		FTD::OrderFieldHelper::readBuffer(buffer, field, readLen);
+		CHECK_EQUAL(writeLen, readLen);
+		delete buffer;
+	}
+
+	TEST(RspQryOrderTest)
+	{
+		RspQryOrder package;
+		int count = 1000;
+		OrderField order = { 0 };
+		for (int i = 0; i < count; i++)
+		{
+			package.orderFields.push_back(order);
+		}
+		std::vector<std::string> msgs;
+		package.toMessages(msgs);
+		RspQryOrder package2;
+		for (int i = 0; i < msgs.size(); i++)
+		{
+			package2.mergeFtdcMessage(msgs[i]);
+		}
+		CHECK_EQUAL(package2.orderFields.size(), package.orderFields.size());
+	}
+}
 /*
 #include <ftd/FTD20/Fields.h>
 #include <ftd/FTD20/Packages.h>
 #include <ftd/FTD20/Error.h>
 using namespace FTD;
+
 
 SUITE(FTDTest)
 {
