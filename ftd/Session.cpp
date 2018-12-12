@@ -94,7 +94,7 @@ bool Session::sendRaw(Package& package, int num)
 	Locker l(m_mutex);
 	if (num > 0)
 	{
-		package.header.sequenceSeries = num;
+		package.m_header.sequenceSeries = num;
 	}
 	if (package.isNoneMode())
 	{
@@ -155,7 +155,7 @@ void Session::next( const std::string& msg, const UtcTimeStamp& timeStamp, bool 
 
 void Session::next( const Package& package, const UtcTimeStamp& timeStamp, bool queued )
 {
-	int tid = package.header.transactionId;
+	int tid = package.m_header.transactionId;
 	if (!isLoggedOn() && !package.isNoneMode())
 	{
 		return;

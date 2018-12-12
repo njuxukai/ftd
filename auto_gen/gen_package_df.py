@@ -122,7 +122,7 @@ for (int i = 0; i < vecSize; i++)
 		nextWrite = ftdcBuffer;
 		writeFieldCount = 0;
 	}}
-	FtdcFieldHeader fieldHeader;
+	//FtdcFieldHeader fieldHeader;
 	fieldHeader.fid = FID_{0};
 	fieldHeader.fidLength = fieldLen;
 	nextWrite += writeFtdcFieldHeader(fieldHeader, nextWrite);
@@ -144,7 +144,7 @@ if (MAX_FTDC_LENGTH - (nextWrite - ftdcBuffer) < FTDC_FIELD_HEADER_LENGTH + fiel
 	nextWrite = ftdcBuffer;
 	writeFieldCount = 0;
 }}
-FtdcFieldHeader fieldHeader;
+//FtdcFieldHeader fieldHeader;
 fieldHeader.fid = FID_{0};
 fieldHeader.fidLength = fieldLen;
 nextWrite += writeFtdcFieldHeader(fieldHeader, nextWrite);
@@ -167,7 +167,7 @@ if(p{0}.get() != nullptr)
 		nextWrite = ftdcBuffer;
 		writeFieldCount = 0;
 	}}
-	FtdcFieldHeader fieldHeader;
+	//FtdcFieldHeader fieldHeader;
 	fieldHeader.fid = FID_{0};
 	fieldHeader.fidLength = fieldLen;
 	nextWrite += writeFtdcFieldHeader(fieldHeader, nextWrite);

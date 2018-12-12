@@ -161,6 +161,7 @@
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="TestFTD20TestCase.cpp" />
     <ClCompile Include="TestPortIDTestCase.cpp" />
+    <ClCompile Include="TestXcpStructTestCase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />

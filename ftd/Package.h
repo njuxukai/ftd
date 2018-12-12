@@ -13,9 +13,9 @@ namespace FTD
 		const uint8_t m_version;
 		const uint32_t m_transactionId;
 		const uint32_t m_mode;
-		FtdcHeader header;
+		FtdcHeader m_header;
 		Package(uint8_t version_, uint32_t transactionId_, uint32_t mode_) :
-			m_version(version_), m_transactionId(transactionId_), m_mode(mode_), header({ 0 })
+			m_version(version_), m_transactionId(transactionId_), m_mode(mode_), m_header({ 0 })
 		{}
 		virtual ~Package() {};
 		virtual void clear() = 0;
@@ -30,18 +30,18 @@ namespace FTD
 			{
 				return false;
 			}
-			if (header.chain == FTDCChainSingle || header.chain == FTDCChainFirst)
+			if (ftdcHeader.chain == FTDCChainSingle || ftdcHeader.chain == FTDCChainFirst)
 			{
 				clear();
-				header.sequenceNO = ftdcHeader.sequenceNO;
-				header.sequenceSeries = ftdcHeader.sequenceSeries;
-				header.version = ftdcHeader.version;
+				m_header.sequenceNO = ftdcHeader.sequenceNO;
+				m_header.sequenceSeries = ftdcHeader.sequenceSeries;
+				m_header.version = ftdcHeader.version;
 			}
-			if (header.sequenceNO != ftdcHeader.sequenceNO
-				|| header.sequenceSeries != ftdcHeader.sequenceSeries)
+			if (m_header.sequenceNO != ftdcHeader.sequenceNO
+				|| m_header.sequenceSeries != ftdcHeader.sequenceSeries)
 				return false;
-			header.fieldCount += ftdcHeader.fieldCount;
-			header.contentLength += ftdcHeader.contentLength;
+			m_header.fieldCount += ftdcHeader.fieldCount;
+			m_header.contentLength += ftdcHeader.contentLength;
 			FtdcFieldHeader fieldHeader = { 0 };
 			const char* buffer = ftdcContent.c_str();
 			const char* pos = buffer;
@@ -52,9 +52,9 @@ namespace FTD
 				mergeFieldMessage(fieldHeader, pos);
 				pos += fieldHeader.fidLength;
 			}
-			if (pos - buffer != header.contentLength)
+			if (pos - buffer != ftdcHeader.contentLength)
 				return false;
-			if (header.chain == FTDCChainSingle || header.chain == FTDCChainLast)
+			if (ftdcHeader.chain == FTDCChainSingle || ftdcHeader.chain == FTDCChainLast)
 				return true;
 			else
 				return false;

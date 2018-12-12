@@ -7,6 +7,7 @@
 
 #include <ftd/BaseType.h>
 #include <UnitTest++.h>
+/*
 #include <ftd/FTD20/Fields.h>
 #include <ftd/FTD20/Packages.h>
 #include <ftd/FTD20/Error.h>
@@ -93,35 +94,5 @@ SUITE(FTDTest)
 		CHECK_EQUAL("okokokokokokok", package2.pErrorTargetOrderField->orderLocalId);
 	}
 
-	/*
-	TEST(MarketMatchData)
-	{
-		FTD::MarketMatchData package;
-		FTD::MarketMatchData package2;
-		FTD::MarketMatchDataField dataField = { 0 };
-		FTD::MarketMatchDataChgField chgField = { 0 };
-		FTD::Field field;
-		int matchCount = 10000;
-		int matchChgCount = 10000;
-		for (int i = 0; i < matchCount; i++)
-		{
-			memcpy(&field.marketMatchDataField, &dataField, sizeof(dataField));
-			package.mergeField(field, FID_MarketMatchDataField);
-		}
-		for (int i = 0; i < matchChgCount; i++)
-		{
-			memcpy(&field.marketMatchDataChgField, &chgField, sizeof(chgField));
-			package.mergeField(field, FID_MarketMatchDataChgField);
-		}
-		std::vector<std::string> msgs;
-		package.toMessages(msgs);
-		for (int i = 0; i < msgs.size(); i++)
-		{
-			if (package.mergeFieldMessage(msgs[i]))
-				break;
-		}
-		CHECK_EQUAL(10000, package2.marketMatchDataFields.size());
-		CHECK_EQUAL(10000, package2.marketMatchDataChgFields.size());
-	}
-	*/
-}
+	
+}*/

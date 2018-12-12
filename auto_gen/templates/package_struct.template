@@ -26,8 +26,8 @@ struct {package_name} : public Package
 
 	{package_name}() : Package(FTD_VERSION, {tid}, {mode})
 	{{
-		header.version = FTD_VERSION;
-		header.transactionId = {tid};
+		m_header.version = FTD_VERSION;
+		m_header.transactionId = {tid};
 	}}
 
 	void clear()
@@ -70,8 +70,9 @@ struct {package_name} : public Package
 		char* ftdcBuffer = new char[MAX_FTDC_LENGTH + 1];
 		char* fieldBuffer = new char[MAX_FTDC_LENGTH + 1];
 		char* ftdcHeaderBuffer = new char[FTDC_HEADER_LENGTH + 1];
+		FtdcFieldHeader fieldHeader = {{0}};
 		FtdcHeader ftdcHeader = {{ 0 }};
-		memcpy(&ftdcHeader, &header, sizeof(FtdcHeader));
+		memcpy(&ftdcHeader, &m_header, sizeof(FtdcHeader));
 		int writeFieldCount = 0;
 		char* nextWrite = ftdcBuffer;
 		int vecSize = 0;
