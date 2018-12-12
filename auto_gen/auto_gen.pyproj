@@ -50,6 +50,9 @@
     <Compile Include="gen_package_df.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="gen_testcase.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="gen_type_df.py">
       <SubType>Code</SubType>
     </Compile>
@@ -78,6 +81,9 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="templates\package_struct.template" />
+    <Content Include="templates\testcase_struct_compare.template">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="templates\type_def.template" />
   </ItemGroup>
   <PropertyGroup>

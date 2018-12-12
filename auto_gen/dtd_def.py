@@ -14,6 +14,24 @@
             size = int(tail.strip())
     return basic_t, size, precise
 
+def get_basic_name_length_spec_pair_tuple(base_type_name):
+    h, l, p = parse_ftd_type_spec(base_type_name)
+    type_name = ''
+    length_spec = ''
+    if h == CHAR_TYPE or h == STRING_TYPE:
+        type_name ='char'
+    if h ==  NUMBER_TYPE or h == INT_TYPE:
+        type_name = 'int'
+    if h == FLOAT_TYPE:
+        type_name = 'double'
+    if h == WORD_TYPE:
+        type_name = 'int16_t'
+    if h == STRING_TYPE:
+        length_spec = '[%d + 1]' % l
+    if h == INT64_TYPE:
+        type_name = 'int64_t'
+    return (type_name, length_spec)
+
 class TypeDTD:
     def __init__(self):
         self.base_type_name = ''
@@ -59,6 +77,8 @@ class TypeDTD:
             type_name = 'int16_t'
         if h == STRING_TYPE:
             length_spec = '[%d + 1]' % l
+        if h == INT64_TYPE:
+            type_name = 'int64_t'
         #return template.format(type_name.ljust(30), name, length_spec)
         return (type_name, length_spec)
     
@@ -79,13 +99,67 @@ class TypeDTD:
             type_name = 'int16_t'
         if h == STRING_TYPE:
             length_spec = '[%d + 1]' % l
+        if h == INT64_TYPE:
+            type_name = 'int64_t'
         #return template.format(type_name.ljust(30), name, length_spec)
         return template.format(type_name, name, length_spec)
+
+    def get_host_enum_prefix(self, project_code):
+        prefix = '%s_FTDC_' % project_code.upper()
+        i = 0
+        name = self.name
+        if name.startswith("FTD"):
+            name = name[3:]
+        for i in range(len(name)):
+            if name[i].isupper():
+                prefix += name[i]
+        return prefix +'_'
+
+    def get_host_define_lines(self, data_type_prefix, project_code):
+        lines = []
+        template = "typedef {0} {1}{2}Type{3};"
+
+        basic_type_cpp = ''
+        prefix = project_code + 'Ftdc'
+        raw_name = self.name[3:]
+        length_spec = ''
+        basic_type_cpp, length_spec = self.get_name_length_tuple()
+
+        lines.append('/' * 80)
+        lines.append('///%s%sType %s' % (prefix, raw_name, self.comment))
+        lines.append('/' * 80)
+        if len(self.enum_value_dicts) > 0:
+            enum_prefix = self.get_host_enum_prefix(project_code)
+            comma =''
+            h, l, p = parse_ftd_type_spec(self.base_type_name)
+            if h == CHAR_TYPE:
+                comma = "'"
+            if h == STRING_TYPE:
+                comma = '"'
+            for d in self.enum_value_dicts:
+                const_raw_name = d['enname'] if 'enname' in d else d['name']
+                lines.append('///%s' % d['comment'])
+                lines.append('#define {0}{1} {2}{3}{2}'.format(enum_prefix,const_raw_name,comma, d['name'] ))
+                lines.append('')
+                        
+        
+        lines.append(template.format(basic_type_cpp, data_type_prefix, raw_name, length_spec));
+        lines.append('')
+        return lines
+
+
+    def get_host_derivative_name(self, host_data_type_prefix):
+        name = self.name
+        if name.startswith("FTD"):
+            return host_data_type_prefix + name[3:] + "Type"
+        else:
+            return name +"Type"
 
 
 CHAR_TYPE = 'FTDCharType'
 FLOAT_TYPE = 'FTDFloatType'
 INT_TYPE = 'FTDIntType'
+INT64_TYPE = 'FTDInt64Type'
 NUMBER_TYPE = 'FTDNumberType'
 STRING_TYPE = 'FTDStringType'
 WORD_TYPE = 'FTDWordType'
@@ -120,8 +194,8 @@ class ItemDTD:
 
         
 
-    def get_tt_item_define(self):
-        template = 'typedef {0} TTItem{1}{2};';
+    def get_tt_item_define(self, prefix='TTItem'):
+        template = 'typedef {0} {3}{1}{2};';
         type_name = '';
         name = self.name;
         length_spec ='';
@@ -140,7 +214,8 @@ class ItemDTD:
             type_name = 'int16_t'
         if h == STRING_TYPE:
             length_spec = '[%d + 1]' % l
-        return template.format(type_name.ljust(30), name, length_spec)
+        return template.format(type_name.ljust(30), name, length_spec, prefix)
+
 
     def get_host_tt_type_name(self, data_type_prefix):
         return '%s%sType' % (data_type_prefix,self.name)

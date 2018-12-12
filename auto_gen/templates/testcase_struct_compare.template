@@ -1,0 +1,25 @@
+#ifdef _MSC_VER
+#pragma warning( disable : 4503 4355 4786 )
+#include "stdafx.h"
+#else
+#include "config.h"
+#endif
+
+#include <ftd/BaseType.h>
+#include <UnitTest++.h>
+#include <ftd/PortID.h>
+#include <xcp/XcpFtdcUserApiStruct.h>
+#include <ftd/{protocal_version}/Fields.h>
+using namespace FTD;
+
+SUITE(AutoGen)
+{{
+
+	TEST(XcpStructure)
+	{{
+{host_struct_size_valid_lines}
+
+{host_ftd_struct_size_compare_lines}
+		//CHECK(sizeof(CXcpFtdcOrderField) == sizeof(OrderField));
+	}}
+}}
