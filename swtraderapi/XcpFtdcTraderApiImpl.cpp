@@ -1,8 +1,8 @@
-#include "SwhyFtdcTraderApiImpl.h"
+#include "XcpFtdcTraderApiImpl.h"
 #include <ftd/SocketInitiator.h>
 //#include <ftd/Port.h>
 
-CSwhyFtdcTraderApiImpl::CSwhyFtdcTraderApiImpl(const char* pswDir)
+CXcpFtdcTraderApiImpl::CXcpFtdcTraderApiImpl(const char* pswDir)
 {
 	m_pswDir = pswDir;
 	//check(and create directory) if exception m_pswDir = ""
@@ -10,18 +10,18 @@ CSwhyFtdcTraderApiImpl::CSwhyFtdcTraderApiImpl(const char* pswDir)
 	//open mmap files read last time trade day's last record serial number
 }
 
-CSwhyFtdcTraderApiImpl::~CSwhyFtdcTraderApiImpl()
+CXcpFtdcTraderApiImpl::~CXcpFtdcTraderApiImpl()
 {
 	Release();
 		
 }
 
-const char* CSwhyFtdcTraderApiImpl::GetApiVersion()
+const char* CXcpFtdcTraderApiImpl::GetApiVersion()
 {
 	return "";
 }
 
-void CSwhyFtdcTraderApiImpl::Release()
+void CXcpFtdcTraderApiImpl::Release()
 {
 	m_pSpi = 0;
 	if (m_pInitiator)
@@ -32,7 +32,7 @@ void CSwhyFtdcTraderApiImpl::Release()
 	}
 }
 
-void CSwhyFtdcTraderApiImpl::Init()
+void CXcpFtdcTraderApiImpl::Init()
 {
 	//1 create initiator 
 	FTD::PortSettings settings;
@@ -54,7 +54,7 @@ void CSwhyFtdcTraderApiImpl::Init()
 	m_pInitiator->start();
 }
 
-void CSwhyFtdcTraderApiImpl::Join()
+void CXcpFtdcTraderApiImpl::Join()
 {
 	if (m_pInitiator != nullptr)
 	{
@@ -62,7 +62,7 @@ void CSwhyFtdcTraderApiImpl::Join()
 	}
 }
 
-const char* CSwhyFtdcTraderApiImpl::GetTradingDay()
+const char* CXcpFtdcTraderApiImpl::GetTradingDay()
 {
 	return "";
 }
@@ -70,21 +70,22 @@ const char* CSwhyFtdcTraderApiImpl::GetTradingDay()
 
 ///注册回调接口
 ///@param pSpi 派生自回调接口类的实例
-void CSwhyFtdcTraderApiImpl::RegisterSpi(CSwhyFtdcTraderSpi *pSpi)
+void CXcpFtdcTraderApiImpl::RegisterSpi(CXcpFtdcTraderSpi *pSpi)
 {
 	m_pSpi = pSpi;
 }
 
-void CSwhyFtdcTraderApiImpl::RegisterFront(const char* frontAddr)
+void CXcpFtdcTraderApiImpl::RegisterFront(const char* frontAddr)
 {
 	m_frontAddresses.push_back(frontAddr);
 }
 
-void CSwhyFtdcTraderApiImpl::SubscribePrivateTopic()
+void CXcpFtdcTraderApiImpl::SubscribePrivateTopic(THOST_TE_RESUME_TYPE resumeType)
 {
 }
 
 
-void CSwhyFtdcTraderApiImpl::SubscribePublicTopic()
+void CXcpFtdcTraderApiImpl::SubscribePublicTopic()
 {
 }
+

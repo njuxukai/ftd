@@ -12,6 +12,7 @@ class CXcpFtdcTraderApiImpl : public CXcpFtdcTraderApi,
 public:
 	CXcpFtdcTraderApiImpl(const char* pswDir);
 
+	///API
 	virtual const char* GetApiVersion();
 
 	virtual void Release();
@@ -22,21 +23,18 @@ public:
 
 	virtual const char* GetTradingDay();
 
-
-	///注册回调接口
-	///@param pSpi 派生自回调接口类的实例
 	virtual void RegisterSpi(CXcpFtdcTraderSpi *pSpi);
 
 	virtual void RegisterFront(const char* frontAddr);
 
-	virtual void SubscribePrivateTopic();
+	virtual void SubscribePrivateTopic(THOST_TE_RESUME_TYPE resumeType);
 
-	virtual void SubscribePublicTopic();
+	virtual void SubscribePublicTopic(THOST_TE_RESUME_TYPE resumeType);
 
-    //
+    ///PackageCracker
 
 
-	//
+	///
 private:
 	std::string m_pswDir;
 	std::vector<std::string> m_frontAddresses;
