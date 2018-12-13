@@ -32,28 +32,25 @@
     <Compile Include="file_util.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="gen_field_df.py">
+    <Compile Include="gen_fields_def.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="gen_host_data_type.py">
+    <Compile Include="gen_host_types_def.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="gen_host_struct.py">
+    <Compile Include="gen_host_fields_def.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="gen_id_def.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="gen_item_df.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="gen_package_df.py">
+    <Compile Include="gen_packages_def.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="gen_testcase.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="gen_type_df.py">
+    <Compile Include="gen_types_def.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

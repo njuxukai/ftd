@@ -68,7 +68,7 @@ def generate_ftd_data_type_file(types, version,
     """
     data_type_prefix = "TFtdc"
     for t in types.values():
-        append_lines = t.get_ftd_define_lines(data_type_prefix)
+        append_lines = t.get_universal_define_lines('')
         lines.extend(append_lines)
 
     d['version'] = version

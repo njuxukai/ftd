@@ -22,12 +22,16 @@ struct FtdHeader
 #define FTDTypeFTDC 0x01
 #define FTDTypeCompressed 0x02
 
+#define FTD_COMPRESS_METHOD_NONE 0
+#define FTD_COMPRESS_METHOD_LZ 1
 
+/*
 struct FtdExtHeader
 {
 	uint8_t FTDTag;
 	int8_t FTDTagLength;
-};
+}
+	*/
 #define FTDTagNone 0x00
 #define FTDTagDatetime 0x01
 #define FTDTagComressMethod 0x02
@@ -77,6 +81,7 @@ struct FtdcHeader
 	uint16_t fieldCount;
 	uint16_t contentLength;
 };
+
 
 #define FTDCChainSingle 'S'
 #define FTDCChainFirst 'F'

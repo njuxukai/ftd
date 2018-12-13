@@ -23,36 +23,9 @@ def get_field_item_var_name(item_name):
     return item_name
 
 
-def get_ftd_field_item_define_statement(item_name, items, types):
-    """
-    OrderPrice 在items 中查找类型名
-    类型名在types中有 直接给出TFtdcPriceType
-    类型名在types中没有  给出 char OrderPrice[]
-    """  
-    template_1 = "{0}   {1};"
-    template_2 = "{0}   {1}{2};"
-    type_name = items[item_name].type_name  
-    if type_name in types:
-        #已定义衍生类型
-        item_line_template = "{0} {1};";
-        host_deravative_name = types[type_name].get_ftd_derivative_name()
-        return item_line_template.format(host_deravative_name, item_name)
-    else:
-        item_line_template = "{0} {1}{2};";
-        basic_type, len_spec = get_basic_name_length_spec_pair_tuple(type_name)
-        return item_line_template.format(basic_type, item_name, len_spec)
 
 def get_ftd_basic_typename(item_name, items, types):
-    """
-    OrderPrice 在items 中查找类型名
-    类型名在types中有 直接给出TFtdcPriceType的basicTypeName: FTDFloatType
-    类型名在types中没有  解析typename FTDFloatType
-    """
-    #string<10,23> basic_name
-    name = items[item_name].type_name  
-    if name in types:
-        name = types[name].base_type_name
-    return name
+    return items[item_name].base_type_name
 
 
 def generate_field_struct(version, field_info, target_path, items, types):
@@ -60,11 +33,14 @@ def generate_field_struct(version, field_info, target_path, items, types):
     field_name_upper = field_info.name.upper()
     property_type_var_pair_list= []
     declare_statment_template = "{0} {1};"
-    for property in field_info.item_dicts:
+    for item_dict in field_info.item_dicts:
+        """
         if 'comment' not in property:
             a = 2
         property_type_var_pair_list.append('///%s' % property['comment'])
         property_type_var_pair_list.append(get_ftd_field_item_define_statement(property['name'], items, types))
+        """
+        property_type_var_pair_list.extend(get_universal_field_item_define_lines(item_dict, items, types, ''))
 
     item_var_pair_list_string = add_whitespaces('\n'.join(property_type_var_pair_list),4)
 

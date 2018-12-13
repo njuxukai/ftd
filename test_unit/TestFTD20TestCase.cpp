@@ -11,10 +11,69 @@
 #include <ftd/FTD30/Fields.h>
 #include <ftd/FTD30/Packages.h>
 #include <ftd/FTD30/Error.h>
+
+#include <ftd/FtdMessageUtil.h>
 using namespace FTD;
 
 SUITE(FTDTest)
 {
+	TEST(FTDHeaderTest)
+	{
+		FtdHeader header = { 0 };
+		FtdHeader header2 = { 0 };
+		header.FTDCLength = 100;
+		header.FTDExtHeaderLength = 126;
+		header.FTDType = 0;
+		char buffer[10];
+		int writeLen = writeFtdHeader(header, buffer);
+		int readLen = readFtdHeader(buffer, header2);
+		CHECK_EQUAL(writeLen, readLen);
+		CHECK_EQUAL(header.FTDCLength, header2.FTDCLength);
+		CHECK_EQUAL(header.FTDExtHeaderLength, header2.FTDExtHeaderLength);
+		CHECK_EQUAL(header.FTDType, header2.FTDType);
+	}
+
+	TEST(FTDExtHeaderTest)
+	{
+		FtdExt ext = { 0 };
+		FtdExt ext2 = { 0 };
+		ext.tradeDate = (1 << 17) + 1;
+		ext.dateTime = 20003;
+		ext.sessionState = 2;
+		strcpy(ext.target, "aa");
+		char buffer[128];
+		int writeLen = writeFtdExt(ext, buffer);
+		int readLen = readFtdExt(buffer, writeLen, ext2);
+		CHECK_EQUAL(writeLen, readLen);
+		CHECK_EQUAL((1 << 17) + 1, ext2.tradeDate);
+		CHECK_EQUAL(ext.sessionState, ext2.sessionState);
+		CHECK_EQUAL(strcmp(ext2.target, "aa") , 0);
+	}
+
+	TEST(SplitFtdcMessagesTest)
+	{
+		RspQryOrder package;
+		OrderField field = { 0 };
+		int count = 10000;
+		for (int i = 0; i < count; i++)
+		{
+			package.orderFields.push_back(field);
+		}
+		std::vector<std::string> mss;
+		package.toMessages(mss);
+		std::string catString;
+		FtdMessageUtil::concatenateFtdcMessages(mss, catString);
+		std::vector<std::string> mss2;
+		bool splitResult = FtdMessageUtil::splitFtdcMessages(catString, mss2);
+		RspQryOrder package2;
+		for (auto it = mss2.begin(); it != mss2.end(); it++)
+		{
+			package2.mergeFtdcMessage(*it);
+		}
+		CHECK(splitResult);
+		CHECK_EQUAL(package2.orderFields.size(), 10000);
+	}
+
 	TEST(OrderFieldTest)
 	{
 		OrderField field ;
