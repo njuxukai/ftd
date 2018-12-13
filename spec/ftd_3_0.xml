@@ -114,6 +114,17 @@
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
+		<packageDefine name="ReqQryFundTransfer" tid="TID_QryFundTransfer" model="dialog" comment="资金划转查询请求">
+			<field name="QryFundTransferField" maxOccur="1" minOccur="1" comment="资金划转查询域"/>
+			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
+		</packageDefine>
+		
+		<packageDefine name="RspQryFundTransfer" tid="TID_QryFundTransfer" model="dialog" comment="资金划转查询应答">
+			<field name="FundTransferField" maxOccur="任意" minOccur="0" comment="资金划转信息域"/>
+			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
+			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
+		</packageDefine>
+		
 		
 		<packageDefine name="ReqQryHisOrder" tid="TID_QryHisOrder" model="dialog" comment="历史报单查询请求">
 			<field name="QryHisOrderField" maxOccur="1" minOccur="1" comment="历史报单查询域"/>
@@ -138,12 +149,12 @@
 		</packageDefine>
 		
 		<packageDefine name="ReqQryHisFundTransfer" tid="TID_QryHisFundTransfer" model="dialog" comment="历史资金划转查询请求">
-			<field name="QryHisFundTransferField" maxOccur="1" minOccur="1" comment="资金划转查询域"/>
+			<field name="QryHisFundTransferField" maxOccur="1" minOccur="1" comment="历史资金划转查询域"/>
 			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 		</packageDefine>
 		
 		<packageDefine name="RspQryHisFundTransfer" tid="TID_QryHisFundTransfer" model="dialog" comment="历史资金划转查询应答">
-			<field name="FundTransferField" maxOccur="任意" minOccur="0" comment="资金划转域"/>
+			<field name="FundTransferField" maxOccur="任意" minOccur="0" comment="资金划转信息域"/>
 			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
@@ -193,12 +204,12 @@
 		</packageDefine>
 		
 		<packageDefine name="ReqQryPurchasableNewIssueSecurity" tid="TID_QryPurchasableNewIssueSecurity" model="dialog" comment="可申购新发行证券信息查询请求">
-			<field name="QryPurchasableNewSecurityField" maxOccur="1" minOccur="1" comment="当日可申购新发行证券信息查询域"/>
+			<field name="QryNewIssueSecurityField" maxOccur="1" minOccur="1" comment="当日可申购新发行证券信息查询域"/>
 			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 		</packageDefine>
 		
 		<packageDefine name="RspQryPurchasableNewIssueSecurity" tid="TID_QryPurchasableNewIssueSecurity" model="dialog" comment="可申购新发行证券信息查询应答">
-			<field name="PurchasableNewIssueSecurityField" maxOccur="任意" minOccur="0" comment="可申购新发行证券信息域"/>
+			<field name="NewIssueSecurityField" maxOccur="任意" minOccur="0" comment="可申购新发行证券信息域"/>
 			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
@@ -576,10 +587,10 @@
 			<item name="ETFCashSubsituteAmount" comment="成分股替代标识为必须现金替代时候的总金额"/>				
 		</fieldDefine>
 		
-		<fieldDefine name="QryPurchasableNewSecurityField" fid="FID_QryPurchasableNewSecurityField" fidValue="0x0022" comment="可申购新发行证券信息查询请求域">
+		<fieldDefine name="QryNewIssueSecurityField" fid="FID_QryNewIssueSecurityField" fidValue="0x0022" comment="可申购新发行证券信息查询请求域">
 		</fieldDefine>
 		
-		<fieldDefine name="PurchasableNewIssueSecurityField" fid="FID_PurchasableNewIssueSecurityField" fidValue="0x0023" comment="可申购新发行证券信息域">
+		<fieldDefine name="NewIssueSecurityField" fid="FID_NewIssueSecurityField" fidValue="0x0023" comment="可申购新发行证券信息域">
 			<item name="TradingDay" comment="交易日"/>
 			<item name="ExchangeCode" comment="交易所代码"/>
 			<item name="InstrumentCode" comment="正股代码"/>

@@ -50,8 +50,8 @@ SUITE(AutoGen)
             CHECK(sizeof(CXcpFtdcETFField) >= 0);
             CHECK(sizeof(CXcpFtdcQryETFCompositionField) >= 0);
             CHECK(sizeof(CXcpFtdcETFCompositionField) >= 0);
-            CHECK(sizeof(CXcpFtdcQryPurchasableNewSecurityField) >= 0);
-            CHECK(sizeof(CXcpFtdcPurchasableNewIssueSecurityField) >= 0);
+            CHECK(sizeof(CXcpFtdcQryNewIssueSecurityField) >= 0);
+            CHECK(sizeof(CXcpFtdcNewIssueSecurityField) >= 0);
             CHECK(sizeof(CXcpFtdcQryPurchaseQuotaField) >= 0);
             CHECK(sizeof(CXcpFtdcPurchaseQuotaField) >= 0);
             CHECK(sizeof(CXcpFtdcExecutionReportField) >= 0);
@@ -90,8 +90,8 @@ SUITE(AutoGen)
             CHECK(sizeof(CXcpFtdcETFField) == sizeof(CFtdcETFField));
             CHECK(sizeof(CXcpFtdcQryETFCompositionField) == sizeof(CFtdcQryETFCompositionField));
             CHECK(sizeof(CXcpFtdcETFCompositionField) == sizeof(CFtdcETFCompositionField));
-            CHECK(sizeof(CXcpFtdcQryPurchasableNewSecurityField) == sizeof(CFtdcQryPurchasableNewSecurityField));
-            CHECK(sizeof(CXcpFtdcPurchasableNewIssueSecurityField) == sizeof(CFtdcPurchasableNewIssueSecurityField));
+            CHECK(sizeof(CXcpFtdcQryNewIssueSecurityField) == sizeof(CFtdcQryNewIssueSecurityField));
+            CHECK(sizeof(CXcpFtdcNewIssueSecurityField) == sizeof(CFtdcNewIssueSecurityField));
             CHECK(sizeof(CXcpFtdcQryPurchaseQuotaField) == sizeof(CFtdcQryPurchaseQuotaField));
             CHECK(sizeof(CXcpFtdcPurchaseQuotaField) == sizeof(CFtdcPurchaseQuotaField));
             CHECK(sizeof(CXcpFtdcExecutionReportField) == sizeof(CFtdcExecutionReportField));

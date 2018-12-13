@@ -1,6 +1,14 @@
 #ifndef {project_code_upper}_FTDCDATATYPE_H
 #define {project_code_upper}_FTDCDATATYPE_H
 
+enum THOST_TE_RESUME_TYPE
+{{
+	THOST_TERT_RESTART = 0,
+	THOST_TERT_RESUME,
+	THOST_TERT_QUICK
+}};
+
 {data_type_def_lines}
+
 
 #endif
