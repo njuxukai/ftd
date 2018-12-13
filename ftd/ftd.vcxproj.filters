@@ -117,6 +117,12 @@
     <ClInclude Include="SocketInitiator.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="FTD30\Packages.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="FtdMessageUtil.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -171,6 +177,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="SocketInitiator.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="FtdMessageUtil.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -103,6 +103,114 @@ static int readFtdHeader(const char* buffer, FtdHeader& header)
 	return readLen;
 }
 
+static int writeFtdHeader(const FtdHeader& header, char* buffer)
+{
+	int writeLen = 0;
+	writeUInt8(header.FTDType, buffer + writeLen);
+	writeLen += 1;
+	writeUInt8(header.FTDExtHeaderLength, buffer + writeLen);
+	writeLen += 1;
+	writeInt16(header.FTDCLength, buffer + writeLen);
+	writeLen += 2;
+	return writeLen;
+}
+
+static int readFtdExt(const char* buffer, int extLen,
+	FtdExt& ext)
+{
+	int readLen = 0;
+	uint8_t extEntryType;
+	uint8_t extEntryDataLen;
+	while (readLen < extLen)
+	{
+		if ((readLen + 2) > extLen)
+			break;
+		readUInt8(buffer + readLen, extEntryType);
+		readLen += 1;
+		readUInt8(buffer + readLen, extEntryDataLen);
+		readLen += 1;
+		if ((readLen + extEntryDataLen) > extLen)
+			break;
+		if (extEntryType == FTDTagNone || extEntryType == FTDTagKeepAlive)
+		{
+		}
+		if (extEntryType == FTDTagDatetime && extEntryDataLen > 0)
+		{
+			readInt32(buffer + readLen, ext.dateTime);
+		}
+		if (extEntryType == FTDTagComressMethod && extEntryDataLen > 0 )
+		{
+			readChar(buffer + readLen, ext.compressMethod);
+		}
+		if (extEntryType == FTDTagSessionState && extEntryDataLen > 0 )
+		{
+			readChar(buffer + readLen, ext.sessionState);
+		}
+		if (extEntryType == FTDTagTradedate && extEntryDataLen > 0 )
+		{
+			readInt32(buffer + readLen, ext.tradeDate);
+
+		}
+		if (extEntryType == FTDTagTarget && extEntryDataLen > 0)
+		{			
+			memcpy(ext.target, buffer + readLen, 2);
+			ext.target[2] = '\0';
+		}
+		readLen += extEntryDataLen;
+	}
+	return readLen;
+}
+
+static int writeFtdExt(const FtdExt& ext, char* buffer)
+{
+	int writeLen = 0;
+	if (ext.dateTime > 0)
+	{
+		writeUInt8(FTDTagDatetime, buffer + writeLen);
+		writeLen += 1;
+		writeUInt8(FTDTagDatetimeLength, buffer + writeLen);
+		writeLen += 1;
+		writeInt32(ext.dateTime, buffer + writeLen);
+		writeLen += 4;
+	}
+	if (ext.tradeDate > 0)
+	{
+		writeUInt8(FTDTagTradedate, buffer + writeLen);
+		writeLen += 1;
+		writeUInt8(FTDTagTradedateLength, buffer + writeLen);
+		writeLen += 1;
+		writeInt32(ext.tradeDate, buffer + writeLen);
+		writeLen += 4;
+	}
+	if (ext.sessionState != 0)
+	{
+		writeUInt8(FTDTagSessionState, buffer + writeLen);
+		writeLen += 1;
+		writeUInt8(FTDTagSessionStateLength, buffer + writeLen);
+		writeLen += 1;
+		writeChar(ext.sessionState, buffer + writeLen);
+		writeLen += 1;
+	}
+	if (ext.compressMethod != 0)
+	{
+		writeUInt8(FTDTagComressMethod, buffer + writeLen);
+		writeLen += 1;
+		writeUInt8(FTDTagComressMethodLength, buffer + writeLen);
+		writeLen += 1;
+		writeChar(ext.compressMethod, buffer + writeLen);
+		writeLen += 1;
+	}
+	if (strlen(ext.target) > 0)
+	{
+		writeUInt8(FTDTagTarget, buffer + writeLen);
+		writeLen += 1;
+		writeUInt8(FTDTagTargetLength , buffer + writeLen);
+		writeLen += 1;
+		memcpy(buffer + writeLen, ext.target, 2);
+		writeLen += 2;
+	}
+	return writeLen;
+}
 
 static int readFtdcHeader(const char* buffer, FtdcHeader& header)
 {
@@ -131,16 +239,6 @@ static int readFtdcHeader(const char* buffer, FtdcHeader& header)
 	return readLen;
 }
 
-static int readFtdcFieldHeader(const char* buffer, FtdcFieldHeader& header)
-{
-	int readLen = 0;
-	const char* pos = buffer;
-	readLen += readInt32(pos, header.fid);
-
-	pos = buffer + readLen;
-	readLen += readUInt16(pos, header.fidLength);
-	return readLen;
-}
 
 static int writeFtdcHeader(const FtdcHeader& header, char* buffer)
 {
@@ -169,6 +267,19 @@ static int writeFtdcHeader(const FtdcHeader& header, char* buffer)
 
 	return writeLen;
 }
+
+
+static int readFtdcFieldHeader(const char* buffer, FtdcFieldHeader& header)
+{
+	int readLen = 0;
+	const char* pos = buffer;
+	readLen += readInt32(pos, header.fid);
+
+	pos = buffer + readLen;
+	readLen += readUInt16(pos, header.fidLength);
+	return readLen;
+}
+
 
 static int writeFtdcFieldHeader(const FtdcFieldHeader& header, char* buffer)
 {

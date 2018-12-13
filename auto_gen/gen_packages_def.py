@@ -15,7 +15,7 @@ include_all_headers = 'Packages.h'
 
 package_cracer_header = 'PackageCracker.h'
 
-def generate_package_struct(version, package, target_path, version_number):
+def generate_package_struct(version, package, target_path, version_number, fields):
     template = load_template_file(package_struct_template_file)
     package_name_upper = package.name.upper()
     member_def_lines = []
@@ -23,12 +23,13 @@ def generate_package_struct(version, package, target_path, version_number):
     member_merge_lines = []
     member_write_sections = []
     for field_info in package.fields:
+        field = fields[field_info.name]
         member_def_lines.append('///%s' % field_info.comment)
-        member_def_lines.append(_format_member_def_line(field_info))
+        member_def_lines.append(_format_member_def_line(field_info,field))
 
-        member_clear_lines.append(_format_member_clear_lines(field_info))
-        member_merge_lines.append(_format_member_merge_lines(field_info))
-        member_write_sections.append(_format_member_write_lines(field_info))
+        member_clear_lines.append(_format_member_clear_lines(field_info,field))
+        member_merge_lines.append(_format_member_merge_lines(field_info,field))
+        member_write_sections.append(_format_member_write_lines(field_info, field))
 
     d = {}
     d['version'] = version
@@ -51,20 +52,21 @@ def generate_package_struct(version, package, target_path, version_number):
     target_fpath = '{0}/{1}/{2}.h'.format(target_path, version,package.name) 
     save_cpp_file(template.format_map(d), target_fpath)
 
-def _format_member_def_line(field_info):
-    fname = field_info.name
+def _format_member_def_line(field_info, field):
+    f_struct_name = field.get_universal_struct_name('')
+    fname = field.name
     vec_fmt = 'std::vector<{0}> {1}s;'
     field_fmt = '{0} {1};'
-    ptr_fmt = '{0}Ptr p{0};'
+    ptr_fmt = '{0}Ptr p{1};'
     if field_info.use_vector():
-        return vec_fmt.format(fname, fname[0].lower()+fname[1:])
+        return vec_fmt.format(f_struct_name, fname[0].lower()+fname[1:])
     if field_info.use_field():
-        return field_fmt.format(fname, fname[0].lower()+fname[1:])
+        return field_fmt.format(f_struct_name, fname[0].lower()+fname[1:])
     if field_info.use_smart_ptr():
-        return ptr_fmt.format(fname)
+        return ptr_fmt.format(f_struct_name,fname )
 
 
-def _format_member_clear_lines(field_info):
+def _format_member_clear_lines(field_info, field):
     fname = field_info.name
     vec_fmt = '{0}s.clear();'
     field_fmt = 'memset(&{0}, 0, sizeof({1}));'
@@ -72,11 +74,12 @@ def _format_member_clear_lines(field_info):
     if field_info.use_vector():
         return vec_fmt.format(fname[0].lower()+fname[1:])
     if field_info.use_field():
-        return field_fmt.format(fname[0].lower()+fname[1:], fname)
+        return field_fmt.format(fname[0].lower()+fname[1:], field.get_universal_struct_name(''))
     if field_info.use_smart_ptr():
         return ptr_fmt.format(fname)
 
-def _format_member_merge_lines(field_info):
+def _format_member_merge_lines(field_info, field):
+    univerl_name = field.get_universal_struct_name('')
     fname = field_info.name
     vec_fmt = """if (fid == FID_{0})
 {{
@@ -85,32 +88,33 @@ def _format_member_merge_lines(field_info):
 }}"""
     field_fmt = """if (fid == FID_{0})
 {{
-	memcpy(&{1}, &field.{1}, sizeof({0}));
+	memcpy(&{1}, &field.{1}, sizeof({2}));
 	return true;
 }}"""
     ptr_fmt = """if (fid == FID_{0})
 {{
 	if (p{0}.get() == nullptr)
 	{{
-		p{0} = {0}Ptr(new {0}());
+		p{0} = {2}Ptr(new {2}());
 	}}
-	memcpy(p{0}.get(), &field.{1}, sizeof({0}));
+	memcpy(p{0}.get(), &field.{1}, sizeof({2}));
 	return true;
 }}"""
     if field_info.use_vector():
         return vec_fmt.format(fname, fname[0].lower()+fname[1:])
     if field_info.use_field():
-        return field_fmt.format(fname, fname[0].lower()+fname[1:])
+        return field_fmt.format(fname, fname[0].lower()+fname[1:],univerl_name)
     if field_info.use_smart_ptr():
-        return ptr_fmt.format(fname, fname[0].lower()+fname[1:])
+        return ptr_fmt.format(fname, fname[0].lower()+fname[1:],univerl_name)
 
-def _format_member_write_lines(field_info):
+def _format_member_write_lines(field_info, field):
+    univerl_name = field.get_universal_struct_name('')
     fname = field_info.name
-    vec_fmt = """//std::vector<{0}> 
+    vec_fmt = """//std::vector<{2}> 
 vecSize = {1}s.size();			
 for (int i = 0; i < vecSize; i++)
 {{
-	{0}Helper::writeBuffer({1}s[i],
+	{2}Helper::writeBuffer({1}s[i],
 		fieldBuffer, fieldLen);
 	if (MAX_FTDC_LENGTH - (nextWrite - ftdcBuffer) < FTDC_FIELD_HEADER_LENGTH + fieldLen)
 	{{					
@@ -131,8 +135,8 @@ for (int i = 0; i < vecSize; i++)
 	writeFieldCount += 1;
 }}
 """
-    field_fmt = """//{0}
-{0}Helper::writeBuffer({1},
+    field_fmt = """//{2}
+{2}Helper::writeBuffer({1},
 	fieldBuffer, fieldLen);
 if (MAX_FTDC_LENGTH - (nextWrite - ftdcBuffer) < FTDC_FIELD_HEADER_LENGTH + fieldLen)
 {{
@@ -155,7 +159,7 @@ writeFieldCount += 1;
     ptr_fmt = """//{0}
 if(p{0}.get() != nullptr)
 {{
-	{0}Helper::writeBuffer(*(p{0}.get()),
+	{2}Helper::writeBuffer(*(p{0}.get()),
 		fieldBuffer, fieldLen);
 	if (MAX_FTDC_LENGTH - (nextWrite - ftdcBuffer) < FTDC_FIELD_HEADER_LENGTH + fieldLen)
 	{{
@@ -177,11 +181,11 @@ if(p{0}.get() != nullptr)
 }}
 """
     if field_info.use_vector():
-        return vec_fmt.format(fname, fname[0].lower()+fname[1:])
+        return vec_fmt.format(fname, fname[0].lower()+fname[1:], univerl_name)
     if field_info.use_field():
-        return field_fmt.format(fname, fname[0].lower()+fname[1:])
+        return field_fmt.format(fname, fname[0].lower()+fname[1:],univerl_name)
     if field_info.use_smart_ptr():
-        return ptr_fmt.format(fname, fname[0].lower()+fname[1:])
+        return ptr_fmt.format(fname, fname[0].lower()+fname[1:],univerl_name)
 
 
 def generate_package_include(version, packages, target_path):

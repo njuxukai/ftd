@@ -21,7 +21,8 @@ namespace FTD
 		virtual void clear() = 0;
 		
 		virtual  void toMessages(std::vector<std::string>& resultBuf) { }
-		
+	
+
 		bool mergeFtdcMessage(const FtdcHeader& ftdcHeader, const std::string& ftdcContent)
 		{
 			if (ftdcHeader.contentLength != ftdcContent.size())

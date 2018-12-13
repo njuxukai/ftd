@@ -12,6 +12,7 @@ Version={version}
 namespace FTD {{
 
 ///TID
+#define TID_Heartbeat 0x0000
 {tid_def}
 
 ///FID

@@ -119,4 +119,15 @@ def load_dtd_file_fields(path, file):
         if tid is not None:
             tids[tid.name] = tid
 
+    for item in items.values():
+        if is_base_type_name(item.type_name):
+            item.base_type_name = item.type_name
+            item.use_derivative_type = False
+        elif item.type_name not in types:
+            print("Item[%s]的对应衍生类型[%s]未定义" % (item.name, item.type_name))
+        else:
+            item.use_derivative_type = True
+            item.base_type_name = types[item.type_name].base_type_name
+
+
     return types, items, fields, packages, tids

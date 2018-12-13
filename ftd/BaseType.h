@@ -53,14 +53,15 @@ namespace FTD
 			readBuffer(buffer, value);
 		}
 
-		static void writeBuffer(double value, char* buffer)
+		static void writeBuffer(double value, void* buffer)
 		{
 			char local_buffer[len + 1];
 			char format_template[] = "%%0%d.%df";
 			char format[20];
 			sprintf(format, format_template, len, precise);
 			sprintf(local_buffer, format, value);
-			memcpy(buffer, &local_buffer, len);
+			local_buffer[len] = '\0';
+			memcpy(buffer, (void*)&local_buffer, len);
 		}
 
 		static void readBuffer(const char* buffer, double& value)

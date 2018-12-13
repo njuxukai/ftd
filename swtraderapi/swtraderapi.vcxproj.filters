@@ -15,18 +15,18 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SwhyFtdcTraderApi.h">
+    <ClInclude Include="XcpFtdcTraderApi.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="SwhyFtdcTraderApiImpl.h">
+    <ClInclude Include="XcpFtdcTraderApiImpl.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="SwhyFtdcTraderApi.cpp">
+    <ClCompile Include="XcpFtdcTraderApi.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="SwhyFtdcTraderApiImpl.cpp">
+    <ClCompile Include="XcpFtdcTraderApiImpl.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

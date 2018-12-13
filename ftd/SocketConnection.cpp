@@ -146,6 +146,8 @@ bool SocketConnection::read( SocketAcceptor& a, SocketServer& s )
           return false;
       }
 	  Package* package = m_packageBuffer.OnFtdcMessage(msg);
+
+	  //OnHeartBeat
 	  if (package == nullptr)
 		  return false;
       //m_pSession = a.lookupSession( m_socket );
