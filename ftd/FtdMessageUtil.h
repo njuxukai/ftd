@@ -7,13 +7,14 @@
 #include "io.h" 
 #include <string>
 #include <sstream>
-
+#include <vector>
 class FtdMessageUtil
 {
 public:
-
+	
 	static bool concatenateFtdcMessages(const std::vector<std::string>& msgs, std::string& result)
 	{
+		
 		if (msgs.size() == 0)
 		{
 			result.clear();
@@ -31,6 +32,7 @@ public:
 			oss << *it;
 		}
 		result = oss.str();
+		
 		return true;
 	}
 
@@ -56,7 +58,7 @@ public:
 			result = true;
 		return result;
 	}
-
+	
 	static std::string unCompressFtdcMessage(const std::string& compressedFtdcMsg, int algoType)
 	{
 		return compressedFtdcMsg;
@@ -67,4 +69,5 @@ public:
 		return rawFtdcMsg;
 	}
 };
+
 #endif

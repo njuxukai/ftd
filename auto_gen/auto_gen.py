@@ -36,7 +36,7 @@ def generate_ftd(path, file, target_path):
     gen_fields_def.generate_fields_include(version,
            list(fields.values()), target_path)
     for package in packages.values():
-        gen_packages_def.generate_package_struct(version, package, target_path, version_number)
+        gen_packages_def.generate_package_struct(version, package, target_path, version_number, fields)
     gen_packages_def.generate_package_include(version, list(packages.values()), target_path)
     gen_packages_def.generate_package_cracker(version, list(packages.values()), target_path)
     
@@ -54,7 +54,7 @@ def generate_testcase(path, file, target_path):
     version_number = nodes[1]
     version = ''.join(nodes).upper()
     types,items,fields, packages, tids = load_dtd_file_fields(path, file)
-    gen_testcase.generate_struct_validation(fields, version, struct_type_prefix, target_path)
+    gen_testcase.generate_struct_validation(fields, version, project_code, target_path)
     pass
 
 if __name__ == "__main__":

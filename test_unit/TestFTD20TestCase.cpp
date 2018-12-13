@@ -49,11 +49,11 @@ SUITE(FTDTest)
 		CHECK_EQUAL(ext.sessionState, ext2.sessionState);
 		CHECK_EQUAL(strcmp(ext2.target, "aa") , 0);
 	}
-
+	
 	TEST(SplitFtdcMessagesTest)
 	{
 		RspQryOrder package;
-		OrderField field = { 0 };
+		CFtdcOrderField field = { 0 };
 		int count = 10000;
 		for (int i = 0; i < count; i++)
 		{
@@ -73,19 +73,20 @@ SUITE(FTDTest)
 		CHECK(splitResult);
 		CHECK_EQUAL(package2.orderFields.size(), 10000);
 	}
+	
 
 	TEST(OrderFieldTest)
 	{
-		OrderField field ;
+		CFtdcOrderField field ;
 		//memset(&field, 0, sizeof(OrderField));
 		field.LimitPrice = 30.56;
 		char* buffer = new char[4096];
 		int write_len = 0;
 		int read_len = 0;
-		OrderField field2;
+		CFtdcOrderField field2;
 		//memset(&field2, 0, sizeof(OrderField));
-		OrderFieldHelper::writeBuffer(field, buffer, write_len);
-		OrderFieldHelper::readBuffer(buffer, field2, read_len);
+		CFtdcOrderFieldHelper::writeBuffer(field, buffer, write_len);
+		CFtdcOrderFieldHelper::readBuffer(buffer, field2, read_len);
 		CHECK(write_len > 0);
 		CHECK_EQUAL(write_len, read_len);
 		CHECK_CLOSE(30.56, field2.LimitPrice, 0.01);
@@ -94,7 +95,7 @@ SUITE(FTDTest)
 	TEST(PackageTest)
 	{
 		RspQryOrder package ;
-		OrderField field = { 0 };
+		CFtdcOrderField field = { 0 };
 		int count = 1;
 		for (int i = 0; i < count; i++)
 		{

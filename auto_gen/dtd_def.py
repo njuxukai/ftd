@@ -157,6 +157,9 @@ class FieldDTD:
         self.comment = ""
         self.item_dicts = []
 
+    def get_universal_struct_name(self, project_name):
+        return 'C%sFtdc%s' %(project_name, self.name)
+
 
 class TIdDTD:
     def __init__(self):
