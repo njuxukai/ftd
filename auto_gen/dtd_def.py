@@ -45,7 +45,7 @@ class TypeDTD:
         name = self.name
         nodes = []
         if name.startswith("FTD"):
-            nodes.append("FTD")
+            nodes.append("FTDC")
             name = name[3:]
         i = 0
         j = 1
@@ -105,7 +105,9 @@ class TypeDTD:
         return template.format(type_name, name, length_spec)
 
     def get_host_enum_prefix(self, project_code):
-        prefix = '%s_FTDC_' % project_code.upper()
+        prefix = 'FTDC_'
+        if len(project_code) > 0:
+           prefix = '%s_FTDC_' % project_code.upper()
         i = 0
         name = self.name
         if name.startswith("FTD"):
@@ -115,12 +117,14 @@ class TypeDTD:
                 prefix += name[i]
         return prefix +'_'
 
+
+
     def get_host_define_lines(self, data_type_prefix, project_code):
         lines = []
         template = "typedef {0} {1}{2}Type{3};"
 
         basic_type_cpp = ''
-        prefix = project_code + 'Ftdc'
+        prefix = data_type_prefix
         raw_name = self.name[3:]
         length_spec = ''
         basic_type_cpp, length_spec = self.get_name_length_tuple()
@@ -147,11 +151,50 @@ class TypeDTD:
         lines.append('')
         return lines
 
+    def get_ftd_define_lines(self, data_type_prefix):
+        lines = []
+        template = "typedef {0} {1}{2}Type{3};"
 
+        basic_type_cpp = ''
+        prefix = data_type_prefix
+        raw_name = self.name[3:]
+        length_spec = ''
+        basic_type_cpp, length_spec = self.get_name_length_tuple()
+
+        lines.append('/' * 80)
+        lines.append('///%s%sType %s' % (prefix, raw_name, self.comment))
+        lines.append('/' * 80)
+        if len(self.enum_value_dicts) > 0:
+            enum_prefix = self.get_host_enum_prefix('')
+            comma =''
+            h, l, p = parse_ftd_type_spec(self.base_type_name)
+            if h == CHAR_TYPE:
+                comma = "'"
+            if h == STRING_TYPE:
+                comma = '"'
+            for d in self.enum_value_dicts:
+                const_raw_name = d['enname'] if 'enname' in d else d['name']
+                lines.append('///%s' % d['comment'])
+                lines.append('#define {0}{1} {2}{3}{2}'.format(enum_prefix,const_raw_name,comma, d['name'] ))
+                lines.append('')
+                        
+        
+        lines.append(template.format(basic_type_cpp, data_type_prefix, raw_name, length_spec));
+        lines.append('')
+        return lines
+
+    
     def get_host_derivative_name(self, host_data_type_prefix):
         name = self.name
         if name.startswith("FTD"):
             return host_data_type_prefix + name[3:] + "Type"
+        else:
+            return name +"Type"
+
+    def get_ftd_derivative_name(self):
+        name = self.name
+        if name.startswith("FTD"):
+            return 'TFtdc' + name[3:] + "Type"
         else:
             return name +"Type"
 

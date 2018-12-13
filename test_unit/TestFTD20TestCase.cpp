@@ -7,12 +7,52 @@
 
 #include <ftd/BaseType.h>
 #include <UnitTest++.h>
-/*
-#include <ftd/FTD20/Fields.h>
-#include <ftd/FTD20/Packages.h>
-#include <ftd/FTD20/Error.h>
+
+#include <ftd/FTD30/Fields.h>
+#include <ftd/FTD30/Packages.h>
+#include <ftd/FTD30/Error.h>
 using namespace FTD;
 
+SUITE(FTDTest)
+{
+	TEST(OrderFieldTest)
+	{
+		OrderField field ;
+		//memset(&field, 0, sizeof(OrderField));
+		field.LimitPrice = 30.56;
+		char* buffer = new char[4096];
+		int write_len = 0;
+		int read_len = 0;
+		OrderField field2;
+		//memset(&field2, 0, sizeof(OrderField));
+		OrderFieldHelper::writeBuffer(field, buffer, write_len);
+		OrderFieldHelper::readBuffer(buffer, field2, read_len);
+		CHECK(write_len > 0);
+		CHECK_EQUAL(write_len, read_len);
+		CHECK_CLOSE(30.56, field2.LimitPrice, 0.01);
+	}
+
+	TEST(PackageTest)
+	{
+		RspQryOrder package ;
+		OrderField field = { 0 };
+		int count = 1;
+		for (int i = 0; i < count; i++)
+		{
+			package.orderFields.push_back(field);
+		}
+		std::vector<std::string> mss;
+		package.toMessages(mss);
+		RspQryOrder package2;
+		for (int i = 0; i < mss.size(); i++)
+		{
+			package2.mergeFtdcMessage(mss[i]);
+		}
+		
+		CHECK_EQUAL(package2.orderFields.size(), package.orderFields.size());
+	}
+}
+/*
 SUITE(FTDTest)
 {
 

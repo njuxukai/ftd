@@ -49,3 +49,29 @@ def generate_type_df(version, types, target_path):
     d['tt_type_def'] = '\n'.join(def_ttype_statements)
     save_cpp_file(template.format_map(d), '%s/%s'%(target_path, target_fname))
     
+host_data_type_template = './templates/host_data_type.template'
+
+def generate_ftd_data_type_file(types, version, 
+                                 target_path):
+    lines = []
+    template = load_template_file(ftd_type_template)
+    d = {}
+    
+    """
+    for t in items.values():
+        append_lines = t.get_host_tt_item_define(types, data_type_prefix, project_code)
+        if append_lines is not None:
+            lines.extend(append_lines)
+        else:
+            a = 1
+    
+    """
+    data_type_prefix = "TFtdc"
+    for t in types.values():
+        append_lines = t.get_ftd_define_lines(data_type_prefix)
+        lines.extend(append_lines)
+
+    d['version'] = version
+    d['t_type_def'] = ''
+    d['tt_type_def'] = '\n'.join(lines)
+    save_cpp_file(template.format_map(d), '%s/%s'%(target_path, target_fname))

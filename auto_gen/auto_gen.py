@@ -34,11 +34,12 @@ def generate_ftd(path, file, target_path):
     ver_path = '%s/%s' %(target_path, version)
     if not os.path.exists(ver_path):
         os.makedirs(ver_path)
-    gen_type_df.generate_type_df(version, list(types.values()), target_path)
-    gen_item_df.generate_item_df(version, list(items.values()), target_path)
+    #gen_type_df.generate_type_df(version, list(types.values()), target_path)
+    gen_type_df.generate_ftd_data_type_file(types, version, target_path)
+    #gen_item_df.generate_item_df(version, list(items.values()), target_path)
     gen_id_def.generate_id_df(version, list(tids.values()), list(fields.values()), target_path, version_number)
     for field in fields.values():
-        gen_field_df.generate_field_struct(version, field, target_path)
+        gen_field_df.generate_field_struct(version, field, target_path, items, types)
     gen_field_df.generate_fields_include(version,
            list(fields.values()), target_path)
     for package in packages.values():
