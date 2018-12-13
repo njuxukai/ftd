@@ -1,0 +1,27 @@
+/*
+本文件自动生成，请勿手工修改
+Version={version}
+*/
+
+#ifndef FTD_DERIVATIVE_TYPE_H
+#define FTD_DERIVATIVE_TYPE_H
+
+<<<<<<< HEAD
+
+namespace FTD {{
+
+=======
+
+
+
+///衍生类型定义	
+{t_type_def}
+>>>>>>> 1582c5fc20f85cc4d2665a4543aa0de7043d2c73
+
+
+///Field存储类型定义
+{tt_type_def}
+
+
+
+#endif
