@@ -170,7 +170,11 @@ void SocketAcceptor::onConnect( SocketServer& server, int a, int s )
   if ( i != m_connections.end() ) return;
   int port = server.socketToPort( a );
 
-  SessionID id = Session::allocateNextSessionID();
+  SessionID id;
+  std::string strRandom;
+  bool generateIDResult = Session::allocateNextSessionID(id, strRandom);
+  if (!generateIDResult)
+	  return;
   Dictionary settings = m_setting[port];
   Sessions sessions = m_portToSessions[port];
   Session* pSession = createSession(id, settings);

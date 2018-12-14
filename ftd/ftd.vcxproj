@@ -84,7 +84,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderOutputFile>.\Debug/ftd.pch</PrecompiledHeaderOutputFile>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -145,6 +145,8 @@ del /F EXCLUDE
     <ClCompile Include="FixTypes.cpp" />
     <ClCompile Include="FtdMessageUtil.cpp" />
     <ClCompile Include="Initiator.cpp" />
+    <ClCompile Include="Log.cpp" />
+    <ClCompile Include="PackageStore.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="Session.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

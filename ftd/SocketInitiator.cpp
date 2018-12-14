@@ -154,7 +154,9 @@ int SocketInitiator::doConnect( const PortID& p, const Dictionary& d )
 		return result;
 	}
 
-	SessionID s = Session::allocateNextSessionID();
+	SessionID s;
+	std::string randomString;
+	bool generateIDResult = Session::allocateNextSessionID(s, randomString);
 	Session* pSession = createSession(s, d);
     m_pendingConnections[ socket ] 
       = new SocketConnection(socket, pSession, &m_connector.getMonitor(), false);

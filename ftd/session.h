@@ -16,6 +16,9 @@
 #include <map>
 #include <queue>
 #include <set>
+#include <boost/uuid/uuid.hpp>            // uuid class
+#include <boost/uuid/uuid_generators.hpp> // generators
+#include <boost/uuid/uuid_io.hpp>         // streaming operators etc.
 
 namespace FTD
 {
@@ -54,7 +57,7 @@ public:
   const int& getSessionID() const
   { return m_sessionID; }
 
-  static SessionID allocateNextSessionID();
+  static bool allocateNextSessionID(SessionID& sessionID, std::string& randomID);
 
 
 
@@ -141,9 +144,12 @@ private:
   Mutex m_mutex;
   bool m_receiveReq;
   static Sessions s_sessions;
+  //s_sessionIDs 全局静态sessionID池，并不保证所有id都有alive的session，应轮询清理
   static SessionIDs s_sessionIDs;
   static Sessions s_registered;
   static Mutex s_mutex;
+  static std::hash<std::string> s_strHash;
+  static boost::uuids::random_generator s_uuidGenerator;
 };
 }
 

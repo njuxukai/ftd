@@ -139,40 +139,6 @@ private:
   UtcTimeStamp m_creationTime;
 };
 
-class MessageStoreFactoryExceptionWrapper
-{
-private:
-  PackageStoreFactory* m_pFactory;
-public:
-  MessageStoreFactoryExceptionWrapper( PackageStoreFactory* pFactory )
-  : m_pFactory( pFactory ) {}
-
-  PackageStore* create( const SessionID&, bool&, ConfigError& );
-  void destroy( PackageStore* );
-};
-
-class MessageStoreExceptionWrapper
-{
-private:
-  PackageStore* m_pStore;
-public:
-  MessageStoreExceptionWrapper( PackageStore* pStore ) : m_pStore( pStore ) {}
-  ~MessageStoreExceptionWrapper() { delete m_pStore; }
-
-  bool set( int, const std::string&, bool&, IOException& );
-  void get( int, int, std::vector < std::string > &, bool&, IOException& ) const;
-  int getNextSenderMsgSeqNum( bool&, IOException& ) const;
-  int getNextTargetMsgSeqNum( bool&, IOException& ) const;
-  void setNextSenderMsgSeqNum( int, bool&, IOException& );
-  void setNextTargetMsgSeqNum( int, bool&, IOException& );
-  void incrNextSenderMsgSeqNum( bool&, IOException& );
-  void incrNextTargetMsgSeqNum( bool&, IOException& );
-
-  UtcTimeStamp getCreationTime( bool&, IOException& );
-
-  void reset( bool&, IOException& );
-  void refresh( bool&, IOException& );
-};
 }
 
 #endif //FIX_MESSAGESTORE_H

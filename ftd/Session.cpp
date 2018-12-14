@@ -35,6 +35,8 @@ Session::Sessions Session::s_sessions;
 Session::SessionIDs Session::s_sessionIDs;
 Session::Sessions Session::s_registered;
 Mutex Session::s_mutex;
+std::hash<std::string> Session::s_strHash;
+boost::uuids::random_generator Session::s_uuidGenerator;
 
 #define LOGEX( method ) try { method; } catch( std::exception& e ) \
   { m_state.onEvent( e.what() ); }
@@ -144,6 +146,24 @@ void Session::disconnect()
     m_state.reset();
 
   m_state.resendRange( 0, 0 );
+}
+
+bool Session::allocateNextSessionID(SessionID& id, std::string& randomString)
+{
+	Locker locker(s_mutex);
+	int tryCount = 0;
+	while (tryCount < 10)
+	{
+		randomString = boost::uuids::to_string(s_uuidGenerator());
+		id = s_strHash(randomString);
+		if (s_sessionIDs.find(id) != s_sessionIDs.end())
+		{
+			s_sessionIDs.insert(id);
+			return true;
+		}
+		tryCount += 1;
+	}
+	return false;
 }
 
 
