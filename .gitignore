@@ -67,3 +67,5 @@ include/*
 /test_unit/TestXcpStructTestCase.cpp
 /test_unit/TestFTDFieldWriteReadTestCase.cpp
 
+/build/Debug/xcptraderapi.tlog
+/build/Debug
