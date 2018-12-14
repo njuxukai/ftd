@@ -42,7 +42,8 @@ def get_basic_name_length_spec_pair_tuple(base_type_name):
     if h == FLOAT_TYPE:
         type_name = 'double'
     if h == WORD_TYPE:
-        type_name = 'int16_t'
+        #type_name = 'int16_t'
+        type_name = 'short'
     if h == STRING_TYPE:
         length_spec = '[%d + 1]' % l
     if h == INT64_TYPE:

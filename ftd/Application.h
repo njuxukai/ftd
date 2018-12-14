@@ -46,6 +46,8 @@ namespace FTD
 			throw(FieldNotFound, IncorrectDataFormat, IncorrectTagValue, UnsupportedMessageType) = 0;
 
 		virtual void onHeartBeat() = 0;
+
+		virtual void onHeartBeatWarning() = 0;
 	};
 
 

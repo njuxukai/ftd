@@ -14,6 +14,7 @@
 #include "XcpFtdcUserApiStruct.h"
 class CXcpFtdcTraderSpi
 {
+public:
 	///当客户端与交易后台建立起通信连接时（还未登录前），该方法被调用。
 	virtual void OnFrontConnected() {};
 
@@ -88,7 +89,7 @@ class CXcpFtdcTraderSpi
 	virtual void OnRspQryPurchaseQuota(CXcpFtdcPurchaseQuotaField* pPurchaseQuota, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast) {}
 
 	///报单成交回报推送响应
-	virtual void OnRtnOrderExecutionReport(CXcpFtdcExecutionReportField* pExecutionReport, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast) {}
+	virtual void OnRtnOrderExecutionReport(CXcpFtdcExecutionReportField* pExecutionReport) {}
 
 };
 
@@ -140,42 +141,55 @@ public:
 	///用户登出请求
 	virtual int ReqUserLogout(CXcpFtdcReqUserLogoutField* pReqUserLogout, int nRequestID) = 0;
 
-	///
+	///报单请求
 	virtual int ReqOrderInsert(CXcpFtdcInputOrderField* pInputOrder, int nRequestID) = 0;
 
-	
+	///报单操作请求
 	virtual int ReqOrderAction(CXcpFtdcInputOrderActionField* pInputOrderAction, int nRequestID) = 0;
 
-	
+	///资金划转请求
 	virtual int ReqFundTransfer(CXcpFtdcInputFundTransferField* pInputFundTransfer, int nRequestID) = 0;
 
-
+	///委托查询请求
 	virtual int ReqQryOrder(CXcpFtdcQryOrderField* pQryOrder, int nRquestID) = 0;
 
+	///成交查询请求
 	virtual int ReqQryTrade(CXcpFtdcQryTradeField* pQryTrade, int nRequestID) = 0;
 
+	///资金查询请求
 	virtual int ReqQryFund(CXcpFtdcQryFundField *pQryFund, int nRequestID) = 0;
 
+	///仓位查询请求
 	virtual int ReqQryPosition(CXcpFtdcQryPositionField *pQryPosition, int nRequestID) = 0;
 
+	///资金划转查询请求
 	virtual int ReqQryFundTransfer(CXcpFtdcQryFundTransferField *pQryFundTransfer, int nRequestID) = 0;
 
+	///查询历史委托请求
 	virtual int ReqQryHisOrder(CXcpFtdcQryHisOrderField *pQryHisOrder, int nRequestID) = 0;
 
+	///查询历史成交请求
 	virtual int ReqQryHisTrade(CXcpFtdcQryHisTradeField *pQryHisTrade, int nRequestID) = 0;
 
+	///查询历史资金划转请求
 	virtual int ReqQryHisFundTransfer(CXcpFtdcQryHisFundTransferField *pQryHisFundTransfer, int nRequestID) = 0;
 
+	///查询证券信息请求
 	virtual int ReqQryInstrument(CXcpFtdcQryInstrumentField *pQryInstrument, int nRequestID) = 0;
 
+	///查询ETF信息请求
 	virtual int ReqQryETF(CXcpFtdcQryETFField *pQryETF, int nRequestID) = 0;
 
-	virtual int ReqQryETFCompisition(CXcpFtdcQryETFCompositionField *pQryEtfComposition, int nRequestID) = 0;
+	///查询ETF成分股信息请求
+	virtual int ReqQryETFComposition(CXcpFtdcQryETFCompositionField *pQryEtfComposition, int nRequestID) = 0;
 
-	virtual int ReqQryStrucutredFund(CXcpFtdcQryStructuredFundField *pQryStructuredFund, int nRequestID) = 0;
+	///查询分级基金信息请求
+	virtual int ReqQryStructuredFund(CXcpFtdcQryStructuredFundField *pQryStructuredFund, int nRequestID) = 0;
 
+	///查询可申购新股信息请求
 	virtual int ReqQryPurchasableNewIssueSecurity(CXcpFtdcQryNewIssueSecurityField *pQryPurchasableNewSecurity, int nRequestID) = 0;
 
+	///查询客户新股申购额度请求
 	virtual int ReqQryPurchaseQuota(CXcpFtdcQryPurchaseQuotaField *pQryPurchaseQuota, int nRequestID) = 0;
 
 protected:

@@ -80,7 +80,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>ISLIB;LIB_TRADER_API_EXPORT;WIN32;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ISLIB;LIB_TRADER_API_EXPORT;WIN32;_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)\include\;$(SolutionDir)\include\xcp</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>

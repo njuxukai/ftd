@@ -280,7 +280,7 @@ def generate_package_cracker(version, packages, target_path):
     const_package_sections = []
     if_else_sections = []
     const_if_else_sections = []
-    class_pre_def_template = 'class {0};'
+    class_pre_def_template = 'struct {0};'
     default_on_const_package_section_template ="virtual void OnPackage( const {0}&, const SessionID&){{}}"
     default_on_package_section_template ="virtual void OnPackage( {0}&, const SessionID&){{}}"
     const_if_else_section_template = """if ( package.m_transactionId == {tid}{judge_expression})

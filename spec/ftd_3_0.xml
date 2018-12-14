@@ -84,7 +84,7 @@
 		</packageDefine>
 		
 		<packageDefine name="RspQryPosition" tid="TID_QryPosition" model="dialog" comment="仓位查询应答">
-			<field name="PositionField" maxOccur="1" minOccur="1" comment="证券仓位域"/>
+			<field name="PositionField" maxOccur="任意" minOccur="1" comment="证券仓位域"/>
 			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
@@ -733,11 +733,11 @@
 		<itemDefine name="RatioMaxCashSubsitute" type="FTDRatio" comment="最大现金替代比例"/>	
 		<itemDefine name="ReportDate" type="FTDDate" comment="报告日期"/>
 		<itemDefine name="ReportTime" type="FTDTime" comment="报告时间"/>
-		<itemDefine name="ReportSysID" type="FTDIntType" comment="报告在系统的编号"/>
+		<itemDefine name="ReportSysID" type="FTDSysID" comment="报告在系统的编号"/>
 		
 		<itemDefine name="SessionID" type="FTDIntType" comment="会话编号"/>
-		<itemDefine name="SequenceSeries" type="FTDSequenceNo" comment="序列类别号"/>
-		<itemDefine name="SequenceNo" type="FTDSequenceSeries" comment="序列号"/>
+		<itemDefine name="SequenceSeries" type="FTDSequenceSeries" comment="序列类别号"/>
+		<itemDefine name="SequenceNo" type="FTDSequenceNo" comment="序列号"/>
 		<itemDefine name="SystemName" type="FTDStringType&lt;20&gt;" comment="交易系统名称"/>	
 		<itemDefine name="StatusSplitMerge" type="FTDBoolFlag" comment="分级基金允许分拆合并状态"/>
 		<itemDefine name="StatusSubscribe" type="FTDBoolFlag" comment="ETF是否允许申购"/>
@@ -882,5 +882,6 @@
 			<enumValue name="0" comment="增量"/>
 			<enumValue name="1" comment="绝对量"/>
 		</typeDefine>
+		<typeDefine name="FTDSysID" baseType="FTDIntType" comment="系统唯一编号，用在报单委托成交等" length="4" precision="0"/>
 	</types>
 </ftd>

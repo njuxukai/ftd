@@ -104,7 +104,7 @@ SUITE(FTDTest)
 		std::vector<std::string> mss;
 		package.toMessages(mss);
 		RspQryOrder package2;
-		for (int i = 0; i < mss.size(); i++)
+		for (unsigned int i = 0; i < mss.size(); i++)
 		{
 			package2.mergeFtdcMessage(mss[i]);
 		}

@@ -12,7 +12,6 @@ Version={version}
 
 namespace FTD
 {{
-class SessionID;
 {class_pre_def}
 
 class PackageCracker
@@ -44,7 +43,7 @@ public:
 
 
 
-}}
+}};
 
 }}
 #endif

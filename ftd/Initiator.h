@@ -59,6 +59,7 @@ public:
 
   virtual ~Initiator();
 
+  int send(Package& package) { return 0; }
   /// Start initiator.
   void start() throw ( ConfigError, RuntimeError );
   /// Block on the initiator
