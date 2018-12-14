@@ -69,3 +69,5 @@ include/*
 
 /build/Debug/xcptraderapi.tlog
 /build/Debug
+/SampleClient/Debug
+/export/lib/Debug

@@ -9,7 +9,7 @@
 #define ERR_CODE_XCP_INITIATOR_NULL -8001
 
 
-class CXcpFtdcTraderApiImpl : public CXcpFtdcTraderApi, 
+class CXcpFtdcTraderApiImpl : public CXcpFtdcTraderApi,
 	public FTD::Application, public FTD::PackageCracker
 {
 public:
