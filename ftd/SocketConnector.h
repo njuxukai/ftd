@@ -19,11 +19,12 @@ public:
 
   SocketConnector( int timeout = 0 );
 
-  int connect( int& socket, const std::string& address, int port, bool noDelay,
-                 int sendBufSize, int rcvBufSize,
-                 const std::string& sourceAddress = "", int sourcePort = 0);
-  int connect(int& socket, const std::string& address, int port, bool noDelay, 
-               int sendBufSize, int rcvBufSize, Strategy& );
+  int connect(const std::string& address, int port, bool noDelay,
+	  int sendBufSize, int rcvBufSize,
+	  const std::string& sourceAddress = "", int sourcePort = 0);
+  int connect(const std::string& address, int port, bool noDelay,
+	  int sendBufSize, int rcvBufSize, Strategy&);
+
   void block( Strategy& strategy, bool poll = 0, double timeout = 0.0 );
   SocketMonitor& getMonitor() { return m_monitor; }
 

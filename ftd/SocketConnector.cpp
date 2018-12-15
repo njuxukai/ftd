@@ -82,33 +82,35 @@ private:
 SocketConnector::SocketConnector( int timeout )
 : m_monitor( timeout ) {}
 
-int SocketConnector::connect( int& socket, const std::string& address, int port, bool noDelay,
-                              int sendBufSize, int rcvBufSize,
-                              const std::string& sourceAddress, int sourcePort)
+int SocketConnector::connect(const std::string& address, int port, bool noDelay,
+	int sendBufSize, int rcvBufSize,
+	const std::string& sourceAddress, int sourcePort)
 {
-  socket = socket_createConnector();
+	int socket = socket_createConnector();
 
-  if ( socket != -1 )
-  {
-    if( noDelay )
-      socket_setsockopt( socket, TCP_NODELAY );
-    if( sendBufSize )
-      socket_setsockopt( socket, SO_SNDBUF, sendBufSize );
-    if( rcvBufSize )
-      socket_setsockopt( socket, SO_RCVBUF, rcvBufSize );
-    if ( !sourceAddress.empty() || sourcePort )
-          socket_bind( socket, sourceAddress.c_str(), sourcePort );
-    m_monitor.addConnect( socket );
-    return socket_connect( socket, address.c_str(), port );
-  }
-  return socket;
+	if (socket != -1)
+	{
+		if (noDelay)
+			socket_setsockopt(socket, TCP_NODELAY);
+		if (sendBufSize)
+			socket_setsockopt(socket, SO_SNDBUF, sendBufSize);
+		if (rcvBufSize)
+			socket_setsockopt(socket, SO_RCVBUF, rcvBufSize);
+		if (!sourceAddress.empty() || sourcePort)
+			socket_bind(socket, sourceAddress.c_str(), sourcePort);
+		m_monitor.addConnect(socket);
+		socket_connect(socket, address.c_str(), port);
+	}
+	return socket;
 }
 
-int SocketConnector::connect( int& socket, const std::string& address, int port, bool noDelay, 
-                              int sendBufSize, int rcvBufSize, Strategy& strategy )
+int SocketConnector::connect(const std::string& address, int port, bool noDelay,
+	int sendBufSize, int rcvBufSize, Strategy& strategy)
 {
-  return connect( socket, address, port, noDelay, sendBufSize, rcvBufSize, "", 0);
+	int socket = connect(address, port, noDelay, sendBufSize, rcvBufSize, "", 0);
+	return socket;
 }
+
 
 void SocketConnector::block( Strategy& strategy, bool poll, double timeout )
 {

@@ -156,7 +156,7 @@ bool Session::allocateNextSessionID(SessionID& id, std::string& randomString)
 	{
 		randomString = boost::uuids::to_string(s_uuidGenerator());
 		id = s_strHash(randomString);
-		if (s_sessionIDs.find(id) != s_sessionIDs.end())
+		if (s_sessionIDs.find(id) == s_sessionIDs.end())
 		{
 			s_sessionIDs.insert(id);
 			return true;

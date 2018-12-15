@@ -147,12 +147,8 @@ int SocketInitiator::doConnect( const PortID& p, const Dictionary& d )
     getLog()->onEvent( "Connecting to " + address + " on port " + IntConvertor::convert((unsigned short)port) + " (Source " + sourceAddress + ":" + IntConvertor::convert((unsigned short)sourcePort) + ")");
 
 	
-	int socket;
-    int result = m_connector.connect(socket, address, port, m_noDelay, m_sendBufSize, m_rcvBufSize, sourceAddress, sourcePort );
-	if (result < 0)
-	{
-		return result;
-	}
+	int socket = m_connector.connect(address, port, m_noDelay, m_sendBufSize, m_rcvBufSize, sourceAddress, sourcePort );
+
 
 	SessionID s;
 	std::string randomString;
