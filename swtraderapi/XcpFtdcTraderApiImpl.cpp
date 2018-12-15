@@ -97,12 +97,21 @@ void CXcpFtdcTraderApiImpl::SubscribePublicTopic(THOST_TE_RESUME_TYPE resumeType
 /// Notification of a session begin created
 void CXcpFtdcTraderApiImpl::onCreate(const FTD::SessionID&)
 {
+
+}
+
+void CXcpFtdcTraderApiImpl::onConnect(const FTD::SessionID& id)
+{
 	if (m_pSpi)
 	{
 		m_pSpi->OnFrontConnected();
 	}
 }
 
+void CXcpFtdcTraderApiImpl::onDisconnect(const FTD::SessionID& id)
+{
+
+}
 /// Notification of a session successfully logging on
 void CXcpFtdcTraderApiImpl::onLogon(const FTD::SessionID&)
 {}

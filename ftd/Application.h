@@ -29,6 +29,10 @@ namespace FTD
 
 		/// Notification of a session begin created
 		virtual void onCreate(const SessionID&) = 0;
+		///connected
+		virtual void onConnect(const SessionID&) = 0;
+		//to be disconnected
+		virtual void onDisconnect(const SessionID&) = 0;
 		/// Notification of a session successfully logging on
 		virtual void onLogon(const SessionID&) = 0;
 		/// Notification of a session logging off or disconnecting

@@ -69,7 +69,7 @@ void Initiator::initialize() throw ( ConfigError )
   m_ports = m_settings.getPorts();
   std::set < SessionID > ::iterator i;
 
-  if ( !m_sessions.size() )
+  if ( !m_ports.size() )
     throw ConfigError( "No portid defined for initiator" );
 }
 

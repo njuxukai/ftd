@@ -123,7 +123,12 @@ public:
 
 	/// Notification of a session begin created
 	virtual void onCreate(const FTD::SessionID&);
+	///
+	virtual void onConnect(const FTD::SessionID&);
+	//
+	virtual void onDisconnect(const FTD::SessionID&);
 	/// Notification of a session successfully logging on
+
 	virtual void onLogon(const FTD::SessionID&);
 	/// Notification of a session logging off or disconnecting
 	virtual void onLogout(const FTD::SessionID&);
