@@ -30,7 +30,7 @@
 *.exe
 *.out
 *.app
-
+*.suo
 *.sdf
 *.opensdf
 /.vs/*
