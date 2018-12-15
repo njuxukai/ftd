@@ -1,21 +1,35 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ftd", "ftd\ftd.vcxproj", "{D3B28290-1A56-4B7E-816E-9811C6E77693}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTest++_vs14", "UnitTest++\UnitTest++_vs14.vcxproj", "{64A4FEFE-0461-4E95-8CC1-91EF5F57DBC6}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_unit", "test_unit\test_unit.vcxproj", "{23D49C61-D5C9-4374-9E23-B8C3EFD06F58}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D3B28290-1A56-4B7E-816E-9811C6E77693} = {D3B28290-1A56-4B7E-816E-9811C6E77693}
+		{64A4FEFE-0461-4E95-8CC1-91EF5F57DBC6} = {64A4FEFE-0461-4E95-8CC1-91EF5F57DBC6}
+	EndProjectSection
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "auto_gen", "auto_gen\auto_gen.pyproj", "{15A40B97-DF74-4D0B-BB97-53E587FB7D49}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xcptraderapi", "swtraderapi\swtraderapi.vcxproj", "{48310061-76FF-4C1C-B89A-39BE8E03D97A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D3B28290-1A56-4B7E-816E-9811C6E77693} = {D3B28290-1A56-4B7E-816E-9811C6E77693}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SampleServer", "SampleServer\SampleServer.vcxproj", "{3025E94C-F349-43A3-B592-0E7DFAE7EDEC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D3B28290-1A56-4B7E-816E-9811C6E77693} = {D3B28290-1A56-4B7E-816E-9811C6E77693}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SampleClient", "SampleClient\SampleClient.vcxproj", "{5A3B9755-79E0-48AB-89C7-1DC2CC3B2C31}"
+	ProjectSection(ProjectDependencies) = postProject
+		{48310061-76FF-4C1C-B89A-39BE8E03D97A} = {48310061-76FF-4C1C-B89A-39BE8E03D97A}
+		{D3B28290-1A56-4B7E-816E-9811C6E77693} = {D3B28290-1A56-4B7E-816E-9811C6E77693}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
