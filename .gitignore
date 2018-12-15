@@ -71,3 +71,6 @@ include/*
 /build/Debug
 /SampleClient/Debug
 /export/lib/Debug
+/SampleServer/Debug
+/Debug/SampleServer.ilk
+/Debug/echo_server.cfg
