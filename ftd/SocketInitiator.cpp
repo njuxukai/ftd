@@ -158,6 +158,7 @@ void SocketInitiator::onConnect( SocketConnector&, int s )
   m_connections[s] = pSocketConnection;
   m_pendingConnections.erase( i );
   setConnected( pSocketConnection->getSession()->getSessionID() );
+  m_application.onConnect(pSocketConnection->getSession()->getSessionID());
   pSocketConnection->onTimeout();
   //·¢ËÍµÇÂ¼ÐÅÏ¢
   //pSocketConnection->getSession()

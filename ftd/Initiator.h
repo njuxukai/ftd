@@ -131,8 +131,9 @@ private:
   
 
   thread_id m_threadid;
-  Application& m_application;
+  
 protected:
+	Application& m_application;
 	typedef std::set < PortID > PortIDs;
 	typedef std::set < SessionID> SessionIDs;
 	typedef std::map < PortID, SessionID > PortIDSessionIDMap;
