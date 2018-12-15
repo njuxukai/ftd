@@ -16,10 +16,7 @@ class SocketAcceptor : public Acceptor, SocketServer::Strategy
 {
   friend class SocketConnection;
 public:
-  SocketAcceptor( Application&, PackageStoreFactory&,
-                  const PortSettings& ) throw( ConfigError );
-  SocketAcceptor( Application&, PackageStoreFactory&,
-                  const PortSettings&, LogFactory& ) throw( ConfigError );
+  SocketAcceptor( Application&, const PortSettings& ) throw( ConfigError );
 
   virtual ~SocketAcceptor();
   Session* lookupSession(int socket);

@@ -33,37 +33,21 @@
 namespace FTD
 {
 Acceptor::Acceptor( Application& application,
-                    PackageStoreFactory& packageStoreFactory,
                     const PortSettings& setting )
 throw( ConfigError )
   : m_threadid( 0 ),
   m_application( application ),
-  m_packageStoreFactory(packageStoreFactory),
   m_portSettings( setting ),
+  m_pPackageStoreFactory(0),
   m_pLogFactory( 0 ),
   m_pLog( 0 ),
+  m_pSessionFactory(0),
   m_firstPoll( true ),
   m_stop( true )
 {
   initialize();
 }
 
-Acceptor::Acceptor( Application& application,
-					PackageStoreFactory& packageStoreFactory,
-                    const PortSettings& setting,
-                    LogFactory& logFactory )
-throw( ConfigError )
-: m_threadid( 0 ),
-  m_application( application ),
-  m_packageStoreFactory(packageStoreFactory),
-  m_portSettings(setting),
-  m_pLogFactory( &logFactory ),
-  m_pLog( logFactory.create() ),
-  m_firstPoll( true ),
-  m_stop( true )
-{
-  initialize();
-}
 
 void Acceptor::initialize() throw ( ConfigError )
 {
@@ -72,7 +56,10 @@ void Acceptor::initialize() throw ( ConfigError )
 	{
 		m_setting[it->getPort()] = m_portSettings.get(*it);
 	}
-	m_pSessionFactory = new SessionFactory(m_application, m_packageStoreFactory, m_pLogFactory);
+	m_pPackageStoreFactory = new  MemoryStoreFactory();
+	m_pLogFactory = new ScreenLogFactory(m_portSettings);
+	m_pLog = m_pLogFactory->create();
+	m_pSessionFactory = new SessionFactory(m_application, *m_pPackageStoreFactory, m_pLogFactory);
   
 }
 
@@ -82,12 +69,29 @@ Acceptor::~Acceptor()
   for ( i = m_sessions.begin(); i != m_sessions.end(); ++i )
     delete i->second;
 
-  if( m_pLogFactory && m_pLog )
-    m_pLogFactory->destroy( m_pLog );
-
   if (m_pSessionFactory)
+  {
 	  delete m_pSessionFactory;
-  m_pSessionFactory = nullptr;
+	  m_pSessionFactory = nullptr;
+  }
+
+  if (m_pPackageStoreFactory)
+  {
+	  delete m_pPackageStoreFactory;
+	  m_pPackageStoreFactory = 0;
+  }
+	  
+
+  if (m_pLogFactory)
+  {
+	  if (m_pLog)
+	  {
+		  m_pLogFactory->destroy(m_pLog);
+		  m_pLog = 0;
+	  }
+	  delete m_pLogFactory;
+	  m_pLogFactory = 0;
+  }  
 }
 
 /*

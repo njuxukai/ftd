@@ -52,10 +52,9 @@ class SessionFactory;
 class Initiator
 {
 public:
-  Initiator( Application&, PackageStoreFactory&,
+  Initiator( Application&,
              const PortSettings& ) throw( ConfigError );
-  Initiator( Application&, PackageStoreFactory&,
-             const PortSettings&, LogFactory& ) throw( ConfigError );
+
 
   virtual ~Initiator();
 
@@ -89,8 +88,7 @@ public:
 
 public:
   Application& getApplication() { return m_application; }
-  PackageStoreFactory& getPackageStoreFactory()
-  { return m_packageStoreFactory; }
+ 
 
   Log* getLog() 
   { 
@@ -134,7 +132,6 @@ private:
 
   thread_id m_threadid;
   Application& m_application;
-  PackageStoreFactory& m_packageStoreFactory;
 protected:
 	typedef std::set < PortID > PortIDs;
 	typedef std::set < SessionID> SessionIDs;
@@ -151,6 +148,7 @@ protected:
   PortSettings m_settings;
   SessionFactory* m_pSessionFactory;
 private:
+	PackageStoreFactory* m_pPackageStoreFactory;
   LogFactory* m_pLogFactory;
   Log* m_pLog;
   NullLog m_nullLog;

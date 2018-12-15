@@ -36,10 +36,7 @@ namespace FTD
 class SocketInitiator : public Initiator, SocketConnector::Strategy
 {
 public:
-  SocketInitiator( Application&, PackageStoreFactory&,
-                   const PortSettings& ) throw( ConfigError );
-  SocketInitiator( Application&, PackageStoreFactory&,
-                   const PortSettings&, LogFactory& ) throw( ConfigError );
+  SocketInitiator( Application&, const PortSettings& ) throw( ConfigError );
 
   virtual ~SocketInitiator();
 

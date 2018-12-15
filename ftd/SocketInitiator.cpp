@@ -31,27 +31,15 @@
 namespace FTD
 {
 SocketInitiator::SocketInitiator( Application& application,
-                                  PackageStoreFactory& factory,
                                   const PortSettings& settings )
 throw( ConfigError )
-: Initiator( application, factory, settings ),
+: Initiator( application, settings ),
   m_connector( 1 ), m_lastConnect( 0 ),
   m_reconnectInterval( 30 ), m_noDelay( false ), m_sendBufSize( 0 ),
   m_rcvBufSize( 0 ) 
 {
 }
 
-SocketInitiator::SocketInitiator( Application& application,
-                                  PackageStoreFactory& factory,
-                                  const PortSettings& settings,
-                                  LogFactory& logFactory )
-throw( ConfigError )
-: Initiator( application, factory, settings, logFactory ),
-  m_connector( 1 ), m_lastConnect( 0 ),
-  m_reconnectInterval( 30 ), m_noDelay( false ), m_sendBufSize( 0 ),
-  m_rcvBufSize( 0 )
-{
-}
 
 SocketInitiator::~SocketInitiator()
 {

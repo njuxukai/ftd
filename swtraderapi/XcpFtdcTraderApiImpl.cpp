@@ -48,9 +48,7 @@ void CXcpFtdcTraderApiImpl::Init()
 		d.setInt(FTD::SOCKET_CONNECT_PORT, id.getPort());
 		settings.set(id, d);
 	}
-	FTD::ScreenLogFactory logFactory(settings);
-	FTD::MemoryStoreFactory storeFactory;
-	m_pInitiator = new FTD::SocketInitiator((FTD::Application&)*this, storeFactory, settings, logFactory);
+	m_pInitiator = new FTD::SocketInitiator((FTD::Application&)*this,  settings);
 	m_pInitiator->start();
 }
 

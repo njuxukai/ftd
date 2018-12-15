@@ -50,10 +50,9 @@ namespace FTD
 	class Acceptor
 	{
 	public:
-		Acceptor(Application&, PackageStoreFactory&,
+		Acceptor(Application&, 
 			const PortSettings&) throw(ConfigError);
-		Acceptor(Application&, PackageStoreFactory&,
-			const PortSettings&, LogFactory&) throw(ConfigError);
+
 
 		virtual ~Acceptor();
 
@@ -90,10 +89,11 @@ namespace FTD
 		bool isStopped() { return m_stop; }
 
 		Application& getApplication() { return m_application; }
+		/*
 		PackageStoreFactory& getPackageStoreFactory()
 		{
 			return m_packageStoreFactory;
-		}
+		}*/
 	protected:
 		///fix:initialize create all sessions ftd:a new socket accepted,new session created
 		Session* createSession(const SessionID& id, const Dictionary& settings);
@@ -120,12 +120,12 @@ namespace FTD
 		Sessions m_sessions;
 		SessionIDs m_sessionIDs;
 		Application& m_application;
-		PackageStoreFactory& m_packageStoreFactory;
 	protected:
 		PortSettings m_portSettings;
 		SessionFactory* m_pSessionFactory;
 		std::map<int, Dictionary> m_setting;
 	private:
+		PackageStoreFactory* m_pPackageStoreFactory;
 		LogFactory* m_pLogFactory;
 		Log* m_pLog;
 		NullLog m_nullLog;

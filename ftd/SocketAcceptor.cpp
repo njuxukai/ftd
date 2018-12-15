@@ -32,19 +32,10 @@
 namespace FTD
 {
 SocketAcceptor::SocketAcceptor( Application& application,
-                                PackageStoreFactory& factory,
                                 const PortSettings& settings ) throw( ConfigError )
-: Acceptor( application, factory, settings ),
+: Acceptor( application, settings ),
   m_pServer( 0 ) {}
 
-SocketAcceptor::SocketAcceptor( Application& application,
-	PackageStoreFactory& factory,
-                                const PortSettings& settings,
-                                LogFactory& logFactory ) throw( ConfigError )
-: Acceptor( application, factory, settings, logFactory ),
-  m_pServer( 0 ) 
-{
-}
 
 SocketAcceptor::~SocketAcceptor()
 {

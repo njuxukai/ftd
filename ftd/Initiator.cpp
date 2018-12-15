@@ -33,37 +33,25 @@
 namespace FTD
 {
 Initiator::Initiator( Application& application,
-                      PackageStoreFactory& packageStoreFactory,
                       const PortSettings& settings ) throw( ConfigError )
 : m_threadid( 0 ),
   m_application( application ),
-  m_packageStoreFactory( packageStoreFactory ),
   m_settings( settings ),
+  m_pPackageStoreFactory(0),
   m_pLogFactory( 0 ),
   m_pLog( 0 ),
   m_firstPoll( true ),
   m_stop( true )
 { initialize(); }
 
-Initiator::Initiator( Application& application,
-					  PackageStoreFactory& messageStoreFactory,
-                      const PortSettings& settings,
-                      LogFactory& logFactory ) throw( ConfigError )
-: m_threadid( 0 ),
-  m_application( application ),
-  m_packageStoreFactory( messageStoreFactory ),
-  m_settings( settings ),
-  m_pLogFactory( &logFactory ),
-  m_pLog( logFactory.create() ),
-  m_firstPoll( true ),
-  m_stop( true )
-{ initialize(); }
+
 
 void Initiator::initialize() throw ( ConfigError )
 {
   
-
-  m_pSessionFactory = new SessionFactory( m_application, m_packageStoreFactory,
+	m_pPackageStoreFactory = new MemoryStoreFactory();
+	m_pLogFactory = new ScreenLogFactory(m_settings);
+  m_pSessionFactory = new SessionFactory( m_application, *m_pPackageStoreFactory,
                           m_pLogFactory );
 
   m_ports = m_settings.getPorts();
@@ -75,6 +63,7 @@ void Initiator::initialize() throw ( ConfigError )
 
 Initiator::~Initiator()
 {
+  //SocketInitiator²»¸ÃÓÃm_sessions
   Sessions::iterator i;
   for ( i = m_sessions.begin(); i != m_sessions.end(); ++i )
     delete i->second;
@@ -84,8 +73,24 @@ Initiator::~Initiator()
 	  delete m_pSessionFactory;
 	  m_pSessionFactory = nullptr;
   }
-  if( m_pLogFactory && m_pLog )
-    m_pLogFactory->destroy( m_pLog );
+
+  if (m_pPackageStoreFactory)
+  {
+	  delete m_pPackageStoreFactory;
+	  m_pPackageStoreFactory = 0;
+  }
+
+
+  if (m_pLogFactory)
+  {
+	  if (m_pLog)
+	  {
+		  m_pLogFactory->destroy(m_pLog);
+		  m_pLog = 0;
+	  }
+	  delete m_pLogFactory;
+	  m_pLogFactory = 0;
+  }
 }
 
 Session* Initiator::getSession( const SessionID& sessionID,
