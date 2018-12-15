@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "EchoServer.h"
+#include <boost/format.hpp>
 
 EchoServer::EchoServer(std::string cfgFile) :m_cfgFile(cfgFile), m_acceptor(0)
 {
@@ -23,3 +24,52 @@ void EchoServer::disconnect()
 	delete m_acceptor;
 	m_acceptor = 0;
 }
+
+void EchoServer::onCreate(const SessionID& id)
+{
+	std::cout << boost::format("SessionID[%d]创建\n") % id;
+}
+///connected
+void EchoServer::onConnect(const SessionID& id)
+{
+	std::cout << boost::format("SessionID[%d]已连接\n") % id;
+}
+
+
+//to be disconnected
+void EchoServer::onDisconnect(const SessionID& id)
+{
+	std::cout << boost::format("SessionID[%d]已断开\n") % id;
+}
+/// Notification of a session successfully logging on
+void EchoServer::onLogon(const SessionID& id)
+{}
+/// Notification of a session logging off or disconnecting
+void EchoServer::onLogout(const SessionID& id)
+{}
+/// Notification of admin message being sent to target
+void EchoServer::toAdmin(Package& package, const SessionID& id)
+{
+	crack(package, id);
+}
+/// Notification of app message being sent to target
+void EchoServer::toApp(Package& package, const SessionID& id)
+{
+	crack(package, id);
+}
+/// Notification of admin message being received from target
+void EchoServer::fromAdmin(const Package& package, const SessionID& id)
+{
+	crack(package, id);
+}
+/// Notification of app message being received from target
+void EchoServer::fromApp(const Package& package, const SessionID& id)
+{
+	crack(package, id);
+}
+
+void EchoServer::onHeartBeat()
+{}
+
+void EchoServer::onHeartBeatWarning()
+{}
