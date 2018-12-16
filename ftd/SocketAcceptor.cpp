@@ -171,7 +171,7 @@ void SocketAcceptor::onConnect( SocketServer& server, int a, int s )
   Session* pSession = createSession(id, settings);
   if (!pSession)
 	  return;   
-  SocketConnection *pSocketConnection = new SocketConnection( s, pSession, &server.getMonitor(), true);
+  SocketConnection *pSocketConnection = new SocketConnection( s, pSession, &server.getMonitor());
   m_connections[s] = pSocketConnection;
   pSession->setResponder(pSocketConnection);
 

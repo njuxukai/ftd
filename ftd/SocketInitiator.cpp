@@ -143,7 +143,7 @@ int SocketInitiator::doConnect( const PortID& p, const Dictionary& d )
 	bool generateIDResult = Session::allocateNextSessionID(s, randomString);
 	Session* pSession = createSession(s, d);
     m_pendingConnections[ socket ] 
-      = new SocketConnection(socket, pSession, &m_connector.getMonitor(), false);
+      = new SocketConnection(socket, pSession, &m_connector.getMonitor());
   }
   catch (std::exception&) { result = -1; }
   return result;

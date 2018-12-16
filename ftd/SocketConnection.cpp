@@ -34,9 +34,9 @@ namespace FTD
 {
 
 SocketConnection::SocketConnection( int s, Session* pSession,
-                                    SocketMonitor* pMonitor, bool isReceiveReq)
+                                    SocketMonitor* pMonitor)
 : m_socket( s ), m_sendLength( 0 ),
-   m_pSession(pSession), m_pMonitor( pMonitor ),m_packageBuffer(PackageBuffer(isReceiveReq))
+   m_pSession(pSession), m_pMonitor( pMonitor )
 {
   FD_ZERO( &m_fds );
   FD_SET( m_socket, &m_fds );

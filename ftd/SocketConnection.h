@@ -49,7 +49,7 @@ class SocketConnection : public Responder
 public:
   typedef std::set<SessionID> Sessions;
 
-  SocketConnection( int s, Session* pSession, SocketMonitor* pMonitor, bool isReceiveReq);
+  SocketConnection( int s, Session* pSession, SocketMonitor* pMonitor);
   virtual ~SocketConnection();
 
   int getSocket() const { return m_socket; }
@@ -85,14 +85,12 @@ private:
   bool readMessage( std::string& msg );
   void readMessages( SocketMonitor& s );
   bool send( const std::string& );
-  bool send(const std::vector<std::string>&);
   void disconnect();
 
   int m_socket;
   char m_buffer[BUFSIZ];
 
   Parser m_parser;
-  PackageBuffer m_packageBuffer;
   Queue m_sendQueue;
   unsigned m_sendLength;
   Sessions m_sessions;
