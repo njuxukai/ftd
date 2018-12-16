@@ -100,6 +100,7 @@ void CXcpFtdcTraderApiImpl::onCreate(const FTD::SessionID&)
 
 void CXcpFtdcTraderApiImpl::onConnect(const FTD::SessionID& id)
 {
+	m_connectedSessionID = id;
 	if (m_pSpi)
 	{
 		m_pSpi->OnFrontConnected();
@@ -145,13 +146,13 @@ void CXcpFtdcTraderApiImpl::onHeartBeatWarning()
 
 
 ///
-int CXcpFtdcTraderApiImpl::send(FTD::Package& package)
+int CXcpFtdcTraderApiImpl::send(FTD::Package& package, bool checkLogged)
 {
 	if (!m_pInitiator)
 	{
 		return XCP_ERR_CODE_INITIATOR_NULL;
 	}
-	if (!m_pInitiator->isLoggedOn())
+	if (checkLogged && !m_pInitiator->isLoggedOn())
 	{
 		return XCP_ERR_CODE_INITIATOR_NOT_LOGGED;
 	}
@@ -177,7 +178,7 @@ int CXcpFtdcTraderApiImpl::ReqUserLogin(CXcpFtdcReqUserLoginField* pReqUserLogin
 	package.clear();
 	memcpy(&package.reqUserLoginField, pReqUserLogin, sizeof(CXcpFtdcReqUserLoginField));
 	package.requestSourceField.RequestID = nRequestID;
-	return send(package);
+	return send(package, false);
 }
 
 ///用户登出请求
@@ -187,7 +188,7 @@ int CXcpFtdcTraderApiImpl::ReqUserLogout(CXcpFtdcReqUserLogoutField* pReqUserLog
 	package.clear();
 	memcpy(&package.reqUserLogoutField, pReqUserLogout, sizeof(CXcpFtdcReqUserLoginField));
 	package.requestSourceField.RequestID = nRequestID;
-	return send(package);
+	return send(package, false);
 }
 
 ///报单请求

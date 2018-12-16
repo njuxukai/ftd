@@ -178,7 +178,7 @@ public:
 
 	///
 private:
-	int send(FTD::Package& package);
+	int send(FTD::Package& package, bool checkLogged=true);
 	FTD::SessionID m_connectedSessionID;
 	std::string m_pswDir;
 	std::vector<std::string> m_frontAddresses;
