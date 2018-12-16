@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "EchoServer.h"
 #include <boost/format.hpp>
+#include <ftd/session.h>
 
 EchoServer::EchoServer(std::string cfgFile) :m_cfgFile(cfgFile), m_acceptor(0)
 {
@@ -73,3 +74,10 @@ void EchoServer::onHeartBeat()
 
 void EchoServer::onHeartBeatWarning()
 {}
+
+void EchoServer::OnPackage(const ReqUserLogin& req, const SessionID& id)
+{
+	std::cout << "Crack[const ReqUserLogin&]\n";
+	RspUserLogin rsp;
+	FTD::Session::sendToTarget((Package&)rsp, id);
+}

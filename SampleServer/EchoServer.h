@@ -34,6 +34,8 @@ public:
 
 	virtual void onHeartBeatWarning();
 
+	virtual void OnPackage(const ReqUserLogin& package, const SessionID&);
+
 private:
 	std::string m_cfgFile;
 	FTD::Acceptor* m_acceptor;

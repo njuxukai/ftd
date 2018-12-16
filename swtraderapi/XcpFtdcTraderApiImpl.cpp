@@ -361,7 +361,7 @@ int CXcpFtdcTraderApiImpl::ReqQryPurchaseQuota(CXcpFtdcQryPurchaseQuotaField *pQ
 	return send(package);
 }
 
-void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspUserLogin& package, const FTD::SessionID& id)
+void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspUserLogin& package, const FTD::SessionID& id)
 {
 	if (!m_pSpi)
 		return;
@@ -373,11 +373,11 @@ void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspUserLogin& package, const FTD::Ses
 	m_pSpi->OnRspUserLogin(&contentField, &errorField, package.requestSourceField.RequestID, true);
 }
 
-void CXcpFtdcTraderApiImpl::OnPackage(FTD::ForceExit& package, const FTD::SessionID& id) 
+void CXcpFtdcTraderApiImpl::OnPackage(const FTD::ForceExit& package, const FTD::SessionID& id) 
 {
 }
 
-void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspUserLogout& package, const FTD::SessionID& id)
+void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspUserLogout& package, const FTD::SessionID& id)
 {
 	if (!m_pSpi)
 		return;
@@ -389,7 +389,7 @@ void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspUserLogout& package, const FTD::Se
 	m_pSpi->OnRspUserLogout(&contentField, &errorField, package.requestSourceField.RequestID, true);
 }
 
-void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspOrderInsert& package, const FTD::SessionID& id) 
+void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspOrderInsert& package, const FTD::SessionID& id) 
 {
 	if (!m_pSpi)
 		return;
@@ -401,7 +401,7 @@ void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspOrderInsert& package, const FTD::S
 	m_pSpi->OnRspInputOrder(&contentField, &errorField, package.requestSourceField.RequestID, true);
 }
 
-void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspOrderAction& package, const FTD::SessionID& id)
+void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspOrderAction& package, const FTD::SessionID& id)
 {
 	if (!m_pSpi)
 		return;
@@ -413,7 +413,7 @@ void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspOrderAction& package, const FTD::S
 	m_pSpi->OnRspInputOrderAction(&contentField, &errorField, package.requestSourceField.RequestID, true);
 }
 
-void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspFundTransfer& package, const FTD::SessionID& id) 
+void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspFundTransfer& package, const FTD::SessionID& id) 
 {
 	if (!m_pSpi)
 		return;
@@ -425,7 +425,7 @@ void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspFundTransfer& package, const FTD::
 	m_pSpi->OnRspInputFundTransfer(&contentField, &errorField, package.requestSourceField.RequestID, true);
 }
 
-void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspQryFund& package, const FTD::SessionID& id) 
+void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspQryFund& package, const FTD::SessionID& id) 
 {
 	if (!m_pSpi)
 		return;
@@ -437,7 +437,7 @@ void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspQryFund& package, const FTD::Sessi
 	m_pSpi->OnRspQryFund(&contentField, &errorField, package.requestSourceField.RequestID, true);
 }
 
-void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspQryPosition& package, const FTD::SessionID& id) 
+void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspQryPosition& package, const FTD::SessionID& id) 
 {
 	if (!m_pSpi)
 		return;
@@ -461,7 +461,7 @@ void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspQryPosition& package, const FTD::S
 	}	
 }
 
-void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspQryOrder& package, const FTD::SessionID& id) 
+void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspQryOrder& package, const FTD::SessionID& id) 
 {
 	if (!m_pSpi)
 		return;
@@ -485,7 +485,7 @@ void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspQryOrder& package, const FTD::Sess
 	}
 }
 
-void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspQryTrade& package, const FTD::SessionID& id) 
+void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspQryTrade& package, const FTD::SessionID& id) 
 {
 	if (!m_pSpi)
 		return;
@@ -509,7 +509,7 @@ void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspQryTrade& package, const FTD::Sess
 	}
 }
 
-void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspQryFundTransfer& package, const FTD::SessionID& id) 
+void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspQryFundTransfer& package, const FTD::SessionID& id) 
 {
 	if (!m_pSpi)
 		return;
@@ -533,7 +533,7 @@ void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspQryFundTransfer& package, const FT
 	}
 }
 
-void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspQryHisOrder& package, const FTD::SessionID& id) 
+void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspQryHisOrder& package, const FTD::SessionID& id) 
 {
 	if (!m_pSpi)
 		return;
@@ -557,7 +557,7 @@ void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspQryHisOrder& package, const FTD::S
 	}
 }
 
-void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspQryHisTrade& package, const FTD::SessionID& id) 
+void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspQryHisTrade& package, const FTD::SessionID& id) 
 {
 	if (!m_pSpi)
 		return;
@@ -581,7 +581,7 @@ void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspQryHisTrade& package, const FTD::S
 	}
 }
 
-void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspQryHisFundTransfer& package, const FTD::SessionID& id) 
+void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspQryHisFundTransfer& package, const FTD::SessionID& id) 
 {
 	if (!m_pSpi)
 		return;
@@ -605,7 +605,7 @@ void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspQryHisFundTransfer& package, const
 	}
 }
 
-void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspQryInstrument& package, const FTD::SessionID& id) 
+void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspQryInstrument& package, const FTD::SessionID& id) 
 {
 	if (!m_pSpi)
 		return;
@@ -629,7 +629,7 @@ void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspQryInstrument& package, const FTD:
 	}
 }
 
-void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspQryStructuredFund& package, const FTD::SessionID& id) 
+void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspQryStructuredFund& package, const FTD::SessionID& id) 
 {
 	if (!m_pSpi)
 		return;
@@ -653,7 +653,7 @@ void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspQryStructuredFund& package, const 
 	}
 }
 
-void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspQryETF& package, const FTD::SessionID& id) 
+void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspQryETF& package, const FTD::SessionID& id) 
 {
 	if (!m_pSpi)
 		return;
@@ -677,7 +677,7 @@ void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspQryETF& package, const FTD::Sessio
 	}
 }
 
-void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspQryETFComposition& package, const FTD::SessionID& id) 
+void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspQryETFComposition& package, const FTD::SessionID& id) 
 {
 	if (!m_pSpi)
 		return;
@@ -701,7 +701,7 @@ void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspQryETFComposition& package, const 
 	}
 }
 
-void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspQryPurchasableNewIssueSecurity& package, const FTD::SessionID& id) 
+void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspQryPurchasableNewIssueSecurity& package, const FTD::SessionID& id) 
 {
 	if (!m_pSpi)
 		return;
@@ -725,7 +725,7 @@ void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspQryPurchasableNewIssueSecurity& pa
 	}
 }
 
-void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspQryPurchaseQuota& package, const FTD::SessionID& id) 
+void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspQryPurchaseQuota& package, const FTD::SessionID& id) 
 {
 	if (!m_pSpi)
 		return;
@@ -750,7 +750,7 @@ void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspQryPurchaseQuota& package, const F
 }
 
 ///与本地缓存的增量数据进行合并后再调用spi
-void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspQryPrivateInitialData& package, const FTD::SessionID& id) 
+void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspQryPrivateInitialData& package, const FTD::SessionID& id) 
 {
 	if (!m_pSpi)
 	{
@@ -775,7 +775,7 @@ void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspQryPrivateInitialData& package, co
 }
 
 ///增量数据，如果没有完成同步则需要缓存在本地
-void CXcpFtdcTraderApiImpl::OnPackage(FTD::IncExecutionReports& package, const FTD::SessionID& id) 
+void CXcpFtdcTraderApiImpl::OnPackage(const FTD::IncExecutionReports& package, const FTD::SessionID& id) 
 {
 	if (!m_pSpi)
 		return;

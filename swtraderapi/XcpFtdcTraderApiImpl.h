@@ -153,28 +153,28 @@ public:
 	///PackageCracker
 	///
 	////////////////////////////////////////////////////////////////////////////
-	virtual void OnPackage(FTD::RspUserLogin& package, const FTD::SessionID& id);
-	virtual void OnPackage(FTD::ForceExit& package, const FTD::SessionID& id);
-	virtual void OnPackage(FTD::RspUserLogout& package, const FTD::SessionID& id);
-	virtual void OnPackage(FTD::RspOrderInsert& package, const FTD::SessionID& id);
-	virtual void OnPackage(FTD::RspOrderAction& package, const FTD::SessionID& id);
-	virtual void OnPackage(FTD::RspFundTransfer& package, const FTD::SessionID& id);
-	virtual void OnPackage(FTD::RspQryFund& package, const FTD::SessionID& id);
-	virtual void OnPackage(FTD::RspQryPosition& package, const FTD::SessionID& id);
-	virtual void OnPackage(FTD::RspQryOrder& package, const FTD::SessionID& id);
-	virtual void OnPackage(FTD::RspQryTrade& package, const FTD::SessionID& id);
-	virtual void OnPackage(FTD::RspQryFundTransfer& package, const FTD::SessionID& id);
-	virtual void OnPackage(FTD::RspQryHisOrder& package, const FTD::SessionID& id);
-	virtual void OnPackage(FTD::RspQryHisTrade& package, const FTD::SessionID& id);
-	virtual void OnPackage(FTD::RspQryHisFundTransfer& package, const FTD::SessionID& id);
-	virtual void OnPackage(FTD::RspQryInstrument& package, const FTD::SessionID& id);
-	virtual void OnPackage(FTD::RspQryStructuredFund& package, const FTD::SessionID& id);
-	virtual void OnPackage(FTD::RspQryETF& package, const FTD::SessionID& id);
-	virtual void OnPackage(FTD::RspQryETFComposition& package, const FTD::SessionID& id);
-	virtual void OnPackage(FTD::RspQryPurchasableNewIssueSecurity& package, const FTD::SessionID& id);
-	virtual void OnPackage(FTD::RspQryPurchaseQuota& package, const FTD::SessionID& id);
-	virtual void OnPackage(FTD::RspQryPrivateInitialData& package, const FTD::SessionID& id);
-	virtual void OnPackage(FTD::IncExecutionReports& package, const FTD::SessionID& id);
+	virtual void OnPackage(const FTD::RspUserLogin& package, const FTD::SessionID& id);
+	virtual void OnPackage(const FTD::ForceExit& package, const FTD::SessionID& id);
+	virtual void OnPackage(const FTD::RspUserLogout& package, const FTD::SessionID& id);
+	virtual void OnPackage(const FTD::RspOrderInsert& package, const FTD::SessionID& id);
+	virtual void OnPackage(const FTD::RspOrderAction& package, const FTD::SessionID& id);
+	virtual void OnPackage(const FTD::RspFundTransfer& package, const FTD::SessionID& id);
+	virtual void OnPackage(const FTD::RspQryFund& package, const FTD::SessionID& id);
+	virtual void OnPackage(const FTD::RspQryPosition& package, const FTD::SessionID& id);
+	virtual void OnPackage(const FTD::RspQryOrder& package, const FTD::SessionID& id);
+	virtual void OnPackage(const FTD::RspQryTrade& package, const FTD::SessionID& id);
+	virtual void OnPackage(const FTD::RspQryFundTransfer& package, const FTD::SessionID& id);
+	virtual void OnPackage(const FTD::RspQryHisOrder& package, const FTD::SessionID& id);
+	virtual void OnPackage(const FTD::RspQryHisTrade& package, const FTD::SessionID& id);
+	virtual void OnPackage(const FTD::RspQryHisFundTransfer& package, const FTD::SessionID& id);
+	virtual void OnPackage(const FTD::RspQryInstrument& package, const FTD::SessionID& id);
+	virtual void OnPackage(const FTD::RspQryStructuredFund& package, const FTD::SessionID& id);
+	virtual void OnPackage(const FTD::RspQryETF& package, const FTD::SessionID& id);
+	virtual void OnPackage(const FTD::RspQryETFComposition& package, const FTD::SessionID& id);
+	virtual void OnPackage(const FTD::RspQryPurchasableNewIssueSecurity& package, const FTD::SessionID& id);
+	virtual void OnPackage(const FTD::RspQryPurchaseQuota& package, const FTD::SessionID& id);
+	virtual void OnPackage(const FTD::RspQryPrivateInitialData& package, const FTD::SessionID& id);
+	virtual void OnPackage(const FTD::IncExecutionReports& package, const FTD::SessionID& id);
 
 	///
 private:
