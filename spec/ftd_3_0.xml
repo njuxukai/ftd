@@ -786,7 +786,7 @@
 			<enumValue name="0" comment="买"/>
 			<enumValue name="1" comment="卖"/>
 		</typeDefine>
-		<typeDefine name="FTDErrorCode" baseType="FTDStringType&lt;10&gt;" length="10" precision="0"/>
+		<typeDefine name="FTDErrorCode" baseType="FTDIntType" length="4" precision="0"/>
 		
 		<typeDefine name="FTDETFCompositionCashSubsituteType" baseType="FTDCharType" length="1" precision="0">
 			<enumValue name="0" comment="必须现金替代" enname="ForceSub"/>
