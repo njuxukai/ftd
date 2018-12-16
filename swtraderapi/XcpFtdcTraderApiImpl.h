@@ -6,7 +6,10 @@
 #include <ftd/Initiator.h>
 #include <ftd/FTD30/PackageCracker.h>
 
-#define ERR_CODE_XCP_INITIATOR_NULL -8001
+#define XCP_OK 0
+#define XCP_ERR_CODE_INITIATOR_NULL -8001
+#define XCP_ERR_CODE_INITIATOR_NOT_LOGGED -8002
+#define XCP_ERR_CODE_FTD_SEND_FAILURE -8003
 
 
 class CXcpFtdcTraderApiImpl : public CXcpFtdcTraderApi,
@@ -175,6 +178,8 @@ public:
 
 	///
 private:
+	int send(FTD::Package& package);
+	FTD::SessionID m_connectedSessionID;
 	std::string m_pswDir;
 	std::vector<std::string> m_frontAddresses;
 	CXcpFtdcTraderSpi* m_pSpi;

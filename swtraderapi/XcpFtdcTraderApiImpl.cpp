@@ -143,6 +143,29 @@ void CXcpFtdcTraderApiImpl::onHeartBeat()
 void CXcpFtdcTraderApiImpl::onHeartBeatWarning()
 {}
 
+
+///
+int CXcpFtdcTraderApiImpl::send(FTD::Package& package)
+{
+	if (!m_pInitiator)
+	{
+		return XCP_ERR_CODE_INITIATOR_NULL;
+	}
+	if (!m_pInitiator->isLoggedOn())
+	{
+		return XCP_ERR_CODE_INITIATOR_NOT_LOGGED;
+	}
+
+	if (FTD::Session::sendToTarget(package, m_connectedSessionID))
+	{
+		return XCP_OK;
+	}
+	else
+	{
+		return XCP_ERR_CODE_FTD_SEND_FAILURE;
+	}
+	
+}
 ////////////////////////////////////////////////////////////////////////////
 ///Trader opertaion
 ///
@@ -150,229 +173,191 @@ void CXcpFtdcTraderApiImpl::onHeartBeatWarning()
 ///用户登录请求
 int CXcpFtdcTraderApiImpl::ReqUserLogin(CXcpFtdcReqUserLoginField* pReqUserLogin, int nRequestID)
 {
-	if (!m_pInitiator)
-		return ERR_CODE_XCP_INITIATOR_NULL;
 	FTD::ReqUserLogin package;
 	package.clear();
 	memcpy(&package.reqUserLoginField, pReqUserLogin, sizeof(CXcpFtdcReqUserLoginField));
 	package.requestSourceField.RequestID = nRequestID;
-	return m_pInitiator->send(package);
+	return send(package);
 }
 
 ///用户登出请求
 int CXcpFtdcTraderApiImpl::ReqUserLogout(CXcpFtdcReqUserLogoutField* pReqUserLogout, int nRequestID)
 {
-	if (!m_pInitiator)
-		return ERR_CODE_XCP_INITIATOR_NULL;
 	FTD::ReqUserLogout package;
 	package.clear();
 	memcpy(&package.reqUserLogoutField, pReqUserLogout, sizeof(CXcpFtdcReqUserLoginField));
 	package.requestSourceField.RequestID = nRequestID;
-	return m_pInitiator->send(package);
+	return send(package);
 }
 
 ///报单请求
 int CXcpFtdcTraderApiImpl::ReqOrderInsert(CXcpFtdcInputOrderField* pInputOrder, int nRequestID)
 {
-	if (!m_pInitiator)
-		return ERR_CODE_XCP_INITIATOR_NULL;
 	FTD::ReqOrderInsert package;
 	package.clear();
 	memcpy(&package.inputOrderField, pInputOrder, sizeof(CXcpFtdcInputOrderField));
 	package.requestSourceField.RequestID = nRequestID;
-	return m_pInitiator->send(package);
+	return send(package);
 }
 
 ///报单操作请求
 int CXcpFtdcTraderApiImpl::ReqOrderAction(CXcpFtdcInputOrderActionField* pInputOrderAction, int nRequestID)
 {
-	if (!m_pInitiator)
-		return ERR_CODE_XCP_INITIATOR_NULL;
 	FTD::ReqOrderAction package;
 	package.clear();
 	memcpy(&package.inputOrderActionField, pInputOrderAction, sizeof(CXcpFtdcInputOrderActionField));
 	package.requestSourceField.RequestID = nRequestID;
-	return m_pInitiator->send(package);
+	return send(package);
 }
 
 ///资金划转请求
 int CXcpFtdcTraderApiImpl::ReqFundTransfer(CXcpFtdcInputFundTransferField* pInputFundTransfer, int nRequestID)
 {
-	if (!m_pInitiator)
-		return ERR_CODE_XCP_INITIATOR_NULL;
 	FTD::ReqFundTransfer package;
 	package.clear();
 	memcpy(&package.inputFundTransferField, pInputFundTransfer, sizeof(CXcpFtdcInputFundTransferField));
 	package.requestSourceField.RequestID = nRequestID;
-	return m_pInitiator->send(package);
+	return send(package);
 }
 
 ///委托查询请求
 int CXcpFtdcTraderApiImpl::ReqQryOrder(CXcpFtdcQryOrderField* pQryOrder, int nRequestID)
 {
-	if (!m_pInitiator)
-		return ERR_CODE_XCP_INITIATOR_NULL;
 	FTD::ReqQryOrder package;
 	package.clear();
 	memcpy(&package.qryOrderField, pQryOrder, sizeof(CXcpFtdcQryOrderField));
 	package.requestSourceField.RequestID = nRequestID;
-	return m_pInitiator->send(package);
+	return send(package);
 }
 
 ///成交查询请求
 int CXcpFtdcTraderApiImpl::ReqQryTrade(CXcpFtdcQryTradeField* pQryTrade, int nRequestID)
 {
-	if (!m_pInitiator)
-		return ERR_CODE_XCP_INITIATOR_NULL;
 	FTD::ReqQryTrade package;
 	package.clear();
 	memcpy(&package.qryTradeField, pQryTrade, sizeof(CXcpFtdcQryTradeField));
 	package.requestSourceField.RequestID = nRequestID;
-	return m_pInitiator->send(package);
+	return send(package);
 }
 
 ///资金查询请求
 int CXcpFtdcTraderApiImpl::ReqQryFund(CXcpFtdcQryFundField *pQryFund, int nRequestID)
 {
-	if (!m_pInitiator)
-		return ERR_CODE_XCP_INITIATOR_NULL;
 	FTD::ReqQryFund package;
 	package.clear();
 	memcpy(&package.qryFundField, pQryFund, sizeof(CXcpFtdcQryFundField));
 	package.requestSourceField.RequestID = nRequestID;
-	return m_pInitiator->send(package);
+	return send(package);
 }
 
 ///仓位查询请求
 int CXcpFtdcTraderApiImpl::ReqQryPosition(CXcpFtdcQryPositionField *pQryPosition, int nRequestID)
 {
-	if (!m_pInitiator)
-		return ERR_CODE_XCP_INITIATOR_NULL;
 	FTD::ReqQryPosition package;
 	package.clear();
 	memcpy(&package.qryPositionField, pQryPosition, sizeof(CXcpFtdcQryPositionField));
 	package.requestSourceField.RequestID = nRequestID;
-	return m_pInitiator->send(package);
+	return send(package);
 }
 
 ///资金划转查询请求
 int CXcpFtdcTraderApiImpl::ReqQryFundTransfer(CXcpFtdcQryFundTransferField *pQryFundTransfer, int nRequestID)
 {
-	if (!m_pInitiator)
-		return ERR_CODE_XCP_INITIATOR_NULL;
 	FTD::ReqQryFundTransfer package;
 	package.clear();
 	memcpy(&package.qryFundTransferField, pQryFundTransfer, sizeof(CXcpFtdcQryFundTransferField));
 	package.requestSourceField.RequestID = nRequestID;
-	return m_pInitiator->send(package);
+	return send(package);
 }
 
 ///查询历史委托请求
 int CXcpFtdcTraderApiImpl::ReqQryHisOrder(CXcpFtdcQryHisOrderField *pQryHisOrder, int nRequestID)
 {
-	if (!m_pInitiator)
-		return ERR_CODE_XCP_INITIATOR_NULL;
 	FTD::ReqQryHisOrder package;
 	package.clear();
 	memcpy(&package.qryHisOrderField, pQryHisOrder, sizeof(CXcpFtdcQryHisOrderField));
 	package.requestSourceField.RequestID = nRequestID;
-	return m_pInitiator->send(package);
+	return send(package);
 }
 
 ///查询历史成交请求
 int CXcpFtdcTraderApiImpl::ReqQryHisTrade(CXcpFtdcQryHisTradeField *pQryHisTrade, int nRequestID)
 {
-	if (!m_pInitiator)
-		return ERR_CODE_XCP_INITIATOR_NULL;
 	FTD::ReqQryHisTrade package;
 	package.clear();
 	memcpy(&package.qryHisTradeField, pQryHisTrade, sizeof(CXcpFtdcQryHisTradeField));
 	package.requestSourceField.RequestID = nRequestID;
-	return m_pInitiator->send(package);
+	return send(package);
 }
 
 ///查询历史资金划转请求
 int CXcpFtdcTraderApiImpl::ReqQryHisFundTransfer(CXcpFtdcQryHisFundTransferField *pQryHisFundTransfer, int nRequestID)
 {
-	if (!m_pInitiator)
-		return ERR_CODE_XCP_INITIATOR_NULL;
 	FTD::ReqQryHisFundTransfer package;
 	package.clear();
 	memcpy(&package.qryHisFundTransferField, pQryHisFundTransfer, sizeof(CXcpFtdcQryHisFundTransferField));
 	package.requestSourceField.RequestID = nRequestID;
-	return m_pInitiator->send(package);
+	return send(package);
 }
 
 ///查询证券信息请求
 int CXcpFtdcTraderApiImpl::ReqQryInstrument(CXcpFtdcQryInstrumentField *pQryInstrument, int nRequestID)
 {
-	if (!m_pInitiator)
-		return ERR_CODE_XCP_INITIATOR_NULL;
 	FTD::ReqQryInstrument package;
 	package.clear();
 	memcpy(&package.qryInstrumentField, pQryInstrument, sizeof(CXcpFtdcQryInstrumentField));
 	package.requestSourceField.RequestID = nRequestID;
-	return m_pInitiator->send(package);
+	return send(package);
 }
 
 ///查询ETF信息请求
 int CXcpFtdcTraderApiImpl::ReqQryETF(CXcpFtdcQryETFField *pQryETF, int nRequestID)
 {
-	if (!m_pInitiator)
-		return ERR_CODE_XCP_INITIATOR_NULL;
 	FTD::ReqQryETF package;
 	package.clear();
 	memcpy(&package.qryETFField, pQryETF, sizeof(CXcpFtdcQryETFField));
 	package.requestSourceField.RequestID = nRequestID;
-	return m_pInitiator->send(package);
+	return send(package);
 }
 
 ///查询ETF成分股信息请求
 int CXcpFtdcTraderApiImpl::ReqQryETFComposition(CXcpFtdcQryETFCompositionField *pQryEtfComposition, int nRequestID)
 {
-	if (!m_pInitiator)
-		return ERR_CODE_XCP_INITIATOR_NULL;
 	FTD::ReqQryETFComposition package;
 	package.clear();
 	memcpy(&package.qryETFCompositionField, pQryEtfComposition, sizeof(CXcpFtdcQryETFCompositionField));
 	package.requestSourceField.RequestID = nRequestID;
-	return m_pInitiator->send(package);
+	return send(package);
 }
 
 ///查询分级基金信息请求
 int CXcpFtdcTraderApiImpl::ReqQryStructuredFund(CXcpFtdcQryStructuredFundField *pQryStructuredFund, int nRequestID)
 {
-	if (!m_pInitiator)
-		return ERR_CODE_XCP_INITIATOR_NULL;
 	FTD::ReqQryStructuredFund package;
 	package.clear();
 	memcpy(&package.qryStructuredFundField, pQryStructuredFund, sizeof(CXcpFtdcQryStructuredFundField));
 	package.requestSourceField.RequestID = nRequestID;
-	return m_pInitiator->send(package);
+	return send(package);
 }
 
 ///查询可申购新股信息请求
 int CXcpFtdcTraderApiImpl::ReqQryPurchasableNewIssueSecurity(CXcpFtdcQryNewIssueSecurityField *pQryPurchasableNewSecurity, int nRequestID)
 {
-	if (!m_pInitiator)
-		return ERR_CODE_XCP_INITIATOR_NULL;
 	FTD::ReqQryPurchasableNewIssueSecurity package;
 	package.clear();
 	memcpy(&package.qryNewIssueSecurityField, pQryPurchasableNewSecurity, sizeof(CXcpFtdcQryNewIssueSecurityField));
 	package.requestSourceField.RequestID = nRequestID;
-	return m_pInitiator->send(package);
+	return send(package);
 }
 
 ///查询客户新股申购额度请求
 int CXcpFtdcTraderApiImpl::ReqQryPurchaseQuota(CXcpFtdcQryPurchaseQuotaField *pQryPurchaseQuota, int nRequestID)
 {
-	if (!m_pInitiator)
-		return ERR_CODE_XCP_INITIATOR_NULL;
 	FTD::ReqQryPurchaseQuota package;
 	package.clear();
 	memcpy(&package.qryPurchaseQuotaField, pQryPurchaseQuota, sizeof(CXcpFtdcQryPurchaseQuotaField));
 	package.requestSourceField.RequestID = nRequestID;
-	return m_pInitiator->send(package);
+	return send(package);
 }
 
 void CXcpFtdcTraderApiImpl::OnPackage(FTD::RspUserLogin& package, const FTD::SessionID& id)
