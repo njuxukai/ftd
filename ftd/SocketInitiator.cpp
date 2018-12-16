@@ -144,6 +144,7 @@ int SocketInitiator::doConnect( const PortID& p, const Dictionary& d )
 	Session* pSession = createSession(s, d);
     m_pendingConnections[ socket ] 
       = new SocketConnection(socket, pSession, &m_connector.getMonitor(), false);
+	pSession->setResponder(m_pendingConnections[socket]);
   }
   catch (std::exception&) { result = -1; }
   return result;
