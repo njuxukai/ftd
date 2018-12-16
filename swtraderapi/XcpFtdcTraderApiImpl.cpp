@@ -127,9 +127,9 @@ void CXcpFtdcTraderApiImpl::toApp(FTD::Package&, const FTD::SessionID&)
 {}
 
 /// Notification of admin message being received from target
-void CXcpFtdcTraderApiImpl::fromAdmin(const FTD::Package&, const FTD::SessionID& id)
+void CXcpFtdcTraderApiImpl::fromAdmin(const FTD::Package& package, const FTD::SessionID& id)
 {
-	
+	crack(package, id);
 }
 
 /// Notification of app message being received from target
