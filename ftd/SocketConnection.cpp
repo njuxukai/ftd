@@ -127,9 +127,16 @@ bool SocketConnection::read( SocketConnector& s )
 
 bool SocketConnection::read( SocketAcceptor& a, SocketServer& s )
 {
+	if (!m_pSession)
+	{
+		s.getMonitor().drop(m_socket);
+		return false;
+	}
   std::string msg;
+
   try
   {
+	  /*
     if ( !m_pSession )
     {
       struct timeval timeout = { 1, 0 };
@@ -145,6 +152,14 @@ bool SocketConnection::read( SocketAcceptor& a, SocketServer& s )
         else if( result < 0 )
           return false;
       }
+	  //
+	  FtdHeader ftdHeader;
+	  readFtdHeader(msg.c_str(), ftdHeader);
+	  if (ftdHeader.FTDType == FTDTypeNone)
+	  {
+		  if (m_pSession)
+			  m_pSession->nextHeartbeat(UtcTimeStamp());
+	  }
 	  Package* package = m_packageBuffer.OnFtdcMessage(msg);
 
 	  //OnHeartBeat
@@ -161,10 +176,7 @@ bool SocketConnection::read( SocketAcceptor& a, SocketServer& s )
           a.getLog()->onIncoming( msg );
         }
       }
-	  /*
-	  if( m_pSession)
-	  m_pSession = a.getSession( *package, *this );
-	  */      
+     
       if( m_pSession )
         m_pSession->next( *package, UtcTimeStamp() );
       if( !m_pSession )
@@ -177,11 +189,11 @@ bool SocketConnection::read( SocketAcceptor& a, SocketServer& s )
       return true;
     }
     else
-    {
+    {*/
       readFromSocket();
       readMessages( s.getMonitor() );
       return true;
-    }
+    //}
   }
   catch ( SocketRecvFailed& e )
   {
@@ -214,6 +226,7 @@ throw( SocketRecvFailed )
   m_parser.addToStream( m_buffer, size );
 }
 
+//msg ->ftdMsg
 bool SocketConnection::readMessage( std::string& msg )
 {
   try

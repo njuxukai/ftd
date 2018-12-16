@@ -19,7 +19,7 @@
 #include <boost/uuid/uuid.hpp>            // uuid class
 #include <boost/uuid/uuid_generators.hpp> // generators
 #include <boost/uuid/uuid_io.hpp>         // streaming operators etc.
-
+#include "ftd30/Packages.h"
 namespace FTD
 {
 /// Maintains the state and implements the logic of a %FIX %session.
@@ -107,6 +107,7 @@ public:
 
   bool send( Package& );
   
+  void nextHeartbeat(const UtcTimeStamp& timestamp);
   void next();
   void next( const UtcTimeStamp& timeStamp );
   void next( const std::string&, const UtcTimeStamp& timeStamp, bool queued = false );
@@ -143,6 +144,7 @@ private:
   Responder* m_pResponder;
   Mutex m_mutex;
   bool m_receiveReq;
+  PackageBuffer m_packageBuffer;
   static Sessions s_sessions;
   //s_sessionIDs 全局静态sessionID池，并不保证所有id都有alive的session，应轮询清理
   static SessionIDs s_sessionIDs;

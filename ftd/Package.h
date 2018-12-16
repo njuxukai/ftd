@@ -6,6 +6,8 @@
 
 #include "ftd.h"
 #include "IO.h"
+#include "FtdMessageUtil.h"
+
 namespace FTD
 {
 	struct Package
@@ -20,6 +22,17 @@ namespace FTD
 		virtual ~Package() {};
 		virtual void clear() = 0;
 		
+		void toFtdMesssages(std::vector<std::string>& ftdMsgs, const FtdExt* pExt=0)
+		{
+			ftdMsgs.clear();
+			std::vector<std::string> ftdcMsgs;
+			toMessages(ftdcMsgs);
+			for (unsigned int i = 0; i < ftdcMsgs.size(); i++)
+			{
+				ftdMsgs.push_back(FtdMessageUtil::formatFtdMessage(ftdcMsgs[i], pExt));
+			}			
+		}
+
 		virtual  void toMessages(std::vector<std::string>& resultBuf) { }
 	
 

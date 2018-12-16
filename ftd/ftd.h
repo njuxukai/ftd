@@ -5,8 +5,9 @@
 
 #define FTD_HEADER_LENGTH 4
 
-#define MAX_FTD_LENGTH 4096
-#define MAX_FTDC_LENGTH 4096 - 16
+#define MAX_FTD_LENGTH 4 + 127 + 4096
+#define MAX_FTDC_LENGTH 4096
+#define MAX_FTDC_CONTENT_LENGTH 4096 - 16
 
 #define FTDC_FIELD_HEADER_LENGTH 6
 #define FTDC_HEADER_LENGTH 16
@@ -57,6 +58,7 @@ struct FtdExt
 	char target[3];
 
 };
+#define MAX_FTD_EXT_MSG_LENGTH 128
 
 #define SEQ_SERIES_DIALOG 0
 #define SEQ_SERIES_PRIVATE 1

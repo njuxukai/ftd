@@ -68,6 +68,95 @@ public:
 	{
 		return rawFtdcMsg;
 	}
+
+	//为ftdc消息加上ftd ftd_ext头（可能还要压缩）
+	static std::string formatFtdMessage(const std::string& rawFtdcMsg, const FtdExt* pExt = 0)
+	{
+		FtdHeader ftdHeader = { 0 };
+		if (pExt && pExt->compressMethod != FTD_COMPRESS_METHOD_NONE)
+		{
+			ftdHeader.FTDType = FTDTypeFTDC;
+		}
+		else
+		{
+			ftdHeader.FTDType = FTDTypeCompressed;
+		}
+		int extLen = 0;
+		int ftdcLen = 0;
+		std::string extMsg = "";
+		if (pExt)
+		{
+			char extBuffer[MAX_FTD_EXT_MSG_LENGTH + 1];
+			int extLen = writeFtdExt(*pExt, extBuffer);
+			extMsg.assign(extBuffer, extBuffer + extLen);
+		}
+		ftdHeader.FTDExtHeaderLength = (uint8_t)extMsg.size();
+		std::vector<std::string> ftdcMsgs;
+		char ftdBuffer[MAX_FTD_LENGTH + 1];
+		int totalLen = 0;
+		memset(ftdBuffer, 0, MAX_FTD_LENGTH + 1);
+
+		//1 先写ext扩充头
+		if (extMsg.size() > 0)
+			memcpy(ftdBuffer + FTD_HEADER_LENGTH, extMsg.c_str(), extMsg.size());
+		//2 写ftdc
+		if (pExt && pExt->compressMethod != FTD_COMPRESS_METHOD_NONE)
+		{
+			//需要压缩
+			std::string compressedFtdcMsg = FtdMessageUtil::compressFtdcMessage(rawFtdcMsg, pExt->compressMethod);
+			ftdHeader.FTDCLength = (int16_t)compressedFtdcMsg.size();
+			memcpy(ftdBuffer + FTD_HEADER_LENGTH + extMsg.size(), compressedFtdcMsg.c_str(), compressedFtdcMsg.size());
+			writeFtdHeader(ftdHeader, ftdBuffer);
+			totalLen = FTD_HEADER_LENGTH + extMsg.size() + compressedFtdcMsg.size();
+		}
+		else
+		{
+			//不需要压缩
+			ftdHeader.FTDCLength = (int16_t)rawFtdcMsg.size();
+			memcpy(ftdBuffer + FTD_HEADER_LENGTH + extMsg.size(), rawFtdcMsg.c_str(), rawFtdcMsg.size());
+			writeFtdHeader(ftdHeader, ftdBuffer);
+			totalLen = FTD_HEADER_LENGTH + extMsg.size() + rawFtdcMsg.size();
+		}
+		//写head
+		writeFtdHeader(ftdHeader, ftdBuffer);
+		return std::string(ftdBuffer, totalLen);
+	}
+
+	//从ftd消息中解析ftdc消息（可能还要解压）
+	static std::string parseFtdMessage(const std::string& ftdMsg)
+	{
+		FtdHeader ftdHeader = { 0 };
+		FtdExt ftdExt = { 0 };
+		bool needUncompress = false;
+		readFtdHeader(ftdMsg.c_str(), ftdHeader);
+		if (ftdHeader.FTDCLength == 0)
+			return "";
+		if (ftdHeader.FTDType == FTDTypeCompressed)
+			needUncompress = true;
+		if (ftdHeader.FTDExtHeaderLength > 0)
+		{
+			readFtdExt(ftdMsg.c_str() + FTD_HEADER_LENGTH, ftdHeader.FTDExtHeaderLength, ftdExt);
+		}
+		std::string  rawFtdcMsg = std::string().assign(ftdMsg.c_str() + FTD_HEADER_LENGTH + ftdHeader.FTDExtHeaderLength, 
+			ftdHeader.FTDCLength);
+		if (needUncompress)
+		{
+			return unCompressFtdcMessage(rawFtdcMsg, ftdExt.compressMethod);
+		}
+		else
+		{
+			return rawFtdcMsg;
+		}
+	}
+
+	static std::string generateHeartbeatMessage()
+	{
+		FtdHeader header = { 0 };
+		header.FTDType = FTDTypeNone;
+		char buffer[FTD_HEADER_LENGTH + 1];
+		writeFtdHeader(header, buffer);
+
+	}
 };
 
 #endif

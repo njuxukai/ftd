@@ -51,7 +51,8 @@ Session::Session( Application& application,
   m_sessionID( sessionID ),
   m_pLogFactory( pLogFactory ),
   m_receiveReq(receiveReq),
-  m_pResponder( 0 )
+  m_pResponder( 0 ),
+  m_packageBuffer(receiveReq)
 {
   m_state.heartBtInt( 3 );
   m_state.initiate( 3 != 0 );
@@ -93,20 +94,37 @@ bool Session::send(Package& package)
 
 bool Session::sendRaw(Package& package, int num)
 {
+	/*
+	*1 none 管理数据 series=0 sequence=0
+	*2 dialog 
+	*  2.1 req  series=0 在这里给定序号
+	*  2.2 rsp  series=0 同源req,函数外
+	*3 private  series=(客户端唯一，用userid?) 
+				sequence=对于客户端唯一
+	*3 boardcast series>=1 
+				sequence=对于客户端唯一
+	*/
 	Locker l(m_mutex);
 	if (num > 0)
 	{
-		package.m_header.sequenceSeries = num;
+		package.m_header.sequenceNO = num;
 	}
 	if (package.isNoneMode())
 	{
 		m_application.toAdmin(package, m_sessionID);
 	}
 	else
-	{
+	{ 
 		if (!isLoggedOn())
 			return false;
 		m_application.toApp(package, m_sessionID);
+	}
+	//app message
+	std::vector<std::string> ftdMsgs;
+	package.toFtdMesssages(ftdMsgs);
+	for (int i = 0; i < ftdMsgs.size(); i++)
+	{
+		send(ftdMsgs[i]);
 	}
 	return true;
 }
@@ -166,10 +184,19 @@ bool Session::allocateNextSessionID(SessionID& id, std::string& randomString)
 	return false;
 }
 
-
+///从对端收到心跳包
+void Session::nextHeartbeat(const UtcTimeStamp& timestamp)
+{}
 
 void Session::next( const std::string& msg, const UtcTimeStamp& timeStamp, bool queued )
 {
+	FtdHeader ftdHeader = { 0 };
+	readFtdHeader(msg.c_str(), ftdHeader);
+	if (ftdHeader.FTDType == FTDTypeNone)
+	{
+		nextHeartbeat(timeStamp);
+		return;
+	}
 
 }
 

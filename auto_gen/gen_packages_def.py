@@ -116,7 +116,7 @@ for (int i = 0; i < vecSize; i++)
 {{
 	{2}Helper::writeBuffer({1}s[i],
 		fieldBuffer, fieldLen);
-	if (MAX_FTDC_LENGTH - (nextWrite - ftdcBuffer) < FTDC_FIELD_HEADER_LENGTH + fieldLen)
+	if (MAX_FTDC_CONTENT_LENGTH - (nextWrite - ftdcBuffer) < FTDC_FIELD_HEADER_LENGTH + fieldLen)
 	{{					
 		ftdcHeader.contentLength = nextWrite - ftdcBuffer;
 		ftdcHeader.fieldCount = writeFieldCount;
@@ -138,7 +138,7 @@ for (int i = 0; i < vecSize; i++)
     field_fmt = """//{2}
 {2}Helper::writeBuffer({1},
 	fieldBuffer, fieldLen);
-if (MAX_FTDC_LENGTH - (nextWrite - ftdcBuffer) < FTDC_FIELD_HEADER_LENGTH + fieldLen)
+if (MAX_FTDC_CONTENT_LENGTH - (nextWrite - ftdcBuffer) < FTDC_FIELD_HEADER_LENGTH + fieldLen)
 {{
 	ftdcHeader.contentLength = nextWrite - ftdcBuffer;
 	ftdcHeader.fieldCount = writeFieldCount;
@@ -161,7 +161,7 @@ if(p{0}.get() != nullptr)
 {{
 	{2}Helper::writeBuffer(*(p{0}.get()),
 		fieldBuffer, fieldLen);
-	if (MAX_FTDC_LENGTH - (nextWrite - ftdcBuffer) < FTDC_FIELD_HEADER_LENGTH + fieldLen)
+	if (MAX_FTDC_CONTENT_LENGTH - (nextWrite - ftdcBuffer) < FTDC_FIELD_HEADER_LENGTH + fieldLen)
 	{{
 		ftdcHeader.contentLength = nextWrite - ftdcBuffer;
 		ftdcHeader.fieldCount = writeFieldCount;

@@ -25,33 +25,7 @@ struct PackageBuffer
 	}}
 {package_members}
 
-	int readFtdMessage(const std::string& ftdMsg)
-	{{
-		FtdHeader ftdHeader = {{0}};
-		readFtdHeader(ftdMsg.c_str(), ftdHeader);
-		if (ftdHeader.FTDType == FTDTypeNone)
-		{{
-			return TID_Heartbeat;
-		}}
-		if (ftdHeader.FTDType == FTDTypeFTDC)
-		{{
-			std::string ftdcMsg;
-			ftdcMsg.assign(ftdMsg, FTDC_HEADER_LENGTH + ftdHeader.FTDExtHeaderLength, ftdHeader.FTDCLength);
-			return readFtdcMessage(ftdcMsg);
-		}}
-		if (ftdHeader.FTDType == FTDTypeCompressed)
-		{{
-			FtdExt ext = {{0}};
-			readFtdExt(ftdMsg.c_str()+FTDC_HEADER_LENGTH, ftdHeader.FTDExtHeaderLength, ext);
-			std::string ftdcMsg;
-			
-			ftdcMsg.assign(ftdMsg, FTDC_HEADER_LENGTH + ftdHeader.FTDExtHeaderLength, ftdHeader.FTDCLength);
-			std::string rawFtdcMsg = FtdMessageUtil::unCompressFtdcMessage(ftdcMsg, ext.compressMethod);
-			return readFtdcMessage(rawFtdcMsg);
-		}}
-		return -1;
-
-	}}
+	
 
 	int readFtdcMessage(const std::string& message)
 	{{
@@ -82,6 +56,11 @@ struct PackageBuffer
 			}}
 		}}
 		return retrieveResult;
+	}}
+
+	Package* OnFtdMessage(const std::string& message)
+	{{
+		return OnFtdcMessage(FtdMessageUtil::parseFtdMessage(message));
 	}}
 
 	///deprecating?
