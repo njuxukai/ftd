@@ -112,7 +112,14 @@ public:
   void next( const UtcTimeStamp& timeStamp );
   void next( const std::string&, const UtcTimeStamp& timeStamp, bool queued = false );
   void next( const Package&, const UtcTimeStamp& timeStamp, bool queued = false );
-  
+  void nextLogin(const Package&);
+  void nextLogout(const Package&);
+  void nextForceExit(const Package&);
+
+  void onSendLogin(Package&);
+  void onSendLogout(Package&);
+  void onSendForceExit(Package&);
+
   void disconnect();
 
 
@@ -143,7 +150,6 @@ private:
   LogFactory* m_pLogFactory;
   Responder* m_pResponder;
   Mutex m_mutex;
-  bool m_receiveReq;
   PackageBuffer m_packageBuffer;
   static Sessions s_sessions;
   //s_sessionIDs 全局静态sessionID池，并不保证所有id都有alive的session，应轮询清理

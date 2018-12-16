@@ -318,6 +318,7 @@
 			<item name="FrontID" comment="前置编号"/>
 			<item name="SessionID" comment="会话编号"/>
 			<item name="MaxOrderRef" comment="最大报单引用"/>
+			<item name="HeartbeatInterval" comment="心跳间隔"/>
 			<item name="RandomString" comment="随机串"/>
 		</fieldDefine>
 		
@@ -686,7 +687,7 @@
 		<itemDefine name="ETFCashSubsituteAmount" type="FTDValue" comment="成分股替代标识为必须现金替代时候的总金额"/>	
 			
 		<itemDefine name="FrontID" type="FTDIntType" comment="Front编号"/>
-		
+		<itemDefine name="HeartbeatInterval" type="FTDIntType" comment="心跳间隔"/>
 		<itemDefine name="InterfaceProductInfo" type="FTDStringType&lt;10&gt;" comment="接口端产品信息"/>
 		<itemDefine name="InvestorID" type="FTDIntType" comment="投资者编码"/>
 		<itemDefine name="InvestUnitID" type="FTDIntType" comment="投资单元编号"/>

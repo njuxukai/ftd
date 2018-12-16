@@ -50,12 +50,11 @@ Session::Session( Application& application,
   m_packageStoreFactory(packageStoreFactory),
   m_sessionID( sessionID ),
   m_pLogFactory( pLogFactory ),
-  m_receiveReq(receiveReq),
   m_pResponder( 0 ),
   m_packageBuffer(receiveReq)
 {
-  m_state.heartBtInt( 3 );
-  m_state.initiate( 3 != 0 );
+  m_state.heartBtInt( 0 );
+  m_state.initiate(!receiveReq );
   m_state.store(m_packageStoreFactory.create( m_sessionID ) );
   if ( m_pLogFactory )
     m_state.log( m_pLogFactory->create( m_sessionID ) );
@@ -205,6 +204,7 @@ void Session::next( const std::string& ftdMsg, const UtcTimeStamp& timeStamp, bo
 
 }
 
+//接受到对方
 void Session::next( const Package& package, const UtcTimeStamp& timeStamp, bool queued )
 {
 	int tid = package.m_header.transactionId;
@@ -227,11 +227,80 @@ void Session::next( const Package& package, const UtcTimeStamp& timeStamp, bool 
 	{
 		m_application.fromApp(package, m_sessionID);
 	}
+	//admin types
+	if (package.m_transactionId == TID_UserLogin)
+		nextLogin(package);
+	if (package.m_transactionId == TID_UserLogout)
+		nextLogout(package);
+	if (package.m_transactionId == TID_ForceExit)
+		nextForceExit(package);
 
 	if( isLoggedOn() )
 		next();
 }
 
+void Session::nextLogin(const Package& package)
+{
+	//客户端收到用户登录应答
+	//服务端收到用户登录请求
+	//initiator received login deny notification
+	if (isInitiator())
+	{
+		const RspUserLogin&  rspUserLogin = (const RspUserLogin&)package;
+		if (rspUserLogin.pErrorField.get() && rspUserLogin.pErrorField->ErrorCode != 0)
+		{
+			return;
+		}
+		else
+		{
+			//m_state.heartBtInt(rspUserLogin.rspUserLoginField.heartber);
+			m_state.heartBtInt(rspUserLogin.rspUserLoginField.HeartbeatInterval);
+			m_state.receivedLogon(true);
+			if(isLoggedOn())
+				m_application.onLogon(m_sessionID);
+		}
+	}
+	else
+	{
+		m_state.receivedLogon(true);
+	}
+}
+
+void Session::nextLogout(const Package& package)
+{
+	//客户端收到用户登出应答
+	//服务端收到用户登出请求
+}
+
+void Session::nextForceExit(const Package& package)
+{
+	//客户端收到强制退出通知
+	if (isInitiator())
+	{
+	}
+}
+
+void Session::onSendLogin(Package& package)
+{
+	//acceptor going to send login deny notification
+	if (isAcceptor())
+	{
+		const RspUserLogin& rspUserLogin = (const RspUserLogin&)package;
+		if (rspUserLogin.pErrorField.get() && rspUserLogin.pErrorField->ErrorCode != 0)
+		{
+			return;
+		}
+	}
+	m_state.sentLogon(true);
+}
+
+void Session::onSendLogout(Package& package)
+{
+	m_state.sentLogout(true);
+}
+
+void Session::onSendForceExit(Package& package)
+{}
 
 bool Session::sendToTarget( Package& message, const SessionID& sessionID )
 throw( SessionNotFound )
