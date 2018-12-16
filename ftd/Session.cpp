@@ -188,14 +188,19 @@ bool Session::allocateNextSessionID(SessionID& id, std::string& randomString)
 void Session::nextHeartbeat(const UtcTimeStamp& timestamp)
 {}
 
-void Session::next( const std::string& msg, const UtcTimeStamp& timeStamp, bool queued )
+void Session::next( const std::string& ftdMsg, const UtcTimeStamp& timeStamp, bool queued )
 {
 	FtdHeader ftdHeader = { 0 };
-	readFtdHeader(msg.c_str(), ftdHeader);
+	readFtdHeader(ftdMsg.c_str(), ftdHeader);
 	if (ftdHeader.FTDType == FTDTypeNone)
 	{
 		nextHeartbeat(timeStamp);
 		return;
+	}
+	Package* package = m_packageBuffer.OnFtdMessage(ftdMsg);
+	if (package)
+	{
+		next(*package, timeStamp, queued);
 	}
 
 }

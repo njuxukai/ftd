@@ -16,7 +16,8 @@ int main()
 		int c = getchar();
 		if (c == 'a')
 		{
-			std::cout << "InputOrder\n";
+			int result = client.manualTestLogin();
+			std::cout << "result=" << result << std::endl;
 		}
 	}
     return 0;
