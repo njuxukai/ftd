@@ -1,16 +1,67 @@
 #include "XcpFtdcTraderApiImpl.h"
 #include <ftd/SocketInitiator.h>
-//#include <ftd/Port.h>
 
 #define PRIVATE_CONN_FNAME "private.conn"
 #define PUBLIC_CONN_FNAME "public.conn"
 
 
-#define MMAP_SIZE  10
+#define TOTAL_SIZE  12 
 
-//private 
+ConnMmap::ConnMmap(const std::string& fpath) :m_fpath(fpath)
+{
+	//if file not exist,create file and fill data
+	boost::filesystem::path boostPath(m_fpath);
+	if (!boost::filesystem::is_regular_file(boostPath))
+	{
+		boost::interprocess::file_mapping::remove(m_fpath.data());
+		{
+			std::ofstream file(m_fpath, std::ios::binary | std::ios::trunc);
+			//file.seekp(static_cast<std::streamoff>(TOTAL_SIZE - 1));
+			//file.write("", 1);
+			std::fill_n(std::ostream_iterator<char>(file), TOTAL_SIZE, 0);
+		}
+	}
+	fmap = boost::interprocess::file_mapping(m_fpath.data(), boost::interprocess::read_write);
+	mreg = boost::interprocess::mapped_region(fmap, boost::interprocess::read_write);
+	m_addr = mreg.get_address();
+	m_size = mreg.get_size();
+}
 
-//public
+
+bool ConnMmap::writeDate(const std::string& tradeDate)
+{
+	if (!m_addr || m_size != TOTAL_SIZE || tradeDate.size() != 8)
+		return false;
+	memcpy(m_addr, tradeDate.data(), 8);
+	return true;
+}
+
+bool ConnMmap::readDate(std::string& tradeDate)
+{
+	if (!m_addr || m_size != TOTAL_SIZE)
+		return false;
+	char buffer[9];
+	memcpy(buffer, m_addr, 8);
+	tradeDate.assign(buffer, 8);
+	return true;
+}
+
+bool ConnMmap::writeSequenceSno(int sno)
+{
+	if (!m_addr || m_size != TOTAL_SIZE)
+		return false;
+	memcpy((char*)m_addr + 8, &sno, 4);
+	return true;
+}
+
+bool ConnMmap::readSequenceSno(int& sno)
+{
+	if (!m_addr || m_size != TOTAL_SIZE)
+		return false;
+	memcpy(&sno, (char*)m_addr + 8, 4);
+	return true;
+}
+
 
 CXcpFtdcTraderApiImpl::CXcpFtdcTraderApiImpl(const char* pswDir)
 {
@@ -18,12 +69,25 @@ CXcpFtdcTraderApiImpl::CXcpFtdcTraderApiImpl(const char* pswDir)
 	//check(and create directory) if exception m_pswDir = ""
 
 	//open mmap files read last time trade day's last record serial number
+	m_publicResumeType = -1;
+	m_privateResumeType = -1;
+	m_pPrivateConn = new ConnMmap(std::string(pswDir) + PUBLIC_CONN_FNAME);
+	m_pPublicConn = new ConnMmap(std::string(pswDir) + PRIVATE_CONN_FNAME);
 }
 
 CXcpFtdcTraderApiImpl::~CXcpFtdcTraderApiImpl()
 {
 	Release();
-		
+	if (m_pPrivateConn)
+	{
+		delete m_pPrivateConn;
+		m_pPrivateConn = 0;
+	}
+	if (m_pPublicConn)
+	{
+		delete m_pPublicConn;
+		m_pPublicConn = 0;
+	}
 }
 
 const char* CXcpFtdcTraderApiImpl::GetApiVersion()
@@ -38,7 +102,7 @@ void CXcpFtdcTraderApiImpl::Release()
 	{
 		m_pInitiator->stop();
 		delete m_pInitiator;
-		m_pInitiator ;
+		m_pInitiator = 0 ;
 	}
 }
 
@@ -72,7 +136,7 @@ void CXcpFtdcTraderApiImpl::Join()
 
 const char* CXcpFtdcTraderApiImpl::GetTradingDay()
 {
-	return "";
+	return m_tradingDay.data();
 }
 
 
@@ -90,11 +154,13 @@ void CXcpFtdcTraderApiImpl::RegisterFront(const char* frontAddr)
 
 void CXcpFtdcTraderApiImpl::SubscribePrivateTopic(THOST_TE_RESUME_TYPE resumeType)
 {
+	m_privateResumeType = resumeType;
 }
 
 
 void CXcpFtdcTraderApiImpl::SubscribePublicTopic(THOST_TE_RESUME_TYPE resumeType)
 {
+	m_publicResumeType = resumeType;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -354,14 +420,66 @@ int CXcpFtdcTraderApiImpl::ReqQryPurchaseQuota(CXcpFtdcQryPurchaseQuotaField *pQ
 
 void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspUserLogin& package, const FTD::SessionID& id)
 {
-	if (!m_pSpi)
-		return;
-	CXcpFtdcRspUserLoginField contentField = { 0 };
-	CXcpFtdcErrorField errorField = { 0 };
-	memcpy(&contentField, &package.rspUserLoginField, sizeof(CXcpFtdcRspUserLoginField));
-	if (package.pErrorField.get())
-		memcpy(&errorField, package.pErrorField.get(), sizeof(CXcpFtdcErrorField));
-	m_pSpi->OnRspUserLogin(&contentField, &errorField, package.rspUserLoginField.RequestID, true);
+	/*
+	1 restart  给0查起 +  订阅流
+	2 resume   给x查起 +   订阅流
+	3 quick    不查询  +   订阅流
+	4 -1       不查询  + 不订阅 
+	*/
+	m_tradingDay.assign(package.rspUserLoginField.TradingDay);
+	std::string fileTradingDay;
+	int lastReceivedSno = 0;
+	m_pPrivateConn->readDate(fileTradingDay);
+	if (fileTradingDay != m_tradingDay)
+	{
+		m_pPrivateConn->writeDate(m_tradingDay);
+		m_pPrivateConn->writeSequenceSno(0);
+	}
+    m_pPrivateConn->readSequenceSno(lastReceivedSno);
+
+	bool qryBackward = true;
+	if (m_privateResumeType < 0 || m_privateResumeType == THOST_TERT_QUICK)
+	{
+		m_privateDataSynced = true;
+		qryBackward = false;
+	}
+	if (m_privateResumeType == THOST_TERT_RESTART)
+	{
+		lastReceivedSno = 0;
+		m_privateDataSynced = false;
+	}
+	if (m_privateResumeType == THOST_TERT_RESUME)
+	{
+		m_privateDataSynced = false;
+	}
+	bool loginFailed = package.pErrorField.get() && package.pErrorField->ErrorCode != 0;
+	if (m_privateResumeType >= 0 && !loginFailed)
+	{
+		FTD::ReqQryPrivateInitialData req;
+		req.clear();
+		req.qryInitialDataField.BrokerID = package.rspUserLoginField.BrokerID;
+		req.qryInitialDataField.UserID = package.rspUserLoginField.UserID;
+		req.qryInitialDataField.InvestorID = package.rspUserLoginField.UserID;
+		if (qryBackward)
+			req.qryInitialDataField.IsBackward = FTDC_BF_True;
+		else
+			req.qryInitialDataField.IsBackward = FTDC_BF_False;
+		req.dissenminationstartField.SequenceSeries = package.rspUserLoginField.UserID;
+		req.dissenminationstartField.SequenceNo = lastReceivedSno;
+		send(req);
+	}
+	
+
+	if (m_pSpi)
+	{
+		CXcpFtdcRspUserLoginField contentField = { 0 };
+		CXcpFtdcErrorField errorField = { 0 };
+		memcpy(&contentField, &package.rspUserLoginField, sizeof(CXcpFtdcRspUserLoginField));
+		if (package.pErrorField.get())
+			memcpy(&errorField, package.pErrorField.get(), sizeof(CXcpFtdcErrorField));
+		m_pSpi->OnRspUserLogin(&contentField, &errorField, package.rspUserLoginField.RequestID, true);
+	}
+	
 }
 
 void CXcpFtdcTraderApiImpl::OnPackage(const FTD::ForceExit& package, const FTD::SessionID& id) 

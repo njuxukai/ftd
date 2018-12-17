@@ -11,6 +11,34 @@
 #define XCP_ERR_CODE_INITIATOR_NOT_LOGGED -8002
 #define XCP_ERR_CODE_FTD_SEND_FAILURE -8003
 
+#include <boost/interprocess/file_mapping.hpp>
+#include <boost/interprocess/mapped_region.hpp>
+#include <boost/filesystem.hpp>
+
+
+
+class ConnMmap
+{
+public:
+	ConnMmap(const std::string& fpath);
+
+	bool writeDate(const std::string& tradeDate);
+
+	bool readDate(std::string& tradeDate);
+
+	bool writeSequenceSno(int sno);
+
+	bool readSequenceSno(int& sno);
+
+private:
+	std::string m_fpath;
+	boost::interprocess::file_mapping fmap;
+	boost::interprocess::mapped_region mreg;
+	void *m_addr;
+	std::size_t m_size;
+};
+
+
 
 class CXcpFtdcTraderApiImpl : public CXcpFtdcTraderApi,
 	public FTD::Application, public FTD::PackageCracker
@@ -186,5 +214,10 @@ private:
 	FTD::Initiator* m_pInitiator;
 	bool m_privateDataSynced;
 	std::map<TXcpFtdcSysIDType, CXcpFtdcExecutionReportField> m_BufferExecutionReport;
+	ConnMmap* m_pPublicConn;
+	ConnMmap* m_pPrivateConn;
+	int m_publicResumeType;
+	int m_privateResumeType;
+	std::string m_tradingDay;
 };
 #endif

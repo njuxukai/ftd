@@ -202,8 +202,8 @@
 		</packageDefine>
 		
 		<packageDefine name="ReqQryPrivateInitialData" tid="TID_QryPrivateInitialData" model="dialog" comment="投资者登录初始数据请求">
-			<field name="QryInitialDataField" maxOccur="1" minOccur="0" comment="客户初始信息查询域"/>
-			<field name="DissenminationstartField" maxOccur="任意" minOccur="0" comment="发送信息起始说明域"/>
+			<field name="QryInitialDataField" maxOccur="1" minOccur="1" comment="客户初始信息查询域"/>
+			<field name="DissenminationstartField" maxOccur="1" minOccur="1" comment="发送信息起始说明域"/>
 		</packageDefine>
 		
 		<packageDefine name="RspQryPrivateInitialData" tid="TID_QryPrivateInitialData" model="dialog" comment="投资者登录初始数据应答">
@@ -645,10 +645,11 @@
 			<item name="BranchID" comment="营业部编号"/>
 		</fieldDefine>
 		
-		<fieldDefine name="QryInitialDataField" fid="FID_QryInitialDataField" fidValue="0x0027" comment="新股申购额度信息域">		
+		<fieldDefine name="QryInitialDataField" fid="FID_QryInitialDataField" fidValue="0x0027" comment="私有信息请求域">		
 			<item name="BrokerID" comment="经纪公司代码"/>
 			<item name="UserID" comment="用户代码"/>
 			<item name="InvestorID" comment="投资者代码"/>
+			<item name="IsBackward" comment="是否请求过往流数据"/>
 		</fieldDefine>
 		
 	</fields>
@@ -704,6 +705,7 @@
 		<itemDefine name="InstrumentCodePurchase" type="FTDInstrumentCode" comment="新股申购代码"/>
 		<itemDefine name="InsertDate" type="FTDDate" comment="报单日期"/>
 		<itemDefine name="InsertTime" type="FTDTime" comment="报单时间"/>
+		<itemDefine name="IsBackward" type="FTDBoolFlag" comment="是否请求过往流数据"/>
 		
 		<itemDefine name="LoginMark" type="FTDStringType&lt;20&gt;" comment="登录备注"/>
 		<itemDefine name="LogoutMark" type="FTDStringType&lt;20&gt;" comment="登出备注"/>
@@ -777,8 +779,8 @@
 			<enumValue name="2" comment="激活"/>
 		</typeDefine>
 		<typeDefine name="FTDBoolFlag" baseType="FTDCharType" length="1" precision="0">
-			<enumValue name="1" comment="真"/>
-			<enumValue name="0" comment="假"/>
+			<enumValue name="1" comment="真" enname="True"/>
+			<enumValue name="0" comment="假" enname="False"/>
 		</typeDefine>
 		<typeDefine name="FTDDate" baseType="FTDStringType&lt;8&gt;" comment="yyyymmdd" length="8" precision="0"/>
 		<typeDefine name="FTDDateTime" baseType="FTDStringType&lt;20&gt;" comment="yyyymmddhh24nnsscc" length="20" precision="0"/>
