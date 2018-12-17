@@ -79,5 +79,7 @@ void EchoServer::OnPackage(const ReqUserLogin& req, const SessionID& id)
 {
 	std::cout << "Crack[const ReqUserLogin&]\n";
 	RspUserLogin rsp;
+	rsp.clear();
+	rsp.rspUserLoginField.HeartbeatInterval = 5;
 	FTD::Session::sendToTarget((Package&)rsp, id);
 }

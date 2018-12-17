@@ -204,21 +204,33 @@ void Session::next( const std::string& ftdMsg, const UtcTimeStamp& timeStamp, bo
 
 }
 
-//接受到对方
+//接受到端发送的package(心跳包除外)
 void Session::next( const Package& package, const UtcTimeStamp& timeStamp, bool queued )
 {
-	int tid = package.m_header.transactionId;
+	//1 合法性检查
+	///Session是非登录状态忽略一切非管理信息
 	if (!isLoggedOn() && !package.isNoneMode())
 	{
 		return;
 	}
-	/*
-	InvalidMessageType
-	UnsupportedMessageType
-	InvalidMessage
-	*/
+	///Acceptor方不该收到response消息
+	if (isAcceptor() && package.isResponse())
+	{
+		return;
+	}
+	///Initiator方不该收到resquest消息
+	if (isInitiator() && package.isRequest())
+	{
+		return;
+	}
+	///TODO 检查sequnceNo
+	///<1> Initiator （boardcast/private,暂不实现20181217）
+	///<2> Acceptor (dialog序号）
+	if (isAcceptor() && package.isDialogMode())
+	{
+	}
 
-	//from callback
+	//2 回调函数
 	if (package.isNoneMode())
 	{
 		m_application.fromAdmin(package, m_sessionID);
@@ -227,40 +239,33 @@ void Session::next( const Package& package, const UtcTimeStamp& timeStamp, bool 
 	{
 		m_application.fromApp(package, m_sessionID);
 	}
-	//admin types
+	//3 管理信息对会话状态进行管理
 	if (package.m_transactionId == TID_UserLogin)
 		nextLogin(package);
 	if (package.m_transactionId == TID_UserLogout)
 		nextLogout(package);
 	if (package.m_transactionId == TID_ForceExit)
 		nextForceExit(package);
-
+	//4 
 	if( isLoggedOn() )
 		next();
 }
 
+//收到的package tid为 TID_UserLogin
 void Session::nextLogin(const Package& package)
 {
-	//客户端收到用户登录应答
-	//服务端收到用户登录请求
-	//initiator received login deny notification
-	if (isInitiator())
+	///客户端收到用户登录应答
+	if (isInitiator() && package.isResponse())
 	{
 		const RspUserLogin&  rspUserLogin = (const RspUserLogin&)package;
-		if (rspUserLogin.pErrorField.get() && rspUserLogin.pErrorField->ErrorCode != 0)
+		if (!rspUserLogin.pErrorField.get() || rspUserLogin.pErrorField->ErrorCode == 0)
 		{
-			return;
-		}
-		else
-		{
-			//m_state.heartBtInt(rspUserLogin.rspUserLoginField.heartber);
 			m_state.heartBtInt(rspUserLogin.rspUserLoginField.HeartbeatInterval);
 			m_state.receivedLogon(true);
-			if(isLoggedOn())
-				m_application.onLogon(m_sessionID);
 		}
 	}
-	else
+	///服务端收到用户登录请求
+	if (isAcceptor() && package.isRequest())
 	{
 		m_state.receivedLogon(true);
 	}

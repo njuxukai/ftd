@@ -103,6 +103,17 @@ namespace FTD
 			return (m_mode & FTD_MODE_NONE) == FTD_MODE_NONE;
 		}
 
+		bool isRequest() const
+		{
+			return (m_mode & FTD_REQUEST) == FTD_REQUEST;
+		}
+
+		bool isResponse() const
+		{
+			return (m_mode & FTD_RESPONSE) == FTD_RESPONSE;
+		}
+
+
 	protected:
 		virtual bool mergeFieldMessage(const FtdcFieldHeader& header, const char* msg) = 0;
 

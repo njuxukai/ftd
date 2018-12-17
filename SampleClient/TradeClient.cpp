@@ -64,8 +64,8 @@ void TraderClient::OnRspUserLogin(CXcpFtdcRspUserLoginField* pRspUserLogin, CXcp
 	m_sessionContext.front_id = pRspUserLogin->FrontID;
 	m_sessionContext.session_id = pRspUserLogin->SessionID;
 	m_sessionContext.max_order_ref = pRspUserLogin->MaxOrderRef;
-	std::cout << boost::format( "登录柜台成功[FrontID=%d][SessionID=%d][MaxOrderRef=%d]\n") %
-		m_sessionContext.front_id % m_sessionContext.session_id % m_sessionContext.max_order_ref;
+	std::cout << boost::format( "登录柜台成功[FrontID=%d][SessionID=%d][MaxOrderRef=%d][heartBeat=%d]\n") %
+		m_sessionContext.front_id % m_sessionContext.session_id % m_sessionContext.max_order_ref % pRspUserLogin->HeartbeatInterval;
 }
 
 ///客户登出请求响应

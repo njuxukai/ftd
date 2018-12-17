@@ -73,6 +73,9 @@ struct FtdExt
 #define FTD_MODE_PRIVATE 0x30
 #define FTD_MODE_BROADCAST 0x40
 
+#define FTD_REQUEST 0x01
+#define FTD_RESPONSE 0x02
+
 struct FtdcHeader
 {
 	uint8_t version;

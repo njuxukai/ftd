@@ -28,6 +28,7 @@ struct {package_name} : public Package
 	{{
 		m_header.version = FTD_VERSION;
 		m_header.transactionId = {tid};
+		clear();
 	}}
 
 	void clear()
