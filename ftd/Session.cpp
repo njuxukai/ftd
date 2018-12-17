@@ -104,6 +104,19 @@ bool Session::sendRaw(Package& package, int num)
 				sequence=对于客户端唯一
 	*/
 	Locker l(m_mutex);
+	if (isInitiator() && package.isRequest() && package.m_transactionId == TID_UserLogin)
+	{
+		m_state.sentLogon(true);
+	}
+	if (isAcceptor() && package.isResponse() && package.m_transactionId == TID_UserLogin)
+	{
+		RspUserLogin& rsp = (RspUserLogin&)package;
+		if (!rsp.pErrorField.get() || rsp.pErrorField->ErrorCode == 0)
+		{
+			m_state.sentLogon(true);
+		}
+	}
+
 	if (num > 0)
 	{
 		package.m_header.sequenceNO = num;
@@ -189,6 +202,7 @@ void Session::nextHeartbeat(const UtcTimeStamp& timestamp)
 
 void Session::next( const std::string& ftdMsg, const UtcTimeStamp& timeStamp, bool queued )
 {
+	m_state.onIncoming(ftdMsg);
 	FtdHeader ftdHeader = { 0 };
 	readFtdHeader(ftdMsg.c_str(), ftdHeader);
 	if (ftdHeader.FTDType == FTDTypeNone)
@@ -229,8 +243,15 @@ void Session::next( const Package& package, const UtcTimeStamp& timeStamp, bool 
 	if (isAcceptor() && package.isDialogMode())
 	{
 	}
+	//2 管理信息对会话状态进行管理
+	if (package.m_transactionId == TID_UserLogin)
+		nextLogin(package);
+	if (package.m_transactionId == TID_UserLogout)
+		nextLogout(package);
+	if (package.m_transactionId == TID_ForceExit)
+		nextForceExit(package);
 
-	//2 回调函数
+	//3 回调函数
 	if (package.isNoneMode())
 	{
 		m_application.fromAdmin(package, m_sessionID);
@@ -239,13 +260,7 @@ void Session::next( const Package& package, const UtcTimeStamp& timeStamp, bool 
 	{
 		m_application.fromApp(package, m_sessionID);
 	}
-	//3 管理信息对会话状态进行管理
-	if (package.m_transactionId == TID_UserLogin)
-		nextLogin(package);
-	if (package.m_transactionId == TID_UserLogout)
-		nextLogout(package);
-	if (package.m_transactionId == TID_ForceExit)
-		nextForceExit(package);
+	
 	//4 
 	if( isLoggedOn() )
 		next();

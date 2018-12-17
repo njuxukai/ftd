@@ -205,7 +205,7 @@ def generate_package_include(version, packages, target_path):
 }}"""
     read_template_dialog = """case(TID_{0}):
 {{
-    bool parseRtn = false;
+    //bool parseRtn = false;
     if(m_isReceiveReq && req{0}.mergeFtdcMessage(message))
     {{
         readResult = TID_{0};
