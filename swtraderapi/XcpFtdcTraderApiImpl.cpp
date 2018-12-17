@@ -2,6 +2,16 @@
 #include <ftd/SocketInitiator.h>
 //#include <ftd/Port.h>
 
+#define PRIVATE_CONN_FNAME "private.conn"
+#define PUBLIC_CONN_FNAME "public.conn"
+
+
+#define MMAP_SIZE  10
+
+//private 
+
+//public
+
 CXcpFtdcTraderApiImpl::CXcpFtdcTraderApiImpl(const char* pswDir)
 {
 	m_pswDir = pswDir;

@@ -131,7 +131,7 @@ bool Session::sendRaw(Package& package, int num)
 bool Session::send( const std::string& string )
 {
   if ( !m_pResponder ) return false;
-  m_state.onOutgoing( string );
+  m_state.onOutgoing(string) ;
   return m_pResponder->send( string );
 }
 

@@ -8,10 +8,12 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <boost/format.hpp>
+
 class FtdMessageUtil
 {
 public:
-	
+	//连接 未压缩的ftdcMesg
 	static bool concatenateFtdcMessages(const std::vector<std::string>& msgs, std::string& result)
 	{
 		
@@ -36,6 +38,7 @@ public:
 		return true;
 	}
 
+	//分割 未压缩的ftdcMesg
 	static bool splitFtdcMessages(const std::string& catedFtdcMsgsString, std::vector<std::string>& msgs)
 	{
 		msgs.clear();
@@ -75,11 +78,11 @@ public:
 		FtdHeader ftdHeader = { 0 };
 		if (pExt && pExt->compressMethod != FTD_COMPRESS_METHOD_NONE)
 		{
-			ftdHeader.FTDType = FTDTypeFTDC;
+			ftdHeader.FTDType = FTDTypeCompressed;
 		}
 		else
 		{
-			ftdHeader.FTDType = FTDTypeCompressed;
+			ftdHeader.FTDType = FTDTypeFTDC;
 		}
 		int extLen = 0;
 		int ftdcLen = 0;
@@ -155,7 +158,37 @@ public:
 		header.FTDType = FTDTypeNone;
 		char buffer[FTD_HEADER_LENGTH + 1];
 		writeFtdHeader(header, buffer);
+	}
 
+	static std::string getFtdBriefInfo(const std::string& ftdMsg)
+	{
+		FtdHeader header = { 0 };
+		readFtdHeader(ftdMsg.c_str(), header);
+		std::ostringstream oss;
+		oss << boost::format("FtdHeader[%d][%d][%d]---") % (int)header.FTDType % (int)header.FTDExtHeaderLength % header.FTDCLength;
+		if (header.FTDType == FTDTypeFTDC)
+		{
+			oss << getFtdcBriefInfo(ftdMsg.substr(FTD_HEADER_LENGTH + header.FTDExtHeaderLength, header.FTDCLength));
+		}
+		if (header.FTDType == FTDTypeCompressed)
+		{
+			oss << "Compressed,Ignore detail";
+		}
+		if (header.FTDType == FTDTypeNone)
+		{
+			oss << "Heartbeat";
+		}
+		return oss.str();
+	}
+
+	static std::string getFtdcBriefInfo(const std::string& ftdcMsg)
+	{
+		FtdcHeader header = { 0 };
+		readFtdcHeader(ftdcMsg.c_str(), header);
+		std::ostringstream oss;
+		oss << boost::format("[Tid=%d][sno=%d(%c)series=%d][Fields(count=%d,length=%d)][ver=%d]") % header.transactionId % header.sequenceSeries % header.chain % header.sequenceNO
+			 % header.fieldCount % header.contentLength % (int)header.version;
+		return oss.str();
 	}
 };
 

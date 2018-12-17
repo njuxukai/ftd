@@ -1,12 +1,13 @@
 #pragma once
 #include <ftd/SocketAcceptor.h>
 #include <ftd/FTD30/PackageCracker.h>
+#include "MockDB.h"
 
 using namespace FTD;
 class EchoServer : public FTD::Application, public FTD::PackageCracker
 {
 public:
-	EchoServer(std::string cfgFile);
+	EchoServer(std::string cfgFile, int frontID=1);
 	~EchoServer();
 
 	void connect();
@@ -39,4 +40,6 @@ public:
 private:
 	std::string m_cfgFile;
 	FTD::Acceptor* m_acceptor;
+	const int m_frontID;
+	MockDB m_DB;
 };

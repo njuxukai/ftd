@@ -30,7 +30,7 @@
 #include "PackageStore.h"
 #include "Log.h"
 #include "Mutex.h"
-
+#include "FtdMessageUtil.h"
 namespace FTD
 {
 /// Maintains all of state for the Session class.
@@ -198,9 +198,9 @@ public:
   void backup()
   { if ( !m_pLog ) return ; Locker l( m_mutex ); m_pLog->backup(); }
   void onIncoming( const std::string& string )
-  { if ( !m_pLog ) return ; Locker l( m_mutex ); m_pLog->onIncoming( string ); }
+  { if ( !m_pLog ) return ; Locker l( m_mutex ); m_pLog->onIncoming(FtdMessageUtil::getFtdBriefInfo(string) ); }
   void onOutgoing( const std::string& string )
-  { if ( !m_pLog ) return ; Locker l( m_mutex ); m_pLog->onOutgoing( string ); }
+  { if ( !m_pLog ) return ; Locker l( m_mutex ); m_pLog->onOutgoing(FtdMessageUtil::getFtdBriefInfo(string) ); }
   void onEvent( const std::string& string )
   { if ( !m_pLog ) return ; Locker l( m_mutex ); m_pLog->onEvent( string ); }
 

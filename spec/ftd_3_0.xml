@@ -2,30 +2,26 @@
 <!DOCTYPE FTD SYSTEM "ftd.1.dtd">
 <ftd>
 	<packages>
-		<packageDefine name="Error" tid="TID_Error" model="dialog" comment="错误响应">
+		<packageDefine name="Error" tid="TID_Error" model="none" comment="错误响应">
 			<field name="ErrorField" maxOccur="任意" minOccur="1" comment="错误域"/>
 		</packageDefine>
 		
 		<packageDefine name="ReqUserLogin" tid="TID_UserLogin" model="none" comment="交易员登录请求">
-			<field name="ReqUserLoginField" maxOccur="1" minOccur="1" comment="交易员登录请求域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>			
+			<field name="ReqUserLoginField" maxOccur="1" minOccur="1" comment="交易员登录请求域"/>		
 		</packageDefine>
 		
 		<packageDefine name="RspUserLogin" tid="TID_UserLogin" model="none" comment="交易员登录应答">
 			<field name="RspUserLoginField" maxOccur="1" minOccur="1" comment="交易员登录响应域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 			
 		</packageDefine>		
 		
 		<packageDefine name="ReqUserLogout" tid="TID_UserLogout" model="none" comment="交易员登录退出请求">
 			<field name="ReqUserLogoutField" maxOccur="1" minOccur="1" comment="交易员退出登录请求域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 		</packageDefine>	
 		
 		<packageDefine name="RspUserLogout" tid="TID_UserLogout" model="none" comment="交易员登录退出应答">
 			<field name="RspUserLogoutField" maxOccur="1" minOccur="1" comment="交易员退出登录响应域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 			
 		</packageDefine>
@@ -36,56 +32,46 @@
 		
 		<packageDefine name="ReqOrderInsert" tid="TID_OrderInsert" model="dialog" comment="报单录入">
 			<field name="InputOrderField" maxOccur="1" minOccur="1" comment="报单信息域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 		</packageDefine>
 		
 		<packageDefine name="RspOrderInsert" tid="TID_OrderInsert" model="none" comment="强制退出">
 			<field name="InputOrderField" maxOccur="1" minOccur="1" comment="报单信息域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
 		<packageDefine name="ReqOrderAction" tid="TID_OrderAction" model="dialog" comment="报单操作请求">
 			<field name="InputOrderActionField" maxOccur="1" minOccur="1" comment="输入报单操作域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 		</packageDefine>
 		
 		<packageDefine name="RspOrderAction" tid="TID_OrderAction" model="dialog" comment="报单操作应答">
 			<field name="InputOrderActionField" maxOccur="1" minOccur="1" comment="报单操作域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
 		<packageDefine name="ReqFundTransfer" tid="TID_FundTransfer" model="dialog" comment="资金划转请求">
 			<field name="InputFundTransferField" maxOccur="1" minOccur="1" comment="输入资金划转域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 		</packageDefine>
 		
 		<packageDefine name="RspFundTransfer" tid="TID_FundTransfer" model="dialog" comment="资金划转应答">
 			<field name="InputFundTransferField" maxOccur="1" minOccur="1" comment="输入资金划转域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
 		<packageDefine name="ReqQryFund" tid="TID_QryFund" model="dialog" comment="资金余额查询请求">
 			<field name="QryFundField" maxOccur="1" minOccur="1" comment="资金余额查询域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 		</packageDefine>
 		
 		<packageDefine name="RspQryFund" tid="TID_QryFund" model="dialog" comment="资金余额查询应答">
 			<field name="FundField" maxOccur="1" minOccur="1" comment="资金余额域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
 		<packageDefine name="ReqQryPosition" tid="TID_QryPosition" model="dialog" comment="仓位查询请求">
 			<field name="QryPositionField" maxOccur="1" minOccur="1" comment="证券仓位域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 		</packageDefine>
 		
 		<packageDefine name="RspQryPosition" tid="TID_QryPosition" model="dialog" comment="仓位查询应答">
 			<field name="PositionField" maxOccur="任意" minOccur="1" comment="证券仓位域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
@@ -94,112 +80,92 @@
 		
 		<packageDefine name="ReqQryOrder" tid="TID_QryOrder" model="dialog" comment="报单查询请求">
 			<field name="QryOrderField" maxOccur="1" minOccur="1" comment="报单查询域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 		</packageDefine>
 		
 		<packageDefine name="RspQryOrder" tid="TID_QryOrder" model="dialog" comment="报单查询应答">
 			<field name="OrderField" maxOccur="任意" minOccur="0" comment="报单状态域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
 		<packageDefine name="ReqQryTrade" tid="TID_QryTrade" model="dialog" comment="报单成交查询请求">
 			<field name="QryTradeField" maxOccur="1" minOccur="1" comment="报单成交查询域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 		</packageDefine>
 		
 		<packageDefine name="RspQryTrade" tid="TID_QryTrade" model="dialog" comment="报单成交查询应答">
 			<field name="TradeField" maxOccur="任意" minOccur="0" comment="报单成交域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
 		<packageDefine name="ReqQryFundTransfer" tid="TID_QryFundTransfer" model="dialog" comment="资金划转查询请求">
 			<field name="QryFundTransferField" maxOccur="1" minOccur="1" comment="资金划转查询域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 		</packageDefine>
 		
 		<packageDefine name="RspQryFundTransfer" tid="TID_QryFundTransfer" model="dialog" comment="资金划转查询应答">
 			<field name="FundTransferField" maxOccur="任意" minOccur="0" comment="资金划转信息域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
 		
 		<packageDefine name="ReqQryHisOrder" tid="TID_QryHisOrder" model="dialog" comment="历史报单查询请求">
 			<field name="QryHisOrderField" maxOccur="1" minOccur="1" comment="历史报单查询域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 		</packageDefine>
 		
 		<packageDefine name="RspQryHisOrder" tid="TID_QryHisOrder" model="dialog" comment="历史报单查询应答">
 			<field name="OrderField" maxOccur="任意" minOccur="0" comment="历史报单状态域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
 		<packageDefine name="ReqQryHisTrade" tid="TID_QryHisTrade" model="dialog" comment="历史报单成交查询请求">
 			<field name="QryHisTradeField" maxOccur="1" minOccur="1" comment="报单成交查询域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 		</packageDefine>
 		
 		<packageDefine name="RspQryHisTrade" tid="TID_QryHisTrade" model="dialog" comment="历史报单成交查询应答">
 			<field name="TradeField" maxOccur="任意" minOccur="0" comment="报单成交域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
 		<packageDefine name="ReqQryHisFundTransfer" tid="TID_QryHisFundTransfer" model="dialog" comment="历史资金划转查询请求">
 			<field name="QryHisFundTransferField" maxOccur="1" minOccur="1" comment="历史资金划转查询域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 		</packageDefine>
 		
 		<packageDefine name="RspQryHisFundTransfer" tid="TID_QryHisFundTransfer" model="dialog" comment="历史资金划转查询应答">
 			<field name="FundTransferField" maxOccur="任意" minOccur="0" comment="资金划转信息域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
 		<packageDefine name="ReqQryInstrument" tid="TID_QryInstrument" model="dialog" comment="证券查询请求">
 			<field name="QryInstrumentField" maxOccur="1" minOccur="1" comment="证券查询域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 		</packageDefine>
 		
 		<packageDefine name="RspQryInstrument" tid="TID_QryInstrument" model="dialog" comment="证券查询应答">
 			<field name="InstrumentField" maxOccur="任意" minOccur="1" comment="证券信息域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
 		<packageDefine name="ReqQryStructuredFund" tid="TID_QryStructuredFund" model="dialog" comment="分级基金查询请求">
 			<field name="QryStructuredFundField" maxOccur="1" minOccur="1" comment="分级基金查询域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 		</packageDefine>
 		
 		<packageDefine name="RspQryStructuredFund" tid="TID_QryStructuredFund" model="dialog" comment="分级基金查询应答">
 			<field name="StructuredFundField" maxOccur="任意" minOccur="1" comment="分级信息信息域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
 		<packageDefine name="ReqQryETF" tid="TID_QryETF" model="dialog" comment="ETF查询请求">
 			<field name="QryETFField" maxOccur="1" minOccur="1" comment="ETF查询域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 		</packageDefine>
 		
 		<packageDefine name="RspQryETF" tid="TID_QryETF" model="dialog" comment="ETF查询应答">
 			<field name="ETFField" maxOccur="任意" minOccur="1" comment="ETF信息域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
 		<packageDefine name="ReqQryETFComposition" tid="TID_QryETFComposition" model="dialog" comment="ETF成分股查询请求">
 			<field name="QryETFCompositionField" maxOccur="1" minOccur="1" comment="ETF成分股查询域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 		</packageDefine>
 		
 		<packageDefine name="RspQryETFComposition" tid="TID_QryETFComposition" model="dialog" comment="ETF成分股查询请求应答">
 			<field name="ETFCompositionField" maxOccur="任意" minOccur="1" comment="ETF成分股信息域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
@@ -643,6 +609,8 @@
 			<item name="ReportDate" comment="成交日期"/>
 			<item name="ReportTime" comment="成交时间"/>
 			<item name="ReportSysID" comment="成交回报在柜台编号"/>
+			<item name="SequenceSeries" comment="序列类别号(同UserID)"/>
+			<item name="SequenceNo" comment="序列号"/>
 			<item name="BranchID" comment="营业部编号"/>
 		</fieldDefine>
 		

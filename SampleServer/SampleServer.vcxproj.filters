@@ -41,5 +41,8 @@
     <ClCompile Include="EchoServer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="MockDB.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

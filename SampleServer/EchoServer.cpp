@@ -3,7 +3,7 @@
 #include <boost/format.hpp>
 #include <ftd/session.h>
 
-EchoServer::EchoServer(std::string cfgFile) :m_cfgFile(cfgFile), m_acceptor(0)
+EchoServer::EchoServer(std::string cfgFile, int frontID) :m_cfgFile(cfgFile), m_frontID(frontID), m_acceptor(0)
 {
 }
 
@@ -77,9 +77,7 @@ void EchoServer::onHeartBeatWarning()
 
 void EchoServer::OnPackage(const ReqUserLogin& req, const SessionID& id)
 {
-	std::cout << "Crack[const ReqUserLogin&]\n";
 	RspUserLogin rsp;
-	rsp.clear();
-	rsp.rspUserLoginField.HeartbeatInterval = 5;
-	FTD::Session::sendToTarget((Package&)rsp, id);
+	m_DB.processReqUerLogin(m_frontID, id, req, rsp);
+	Session::sendToTarget(rsp, id);
 }
