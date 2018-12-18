@@ -112,12 +112,15 @@ void CXcpFtdcTraderApiImpl::Init()
 	FTD::PortSettings settings;
 	FTD::Dictionary defaultDictionary;
 	//TODO default setting
+	defaultDictionary.setBool(FTD::SCREEN_LOG_SHOW_OUTGOING, false);
+	defaultDictionary.setBool(FTD::SCREEN_LOG_SHOW_INCOMING, false);
 	settings.set(defaultDictionary);
 	for (auto it = m_frontAddresses.begin(); it != m_frontAddresses.end(); it++)
 	{
 		FTD::PortID id;
 		id.fromString(*it);
 		FTD::Dictionary d;
+		d.merge(defaultDictionary);
 		d.setString(FTD::SOCKET_CONNECT_HOST, id.getAddress());
 		d.setInt(FTD::SOCKET_CONNECT_PORT, id.getPort());
 		settings.set(id, d);
