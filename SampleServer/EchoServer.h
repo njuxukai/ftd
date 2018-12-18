@@ -36,8 +36,29 @@ public:
 	virtual void onHeartBeatWarning();
 
 	virtual void OnPackage(const ReqUserLogin& package, const SessionID&);
+	
+	virtual void OnPackage(const ReqQryPrivateInitialData& package, const SessionID&);
+
+	//私有流订阅管理
+	void resigterSequenceSubscription(const SessionID& id,int sequenceSerie)
+	{
+		if (m_subMap.find(sequenceSerie) == m_subMap.end())
+		{
+			m_subMap[sequenceSerie] = std::set<SessionID>();
+		}
+		m_subMap[sequenceSerie].insert(id);
+	}
+
+	void unresigterSequenceSubscription(const SessionID& id)
+	{
+		for (auto it = m_subMap.begin(); it != m_subMap.end(); it++)
+		{
+			it->second.erase(id);
+		}
+	}
 
 private:
+	std::map<int, std::set<SessionID>> m_subMap;
 	std::string m_cfgFile;
 	FTD::Acceptor* m_acceptor;
 	const int m_frontID;

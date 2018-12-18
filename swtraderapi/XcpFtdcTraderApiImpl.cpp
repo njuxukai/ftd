@@ -872,12 +872,13 @@ void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspQryPrivateInitialData& packa
 	for (int i = 0; i < dataLen; i++)
 	{
 		memcpy(&contentfield, &package.executionReportFields[i], sizeof(CXcpFtdcExecutionReportField));
-		m_BufferExecutionReport[contentfield.ReportSysID] = contentfield;
+		m_BufferExecutionReport[contentfield.SequenceNo] = contentfield;
 	}
 
 	for (auto it = m_BufferExecutionReport.begin(); it != m_BufferExecutionReport.end(); it++)
 	{
 		m_pSpi->OnRtnOrderExecutionReport(&(it->second));
+		m_pPrivateConn->writeSequenceSno(it->second.SequenceNo);
 	}
 	m_BufferExecutionReport.clear();
 	m_privateDataSynced = true;
@@ -898,10 +899,11 @@ void CXcpFtdcTraderApiImpl::OnPackage(const FTD::IncExecutionReports& package, c
 		if (m_privateDataSynced)
 		{
 			m_pSpi->OnRtnOrderExecutionReport(&contentfield);
+			m_pPrivateConn->writeSequenceSno(contentfield.SequenceNo);
 		} 
 		else
 		{
-			m_BufferExecutionReport[contentfield.ReportSysID] = contentfield;
+			m_BufferExecutionReport[contentfield.SequenceNo] = contentfield;
 		}
 	}
 }

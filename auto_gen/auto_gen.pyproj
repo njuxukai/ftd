@@ -53,6 +53,9 @@
     <Compile Include="gen_types_def.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="stat_code.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="templates\" />

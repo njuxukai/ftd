@@ -15,7 +15,7 @@ void MockDB::processReqUerLogin(int frontID, int sessionID, const ReqUserLogin& 
 	//
 	rsp.rspUserLoginField.FrontID = frontID;
 	rsp.rspUserLoginField.SessionID = sessionID;
-	rsp.rspUserLoginField.MaxOrderRef = QryMaxOrderRef(frontID, sessionID);
+	QryMaxOrderRef(frontID, sessionID, rsp.rspUserLoginField.MaxOrderRef);
 }
 
 void MockDB::processReqInputOrder(int frontID, int sessionID, const ReqOrderInsert& req, RspOrderInsert& rsp)
@@ -28,15 +28,40 @@ void MockDB::processReqQryOrder(int frontID, int sessionID, const ReqQryOrder& r
 	rsp.clear();
 }
 
-int MockDB::QryMaxOrderRef(int frontid, int sessionid)
+void MockDB::processReqInitialPrivateData(int frontID, int sessionID, const ReqQryPrivateInitialData& req, RspQryPrivateInitialData& rsp)
 {
-	int maxOrderRef = 1;
-	for (auto it = m_orderMap.begin(); it != m_orderMap.end(); it++)
+	rsp.clear();
+	if (req.qryInitialDataField.IsBackward == FTDC_BF_True)
 	{
-		if (it->second.FrontID == frontid && it->second.SessionID && it->second.OrderRef >= maxOrderRef)
+		std::vector<CFtdcExecutionReportField> result;
+		QryExecutionReport(req.dissenminationstartField.SequenceSeries, req.dissenminationstartField.SequenceNo, result);
+		for (auto it = result.begin(); it != result.end(); it++)
 		{
-			maxOrderRef += 1;
+			rsp.executionReportFields.push_back(*it);
 		}
 	}
-	return maxOrderRef;
+}
+
+void MockDB::QryMaxOrderRef(int frontid, int sessionid, int& result)
+{
+	result = 1;
+	for (auto it = m_orderMap.begin(); it != m_orderMap.end(); it++)
+	{
+		if (it->second.FrontID == frontid && it->second.SessionID && it->second.OrderRef >= result)
+		{
+			result = it->second.OrderRef + 1;
+		}
+	}
+}
+
+void MockDB::QryExecutionReport(int userid, int sno, std::vector<CFtdcExecutionReportField>& result)
+{
+	result.clear();
+	for (auto it = m_executionReportMap.begin(); it != m_executionReportMap.end(); it++)
+	{
+		if (it->first.serie == userid && it->first.sno > sno)
+		{
+			result.push_back(it->second);
+		}
+	}
 }

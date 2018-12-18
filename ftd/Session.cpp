@@ -134,7 +134,7 @@ bool Session::sendRaw(Package& package, int num)
 	//app message
 	std::vector<std::string> ftdMsgs;
 	package.toFtdMesssages(ftdMsgs);
-	for (int i = 0; i < ftdMsgs.size(); i++)
+	for (unsigned int i = 0; i < ftdMsgs.size(); i++)
 	{
 		send(ftdMsgs[i]);
 	}

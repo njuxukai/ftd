@@ -37,6 +37,29 @@ inline bool operator!=(const OrderKey& lv, const OrderKey& rv)
 	return (lv.frontID != rv.frontID || lv.sessionID != rv.sessionID || lv.orderRef != rv.orderRef);
 }
 
+struct ReportKey
+{
+	int serie;
+	int sno;
+	friend bool operator<(const ReportKey&, const ReportKey&);
+	friend bool operator==(const ReportKey&, const ReportKey&);
+	friend bool operator!=(const ReportKey&, const ReportKey&);
+};
+inline bool operator<(const ReportKey& lv, const ReportKey& rv)
+{
+	return (lv.serie < rv.serie)
+		|| (lv.serie == rv.serie && lv.sno < rv.sno);
+}
+
+inline bool operator==(const ReportKey& lv, const ReportKey& rv)
+{
+	return  (lv.serie == rv.serie && lv.sno == rv.sno );
+}
+
+inline bool operator!=(const ReportKey& lv, const ReportKey& rv)
+{
+	return (lv.serie != rv.serie || lv.sno != rv.sno);
+}
 
 class MockDB
 {
@@ -51,8 +74,10 @@ public:
 
 private:
 	int m_frontID;
-	int QryMaxOrderRef(int frontID, int sessionID);
+	void QryMaxOrderRef(int frontID, int sessionID, int& result);
+	void QryExecutionReport(int sserie, int sno, std::vector<CFtdcExecutionReportField>& result);
 	std::map<OrderKey, CFtdcOrderField> m_orderMap;
+	std::map<ReportKey, CFtdcExecutionReportField> m_executionReportMap;
 
 
 };

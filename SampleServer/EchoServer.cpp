@@ -81,3 +81,13 @@ void EchoServer::OnPackage(const ReqUserLogin& req, const SessionID& id)
 	m_DB.processReqUerLogin(m_frontID, id, req, rsp);
 	Session::sendToTarget(rsp, id);
 }
+
+void EchoServer::OnPackage(const ReqQryPrivateInitialData& req, const SessionID& id)
+{
+	RspQryPrivateInitialData rsp;
+	//1 服务器端注册会话私有流订阅
+	resigterSequenceSubscription(id, req.dissenminationstartField.SequenceSeries);
+	//2 按需查询私有数据返回
+	m_DB.processReqInitialPrivateData(m_frontID, id, req, rsp);
+	Session::sendToTarget((Package&)rsp, id);
+}
