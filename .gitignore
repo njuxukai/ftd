@@ -75,3 +75,4 @@ include/*
 /Debug/SampleServer.ilk
 /Debug/echo_server.cfg
 *.doc
+*.conn

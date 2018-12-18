@@ -9,6 +9,7 @@ int main()
 	TraderClient client;
 	ApiParameter parameter = { 0 };
 	strcpy(parameter.frontAddress, "tcp:\\127.0.0.1:8000");
+	strcpy(parameter.fileDirectory, ".\\");
 	client.setParameter(parameter);
 	client.connect();
 	while (1 == 1)

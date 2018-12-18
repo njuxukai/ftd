@@ -1,16 +1,67 @@
 #include "XcpFtdcTraderApiImpl.h"
 #include <ftd/SocketInitiator.h>
-//#include <ftd/Port.h>
 
 #define PRIVATE_CONN_FNAME "private.conn"
 #define PUBLIC_CONN_FNAME "public.conn"
 
 
-#define MMAP_SIZE  10
+#define TOTAL_SIZE  12 
 
-//private 
+ConnMmap::ConnMmap(const std::string& fpath) :m_fpath(fpath)
+{
+	//if file not exist,create file and fill data
+	boost::filesystem::path boostPath(m_fpath);
+	if (!boost::filesystem::is_regular_file(boostPath))
+	{
+		boost::interprocess::file_mapping::remove(m_fpath.data());
+		{
+			std::ofstream file(m_fpath, std::ios::binary | std::ios::trunc);
+			//file.seekp(static_cast<std::streamoff>(TOTAL_SIZE - 1));
+			//file.write("", 1);
+			std::fill_n(std::ostream_iterator<char>(file), TOTAL_SIZE, 0);
+		}
+	}
+	fmap = boost::interprocess::file_mapping(m_fpath.data(), boost::interprocess::read_write);
+	mreg = boost::interprocess::mapped_region(fmap, boost::interprocess::read_write);
+	m_addr = mreg.get_address();
+	m_size = mreg.get_size();
+}
 
-//public
+
+bool ConnMmap::writeDate(const std::string& tradeDate)
+{
+	if (!m_addr || m_size != TOTAL_SIZE || tradeDate.size() != 8)
+		return false;
+	memcpy(m_addr, tradeDate.data(), 8);
+	return true;
+}
+
+bool ConnMmap::readDate(std::string& tradeDate)
+{
+	if (!m_addr || m_size != TOTAL_SIZE)
+		return false;
+	char buffer[9];
+	memcpy(buffer, m_addr, 8);
+	tradeDate.assign(buffer, 8);
+	return true;
+}
+
+bool ConnMmap::writeSequenceSno(int sno)
+{
+	if (!m_addr || m_size != TOTAL_SIZE)
+		return false;
+	memcpy((char*)m_addr + 8, &sno, 4);
+	return true;
+}
+
+bool ConnMmap::readSequenceSno(int& sno)
+{
+	if (!m_addr || m_size != TOTAL_SIZE)
+		return false;
+	memcpy(&sno, (char*)m_addr + 8, 4);
+	return true;
+}
+
 
 CXcpFtdcTraderApiImpl::CXcpFtdcTraderApiImpl(const char* pswDir)
 {
@@ -18,12 +69,25 @@ CXcpFtdcTraderApiImpl::CXcpFtdcTraderApiImpl(const char* pswDir)
 	//check(and create directory) if exception m_pswDir = ""
 
 	//open mmap files read last time trade day's last record serial number
+	m_publicResumeType = -1;
+	m_privateResumeType = -1;
+	m_pPrivateConn = new ConnMmap(std::string(pswDir) + PUBLIC_CONN_FNAME);
+	m_pPublicConn = new ConnMmap(std::string(pswDir) + PRIVATE_CONN_FNAME);
 }
 
 CXcpFtdcTraderApiImpl::~CXcpFtdcTraderApiImpl()
 {
 	Release();
-		
+	if (m_pPrivateConn)
+	{
+		delete m_pPrivateConn;
+		m_pPrivateConn = 0;
+	}
+	if (m_pPublicConn)
+	{
+		delete m_pPublicConn;
+		m_pPublicConn = 0;
+	}
 }
 
 const char* CXcpFtdcTraderApiImpl::GetApiVersion()
@@ -38,7 +102,7 @@ void CXcpFtdcTraderApiImpl::Release()
 	{
 		m_pInitiator->stop();
 		delete m_pInitiator;
-		m_pInitiator ;
+		m_pInitiator = 0 ;
 	}
 }
 
@@ -72,7 +136,7 @@ void CXcpFtdcTraderApiImpl::Join()
 
 const char* CXcpFtdcTraderApiImpl::GetTradingDay()
 {
-	return "";
+	return m_tradingDay.data();
 }
 
 
@@ -90,11 +154,13 @@ void CXcpFtdcTraderApiImpl::RegisterFront(const char* frontAddr)
 
 void CXcpFtdcTraderApiImpl::SubscribePrivateTopic(THOST_TE_RESUME_TYPE resumeType)
 {
+	m_privateResumeType = resumeType;
 }
 
 
 void CXcpFtdcTraderApiImpl::SubscribePublicTopic(THOST_TE_RESUME_TYPE resumeType)
 {
+	m_publicResumeType = resumeType;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -187,7 +253,6 @@ int CXcpFtdcTraderApiImpl::ReqUserLogin(CXcpFtdcReqUserLoginField* pReqUserLogin
 	FTD::ReqUserLogin package;
 	package.clear();
 	memcpy(&package.reqUserLoginField, pReqUserLogin, sizeof(CXcpFtdcReqUserLoginField));
-	package.requestSourceField.RequestID = nRequestID;
 	return send(package, false);
 }
 
@@ -197,7 +262,6 @@ int CXcpFtdcTraderApiImpl::ReqUserLogout(CXcpFtdcReqUserLogoutField* pReqUserLog
 	FTD::ReqUserLogout package;
 	package.clear();
 	memcpy(&package.reqUserLogoutField, pReqUserLogout, sizeof(CXcpFtdcReqUserLoginField));
-	package.requestSourceField.RequestID = nRequestID;
 	return send(package, false);
 }
 
@@ -207,7 +271,6 @@ int CXcpFtdcTraderApiImpl::ReqOrderInsert(CXcpFtdcInputOrderField* pInputOrder, 
 	FTD::ReqOrderInsert package;
 	package.clear();
 	memcpy(&package.inputOrderField, pInputOrder, sizeof(CXcpFtdcInputOrderField));
-	package.requestSourceField.RequestID = nRequestID;
 	return send(package);
 }
 
@@ -217,7 +280,6 @@ int CXcpFtdcTraderApiImpl::ReqOrderAction(CXcpFtdcInputOrderActionField* pInputO
 	FTD::ReqOrderAction package;
 	package.clear();
 	memcpy(&package.inputOrderActionField, pInputOrderAction, sizeof(CXcpFtdcInputOrderActionField));
-	package.requestSourceField.RequestID = nRequestID;
 	return send(package);
 }
 
@@ -227,7 +289,6 @@ int CXcpFtdcTraderApiImpl::ReqFundTransfer(CXcpFtdcInputFundTransferField* pInpu
 	FTD::ReqFundTransfer package;
 	package.clear();
 	memcpy(&package.inputFundTransferField, pInputFundTransfer, sizeof(CXcpFtdcInputFundTransferField));
-	package.requestSourceField.RequestID = nRequestID;
 	return send(package);
 }
 
@@ -237,7 +298,6 @@ int CXcpFtdcTraderApiImpl::ReqQryOrder(CXcpFtdcQryOrderField* pQryOrder, int nRe
 	FTD::ReqQryOrder package;
 	package.clear();
 	memcpy(&package.qryOrderField, pQryOrder, sizeof(CXcpFtdcQryOrderField));
-	package.requestSourceField.RequestID = nRequestID;
 	return send(package);
 }
 
@@ -247,7 +307,6 @@ int CXcpFtdcTraderApiImpl::ReqQryTrade(CXcpFtdcQryTradeField* pQryTrade, int nRe
 	FTD::ReqQryTrade package;
 	package.clear();
 	memcpy(&package.qryTradeField, pQryTrade, sizeof(CXcpFtdcQryTradeField));
-	package.requestSourceField.RequestID = nRequestID;
 	return send(package);
 }
 
@@ -257,7 +316,6 @@ int CXcpFtdcTraderApiImpl::ReqQryFund(CXcpFtdcQryFundField *pQryFund, int nReque
 	FTD::ReqQryFund package;
 	package.clear();
 	memcpy(&package.qryFundField, pQryFund, sizeof(CXcpFtdcQryFundField));
-	package.requestSourceField.RequestID = nRequestID;
 	return send(package);
 }
 
@@ -267,7 +325,6 @@ int CXcpFtdcTraderApiImpl::ReqQryPosition(CXcpFtdcQryPositionField *pQryPosition
 	FTD::ReqQryPosition package;
 	package.clear();
 	memcpy(&package.qryPositionField, pQryPosition, sizeof(CXcpFtdcQryPositionField));
-	package.requestSourceField.RequestID = nRequestID;
 	return send(package);
 }
 
@@ -277,7 +334,6 @@ int CXcpFtdcTraderApiImpl::ReqQryFundTransfer(CXcpFtdcQryFundTransferField *pQry
 	FTD::ReqQryFundTransfer package;
 	package.clear();
 	memcpy(&package.qryFundTransferField, pQryFundTransfer, sizeof(CXcpFtdcQryFundTransferField));
-	package.requestSourceField.RequestID = nRequestID;
 	return send(package);
 }
 
@@ -287,7 +343,6 @@ int CXcpFtdcTraderApiImpl::ReqQryHisOrder(CXcpFtdcQryHisOrderField *pQryHisOrder
 	FTD::ReqQryHisOrder package;
 	package.clear();
 	memcpy(&package.qryHisOrderField, pQryHisOrder, sizeof(CXcpFtdcQryHisOrderField));
-	package.requestSourceField.RequestID = nRequestID;
 	return send(package);
 }
 
@@ -297,7 +352,6 @@ int CXcpFtdcTraderApiImpl::ReqQryHisTrade(CXcpFtdcQryHisTradeField *pQryHisTrade
 	FTD::ReqQryHisTrade package;
 	package.clear();
 	memcpy(&package.qryHisTradeField, pQryHisTrade, sizeof(CXcpFtdcQryHisTradeField));
-	package.requestSourceField.RequestID = nRequestID;
 	return send(package);
 }
 
@@ -307,7 +361,6 @@ int CXcpFtdcTraderApiImpl::ReqQryHisFundTransfer(CXcpFtdcQryHisFundTransferField
 	FTD::ReqQryHisFundTransfer package;
 	package.clear();
 	memcpy(&package.qryHisFundTransferField, pQryHisFundTransfer, sizeof(CXcpFtdcQryHisFundTransferField));
-	package.requestSourceField.RequestID = nRequestID;
 	return send(package);
 }
 
@@ -317,7 +370,6 @@ int CXcpFtdcTraderApiImpl::ReqQryInstrument(CXcpFtdcQryInstrumentField *pQryInst
 	FTD::ReqQryInstrument package;
 	package.clear();
 	memcpy(&package.qryInstrumentField, pQryInstrument, sizeof(CXcpFtdcQryInstrumentField));
-	package.requestSourceField.RequestID = nRequestID;
 	return send(package);
 }
 
@@ -327,7 +379,6 @@ int CXcpFtdcTraderApiImpl::ReqQryETF(CXcpFtdcQryETFField *pQryETF, int nRequestI
 	FTD::ReqQryETF package;
 	package.clear();
 	memcpy(&package.qryETFField, pQryETF, sizeof(CXcpFtdcQryETFField));
-	package.requestSourceField.RequestID = nRequestID;
 	return send(package);
 }
 
@@ -337,7 +388,6 @@ int CXcpFtdcTraderApiImpl::ReqQryETFComposition(CXcpFtdcQryETFCompositionField *
 	FTD::ReqQryETFComposition package;
 	package.clear();
 	memcpy(&package.qryETFCompositionField, pQryEtfComposition, sizeof(CXcpFtdcQryETFCompositionField));
-	package.requestSourceField.RequestID = nRequestID;
 	return send(package);
 }
 
@@ -347,7 +397,6 @@ int CXcpFtdcTraderApiImpl::ReqQryStructuredFund(CXcpFtdcQryStructuredFundField *
 	FTD::ReqQryStructuredFund package;
 	package.clear();
 	memcpy(&package.qryStructuredFundField, pQryStructuredFund, sizeof(CXcpFtdcQryStructuredFundField));
-	package.requestSourceField.RequestID = nRequestID;
 	return send(package);
 }
 
@@ -357,7 +406,6 @@ int CXcpFtdcTraderApiImpl::ReqQryPurchasableNewIssueSecurity(CXcpFtdcQryNewIssue
 	FTD::ReqQryPurchasableNewIssueSecurity package;
 	package.clear();
 	memcpy(&package.qryNewIssueSecurityField, pQryPurchasableNewSecurity, sizeof(CXcpFtdcQryNewIssueSecurityField));
-	package.requestSourceField.RequestID = nRequestID;
 	return send(package);
 }
 
@@ -367,20 +415,71 @@ int CXcpFtdcTraderApiImpl::ReqQryPurchaseQuota(CXcpFtdcQryPurchaseQuotaField *pQ
 	FTD::ReqQryPurchaseQuota package;
 	package.clear();
 	memcpy(&package.qryPurchaseQuotaField, pQryPurchaseQuota, sizeof(CXcpFtdcQryPurchaseQuotaField));
-	package.requestSourceField.RequestID = nRequestID;
 	return send(package);
 }
 
 void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspUserLogin& package, const FTD::SessionID& id)
 {
-	if (!m_pSpi)
-		return;
-	CXcpFtdcRspUserLoginField contentField = { 0 };
-	CXcpFtdcErrorField errorField = { 0 };
-	memcpy(&contentField, &package.rspUserLoginField, sizeof(CXcpFtdcRspUserLoginField));
-	if (package.pErrorField.get())
-		memcpy(&errorField, package.pErrorField.get(), sizeof(CXcpFtdcErrorField));
-	m_pSpi->OnRspUserLogin(&contentField, &errorField, package.requestSourceField.RequestID, true);
+	/*
+	1 restart  给0查起 +  订阅流
+	2 resume   给x查起 +   订阅流
+	3 quick    不查询  +   订阅流
+	4 -1       不查询  + 不订阅 
+	*/
+	m_tradingDay.assign(package.rspUserLoginField.TradingDay);
+	std::string fileTradingDay;
+	int lastReceivedSno = 0;
+	m_pPrivateConn->readDate(fileTradingDay);
+	if (fileTradingDay != m_tradingDay)
+	{
+		m_pPrivateConn->writeDate(m_tradingDay);
+		m_pPrivateConn->writeSequenceSno(0);
+	}
+    m_pPrivateConn->readSequenceSno(lastReceivedSno);
+
+	bool qryBackward = true;
+	if (m_privateResumeType < 0 || m_privateResumeType == THOST_TERT_QUICK)
+	{
+		m_privateDataSynced = true;
+		qryBackward = false;
+	}
+	if (m_privateResumeType == THOST_TERT_RESTART)
+	{
+		lastReceivedSno = 0;
+		m_privateDataSynced = false;
+	}
+	if (m_privateResumeType == THOST_TERT_RESUME)
+	{
+		m_privateDataSynced = false;
+	}
+	bool loginFailed = package.pErrorField.get() && package.pErrorField->ErrorCode != 0;
+	if (m_privateResumeType >= 0 && !loginFailed)
+	{
+		FTD::ReqQryPrivateInitialData req;
+		req.clear();
+		req.qryInitialDataField.BrokerID = package.rspUserLoginField.BrokerID;
+		req.qryInitialDataField.UserID = package.rspUserLoginField.UserID;
+		req.qryInitialDataField.InvestorID = package.rspUserLoginField.UserID;
+		if (qryBackward)
+			req.qryInitialDataField.IsBackward = FTDC_BF_True;
+		else
+			req.qryInitialDataField.IsBackward = FTDC_BF_False;
+		req.dissenminationstartField.SequenceSeries = package.rspUserLoginField.UserID;
+		req.dissenminationstartField.SequenceNo = lastReceivedSno;
+		send(req);
+	}
+	
+
+	if (m_pSpi)
+	{
+		CXcpFtdcRspUserLoginField contentField = { 0 };
+		CXcpFtdcErrorField errorField = { 0 };
+		memcpy(&contentField, &package.rspUserLoginField, sizeof(CXcpFtdcRspUserLoginField));
+		if (package.pErrorField.get())
+			memcpy(&errorField, package.pErrorField.get(), sizeof(CXcpFtdcErrorField));
+		m_pSpi->OnRspUserLogin(&contentField, &errorField, package.rspUserLoginField.RequestID, true);
+	}
+	
 }
 
 void CXcpFtdcTraderApiImpl::OnPackage(const FTD::ForceExit& package, const FTD::SessionID& id) 
@@ -396,7 +495,7 @@ void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspUserLogout& package, const F
 	memcpy(&contentField, &package.rspUserLogoutField, sizeof(CXcpFtdcRspUserLogoutField));
 	if (package.pErrorField.get())
 		memcpy(&errorField, package.pErrorField.get(), sizeof(CXcpFtdcErrorField));
-	m_pSpi->OnRspUserLogout(&contentField, &errorField, package.requestSourceField.RequestID, true);
+	m_pSpi->OnRspUserLogout(&contentField, &errorField, package.rspUserLogoutField.RequestID, true);
 }
 
 void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspOrderInsert& package, const FTD::SessionID& id) 
@@ -408,7 +507,7 @@ void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspOrderInsert& package, const 
 	memcpy(&contentField, &package.inputOrderField, sizeof(CXcpFtdcInputOrderField));
 	if (package.pErrorField.get())
 		memcpy(&errorField, package.pErrorField.get(), sizeof(CXcpFtdcErrorField));
-	m_pSpi->OnRspInputOrder(&contentField, &errorField, package.requestSourceField.RequestID, true);
+	m_pSpi->OnRspInputOrder(&contentField, &errorField, package.inputOrderField.RequestID, true);
 }
 
 void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspOrderAction& package, const FTD::SessionID& id)
@@ -420,7 +519,7 @@ void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspOrderAction& package, const 
 	memcpy(&contentField, &package.inputOrderActionField, sizeof(CXcpFtdcInputOrderActionField));
 	if (package.pErrorField.get())
 		memcpy(&errorField, package.pErrorField.get(), sizeof(CXcpFtdcErrorField));
-	m_pSpi->OnRspInputOrderAction(&contentField, &errorField, package.requestSourceField.RequestID, true);
+	m_pSpi->OnRspInputOrderAction(&contentField, &errorField, package.inputOrderActionField.RequestID, true);
 }
 
 void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspFundTransfer& package, const FTD::SessionID& id) 
@@ -432,7 +531,7 @@ void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspFundTransfer& package, const
 	memcpy(&contentField, &package.inputFundTransferField, sizeof(CXcpFtdcInputFundTransferField));
 	if (package.pErrorField.get())
 		memcpy(&errorField, package.pErrorField.get(), sizeof(CXcpFtdcErrorField));
-	m_pSpi->OnRspInputFundTransfer(&contentField, &errorField, package.requestSourceField.RequestID, true);
+	m_pSpi->OnRspInputFundTransfer(&contentField, &errorField, package.inputFundTransferField.RequestID, true);
 }
 
 void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspQryFund& package, const FTD::SessionID& id) 

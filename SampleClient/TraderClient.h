@@ -7,6 +7,8 @@ struct ApiParameter
 {
 	char frontAddress[30];
 	char fileDirectory[100];
+	int publicResume;
+	int privateResume;
 	CXcpFtdcReqUserLoginField loginField;	
 };
 

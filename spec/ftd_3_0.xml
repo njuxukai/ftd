@@ -63,6 +63,7 @@
 		
 		<packageDefine name="RspQryFund" tid="TID_QryFund" model="dialog" comment="资金余额查询应答">
 			<field name="FundField" maxOccur="1" minOccur="1" comment="资金余额域"/>
+			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
@@ -72,6 +73,7 @@
 		
 		<packageDefine name="RspQryPosition" tid="TID_QryPosition" model="dialog" comment="仓位查询应答">
 			<field name="PositionField" maxOccur="任意" minOccur="1" comment="证券仓位域"/>
+			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
@@ -84,6 +86,7 @@
 		
 		<packageDefine name="RspQryOrder" tid="TID_QryOrder" model="dialog" comment="报单查询应答">
 			<field name="OrderField" maxOccur="任意" minOccur="0" comment="报单状态域"/>
+			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
@@ -93,6 +96,7 @@
 		
 		<packageDefine name="RspQryTrade" tid="TID_QryTrade" model="dialog" comment="报单成交查询应答">
 			<field name="TradeField" maxOccur="任意" minOccur="0" comment="报单成交域"/>
+			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
@@ -102,6 +106,7 @@
 		
 		<packageDefine name="RspQryFundTransfer" tid="TID_QryFundTransfer" model="dialog" comment="资金划转查询应答">
 			<field name="FundTransferField" maxOccur="任意" minOccur="0" comment="资金划转信息域"/>
+			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
@@ -112,6 +117,7 @@
 		
 		<packageDefine name="RspQryHisOrder" tid="TID_QryHisOrder" model="dialog" comment="历史报单查询应答">
 			<field name="OrderField" maxOccur="任意" minOccur="0" comment="历史报单状态域"/>
+			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
@@ -121,6 +127,7 @@
 		
 		<packageDefine name="RspQryHisTrade" tid="TID_QryHisTrade" model="dialog" comment="历史报单成交查询应答">
 			<field name="TradeField" maxOccur="任意" minOccur="0" comment="报单成交域"/>
+			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
@@ -130,6 +137,7 @@
 		
 		<packageDefine name="RspQryHisFundTransfer" tid="TID_QryHisFundTransfer" model="dialog" comment="历史资金划转查询应答">
 			<field name="FundTransferField" maxOccur="任意" minOccur="0" comment="资金划转信息域"/>
+			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
@@ -139,6 +147,7 @@
 		
 		<packageDefine name="RspQryInstrument" tid="TID_QryInstrument" model="dialog" comment="证券查询应答">
 			<field name="InstrumentField" maxOccur="任意" minOccur="1" comment="证券信息域"/>
+			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
@@ -148,6 +157,7 @@
 		
 		<packageDefine name="RspQryStructuredFund" tid="TID_QryStructuredFund" model="dialog" comment="分级基金查询应答">
 			<field name="StructuredFundField" maxOccur="任意" minOccur="1" comment="分级信息信息域"/>
+			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
@@ -157,6 +167,7 @@
 		
 		<packageDefine name="RspQryETF" tid="TID_QryETF" model="dialog" comment="ETF查询应答">
 			<field name="ETFField" maxOccur="任意" minOccur="1" comment="ETF信息域"/>
+			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
@@ -166,12 +177,12 @@
 		
 		<packageDefine name="RspQryETFComposition" tid="TID_QryETFComposition" model="dialog" comment="ETF成分股查询请求应答">
 			<field name="ETFCompositionField" maxOccur="任意" minOccur="1" comment="ETF成分股信息域"/>
+			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
 		<packageDefine name="ReqQryPurchasableNewIssueSecurity" tid="TID_QryPurchasableNewIssueSecurity" model="dialog" comment="可申购新发行证券信息查询请求">
 			<field name="QryNewIssueSecurityField" maxOccur="1" minOccur="1" comment="当日可申购新发行证券信息查询域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 		</packageDefine>
 		
 		<packageDefine name="RspQryPurchasableNewIssueSecurity" tid="TID_QryPurchasableNewIssueSecurity" model="dialog" comment="可申购新发行证券信息查询应答">
@@ -182,7 +193,6 @@
 		
 		<packageDefine name="ReqQryPurchaseQuota" tid="TID_QryPurchaseQuota" model="dialog" comment="新股申购额度信息查询请求">
 			<field name="QryPurchaseQuotaField" maxOccur="1" minOccur="1" comment="客户新股申购额度信息查询域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 		</packageDefine>
 		
 		<packageDefine name="RspQryPurchaseQuota" tid="TID_QryPurchaseQuota" model="dialog" comment="新股申购额度信息查询应答">
@@ -192,9 +202,8 @@
 		</packageDefine>
 		
 		<packageDefine name="ReqQryPrivateInitialData" tid="TID_QryPrivateInitialData" model="dialog" comment="投资者登录初始数据请求">
-			<field name="QryInitialDataField" maxOccur="1" minOccur="0" comment="客户初始信息查询域"/>
-			<field name="DissenminationstartField" maxOccur="任意" minOccur="0" comment="发送信息起始说明域"/>
-			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
+			<field name="QryInitialDataField" maxOccur="1" minOccur="1" comment="客户初始信息查询域"/>
+			<field name="DissenminationstartField" maxOccur="1" minOccur="1" comment="发送信息起始说明域"/>
 		</packageDefine>
 		
 		<packageDefine name="RspQryPrivateInitialData" tid="TID_QryPrivateInitialData" model="dialog" comment="投资者登录初始数据应答">
@@ -251,12 +260,11 @@
 		</fieldDefine>
 	
 		<fieldDefine name="RequestSourceField" fid="FID_RequestSourceField" fidValue="0x0002" comment="请求源信息域">
-			<item name="FrontID" comment="Front编号"/>
-			<item name="SessionID" comment="会话编号"/>
 			<item name="RequestID" comment="请求编号"/>
 		</fieldDefine>
 		
 		<fieldDefine name="ReqUserLoginField" fid="FID_ReqUserLoginField" fidValue="0x0003"  comment="交易员登录请求域">
+			<item name="RequestID" comment="请求编号"/>
 			<item name="TradingDay" comment="交易日"/>
 			<item name="BrokerID" comment="经纪公司代码"/>
 			<item name="UserID" comment="用户代码"/>
@@ -276,6 +284,7 @@
 		</fieldDefine>
 	
 		<fieldDefine name="RspUserLoginField" fid="FID_RspUserLoginField" fidValue="0x0005" comment="交易员登录响应域">
+			<item name="RequestID" comment="请求编号"/>
 		    <item name="TradingDay" comment="交易日"/>
 			<item name="LoginTime" comment="登录成功时间"/>
 			<item name="BrokerID" comment="经纪公司代码"/>
@@ -291,22 +300,44 @@
 		<fieldDefine name="SecurityAccountField" fid="FID_SecurityAccountField" fidValue="0x0006" comment="股东账号域">		
 		</fieldDefine>
 		
-		<fieldDefine name="ReqUserLogoutField" fid="FID_ReqUserLogoutField" fidValue="0x0007" comment="交易员退出登录请求域">	
+		<fieldDefine name="ReqUserLogoutField" fid="FID_ReqUserLogoutField" fidValue="0x0007" comment="交易员退出登录请求域">
+			<item name="RequestID" comment="请求编号"/>
+			<item name="TradingDay" comment="交易日"/>
+			<item name="BrokerID" comment="经纪公司代码"/>
+			<item name="UserID" comment="用户代码"/>
+			<item name="UserProductInfo" comment="用户端产品信息"/>
+			<item name="InterfaceProductInfo" comment="接口端产品信息"/>
+			<item name="ProtocolInfo" comment="协议信息"/>
+			<item name="MacAddress" comment="Mac地址"/>
+			<item name="ClientIPAddress" comment="终端IP地址"/>
+			<item name="LogoutMark" comment="登录备注"/>
 		</fieldDefine>
 		
 		<fieldDefine name="RspUserLogoutField" fid="FID_RspUserLogoutField" fidValue="0x0008" comment="交易员退出登录响应域">
+			<item name="RequestID" comment="请求编号"/>
+			<item name="TradingDay" comment="交易日"/>
+			<item name="BrokerID" comment="经纪公司代码"/>
+			<item name="UserID" comment="用户代码"/>
+			<item name="UserProductInfo" comment="用户端产品信息"/>
+			<item name="InterfaceProductInfo" comment="接口端产品信息"/>
+			<item name="ProtocolInfo" comment="协议信息"/>
+			<item name="MacAddress" comment="Mac地址"/>
+			<item name="OneTimePassword" comment="动态密码"/>
+			<item name="ClientIPAddress" comment="终端IP地址"/>
+			<item name="LogoutMark" comment="登录备注"/>
 		</fieldDefine>
 		
 		<fieldDefine name="ForceExitField" fid="FID_ForceExitField" fidValue="0x0009" comment="强制退出域">
+			<item name="ErrorCode" comment="错误代码"/>
 		</fieldDefine>
 		
 		<fieldDefine name="InputOrderField" fid="FID_InputOrderField" fidValue="0x000A" comment="报单信息域">
+			<item name="RequestID" comment="请求编号"/>
 			<item name="BrokerID" comment="经纪公司编码"/>
 			<item name="InvestorID" comment="投资者编码"/>
 			<item name="InstrumentCode" comment="证券代码"/>
 			<item name="ExchangeCode" comment="交易所代码"/>
 			<item name="OrderRef" comment="报单引用"/>
-			<item name="RequestID" comment="请求编码"/>
 			<item name="UserID" comment="用户编码"/>
 			<item name="Direction" comment="报单价格方向"/>
 			<item name="PriceType" comment="报单价格条件"/>
@@ -316,11 +347,11 @@
 			<item name="MacAddress" comment="Mac地址"/>
 		</fieldDefine>
 		
-		<fieldDefine name="InputOrderActionField" fid="FID_InputOrderActionField" fidValue="0x000B" comment="报单操作域">		
+		<fieldDefine name="InputOrderActionField" fid="FID_InputOrderActionField" fidValue="0x000B" comment="报单操作域">
+			<item name="RequestID" comment="请求编号"/>		
 			<item name="BrokerID" comment="经纪公司编码"/>
 			<item name="UserID" comment="用户编码"/>
 			<item name="InvestorID" comment="投资者编码"/>
-			<item name="RequestID" comment="请求编号"/>
 			<item name="InstrumentCode" comment="证券代码"/>
 			<item name="ExchangeCode" comment="交易所代码"/>
      		<item name="FrontID" comment="用户代码"/>
@@ -337,11 +368,11 @@
 			<item name="MacAddress" comment="Mac地址"/>
 		</fieldDefine>
 		
-		<fieldDefine name="InputFundTransferField" fid="FID_InputFundTransferField" fidValue="0x000C" comment="输入资金划转域">		
+		<fieldDefine name="InputFundTransferField" fid="FID_InputFundTransferField" fidValue="0x000C" comment="输入资金划转域">
+			<item name="RequestID" comment="请求编号"/>		
 			<item name="BrokerID" comment="经纪公司编码"/>
 			<item name="UserID" comment="用户编码"/>
 			<item name="InvestorID" comment="投资者编码"/>
-			<item name="RequestID" comment="请求编号"/>
 			<item name="ClientUUID" comment="本地请求唯一编号"/>
 		</fieldDefine>
 		
@@ -614,10 +645,11 @@
 			<item name="BranchID" comment="营业部编号"/>
 		</fieldDefine>
 		
-		<fieldDefine name="QryInitialDataField" fid="FID_QryInitialDataField" fidValue="0x0027" comment="新股申购额度信息域">		
+		<fieldDefine name="QryInitialDataField" fid="FID_QryInitialDataField" fidValue="0x0027" comment="私有信息请求域">		
 			<item name="BrokerID" comment="经纪公司代码"/>
 			<item name="UserID" comment="用户代码"/>
 			<item name="InvestorID" comment="投资者代码"/>
+			<item name="IsBackward" comment="是否请求过往流数据"/>
 		</fieldDefine>
 		
 	</fields>
@@ -673,8 +705,10 @@
 		<itemDefine name="InstrumentCodePurchase" type="FTDInstrumentCode" comment="新股申购代码"/>
 		<itemDefine name="InsertDate" type="FTDDate" comment="报单日期"/>
 		<itemDefine name="InsertTime" type="FTDTime" comment="报单时间"/>
+		<itemDefine name="IsBackward" type="FTDBoolFlag" comment="是否请求过往流数据"/>
 		
 		<itemDefine name="LoginMark" type="FTDStringType&lt;20&gt;" comment="登录备注"/>
+		<itemDefine name="LogoutMark" type="FTDStringType&lt;20&gt;" comment="登出备注"/>
 		<itemDefine name="LoginTime" type="FTDTime" comment="登录成功时间"/>
 		<itemDefine name="LimitPrice" type="FTDPrice" comment="限制价格"/>
 		
@@ -745,8 +779,8 @@
 			<enumValue name="2" comment="激活"/>
 		</typeDefine>
 		<typeDefine name="FTDBoolFlag" baseType="FTDCharType" length="1" precision="0">
-			<enumValue name="1" comment="真"/>
-			<enumValue name="0" comment="假"/>
+			<enumValue name="1" comment="真" enname="True"/>
+			<enumValue name="0" comment="假" enname="False"/>
 		</typeDefine>
 		<typeDefine name="FTDDate" baseType="FTDStringType&lt;8&gt;" comment="yyyymmdd" length="8" precision="0"/>
 		<typeDefine name="FTDDateTime" baseType="FTDStringType&lt;20&gt;" comment="yyyymmddhh24nnsscc" length="20" precision="0"/>
