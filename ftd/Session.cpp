@@ -68,10 +68,12 @@ Session::Session( Application& application,
 
 Session::~Session()
 {
-  removeSession( *this );
-  m_packageStoreFactory.destroy( m_state.store() );
-  if ( m_pLogFactory && m_state.log() )
-    m_pLogFactory->destroy( m_state.log() );
+	m_application.onDisconnect(m_sessionID);
+	removeSession( *this );
+	m_packageStoreFactory.destroy( m_state.store() );
+	if ( m_pLogFactory && m_state.log() )
+		m_pLogFactory->destroy( m_state.log() );
+  
 }
 
 
@@ -104,6 +106,8 @@ bool Session::sendRaw(Package& package, int num)
 				sequence=对于客户端唯一
 	*/
 	Locker l(m_mutex);
+
+
 	if (isInitiator() && package.isRequest() && package.m_transactionId == TID_UserLogin)
 	{
 		m_state.sentLogon(true);
@@ -121,6 +125,13 @@ bool Session::sendRaw(Package& package, int num)
 	{
 		package.m_header.sequenceNO = num;
 	}
+
+	if (num == 0 && isInitiator() && package.isDialogMode() && package.isRequest())
+	{
+		package.m_header.sequenceNO = m_state.getNextSenderMsgSeqNum();
+		m_state.incrNextSenderMsgSeqNum();
+	}
+
 	if (package.isNoneMode())
 	{
 		m_application.toAdmin(package, m_sessionID);
@@ -242,6 +253,11 @@ void Session::next( const Package& package, const UtcTimeStamp& timeStamp, bool 
 	///<2> Acceptor (dialog序号）
 	if (isAcceptor() && package.isDialogMode())
 	{
+		if (package.m_header.sequenceNO != m_state.getNextTargetMsgSeqNum())
+		{
+			disconnect();
+		}
+		m_state.incrNextTargetMsgSeqNum();
 	}
 	//2 管理信息对会话状态进行管理
 	if (package.m_transactionId == TID_UserLogin)

@@ -459,6 +459,7 @@ void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspUserLogin& package, const FT
 	if (m_privateResumeType >= 0 && !loginFailed)
 	{
 		FTD::ReqQryPrivateInitialData req;
+		//req.m_header.sequenceSeries = ;
 		req.clear();
 		req.qryInitialDataField.BrokerID = package.rspUserLoginField.BrokerID;
 		req.qryInitialDataField.UserID = package.rspUserLoginField.UserID;

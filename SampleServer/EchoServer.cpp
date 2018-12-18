@@ -40,6 +40,7 @@ void EchoServer::onConnect(const SessionID& id)
 //to be disconnected
 void EchoServer::onDisconnect(const SessionID& id)
 {
+	unresigterSequenceSubscription(id);
 	std::cout << boost::format("SessionID[%d]已断开\n") % id;
 }
 /// Notification of a session successfully logging on
@@ -90,4 +91,17 @@ void EchoServer::OnPackage(const ReqQryPrivateInitialData& req, const SessionID&
 	//2 按需查询私有数据返回
 	m_DB.processReqInitialPrivateData(m_frontID, id, req, rsp);
 	Session::sendToTarget((Package&)rsp, id);
+}
+
+void EchoServer::OnPackage(const ReqOrderInsert& req, const SessionID& id)
+{
+	RspOrderInsert rsp;
+	std::vector<CFtdcExecutionReportField> reports;
+	m_DB.processReqInputOrder(m_frontID, id, req, rsp, reports);
+	Session::sendToTarget(rsp, id);
+	for (unsigned int i = 0; i < reports.size(); i++)
+	{
+		publishExecutionReport(reports[i]);
+	}
+
 }

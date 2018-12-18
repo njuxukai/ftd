@@ -66,7 +66,7 @@ class MockDB
 public:
 	void processReqUerLogin(int frontID, int sessionID, const ReqUserLogin& req, RspUserLogin& rsp);
 
-	void processReqInputOrder(int frontID, int sessionID, const ReqOrderInsert& req, RspOrderInsert& rsp);
+	void processReqInputOrder(int frontID, int sessionID, const ReqOrderInsert& req, RspOrderInsert& rsp, std::vector<CFtdcExecutionReportField>& reports);
 
 	void processReqQryOrder(int frontID, int sessionID, const ReqQryOrder& req, RspQryOrder& rsp);
 
@@ -77,7 +77,11 @@ private:
 	void QryMaxOrderRef(int frontID, int sessionID, int& result);
 	void QryExecutionReport(int sserie, int sno, std::vector<CFtdcExecutionReportField>& result);
 	std::map<OrderKey, CFtdcOrderField> m_orderMap;
+	std::map<int, CFtdcTradeField> m_tradeMap;
 	std::map<ReportKey, CFtdcExecutionReportField> m_executionReportMap;
+	int m_orderSeq;
+	int m_tradeSeq;
+	std::map<int, int> m_privateSeq; //每个客户一个
 
 
 };

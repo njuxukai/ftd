@@ -76,3 +76,4 @@ include/*
 /Debug/echo_server.cfg
 *.doc
 *.conn
+/export/lib

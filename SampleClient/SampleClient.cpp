@@ -8,6 +8,8 @@ int main()
 {
 	TraderClient client;
 	ApiParameter parameter = { 0 };
+	parameter.loginField.UserID = 1000;
+	parameter.loginField.BrokerID = 99;
 	strcpy(parameter.frontAddress, "tcp:\\127.0.0.1:8000");
 	strcpy(parameter.fileDirectory, ".\\");
 	client.setParameter(parameter);
@@ -17,7 +19,7 @@ int main()
 		int c = getchar();
 		if (c == 'a')
 		{
-			int result = client.manualTestLogin();
+			int result = client.manualTestInputOrder();
 			std::cout << "result=" << result << std::endl;
 		}
 	}

@@ -165,18 +165,18 @@ public:
 		FtdHeader header = { 0 };
 		readFtdHeader(ftdMsg.c_str(), header);
 		std::ostringstream oss;
-		oss << boost::format("FtdHeader[%d][%d][%d]---") % (int)header.FTDType % (int)header.FTDExtHeaderLength % header.FTDCLength;
+		oss << boost::format("{FtdHeader[%d][%d][%d]}:") % (int)header.FTDType % (int)header.FTDExtHeaderLength % header.FTDCLength;
 		if (header.FTDType == FTDTypeFTDC)
 		{
 			oss << getFtdcBriefInfo(ftdMsg.substr(FTD_HEADER_LENGTH + header.FTDExtHeaderLength, header.FTDCLength));
 		}
 		if (header.FTDType == FTDTypeCompressed)
 		{
-			oss << "Compressed,Ignore detail";
+			oss << "{Compressed,Ignore detail}";
 		}
 		if (header.FTDType == FTDTypeNone)
 		{
-			oss << "Heartbeat";
+			oss << "{Heartbeat}";
 		}
 		return oss.str();
 	}
@@ -186,7 +186,8 @@ public:
 		FtdcHeader header = { 0 };
 		readFtdcHeader(ftdcMsg.c_str(), header);
 		std::ostringstream oss;
-		oss << boost::format("[Tid=%d][sno=%d(%c)series=%d][Fields(count=%d,length=%d)][ver=%d]") % header.transactionId % header.sequenceSeries % header.chain % header.sequenceNO
+		oss << boost::format("{[Tid=%d][serie=%d,sno=%d(%c)][Fields(count=%d,length=%d)][ver=%d]}")
+			% header.transactionId % header.sequenceSeries % header.sequenceNO % header.chain
 			 % header.fieldCount % header.contentLength % (int)header.version;
 		return oss.str();
 	}

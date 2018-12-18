@@ -1,6 +1,7 @@
 #pragma once
 #include <ftd/SocketAcceptor.h>
 #include <ftd/FTD30/PackageCracker.h>
+#include <ftd/session.h>
 #include "MockDB.h"
 
 using namespace FTD;
@@ -35,9 +36,11 @@ public:
 
 	virtual void onHeartBeatWarning();
 
-	virtual void OnPackage(const ReqUserLogin& package, const SessionID&);
+	virtual void OnPackage(const ReqUserLogin& package, const SessionID& id);
 	
-	virtual void OnPackage(const ReqQryPrivateInitialData& package, const SessionID&);
+	virtual void OnPackage(const ReqQryPrivateInitialData& package, const SessionID& id);
+
+	virtual void OnPackage(const ReqOrderInsert& package, const SessionID& id);
 
 	//私有流订阅管理
 	void resigterSequenceSubscription(const SessionID& id,int sequenceSerie)
@@ -54,6 +57,21 @@ public:
 		for (auto it = m_subMap.begin(); it != m_subMap.end(); it++)
 		{
 			it->second.erase(id);
+		}
+	}
+
+	void publishExecutionReport(const CFtdcExecutionReportField& field)
+	{
+		if (m_subMap.find(field.SequenceSeries) != m_subMap.end())
+		{
+			IncExecutionReports package;
+			package.m_header.sequenceSeries = field.SequenceSeries;
+			package.m_header.sequenceNO = field.SequenceNo;
+			package.executionReportFields.push_back(field);
+			for (auto it = m_subMap[field.SequenceSeries].begin(); it != m_subMap[field.SequenceSeries].end(); it++)
+			{
+				Session::sendToTarget(package, *it);
+			}
 		}
 	}
 

@@ -74,4 +74,11 @@ void TraderClient::OnRspUserLogout(CXcpFtdcRspUserLogoutField* pRspUserLogout, C
 
 ///报单委托请求响应
 void TraderClient::OnRspInputOrder(CXcpFtdcInputOrderField* pInputOrder, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast)
-{}
+{
+	std::cout << boost::format("委托响应[OrderRef=%d][RequestID=%d]\n") % pInputOrder->OrderRef %nRequestID;
+}
+
+void TraderClient::OnRtnOrderExecutionReport(CXcpFtdcExecutionReportField* pExecutionReport)
+{
+	std::cout << boost::format("成交响应[Series=%d][Sno=%d]\n") % pExecutionReport->SequenceSeries % pExecutionReport->SequenceNo;
+}
