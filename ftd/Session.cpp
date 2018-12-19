@@ -108,18 +108,19 @@ bool Session::sendRaw(Package& package, int num)
 	Locker l(m_mutex);
 
 
-	if (isInitiator() && package.isRequest() && package.m_transactionId == TID_UserLogin)
+	if (package.m_transactionId == TID_UserLogin)
 	{
-		m_state.sentLogon(true);
+		onSendLogin(package);
 	}
-	if (isAcceptor() && package.isResponse() && package.m_transactionId == TID_UserLogin)
+	if (package.m_transactionId == TID_UserLogout)
 	{
-		RspUserLogin& rsp = (RspUserLogin&)package;
-		if (!rsp.pErrorField.get() || rsp.pErrorField->ErrorCode == 0)
-		{
-			m_state.sentLogon(true);
-		}
+		onSendLogout(package);
 	}
+	if (package.m_transactionId == TID_ForceExit)
+	{
+		onSendForceExit(package);
+	}
+	
 
 	if (num > 0)
 	{
@@ -142,7 +143,7 @@ bool Session::sendRaw(Package& package, int num)
 			return false;
 		m_application.toApp(package, m_sessionID);
 	}
-	//app message
+	//out message
 	std::vector<std::string> ftdMsgs;
 	package.toFtdMesssages(ftdMsgs);
 	for (unsigned int i = 0; i < ftdMsgs.size(); i++)
