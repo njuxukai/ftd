@@ -64,17 +64,11 @@ public:
   static bool sendToTarget( Package& message, const SessionID& sessionID )
   throw( SessionNotFound );
 
-  static bool sendToTarget( Package& message,
-                            const std::string& userID)
-  throw( SessionNotFound );
 
-  static bool broadcast(Package& message);
 
   static std::set<SessionID> getSessions();
   static bool doesSessionExist( const SessionID& );
-  static Session* lookupSession(const Package* package);
   static Session* lookupSession( const SessionID& );
-  static Session* lookupSession( const std::string&, bool reverse = false );
   static bool isSessionRegistered( const SessionID& );
   static Session* registerSession( const SessionID& );
   static void unregisterSession( const SessionID& );
@@ -106,6 +100,8 @@ public:
   }
 
   bool send( Package& );
+  bool send(std::string&);
+  bool send(std::vector<std::string>&);
   
   void nextHeartbeat(const UtcTimeStamp& timestamp);
   void next();
@@ -134,11 +130,19 @@ private:
   static bool addSession( Session& );
   static void removeSession( Session& );
 
+  //synced atomic operation
+  bool sendRaw(std::string& ftdMsg);
   bool sendRaw(Package& package, int num);
-  bool send(const std::string & string);
+  bool sendRaw(std::vector<std::string>& ftdMsgs);
+  //
+  bool responderSend(const std::string & string);
+  
+  void generateHeartbeat()
+  {
+	  sendRaw(FtdMessageUtil::generateHeartbeatMessage());
+  }
 
 
-  Package * newPackage(int transaction_id) const;
 
   Application& m_application;
   SessionID m_sessionID;

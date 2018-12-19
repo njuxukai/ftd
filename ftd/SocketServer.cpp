@@ -147,6 +147,7 @@ void SocketServer::close()
 
 bool SocketServer::block( Strategy& strategy, bool poll, double timeout )
 {
+	std::cout << "SocketServer block\n";
   std::set<int> sockets;
   SocketToInfo::iterator i = m_socketToInfo.begin();
   for( ; i != m_socketToInfo.end(); ++i )

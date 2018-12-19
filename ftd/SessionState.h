@@ -116,9 +116,16 @@ public:
   bool alreadySentLogon() const { return initiate() && sentLogon(); }
   bool logonTimedOut() const
   {
+	  if (sentLogon() && receivedLogon())
+		  return false;
     UtcTimeStamp now;
-    return now - lastReceivedTime() >= logonTimeout();
+	if (initiate() && (now - lastReceivedTime() >= logonTimeout()))
+		return true;
+	if (!initiate() && (now - lastSentTime() >= logonTimeout()))
+		return true;
+	return false;
   }
+
   bool logoutTimedOut() const
   {
     UtcTimeStamp now;
@@ -135,6 +142,12 @@ public:
     UtcTimeStamp now;
     return ( now - lastReceivedTime() ) >= ( 2.4 * ( double ) heartBtInt() );
   }
+  bool warningTimeOut() const
+  {
+	  UtcTimeStamp now;
+	  return (now - lastReceivedTime()) >= (2 * (double)heartBtInt());
+  }
+
   bool needHeartbeat() const
   {
     UtcTimeStamp now;

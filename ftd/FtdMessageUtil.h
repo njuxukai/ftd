@@ -158,6 +158,7 @@ public:
 		header.FTDType = FTDTypeNone;
 		char buffer[FTD_HEADER_LENGTH + 1];
 		writeFtdHeader(header, buffer);
+		return std::string().assign(buffer, FTD_HEADER_LENGTH);
 	}
 
 	static std::string getFtdBriefInfo(const std::string& ftdMsg)

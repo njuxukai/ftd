@@ -84,7 +84,31 @@ void Session::next()
 
 void Session::next( const UtcTimeStamp& timeStamp )
 {
-
+	//Initiator & Acceptor 登录超时
+	if (m_state.logonTimedOut())
+	{
+		m_state.onEvent("Timed out waiting for logon response");
+		disconnect();
+		return;
+	}
+	if (m_state.heartBtInt() == 0)
+		return;
+	if (m_state.withinHeartBeat())
+		return;
+	if (m_state.timedOut())
+	{
+		m_state.onEvent("Timed out waiting for heartbeat");
+		disconnect();
+		return;
+	}
+	if (m_state.warningTimeOut())
+	{
+		m_application.onHeartBeatWarning();
+	}
+	if (m_state.needHeartbeat())
+	{
+		generateHeartbeat();
+	}
 }
 
 bool Session::send(Package& package)
@@ -92,6 +116,15 @@ bool Session::send(Package& package)
 	return sendRaw(package, 0);
 }
 
+bool Session::send(std::string& ftdMsg)
+{
+	return sendRaw(ftdMsg);
+}
+
+bool Session::send(std::vector<std::string>& ftdMsgs)
+{
+	return sendRaw(ftdMsgs);
+}
 
 bool Session::sendRaw(Package& package, int num)
 {
@@ -148,16 +181,44 @@ bool Session::sendRaw(Package& package, int num)
 	package.toFtdMesssages(ftdMsgs);
 	for (unsigned int i = 0; i < ftdMsgs.size(); i++)
 	{
-		send(ftdMsgs[i]);
+		responderSend(ftdMsgs[i]);
 	}
 	return true;
 }
 
-bool Session::send( const std::string& string )
+//直接发送ftdMsg 
+//一般用于
+// 1  1发送心跳包 
+// 2 Acceptor发送消息（sequnce信息已设置ok）
+bool Session::sendRaw(std::string& ftdMsg)
 {
-  if ( !m_pResponder ) return false;
+	Locker l(m_mutex);
+	return responderSend(ftdMsg);
+}
+
+bool Session::sendRaw(std::vector<std::string>& ftdMsgs)
+{
+	Locker l(m_mutex);
+	for (unsigned int i = 0; i < ftdMsgs.size(); i++)
+	{
+		if (!responderSend(ftdMsgs[i]))
+			return false;
+	}
+	return true;
+}
+
+bool Session::responderSend( const std::string& string )
+{
+  if ( !m_pResponder ) 
+	  return false;
   m_state.onOutgoing(string) ;
-  return m_pResponder->send( string );
+  bool result =  m_pResponder->send(string);
+  if (result)
+  {
+	  UtcTimeStamp now;
+	  m_state.lastSentTime(now);
+  }
+  return result;
 }
 
 void Session::disconnect()
@@ -215,11 +276,14 @@ void Session::nextHeartbeat(const UtcTimeStamp& timestamp)
 void Session::next( const std::string& ftdMsg, const UtcTimeStamp& timeStamp, bool queued )
 {
 	m_state.onIncoming(ftdMsg);
+	m_state.lastReceivedTime(timeStamp);
+
 	FtdHeader ftdHeader = { 0 };
 	readFtdHeader(ftdMsg.c_str(), ftdHeader);
 	if (ftdHeader.FTDType == FTDTypeNone)
 	{
 		nextHeartbeat(timeStamp);
+		m_application.onHeartBeat();
 		return;
 	}
 	Package* package = m_packageBuffer.OnFtdMessage(ftdMsg);
@@ -249,6 +313,9 @@ void Session::next( const Package& package, const UtcTimeStamp& timeStamp, bool 
 	{
 		return;
 	}
+
+	
+
 	///TODO 检查sequnceNo
 	///<1> Initiator （boardcast/private,暂不实现20181217）
 	///<2> Acceptor (dialog序号）
@@ -294,6 +361,7 @@ void Session::nextLogin(const Package& package)
 		{
 			m_state.heartBtInt(rspUserLogin.rspUserLoginField.HeartbeatInterval);
 			m_state.receivedLogon(true);
+			std::cout << "Log on received\n";
 		}
 	}
 	///服务端收到用户登录请求
@@ -327,7 +395,12 @@ void Session::onSendLogin(Package& package)
 		{
 			return;
 		}
+		else
+		{
+			m_state.heartBtInt(rspUserLogin.rspUserLoginField.HeartbeatInterval);
+		}
 	}
+	std::cout << "Log on sent\n";
 	m_state.sentLogon(true);
 }
 

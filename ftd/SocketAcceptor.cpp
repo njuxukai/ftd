@@ -156,6 +156,7 @@ void SocketAcceptor::onStop()
 
 void SocketAcceptor::onConnect( SocketServer& server, int a, int s )
 {
+	std::cout << "Acceptor[OnConnect]\n";
   if ( !socket_isValid( s ) ) return;
   SocketConnections::iterator i = m_connections.find( s );
   if ( i != m_connections.end() ) return;
