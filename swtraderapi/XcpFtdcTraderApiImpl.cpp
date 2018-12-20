@@ -435,11 +435,12 @@ void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspUserLogin& package, const FT
 	m_pPrivateConn->readDate(fileTradingDay);
 	if (fileTradingDay != m_tradingDay)
 	{
+		//std::cout << "fileTradingDay[" << fileTradingDay << "]m_tradingDay[" << m_tradingDay << "]\n";
 		m_pPrivateConn->writeDate(m_tradingDay);
 		m_pPrivateConn->writeSequenceSno(0);
 	}
     m_pPrivateConn->readSequenceSno(lastReceivedSno);
-
+	//std::cout << "**************************lastReceivedSno=" << lastReceivedSno << std::endl;
 	bool qryBackward = true;
 	if (m_privateResumeType < 0 || m_privateResumeType == THOST_TERT_QUICK)
 	{

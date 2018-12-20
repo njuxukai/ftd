@@ -11,6 +11,7 @@ int main()
 	parameter.loginField.UserID = 1000;
 	parameter.loginField.BrokerID = 99;
 	strcpy(parameter.frontAddress, "tcp:\\127.0.0.1:8000");
+	strcpy(parameter.frontAddress2, "tcp:\\127.0.0.1:9000");
 	strcpy(parameter.fileDirectory, ".\\");
 	client.setParameter(parameter);
 	client.connect();

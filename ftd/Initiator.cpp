@@ -41,7 +41,9 @@ Initiator::Initiator( Application& application,
   m_pLogFactory( 0 ),
   m_pLog( 0 ),
   m_firstPoll( true ),
-  m_stop( true )
+  m_stop( true ),
+  m_nextConnectPortIdx(0),
+	m_needReconnect(false)
 { initialize(); }
 
 
@@ -54,7 +56,9 @@ void Initiator::initialize() throw ( ConfigError )
   m_pSessionFactory = new SessionFactory( m_application, *m_pPackageStoreFactory,
                           m_pLogFactory );
 
-  m_ports = m_settings.getPorts();
+  std::set<PortID> ports = m_settings.getPorts();
+  for (auto it = ports.begin(); it != ports.end(); it++)
+	  m_ports.push_back(*it);
   std::set < SessionID > ::iterator i;
 
   if ( !m_ports.size() )
@@ -130,22 +134,32 @@ void Initiator::connect()
 {
   Locker l(m_mutex);
 
-  PortIDs disconnected = m_ports;
-  PortIDs::iterator i = disconnected.begin();
+  //PortIDs disconnected = m_ports;
+  //PortIDs::iterator i = disconnected.begin();
+  if (m_pending.size() > 0 || m_connected.size() > 0 || m_ports.size() == 0)
+	  return;
+  if (m_nextConnectPortIdx >= m_ports.size())
+	  m_nextConnectPortIdx = m_nextConnectPortIdx % m_ports.size();
+  doConnect(m_ports[m_nextConnectPortIdx], m_settings.get(m_ports[m_nextConnectPortIdx]));
+  std::cout << "Connecting to " << m_ports[m_nextConnectPortIdx].toString() << std::endl;
+  m_nextConnectPortIdx += 1;
+  /*
   for ( ; i != disconnected.end(); ++i )
   {
-	  if (m_badPorts.find(*i) != m_badPorts.end())
-		  continue;
-      int socket = doConnect( *i, m_settings.get( *i ));
-	  if (socket > 0)
-	  {
-		  return;
-	  }
-	  else
-	  {
-		  m_badPorts.insert(*i);
-	  }
+  if (m_badPorts.find(*i) != m_badPorts.end())
+  continue;
+  int socket = doConnect( *i, m_settings.get( *i ));
+  if (socket > 0)
+  {
+  return;
   }
+  else
+  {
+  m_badPorts.insert(*i);
+  }
+  }
+  */
+  
 }
 
 void Initiator::setPending( const SessionID& sessionID )

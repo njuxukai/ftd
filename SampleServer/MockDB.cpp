@@ -1,7 +1,10 @@
 #include "stdafx.h"
 #include "MockDB.h"
-
+#include <iostream>
+#include <sstream>
+#include <ftd/fixtypes.h>
 using namespace FTD;
+using namespace std;
 
 void MockDB::processReqUerLogin(int frontID, int sessionID, const ReqUserLogin& req, RspUserLogin& rsp)
 {
@@ -16,7 +19,21 @@ void MockDB::processReqUerLogin(int frontID, int sessionID, const ReqUserLogin& 
 	rsp.rspUserLoginField.BrokerID = req.reqUserLoginField.BrokerID;
 	strcpy(rsp.rspUserLoginField.SystemName, "模拟交易服务器");
 	//日期填写
-	strcpy(rsp.rspUserLoginField.TradingDay, "");
+	FTD::LocalTimeStamp date;
+	int year;
+	int month;
+	int day;
+	int hour;
+	int minute;
+	int second;
+	int millis;
+	date.getYMD(year, month, day);
+	date.getHMS(hour, minute, second, millis);
+	//std::cout << boost::format("%d%d%d %d:%d:%d.%d") % year % month % day % hour % minute % second % millis;
+	std::ostringstream oss;
+	oss << year * 10000 + month * 100 + day;
+	//std::cout << "登录[" << oss.str() << "]\n";
+	strcpy(rsp.rspUserLoginField.TradingDay, oss.str().data());
 	rsp.rspUserLoginField.HeartbeatInterval = 5;
 	//
 	rsp.rspUserLoginField.FrontID = frontID;
@@ -31,7 +48,7 @@ void MockDB::processReqInputOrder(int frontID, int sessionID, const ReqOrderInse
 	rsp.clear();
 	rsp.m_header.sequenceSeries = req.m_header.sequenceSeries;
 	rsp.m_header.sequenceNO = req.m_header.sequenceNO;
-	memcpy(&rsp.inputOrderField, &rsp.inputOrderField, sizeof(CFtdcInputOrderField));
+	memcpy(&rsp.inputOrderField, &req.inputOrderField, sizeof(CFtdcInputOrderField));
 	rsp.pErrorField = 0;
 	//1 Order
 	CFtdcOrderField order = { 0 };

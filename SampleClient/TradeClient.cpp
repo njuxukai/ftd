@@ -9,8 +9,9 @@ void TraderClient::connect()
 	m_pApi = CXcpFtdcTraderApi::CreateFtdcTraderApi(m_parameter.fileDirectory);
 	m_pApi->RegisterSpi(this);
 	m_pApi->RegisterFront(m_parameter.frontAddress);
-	m_pApi->SubscribePrivateTopic(THOST_TERT_RESTART);
-	m_pApi->SubscribePublicTopic(THOST_TERT_RESTART);
+	m_pApi->RegisterFront(m_parameter.frontAddress2);
+	m_pApi->SubscribePrivateTopic(THOST_TERT_RESUME);
+	m_pApi->SubscribePublicTopic(THOST_TERT_RESUME);
 	m_pApi->Init();
 }
 

@@ -35,7 +35,7 @@ SocketInitiator::SocketInitiator( Application& application,
 throw( ConfigError )
 : Initiator( application, settings ),
   m_connector( 1 ), m_lastConnect( 0 ),
-  m_reconnectInterval( 30 ), m_noDelay( false ), m_sendBufSize( 0 ),
+  m_reconnectInterval( 2 ), m_noDelay( false ), m_sendBufSize( 0 ),
   m_rcvBufSize( 0 ) 
 {
 }
@@ -78,6 +78,7 @@ void SocketInitiator::onStart()
   connect();
 
   while ( !isStopped() ) {
+	// m_connector.block(*this, false, 1.0);
     m_connector.block( *this, false, 1.0 );
     onTimeout( m_connector );
   }
@@ -192,21 +193,22 @@ void SocketInitiator::onDisconnect( SocketConnector&, int s )
     pSocketConnection = i->second;
   if( j != m_pendingConnections.end() )
     pSocketConnection = j->second;
-  if( !pSocketConnection )
-    return;
-
-  Session* pSession = pSocketConnection->getSession();
-  if ( pSession )
+  if(pSocketConnection )
   {
-    pSession->disconnect();
-    setDisconnected( pSession->getSessionID() );
-	m_sessions.erase( pSession->getSessionID() );
-	m_pSessionFactory->destroy(pSession);
-  }
+	  Session* pSession = pSocketConnection->getSession();
+	  if (pSession)
+	  {
+		  pSession->disconnect();
+		  destroySession(pSession);
+	  }
 
-  m_connections.erase( s );
-  m_pendingConnections.erase( s );
-  delete pSocketConnection;
+	  m_connections.erase(s);
+	  m_pendingConnections.erase(s);
+	  delete pSocketConnection;
+  }
+  //connect();
+  m_needReconnect = true;
+  
 }
 
 void SocketInitiator::onError( SocketConnector& connector )
@@ -223,6 +225,7 @@ void SocketInitiator::onTimeout( SocketConnector& )
   {
     connect();
     m_lastConnect = now;
+	m_needReconnect = false;
   }
 
   SocketConnections::iterator i;

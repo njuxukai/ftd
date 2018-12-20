@@ -134,7 +134,7 @@ private:
   
 protected:
 	Application& m_application;
-	typedef std::set < PortID > PortIDs;
+	typedef std::vector < PortID > PortIDs;
 	typedef std::set < SessionID> SessionIDs;
 	typedef std::map < PortID, SessionID > PortIDSessionIDMap;
 	typedef std::map < SessionID, Session* > Sessions;
@@ -145,9 +145,10 @@ protected:
 	SessionIDs m_pending;
 	SessionIDs m_connected;
 	PortIDs m_ports;
-	PortIDs m_badPorts;
+	//PortIDs m_badPorts;
   PortSettings m_settings;
   SessionFactory* m_pSessionFactory;
+  bool m_needReconnect;
 private:
 	PackageStoreFactory* m_pPackageStoreFactory;
   LogFactory* m_pLogFactory;
@@ -156,6 +157,8 @@ private:
   bool m_firstPoll;
   bool m_stop;
   Mutex m_mutex;
+  int m_nextConnectPortIdx;
+  
 };
 /*! @} */
 }
