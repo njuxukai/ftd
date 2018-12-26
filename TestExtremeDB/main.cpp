@@ -112,7 +112,7 @@ MCO_RET populate_db3(mco_db_h db)
 			rc = mco_trans_commit(t);
 			if (MCO_S_OK == rc)
 			{
-				printf("[%d]Insert Success[%d]\n", j, part.user_id);
+				//printf("[%d]Insert Success[%d]\n", j, part.user_id);
 			}
 			else
 			{
@@ -141,11 +141,11 @@ MCO_RET populate_db2(mco_db_h db)
 			user.broker_id = 8080;
 			user.user_id = j + 10000;
 			user.password = "test";
-			printf("[%d]To Insert[%d]\n", j, user.user_id);
+			//printf("[%d]To Insert[%d]\n", j, user.user_id);
 			rc = mco_trans_commit(t);
 			if (MCO_S_OK == rc)
 			{
-				printf("[%d]Insert Success[%d]\n", j, user.user_id);
+				//printf("[%d]Insert Success[%d]\n", j, user.user_id);
 			}
 			else
 			{

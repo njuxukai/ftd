@@ -77,3 +77,12 @@ include/*
 *.doc
 *.conn
 /export/lib
+/build/02_open_disk_file/Debug
+/TestExtremeDB/bin/Debug
+/TestExtremeDB/genericdb.h
+/TestExtremeDB/genericdb.c
+/TestExtremeDB/genericdb.hpp
+/TestExtremeDB/build/02_open_disk_file/Debug
+/bin/Debug
+/TestExtremeDB/disk_file.dbs
+/TestExtremeDB/disk_file.log
