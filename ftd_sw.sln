@@ -33,6 +33,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SampleClient", "SampleClien
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rqp", "rqp\rqp.vcxproj", "{8C63C69B-84B9-448B-AE6F-A0EEA4AA2B51}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "02_open_disk_file", "TestDB\TestDB.vcxproj", "{FDB5F0ED-4A9E-48E4-88A3-D281AE1F8358}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -117,6 +119,14 @@ Global
 		{8C63C69B-84B9-448B-AE6F-A0EEA4AA2B51}.Release|x64.Build.0 = Release|x64
 		{8C63C69B-84B9-448B-AE6F-A0EEA4AA2B51}.Release|x86.ActiveCfg = Release|Win32
 		{8C63C69B-84B9-448B-AE6F-A0EEA4AA2B51}.Release|x86.Build.0 = Release|Win32
+		{FDB5F0ED-4A9E-48E4-88A3-D281AE1F8358}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{FDB5F0ED-4A9E-48E4-88A3-D281AE1F8358}.Debug|x64.ActiveCfg = Debug|Win32
+		{FDB5F0ED-4A9E-48E4-88A3-D281AE1F8358}.Debug|x86.ActiveCfg = Debug|Win32
+		{FDB5F0ED-4A9E-48E4-88A3-D281AE1F8358}.Debug|x86.Build.0 = Debug|Win32
+		{FDB5F0ED-4A9E-48E4-88A3-D281AE1F8358}.Release|Any CPU.ActiveCfg = Release|Win32
+		{FDB5F0ED-4A9E-48E4-88A3-D281AE1F8358}.Release|x64.ActiveCfg = Release|Win32
+		{FDB5F0ED-4A9E-48E4-88A3-D281AE1F8358}.Release|x86.ActiveCfg = Release|Win32
+		{FDB5F0ED-4A9E-48E4-88A3-D281AE1F8358}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
