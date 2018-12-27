@@ -68,7 +68,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(McobjectDir)\target\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>mcouwrt_debug.lib;mconet_debug.lib;mcosalsmp_debug.lib;mcosalmem_debug.lib;mcotrace_debug.lib;mcocryptstub_debug.lib;mcolib_debug.lib;mcovtdsk_debug.lib;mcofw32_debug.lib;mcomconv_debug.lib;mcotmursiw_debug.lib;mcosw32_debug.lib;mcosallatches_debug.lib;mcosalatomic_debug.lib;mcosaldload_debug.lib;mcosaltimer_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>mcouwrt_debug.lib;mconet_debug.lib;mcosalsmp_debug.lib;ws2_32.lib;mcosalmem_debug.lib;mcotrace_debug.lib;mcocryptstub_debug.lib;mcolib_debug.lib;mcovtdsk_debug.lib;mcofw32_debug.lib;mcomconv_debug.lib;mcotmursiw_debug.lib;mcosw32_debug.lib;mcosallatches_debug.lib;mcosalatomic_debug.lib;mcosaldload_debug.lib;mcosaltimer_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName).exe</OutputFile>
       <ProgramDatabaseFile>$(OutDir)$(TargetName).pdb</ProgramDatabaseFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -120,6 +120,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <ClCompile Include="ftdc_all.cpp" />
+    <ClCompile Include="fund_transfer.cpp" />
     <ClCompile Include="genericdb.c">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -132,7 +134,11 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <ClCompile Include="order_action.cpp" />
     <ClCompile Include="order_insert.cpp" />
+    <ClCompile Include="qry_order.cpp" />
+    <ClCompile Include="qry_trade.cpp" />
+    <ClCompile Include="user_login.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ftdc_all.h" />
