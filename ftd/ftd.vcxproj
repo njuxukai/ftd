@@ -174,6 +174,7 @@ del /F EXCLUDE
     <ClInclude Include="BaseType.h" />
     <ClInclude Include="Declare.h" />
     <ClInclude Include="Dictionary.h" />
+    <ClInclude Include="Errors.h" />
     <ClInclude Include="Exceptions.h" />
     <ClInclude Include="FixConvertors.h" />
     <ClInclude Include="FixTypes.h" />

@@ -453,6 +453,7 @@
 			<item name="InvestUnitID" comment="席位编号"/>
 			<item name="IPAddress" comment="IP地址"/>
 			<item name="MacAddress" comment="Mac地址"/>
+			<item name="TestTimestamp" comment="int64时间"/>
 		</fieldDefine>
 		
 		<fieldDefine name="QryTradeField" fid="FID_QryTradeField" fidValue="0x0014" comment="报单成交查询请求域">
@@ -753,6 +754,8 @@
 		<itemDefine name="TradeSysID" type="FTDIntType" comment="成交回报在柜台编号"/>
 		<itemDefine name="TradeExchangeID" type="FTDIntType" comment="成交在交易所编号"/>
 		<itemDefine name="TotalAmount" type="FTDValue" comment="最小申赎单位净值总金额"/>
+		<itemDefine name="TestTimestamp" type="FTDTimeStamp2" comment="时间戳"/>
+		
 		
 		<itemDefine name="UserID" type="FTDUserID" comment="用户代码"/>
 		<itemDefine name="UserProductInfo" type="FTDStringType&lt;20&gt;" comment="用户端产品信息"/>
@@ -878,6 +881,7 @@
 		<typeDefine name="FTDTimeStamp" baseType="FTDStringType&lt;20&gt;" comment="Unix系统UTC时间" length="20" precision="0"/>
 		<typeDefine name="FTDTimeStampSecs" baseType="FTDIntType" comment="UTC时间(1970-1-1:00:00:00至今秒数)" length="4" precision="0"/>
 		<typeDefine name="FTDTimeStampNanoecs" baseType="FTDIntType" comment="UTC时间(纳秒尾数)" length="4" precision="0"/>
+		<typeDefine name="FTDTimeStamp2" baseType="FTDInt64Type" comment="Unix系统UTC时间" length="8" precision="0"/>
 		<typeDefine name="FTDUserID" baseType="FTDIntType" length="4" precision="0"/>
 		<typeDefine name="FTDValue" baseType="FTDFloatType&lt;14,2&gt;" length="14" precision="2"/>
 		<typeDefine name="FTDVolume" baseType="FTDIntType" length="4" precision="0"/>

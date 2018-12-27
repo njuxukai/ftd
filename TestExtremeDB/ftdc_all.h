@@ -2,8 +2,10 @@
 #define FTDC_ALL_H_
 #include <genericdb.hpp>
 #include <ftd/FTD30/Packages.h>
-
+#include <ftd/Errors.h>
 using namespace FTD;
+
+Package* ftdcAll(const Package* pReq, mco_db_h db);
 
 Package* processUserLogin(const Package* pReq, mco_db_h db);
 Package* processOrderInsert(const Package* pReq, mco_db_h db);

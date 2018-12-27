@@ -96,6 +96,7 @@ SUITE(FTDTest)
 	{
 		RspQryOrder package ;
 		CFtdcOrderField field = { 0 };
+		field.TestTimestamp = 1 << 33;
 		int count = 1;
 		for (int i = 0; i < count; i++)
 		{
@@ -108,7 +109,7 @@ SUITE(FTDTest)
 		{
 			package2.mergeFtdcMessage(mss[i]);
 		}
-		
+		CHECK_EQUAL(package2.orderFields[0].TestTimestamp, 1 << 32);
 		CHECK_EQUAL(package2.orderFields.size(), package.orderFields.size());
 	}
 }

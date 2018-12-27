@@ -6,6 +6,8 @@
 #include <stdio.h>
 #include <common.h>
 #include <genericdb.hpp>
+#include <ftd/FTD30/Packages.h>
+#include "ftdc_all.h"
 
 char sample_descr[] = {
   "Sample 'disk_file' opens a database using FILE memory devices.\n"
@@ -216,6 +218,9 @@ int main(int argc, char* argv[])
       /* Show characteristics of opened database */
       //sample_show_device_info("\n\tThe opened database has the following memory devices:", dev, N_DEVICES);
 	  rc  = populate_db2(db);
+	  ReqUserLogin req;
+	  //std::shared_ptr<Package> pRsp = std::shared_ptr<Package>(
+	//	  ftdcAll(&req, db));
 	  if (MCO_S_OK != rc)
 	  {
 		  printf("[%d]error populate\n", rc);
