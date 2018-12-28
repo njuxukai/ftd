@@ -3,10 +3,21 @@
 
 #include <memory>
 #include <thread>
+#include <atomic>
+#include <vector>
+#include <thread>
+#include <functional>
+#include <chrono> 
+#include <condition_variable>
+#include <queue>
+
 #include <ftd/FTD30/packages.h>
 #include <ftdc_all.h>
 
 using namespace FTD;
+
+#define  MAX_DEVICES           10
+#define  N_DEVICES             4
 
 template<typename T>
 class ThreadsafeQueue
@@ -102,35 +113,27 @@ public:
 class McoDBWrapper
 {
 public:
-	typedef std::function<void(PackagePtr)> Callback;
+	typedef std::function<void(PackageSPtr)> Callback;
 	McoDBWrapper();
-	void submit(PackagePtr pReq);
+	~McoDBWrapper();
+	void submit(PackageSPtr pReq);
 	void registerResponseCallback(Callback callback);
 private:
 	bool m_done;
-	ThreadsafeQueue<PackagePtr> m_reqQueue;
+	ThreadsafeQueue<PackageSPtr> m_reqQueue;
 	JoinThreads m_joiner;
 	std::vector<std::thread> m_threads;
-
+	void InitDB();
+	void InitThreads();
+private:
+	mco_device_t       dev[N_DEVICES]; 
+	mco_db_params_t    db_params;
 private:
 	Callback m_respCallback;
 	//线程工作函数
-	void worker()
-	{
-		while (!m_done || !m_reqQueue.empty())
-		{
-			auto ppReq = m_reqQueue.wait_and_pop(20);
-			if (ppReq.get())
-			{
-				PackagePtr pReq = std::move(*(ppReq.get()));
-				PackagePtr pRsp;
-				m_respCallback(pRsp);
-			}
-		}
-	}
+	void worker();
 	
 	McoDBWrapper(const McoDBWrapper&) = delete;
-	McoDBWrapper(McoDBWrapper&) = delete;
 	McoDBWrapper& operator=(const McoDBWrapper&) = delete;
 };
 

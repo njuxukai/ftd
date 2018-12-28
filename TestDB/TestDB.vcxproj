@@ -176,6 +176,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(McobjectDir)\samples\native\common\common.c" />
+    <ClCompile Include="DBwrapper.cpp" />
     <ClCompile Include="ftdc_all.cpp" />
     <ClCompile Include="fund_transfer.cpp" />
     <ClCompile Include="genericdb.c" />

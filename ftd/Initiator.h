@@ -157,7 +157,7 @@ private:
   bool m_firstPoll;
   bool m_stop;
   Mutex m_mutex;
-  int m_nextConnectPortIdx;
+  unsigned int m_nextConnectPortIdx;
   
 };
 /*! @} */
