@@ -35,6 +35,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rqp", "rqp\rqp.vcxproj", "{
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "02_open_disk_file", "TestExtremeDB\TestExtremeDB.vcxproj", "{FDB5F0ED-4A9E-48E4-88A3-D281AE1F8358}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "02_open_disk_file", "TestExtremeDB2\TestExtremeDB2.vcxproj", "{F40AD48C-22B9-423A-B59A-8366A941C392}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -127,6 +129,14 @@ Global
 		{FDB5F0ED-4A9E-48E4-88A3-D281AE1F8358}.Release|x64.ActiveCfg = Release|Win32
 		{FDB5F0ED-4A9E-48E4-88A3-D281AE1F8358}.Release|x86.ActiveCfg = Release|Win32
 		{FDB5F0ED-4A9E-48E4-88A3-D281AE1F8358}.Release|x86.Build.0 = Release|Win32
+		{F40AD48C-22B9-423A-B59A-8366A941C392}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{F40AD48C-22B9-423A-B59A-8366A941C392}.Debug|x64.ActiveCfg = Debug|Win32
+		{F40AD48C-22B9-423A-B59A-8366A941C392}.Debug|x86.ActiveCfg = Debug|Win32
+		{F40AD48C-22B9-423A-B59A-8366A941C392}.Debug|x86.Build.0 = Debug|Win32
+		{F40AD48C-22B9-423A-B59A-8366A941C392}.Release|Any CPU.ActiveCfg = Release|Win32
+		{F40AD48C-22B9-423A-B59A-8366A941C392}.Release|x64.ActiveCfg = Release|Win32
+		{F40AD48C-22B9-423A-B59A-8366A941C392}.Release|x86.ActiveCfg = Release|Win32
+		{F40AD48C-22B9-423A-B59A-8366A941C392}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

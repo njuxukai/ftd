@@ -86,3 +86,4 @@ include/*
 /bin/Debug
 /TestExtremeDB/disk_file.dbs
 /TestExtremeDB/disk_file.log
+*.ilk
