@@ -43,8 +43,8 @@ Package* processUserLogin(const Package* pReq, mco_db_h db)
 		return pRsp;
 	}
 
-	pRsp->pErrorField->ErrorCode = FTD_ERROR_CODE_USER_ID_NOT_EXIST;
-	strcpy(pRsp->pErrorField->ErrorText, FTD_ERROR_TEXT_USER_ID_NOT_EXIST);
+	pRsp->pErrorField->ErrorCode = 0;
+	strcpy(pRsp->pErrorField->ErrorText, "µÇÂ¼³É¹¦");
 	mco_trans_commit(t);
 	return pRsp;
 }

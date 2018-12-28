@@ -15,6 +15,9 @@ Version={version}
 namespace FTD
 {{
 
+DECLARE_SPTR(Package);
+DECLARE_PTR(Package);
+
 {declare_smart_ptr_lines}
 
 struct PackageBuffer
