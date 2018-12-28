@@ -5,7 +5,7 @@
 #include <ftd/Errors.h>
 using namespace FTD;
 
-Package* ftdcAll(const Package* pReq, mco_db_h db);
+PackageSPtr ftdcAll(const PackageSPtr pReq, mco_db_h db);
 
 Package* processUserLogin(const Package* pReq, mco_db_h db);
 Package* processOrderInsert(const Package* pReq, mco_db_h db);
