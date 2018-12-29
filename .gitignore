@@ -87,3 +87,9 @@ include/*
 /TestExtremeDB/disk_file.dbs
 /TestExtremeDB/disk_file.log
 *.ilk
+/TestDB/Debug
+/TestDB/genericdb.c
+/TestDB/genericdb.h
+/TestDB/disk_file.log
+/TestDB/disk_file.dbs
+/TestDB/genericdb.hpp

@@ -113,14 +113,19 @@ public:
 class McoDBWrapper
 {
 public:
-	typedef std::function<void(PackageSPtr)> Callback;
+	typedef std::function<void(mco_db_h)> DBTask;
 	McoDBWrapper();
 	~McoDBWrapper();
-	void submit(PackageSPtr pReq);
-	void registerResponseCallback(Callback callback);
+
+	template<typename FunctionType>
+	void submit(FunctionType f)
+	{
+		m_reqQueue.push(DBTask(f));
+	}
+
 private:
 	bool m_done;
-	ThreadsafeQueue<PackageSPtr> m_reqQueue;
+	ThreadsafeQueue<DBTask> m_reqQueue;
 	JoinThreads m_joiner;
 	std::vector<std::thread> m_threads;
 	void InitDB();
@@ -129,10 +134,7 @@ private:
 	mco_device_t       dev[N_DEVICES]; 
 	mco_db_params_t    db_params;
 private:
-	Callback m_respCallback;
-	//线程工作函数
 	void worker();
-	
 	McoDBWrapper(const McoDBWrapper&) = delete;
 	McoDBWrapper& operator=(const McoDBWrapper&) = delete;
 };

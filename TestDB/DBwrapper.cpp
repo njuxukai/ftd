@@ -115,24 +115,36 @@ void McoDBWrapper::worker()
 		return;
 	while (!m_done || !m_reqQueue.empty())
 	{
+		/*
 		auto ppReq = m_reqQueue.wait_and_pop(20);
 		if (ppReq.get())
 		{
-			PackageSPtr pReq = std::move(*(ppReq.get()));
-			PackageSPtr pRsp = ftdcAll(pReq, db);
-			if(m_respCallback)
-				m_respCallback(pRsp);
+		PackageSPtr pReq = std::move(*(ppReq.get()));
+		PackageSPtr pRsp = ftdcAll(pReq, db);
+		if(m_respCallback)
+		m_respCallback(pRsp);
+		}
+		*/
+		auto pTask = m_reqQueue.wait_and_pop(20);
+		if (pTask.get())
+		{
+			(*pTask)(db);
 		}
 	}
-	mco_db_close(db_name);
+	mco_db_disconnect(db);
 }
 
-void McoDBWrapper::submit(PackageSPtr pReq)
+
+/*
+void McoDBWrapper::submit(const DBTask& task)
 {
-	m_reqQueue.push(pReq);
-}
+m_reqQueue.push(task);
+}*/
 
+
+/*
 void McoDBWrapper::registerResponseCallback(Callback callback)
 {
-	m_respCallback = callback;
+m_respCallback = callback;
 }
+*/
