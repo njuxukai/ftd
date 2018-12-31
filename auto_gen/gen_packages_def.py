@@ -22,6 +22,7 @@ def generate_package_struct(version, package, target_path, version_number, field
     member_clear_lines = []
     member_merge_lines = []
     member_write_sections = []
+    member_clone_lines = []
     for field_info in package.fields:
         field = fields[field_info.name]
         member_def_lines.append('///%s' % field_info.comment)
@@ -30,6 +31,7 @@ def generate_package_struct(version, package, target_path, version_number, field
         member_clear_lines.append(_format_member_clear_lines(field_info,field))
         member_merge_lines.append(_format_member_merge_lines(field_info,field))
         member_write_sections.append(_format_member_write_lines(field_info, field))
+        member_clone_lines.append(_format_member_clone_lines(field_info, field))
 
     d = {}
     d['version'] = version
@@ -183,6 +185,16 @@ if(p{0}.get() != nullptr)
         return field_fmt.format(fname, fname[0].lower()+fname[1:],univerl_name)
     if field_info.use_smart_ptr():
         return ptr_fmt.format(fname, fname[0].lower()+fname[1:],univerl_name)
+
+
+def _format_member_clone_lines(field_info, field):
+    vector_format = """//std::vector<{2}>
+for(int i =0;i < {1}s.size(); i++)
+{
+    new
+}
+    """
+
 
 
 def generate_package_include(version, packages, target_path):

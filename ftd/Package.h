@@ -20,6 +20,7 @@ namespace FTD
 			m_version(version_), m_transactionId(transactionId_), m_mode(mode_), m_header({ 0 })
 		{}
 		virtual ~Package() {};
+		virtual Package* clone() = 0;
 		virtual void clear() = 0;
 		
 		void toFtdMesssages(std::vector<std::string>& ftdMsgs, const FtdExt* pExt=0)

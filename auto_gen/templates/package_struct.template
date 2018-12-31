@@ -31,6 +31,17 @@ struct {package_name} : public Package
 		clear();
 	}}
 
+	virtual ~{package_name}()
+	{{}}
+
+	virutal Package* clone()
+	{{
+		{package_name}* pCopy = new {package_name}();
+		pCopy->clear();
+{member_clone_lines}
+		return pCopy;
+	}}
+
 	void clear()
 	{{
 {member_clear_lines}			

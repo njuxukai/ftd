@@ -3,6 +3,7 @@
 #include <boost/format.hpp>
 #include <ftd/session.h>
 
+//void processReq(FTD::Package* package, )
 EchoServer::EchoServer(std::string cfgFile, int frontID) :m_cfgFile(cfgFile), m_frontID(frontID), m_acceptor(0)
 {
 }
@@ -79,8 +80,8 @@ void EchoServer::onHeartBeatWarning()
 void EchoServer::OnPackage(const ReqUserLogin& req, const SessionID& id)
 {
 	RspUserLogin rsp;
-	m_DB.processReqUerLogin(m_frontID, id, req, rsp);
-	Session::sendToTarget(rsp, id);
+	//m_DB.processReqUerLogin(m_frontID, id, req, rsp);
+	//Session::sendToTarget(rsp, id);
 }
 
 void EchoServer::OnPackage(const ReqQryPrivateInitialData& req, const SessionID& id)
