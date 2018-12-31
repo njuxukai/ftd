@@ -2,6 +2,7 @@
 #include <ftd/SocketAcceptor.h>
 #include <ftd/FTD30/PackageCracker.h>
 #include <ftd/session.h>
+#include <dbcore/DBWrapper.h>
 #include "MockDB.h"
 
 using namespace FTD;
@@ -81,4 +82,5 @@ private:
 	FTD::Acceptor* m_acceptor;
 	const int m_frontID;
 	MockDB m_DB;
+	McoDBWrapper m_DB2;
 };

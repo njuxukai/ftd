@@ -93,3 +93,11 @@ include/*
 /TestDB/disk_file.log
 /TestDB/disk_file.dbs
 /TestDB/genericdb.hpp
+/build/dbcore/Debug
+/build/ftd/Debug
+/build/SampleClient/Debug
+/build/SampleServer/Debug
+/build/xcptraderapi/Debug
+/export/Debug
+*.dbs
+*.log
