@@ -112,6 +112,10 @@ void printRspUserLogin(RspUserLogin* pRsp)
 
 void printRspPackage(Package* pRsp)
 {
+	if (!pRsp)
+	{
+		return;
+	}
 	if (pRsp->m_transactionId == TID_UserLogin && pRsp->isResponse())
 	{
 		printRspUserLogin((RspUserLogin*)pRsp);
