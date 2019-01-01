@@ -4,7 +4,7 @@ import os
 from io import BytesIO
 from dtd_def import *
 from file_util import *
-
+import datetime
 ftd_type_template = './templates/id_def.template'
 target_fname = 'Id.h'
 
@@ -22,4 +22,5 @@ def generate_id_df(version, tids, fields, target_path, version_number):
     d['tid_def'] = '\n'.join(tid_statments)
     d['fid_def'] = '\n'.join(fid_statements)
     d['version_number'] = version_number
+    d['datetime'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     save_cpp_file(template.format_map(d), '%s/%s'%(target_path, target_fname))

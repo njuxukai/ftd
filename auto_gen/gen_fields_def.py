@@ -4,6 +4,7 @@ import os
 from io import BytesIO
 from dtd_def import *
 from file_util import *
+import datetime
 
 field_struct_template_file = './templates/field_struct.template'
 
@@ -72,6 +73,7 @@ def generate_field_struct(version, field_info, target_path, items, types):
     d['item_type_var_pair_list_string'] = item_var_pair_list_string
     d['write_items_string'] = write_items_string
     d['read_items_string'] = read_items_string
+    d['datetime'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     target_fpath = '{0}/{1}/{2}.h'.format(target_path, version,target_field_struct_name) 
     save_cpp_file(template.format_map(d), target_fpath)
@@ -104,6 +106,7 @@ def generate_fields_include(version, fields, target_path):
     d['field_members'] = '\n'.join(member_lines)
     d['cases'] = '\n'.join(case_lines)
     d['declare_smart_ptr_lines'] = '\n'.join(ptr_lines)
+    d['datetime'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     save_cpp_file(template.format_map(d),
                   '{0}/{1}/{2}'.format(target_path, version, include_all_headers))
 

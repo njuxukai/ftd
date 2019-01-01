@@ -1,5 +1,6 @@
 /*
 本文件自动生成，请勿手工修改
+generated@{datetime}
 */
 
 #ifndef {version}_{package_name_upper}_H

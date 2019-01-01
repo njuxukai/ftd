@@ -4,6 +4,8 @@ import os
 from io import BytesIO
 from dtd_def import *
 from file_util import *
+import datetime 
+
 
 ftd_type_template = './templates/type_def.template'
 target_fname = 'DerivativeType.h'
@@ -47,6 +49,7 @@ def generate_type_df(version, types, target_path):
     d['version'] = version
     d['t_type_def'] = '\n'.join(def_type_statments)
     d['tt_type_def'] = '\n'.join(def_ttype_statements)
+    d['datetime'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     save_cpp_file(template.format_map(d), '%s/%s'%(target_path, target_fname))
 
 
@@ -71,6 +74,7 @@ def generate_ftd_data_type_file(version, types, target_path,data_type_prefix):
     d['version'] = version
     d['project_code_upper'] = project_code.upper()
     d['tt_type_def'] = '\n'.join(lines)
+    d['datetime'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     save_cpp_file(template.format_map(d), '%s/%s'%(target_path, target_fname))
     
 host_data_type_template = './templates/host_data_type.template'
@@ -98,4 +102,5 @@ def generate_ftd_data_type_file(types, version,
     d['version'] = version
     d['t_type_def'] = ''
     d['tt_type_def'] = '\n'.join(lines)
+    d['datetime'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     save_cpp_file(template.format_map(d), '%s/%s'%(target_path, target_fname))

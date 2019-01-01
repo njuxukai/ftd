@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-
+import datetime
 from io import BytesIO
 from dtd_def import *
 from file_util import *
@@ -45,6 +45,7 @@ def generate_package_struct(version, package, target_path, version_number, field
     d['member_clone_lines'] = add_whitespaces(''.join(member_clone_lines), 8)
     d['version_number'] = version_number
     d['package_comment'] = package.comment
+    d['datetime'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     if package.same_as_id:
         d['mode'] = 'FTD_MODE_'+ package.model.upper()
     else:
@@ -296,6 +297,7 @@ def generate_package_include(version, packages, target_path):
     d['package_members'] = add_whitespaces('\n'.join(member_lines),4)
     d['read_cases'] = add_whitespaces('\n'.join(read_cases_lines), 8)
     d['retrieve_cases'] = add_whitespaces('\n'.join(retrieve_cases_lines),8)
+    d['datetime'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     target_fpath = '{0}/{1}/{2}'.format(target_path, version, include_all_headers) 
     save_cpp_file(template.format_map(d), target_fpath)
@@ -342,6 +344,7 @@ else"""
     d['default_on_package_section'] = add_whitespaces('\n'.join(package_sections),4)
     d['const_if_else_sections'] = add_whitespaces('\n'.join(const_if_else_sections),8)
     d['if_else_sections'] = add_whitespaces('\n'.join(if_else_sections),8)
+    d['datetime'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     target_fpath = '{0}/{1}/{2}'.format(target_path, version, package_cracer_header) 
     save_cpp_file(template.format_map(d), target_fpath)
 

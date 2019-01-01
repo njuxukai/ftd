@@ -4,7 +4,7 @@ import os
 from io import BytesIO
 from dtd_def import *
 from file_util import *
-
+import datetime
 
 host_struct_template = './templates/testcase_struct_compare.template'
 
@@ -26,4 +26,5 @@ def generate_struct_validation(fields,protocal_version, project_code, target_pat
     d['protocal_version'] = protocal_version
     d['host_struct_size_valid_lines'] = add_whitespaces('\n'.join(validate_lines), 12)
     d['host_ftd_struct_size_compare_lines'] = add_whitespaces('\n'.join(compare_lines), 12)
+    d['datetime'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     save_cpp_file(template.format_map(d), '%s/%s'%(target_path, fname))
