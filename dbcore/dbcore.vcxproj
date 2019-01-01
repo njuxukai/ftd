@@ -190,7 +190,6 @@ del /F EXCLUDE</Command>
     <ClInclude Include="ftdc_all.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="TestDB.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(McobjectDir)\samples\native\common\common.c" />
@@ -198,13 +197,11 @@ del /F EXCLUDE</Command>
     <ClCompile Include="ftdc_all.cpp" />
     <ClCompile Include="fund_transfer.cpp" />
     <ClCompile Include="genericdb.c" />
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="order_action.cpp" />
     <ClCompile Include="order_insert.cpp" />
     <ClCompile Include="qry_order.cpp" />
     <ClCompile Include="qry_trade.cpp" />
     <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="TestDB.cpp" />
     <ClCompile Include="user_login.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

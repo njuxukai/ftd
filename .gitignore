@@ -35,10 +35,11 @@
 *.opensdf
 /.vs/*
 ipch/*
-include/*
+/include/*
+/build/*
+/dbcore/genericdb.*
 /ftd/Debug
 /UnitTest++/obj/UnitTest++_vs14/Debug/UnitTest++_vs14.tlog
-/lib/debug
 /test_unit/Debug/test_unit.tlog
 /UnitTest++/obj/UnitTest++_vs14/Debug
 /test_unit/Debug
