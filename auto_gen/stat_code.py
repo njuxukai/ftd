@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*- 
 
 import os
-code_dirs = ['../ftd', '../swtraderapi', '.', '../include/']
+code_dirs = ['../ftd', '../swtraderapi', '.', '../include/', '../dbobject', '../SampleClient', 'SampleServer']
 code_types = set(['.cpp', '.h', '.py'])
 
 def stat_dir(dir, stat, stated_file_set):

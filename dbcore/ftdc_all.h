@@ -17,7 +17,7 @@
 #include <ftd/Errors.h>
 using namespace FTD;
 
-API_EXPORT PackageSPtr ftdcAll(const PackageSPtr pReq, mco_db_h db);
+API_EXPORT Package* ftdcAll(const Package* pReq, mco_db_h db);
 
 Package* processUserLogin(const Package* pReq, mco_db_h db);
 Package* processOrderInsert(const Package* pReq, mco_db_h db);

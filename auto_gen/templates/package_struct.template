@@ -34,11 +34,14 @@ struct {package_name} : public Package
 	virtual ~{package_name}()
 	{{}}
 
-	virutal Package* clone()
+	virtual Package* clone() const
 	{{
 		{package_name}* pCopy = new {package_name}();
+		memcpy(&pCopy->m_header, &m_header, sizeof(FtdcHeader));
 		pCopy->clear();
+
 {member_clone_lines}
+
 		return pCopy;
 	}}
 

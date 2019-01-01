@@ -2,8 +2,16 @@
 #include "EchoServer.h"
 #include <boost/format.hpp>
 #include <ftd/session.h>
+#include <dbcore/ftdc_all.h>
+#include <functional>
 
-//void processReq(FTD::Package* package, )
+void EchoServer::processReq(PackageSPtr pReq, mco_db_h db, SessionID sessionID)
+{
+	PackageSPtr pRsp = PackageSPtr(ftdcAll(pReq.get(), db));
+	if (pRsp.get())
+		Session::sendToTarget(*(pRsp.get()), sessionID);
+}
+
 EchoServer::EchoServer(std::string cfgFile, int frontID) :m_cfgFile(cfgFile), m_frontID(frontID), m_acceptor(0)
 {
 }
@@ -79,9 +87,11 @@ void EchoServer::onHeartBeatWarning()
 
 void EchoServer::OnPackage(const ReqUserLogin& req, const SessionID& id)
 {
-	RspUserLogin rsp;
+	//RspUserLogin rsp;
 	//m_DB.processReqUerLogin(m_frontID, id, req, rsp);
 	//Session::sendToTarget(rsp, id);
+	//EchoServer::processReq
+	m_DB2.submit(std::bind(&EchoServer::processReq, this, PackageSPtr(req.clone()), std::placeholders::_1, id));
 }
 
 void EchoServer::OnPackage(const ReqQryPrivateInitialData& req, const SessionID& id)

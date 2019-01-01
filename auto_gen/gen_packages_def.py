@@ -42,6 +42,7 @@ def generate_package_struct(version, package, target_path, version_number, field
     d['member_clear_lines'] = add_whitespaces('\n'.join(member_clear_lines), 8)
     d['member_merge_lines'] = add_whitespaces('\n'.join(member_merge_lines), 8)
     d['member_write_sections'] = add_whitespaces('\n'.join(member_write_sections), 8)
+    d['member_clone_lines'] = add_whitespaces(''.join(member_clone_lines), 8)
     d['version_number'] = version_number
     d['package_comment'] = package.comment
     if package.same_as_id:
@@ -178,7 +179,7 @@ if(p{0}.get() != nullptr)
 	nextWrite += fieldLen;
 	writeFieldCount += 1;
 }}
-"""
+""" 
     if field_info.use_vector():
         return vec_fmt.format(fname, fname[0].lower()+fname[1:], univerl_name)
     if field_info.use_field():
@@ -188,12 +189,30 @@ if(p{0}.get() != nullptr)
 
 
 def _format_member_clone_lines(field_info, field):
-    vector_format = """//std::vector<{2}>
-for(int i =0;i < {1}s.size(); i++)
-{
-    new
-}
-    """
+    univerl_name = field.get_universal_struct_name('')
+    fname = field_info.name
+    vec_fmt = """///std::vector<{2}> {1}s
+for(unsigned int i = 0;i < {1}s.size(); i++)
+{{
+    pCopy->{1}s.push_back({1}s[i]);
+}}
+"""
+    field_fmt = """///{2} {1}
+memcpy(&(pCopy->{1}), &{1}, sizeof({2}));
+"""
+    ptr_fmt = """///{2}Ptr p{0}
+if (p{0}.get())
+{{
+    pCopy->p{0} = {2}Ptr(new {2}());
+    memcpy(pCopy->p{0}.get(),p{0}.get(),sizeof({2}));
+}}
+"""
+    if field_info.use_vector():
+        return vec_fmt.format(fname, fname[0].lower()+fname[1:], univerl_name)
+    if field_info.use_field():
+        return field_fmt.format(fname, fname[0].lower()+fname[1:],univerl_name)
+    if field_info.use_smart_ptr():
+        return ptr_fmt.format(fname, fname[0].lower()+fname[1:],univerl_name)
 
 
 

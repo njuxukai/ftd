@@ -83,7 +83,7 @@ MCO_RET show_db(mco_db_h db)
 
 void processTask(mco_db_h db, PackageSPtr pPackage)
 {
-	PackageSPtr pRsp = PackageSPtr(ftdcAll(pPackage, db));
+	PackageSPtr pRsp = PackageSPtr(ftdcAll(pPackage.get(), db));
 	printRspPackage(pRsp.get());
 }
 
