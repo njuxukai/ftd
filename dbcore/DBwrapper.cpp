@@ -214,7 +214,7 @@ void McoDBWrapperImpl::initDB()
 	mco_db_params_init(&db_params);                  /* Initialize the params with default values */
 	db_params.mem_page_size = MEMORY_PAGE_SIZE;    /* Set page size for in-memory part */
 	db_params.disk_page_size = PSTORAGE_PAGE_SIZE;  /* Set page size for persistent storage */
-	db_params.db_max_connections = 1;                   /* Set total number of connections to the database */
+	db_params.db_max_connections = 10;                   /* Set total number of connections to the database */
 	db_params.db_log_type = UNDO_LOG;            /* Set log type */
 #ifdef EXTREMEDB_LICENSE_KEY
 	db_params.license_key = EXTREMEDB_LICENSE_KEY;
@@ -272,7 +272,7 @@ void McoDBWrapperImpl::worker()
 		printf("mco_db_connect failure[%d]\n", (int)rc);
 		return;
 	}
-		
+	mco_disk_transaction_policy(db, MCO_COMMIT_BUFFERED);
 	while (!m_done || !m_reqQueue.empty())
 	{
 		auto pTask = m_reqQueue.wait_and_pop(20);

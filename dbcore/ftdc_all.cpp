@@ -51,15 +51,15 @@ void populate_db(mco_db_h db)
 			user.broker_id = 8080;
 			user.user_id = j + 1;
 			user.password = "test";
-			//printf("[%d]To Insert[%d]\n", j, user.user_id);
+			printf("[%d]To Insert[%d]\n", j, (uint4)user.user_id);
 			rc = mco_trans_commit(t);
 			if (MCO_S_OK == rc)
 			{
-				printf("[%d]Insert Success[%d]\n", j, (uint4)user.user_id);
+				//printf("[%d]Insert Success[%d]\n", j, (uint4)user.user_id);
 			}
 			else
 			{
-				printf("[%d]Insert failure[%d]\n", j, (uint4)user.user_id);
+				//printf("[%d]Insert failure[%d]\n", j, (uint4)user.user_id);
 			}
 		}
 	}

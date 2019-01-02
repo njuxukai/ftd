@@ -8,7 +8,8 @@ int main()
 {
 	TraderClient client;
 	ApiParameter parameter = { 0 };
-	parameter.loginField.UserID = 1000;
+	parameter.loginField.UserID = 100;
+	strcpy(parameter.loginField.Password, "test");
 	parameter.loginField.BrokerID = 99;
 	strcpy(parameter.frontAddress, "tcp:\\127.0.0.1:8000");
 	strcpy(parameter.frontAddress2, "tcp:\\127.0.0.1:9000");
