@@ -5,6 +5,7 @@
 #include <dbcore/ftdc_all.h>
 #include <functional>
 
+
 void EchoServer::processReq(PackageSPtr pReq, mco_db_h db, SessionID sessionID)
 {
 	PackageSPtr pRsp = PackageSPtr(ftdcAll(pReq.get(), db));
@@ -14,6 +15,7 @@ void EchoServer::processReq(PackageSPtr pReq, mco_db_h db, SessionID sessionID)
 
 EchoServer::EchoServer(std::string cfgFile, int frontID) :m_cfgFile(cfgFile), m_frontID(frontID), m_acceptor(0)
 {
+	m_DB2.populate(std::function<void(mco_db_h)>(populate_db));
 }
 
 EchoServer::~EchoServer()

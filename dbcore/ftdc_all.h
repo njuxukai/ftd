@@ -26,6 +26,6 @@ Package* processFundTransfer(const Package* pReq, mco_db_h db);
 Package* processQryOrder(const Package* pReq, mco_db_h db);
 Package* processQryTrade(const Package* pReq, mco_db_h db);
 
-
+API_EXPORT void populate_db(mco_db_h db);
 
 #endif

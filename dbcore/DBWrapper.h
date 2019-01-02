@@ -30,6 +30,7 @@ public:
 	McoDBWrapper();
 	~McoDBWrapper();
 	void submit(const DBTask& f);
+	void populate(const DBTask& f);
 private:
 	McoDBWrapperImpl *m_pImpl;
 };

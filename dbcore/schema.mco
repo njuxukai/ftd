@@ -1,10 +1,13 @@
 #define int1  signed<1>
 #define int2  signed<2>
 #define int4  signed<4>
+#define uint1  unsigned<1>
+#define uint2  unsigned<2>
+#define uint4  unsigned<4>
 #define uint8 unsigned<8>
-#define price_type decimal< 10, 3>
-#define amount_type decimal< 14, 2>
-#define volume_type unsigned<8>
+#define PriceType decimal< 10, 3>
+#define AmountType decimal< 14, 2>
+#define VolumeType unsigned<8>
 
 
 declare database genericdb;
@@ -50,10 +53,71 @@ transient class Part2
 };
 
 
-transient class User
+persistent class User
 {
 	int4 broker_id;
 	unsigned<4> user_id;
 	char<8> password;
 	unique tree<user_id> idx_user_id;
+};
+
+persistent class OrderInsert
+{
+	uint2 owner_type;
+	int4 front_id;
+	int4 session_id;
+	int4 order_ref;
+	int4 user_id;
+	int4 investor_id;
+	char<10> secu_account;
+	string security_code;
+	uint1 exchange_type;
+	uint1 bs_flag;
+	int4 business_code;
+	uint1 price_type;
+	PriceType price;
+	VolumeType volume;
+};
+
+persistent class Order
+{
+	uint2 owner_type;
+	int4 front_id;
+	int4 session_id;
+	int4 order_ref;
+	int4 user_id;
+	int4 investor_id;
+	char<10> secu_account;
+	string security_code;
+	uint1 exchange_type;
+	uint1 bs_flag;
+	int4 business_code;
+	uint1 price_type;
+	PriceType price;
+	VolumeType volume;
+	int4 branch_id;
+	int4 pbu_id;
+	char<10> order_sys_id;
+	char<10> order_exchange_id;
+	uint1 status;
+	VolumeType volume_traded;
+	AmountType amount_traded;
+};
+
+persistent class OrderAction
+{
+	uint2 owner_type;
+	int4 user_id;
+	int4 investor_id;
+	int4 front_id;
+	int4 session_id;
+	int4 order_ref;
+	char<10> order_sys_id;
+	uint1 exchange_type;
+	char<10> order_exchange_id;
+	char<10> secu_account;
+	string security_code;
+	uint1 bs_flag;
+	VolumeType volume;
+	PriceType price;
 };

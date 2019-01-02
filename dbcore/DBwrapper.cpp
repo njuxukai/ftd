@@ -32,7 +32,7 @@ const int nRecords = 1000000;
 /* Define transaction block size to reduce time for inserts */
 const int nInsertsPerTransaction = 10000;
 
-const int nThreadCount = 1;
+const int nThreadCount = 2;
 
 
 template<typename T>
@@ -138,13 +138,16 @@ public:
 		m_reqQueue.push(std::move(f));
 	}
 
+	void populate(const DBTask& pf);
 private:
 	std::atomic<bool> m_done;
 	ThreadsafeQueue<DBTask> m_reqQueue;
 	JoinThreads m_joiner;
 	std::vector<std::thread> m_threads;
-	void InitDB();
-	void InitThreads();
+	void initDB();
+	void initThreads();
+	
+	
 private:
 	mco_device_t       dev[N_DEVICES];
 	mco_db_params_t    db_params;
@@ -158,8 +161,8 @@ private:
 
 McoDBWrapperImpl::McoDBWrapperImpl(): m_done(false),m_joiner(m_threads)
 {
-	InitDB();
-	InitThreads();
+	initDB();
+	initThreads();
 }
 
 McoDBWrapperImpl::~McoDBWrapperImpl()
@@ -170,8 +173,8 @@ McoDBWrapperImpl::~McoDBWrapperImpl()
 	free(dev[1].dev.conv.ptr);
 	sample_os_shutdown();
 }
-
-void McoDBWrapperImpl::InitDB()
+ 
+void McoDBWrapperImpl::initDB()
 {
 	MCO_RET            rc;
 
@@ -225,7 +228,25 @@ void McoDBWrapperImpl::InitDB()
 	}
 }
 
-void McoDBWrapperImpl::InitThreads()
+void McoDBWrapperImpl::populate(const DBTask& task)
+{
+	mco_db_h db = 0;
+	auto rc = mco_db_connect(db_name, &db);
+	if (MCO_S_OK != rc)
+	{
+		printf("Populate mco_db_connect failure[%d]\n", (int)rc);
+		return;
+	}
+	else
+	{
+		printf("Populate mco_db_connect succ.\n");
+	}
+		
+	task(db);
+	mco_db_disconnect(db);
+}
+
+void McoDBWrapperImpl::initThreads()
 {
 	try 
 	{
@@ -247,7 +268,11 @@ void McoDBWrapperImpl::worker()
 	mco_db_h db = 0;
 	auto rc = mco_db_connect(db_name, &db);
 	if (MCO_S_OK != rc)
+	{
+		printf("mco_db_connect failure[%d]\n", (int)rc);
 		return;
+	}
+		
 	while (!m_done || !m_reqQueue.empty())
 	{
 		auto pTask = m_reqQueue.wait_and_pop(20);
@@ -280,3 +305,10 @@ void McoDBWrapper::submit(const DBTask& f)
 	}
 }
 
+void McoDBWrapper::populate(const DBTask& f)
+{
+	if (m_pImpl)
+	{
+		m_pImpl->populate(f);
+	}
+}
