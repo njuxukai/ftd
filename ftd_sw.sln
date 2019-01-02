@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ftd", "ftd\ftd.vcxproj", "{D3B28290-1A56-4B7E-816E-9811C6E77693}"
 EndProject
@@ -23,6 +23,7 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SampleServer", "SampleServer\SampleServer.vcxproj", "{3025E94C-F349-43A3-B592-0E7DFAE7EDEC}"
 	ProjectSection(ProjectDependencies) = postProject
 		{D3B28290-1A56-4B7E-816E-9811C6E77693} = {D3B28290-1A56-4B7E-816E-9811C6E77693}
+		{FB3F75D0-C31A-4A3C-AD44-C1E317B2F768} = {FB3F75D0-C31A-4A3C-AD44-C1E317B2F768}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SampleClient", "SampleClient\SampleClient.vcxproj", "{5A3B9755-79E0-48AB-89C7-1DC2CC3B2C31}"
@@ -34,6 +35,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rqp", "rqp\rqp.vcxproj", "{8C63C69B-84B9-448B-AE6F-A0EEA4AA2B51}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dbcore", "dbcore\dbcore.vcxproj", "{FB3F75D0-C31A-4A3C-AD44-C1E317B2F768}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D3B28290-1A56-4B7E-816E-9811C6E77693} = {D3B28290-1A56-4B7E-816E-9811C6E77693}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

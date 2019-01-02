@@ -1,7 +1,22 @@
 #include "DBWrapper.h"
-#include <common.h>
-#include <iostream>
 
+#include <common.h>
+#include "genericdb.hpp"
+
+#include <iostream>
+#include <thread>
+#include <atomic>
+#include <vector>
+#include <thread>
+#include <chrono> 
+#include <condition_variable>
+#include <queue>
+#include <atomic>
+
+
+
+#define  MAX_DEVICES           10
+#define  N_DEVICES             4
 
 char sample_descr[] = {
 	"Sample 'disk_file' opens a database using FILE memory devices.\n"
@@ -19,15 +34,135 @@ const int nInsertsPerTransaction = 10000;
 
 const int nThreadCount = 1;
 
-using namespace genericdb;
 
-McoDBWrapper::McoDBWrapper(): m_done(false),m_joiner(m_threads)
+template<typename T>
+class ThreadsafeQueue
+{
+private:
+	mutable std::mutex mut;
+	std::queue<T> data_queue;
+	std::condition_variable data_cond;
+public:
+	ThreadsafeQueue()
+	{}
+
+	void push(T data)
+	{
+		std::lock_guard<std::mutex> lk(mut);
+		data_queue.push(std::move(data));
+		data_cond.notify_one();
+	}
+
+	void wait_and_pop(T& value, int milliSeconds)
+	{
+		std::unique_lock<std::mutex> lk(mut);
+		bool wait_result = data_cond.wait_for(lk, std::chrono::milliseconds(milliSeconds),
+			[this] {return !data_queue.empty(); });
+		if (wait_result)
+		{
+			value = std::move(data_queue.front());
+			data_queue.pop();
+		}
+	}
+
+	std::shared_ptr<T> wait_and_pop(int milliSeconds)
+	{
+		std::unique_lock<std::mutex> lk(mut);
+		bool wait_result = data_cond.wait_for(lk, std::chrono::milliseconds(milliSeconds),
+			[this] {return !data_queue.empty(); });
+		std::shared_ptr<T> res;
+		if (wait_result)
+		{
+			res = std::make_shared<T>(std::move(data_queue.front()));
+			data_queue.pop();
+		}
+		return res;
+	}
+
+	bool try_pop(T& value)
+	{
+		std::lock_guard<std::mutex> lk(mut);
+		if (data_queue.empty())
+			return false;
+		value = std::move(data_queue.front());
+		data_queue.pop();
+		return true;
+	}
+
+	std::shared_ptr<T> try_pop()
+	{
+		std::lock_guard<std::mutex> lk(mut);
+		if (data_queue.empty())
+			return std::shared_ptr<T>();
+		std::shared_ptr<T> res(
+			std::make_shared<T>(std::move(data_queue.front())));
+		data_queue.pop();
+		return res;
+	}
+
+	bool empty() const
+	{
+		std::lock_guard<std::mutex> lk(mut);
+		return data_queue.empty();
+	}
+};
+
+
+class JoinThreads
+{
+	std::vector<std::thread>& threads;
+public:
+	explicit JoinThreads(std::vector<std::thread>& threads_) :
+		threads(threads_)
+	{}
+
+	~JoinThreads()
+	{
+		for (unsigned long i = 0; i<threads.size(); ++i)
+		{
+			if (threads[i].joinable())
+				threads[i].join();
+		}
+	}
+};
+
+class  McoDBWrapperImpl
+{
+public:
+	McoDBWrapperImpl();
+
+	~McoDBWrapperImpl();
+
+	void submit(const DBTask& f)
+	{
+		m_reqQueue.push(std::move(f));
+	}
+
+private:
+	std::atomic<bool> m_done;
+	ThreadsafeQueue<DBTask> m_reqQueue;
+	JoinThreads m_joiner;
+	std::vector<std::thread> m_threads;
+	void InitDB();
+	void InitThreads();
+private:
+	mco_device_t       dev[N_DEVICES];
+	mco_db_params_t    db_params;
+private:
+	void worker();
+	McoDBWrapperImpl(const McoDBWrapperImpl&) = delete;
+	McoDBWrapperImpl& operator=(const McoDBWrapperImpl&) = delete;
+};
+
+
+
+McoDBWrapperImpl::McoDBWrapperImpl(): m_done(false),m_joiner(m_threads)
 {
 	InitDB();
 	InitThreads();
 }
 
-McoDBWrapper::~McoDBWrapper()
+McoDBWrapperImpl::~McoDBWrapperImpl()
 {
 	m_done = true;
 	mco_runtime_stop();
@@ -36,7 +171,7 @@ McoDBWrapper::~McoDBWrapper()
 	sample_os_shutdown();
 }
 
-void McoDBWrapper::InitDB()
+void McoDBWrapperImpl::InitDB()
 {
 	MCO_RET            rc;
 
@@ -90,14 +225,14 @@ void McoDBWrapper::InitDB()
 	}
 }
 
-void McoDBWrapper::InitThreads()
+void McoDBWrapperImpl::InitThreads()
 {
 	try 
 	{
 		for (int i = 0; i < nThreadCount; i++)
 		{
 			m_threads.push_back(
-				std::thread(&McoDBWrapper::worker, this));
+				std::thread(&McoDBWrapperImpl::worker, this));
 		}
 	}
 	catch (...)
@@ -107,7 +242,7 @@ void McoDBWrapper::InitThreads()
 	
 }
 
-void McoDBWrapper::worker()
+void McoDBWrapperImpl::worker()
 {
 	mco_db_h db = 0;
 	auto rc = mco_db_connect(db_name, &db);
@@ -115,16 +250,6 @@ void McoDBWrapper::worker()
 		return;
 	while (!m_done || !m_reqQueue.empty())
 	{
-		/*
-		auto ppReq = m_reqQueue.wait_and_pop(20);
-		if (ppReq.get())
-		{
-		PackageSPtr pReq = std::move(*(ppReq.get()));
-		PackageSPtr pRsp = ftdcAll(pReq, db);
-		if(m_respCallback)
-		m_respCallback(pRsp);
-		}
-		*/
 		auto pTask = m_reqQueue.wait_and_pop(20);
 		if (pTask.get())
 		{
@@ -134,17 +259,24 @@ void McoDBWrapper::worker()
 	mco_db_disconnect(db);
 }
 
+McoDBWrapper::McoDBWrapper(): m_pImpl(new McoDBWrapperImpl())
+{}
 
-/*
-void McoDBWrapper::submit(const DBTask& task)
+McoDBWrapper::~McoDBWrapper()
 {
-m_reqQueue.push(task);
-}*/
-
-
-/*
-void McoDBWrapper::registerResponseCallback(Callback callback)
-{
-m_respCallback = callback;
+	if (m_pImpl)
+	{
+		delete m_pImpl;
+		m_pImpl = 0;
+	}
 }
-*/
+
+
+void McoDBWrapper::submit(const DBTask& f)
+{
+	if (m_pImpl)
+	{
+		m_pImpl->submit(f);
+	}
+}
+
