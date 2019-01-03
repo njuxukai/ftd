@@ -340,6 +340,8 @@
 			<item name="ExchangeCode" comment="交易所代码"/>
 			<item name="SecurityAccount" comment="证券账户"/>
 			<item name="InstrumentCode" comment="证券代码"/>
+			<item name="FrontID" comment="用户代码"/>
+			<item name="SessionID" comment="会话代码"/>
 			<item name="OrderRef" comment="报单引用"/>
 			<item name="UserID" comment="用户编码"/>
 			<item name="Direction" comment="报单价格方向"/>

@@ -99,27 +99,18 @@ void EchoServer::OnPackage(const ReqUserLogin& req, const SessionID& id)
 
 void EchoServer::OnPackage(const ReqQryPrivateInitialData& req, const SessionID& id)
 {
-	RspQryPrivateInitialData rsp;
 	//1 服务器端注册会话私有流订阅
 	resigterSequenceSubscription(id, req.dissenminationstartField.SequenceSeries);
 	//2 按需查询私有数据返回
-	//m_DB.processReqInitialPrivateData(m_frontID, id, req, rsp);
-	//Session::sendToTarget((Package&)rsp, id);
 	m_DB2.submit(std::bind(&EchoServer::processReq, this, PackageSPtr(req.clone()), std::placeholders::_1, id));
 }
 
 void EchoServer::OnPackage(const ReqOrderInsert& req, const SessionID& id)
 {
-	RspOrderInsert rsp;
-	std::vector<CFtdcExecutionReportField> reports;
-	//m_DB.processReqInputOrder(m_frontID, id, req, rsp, reports);
-	//Session::sendToTarget(rsp, id);
-	m_DB2.submit(std::bind(&EchoServer::processReq, this, PackageSPtr(req.clone()), std::placeholders::_1, id));
-	for (unsigned int i = 0; i < reports.size(); i++)
-	{
-		publishExecutionReport(reports[i]);
-	}
-
+	ReqOrderInsert *pClone = (ReqOrderInsert*)req.clone();
+	pClone->inputOrderField.FrontID = m_frontID;
+	pClone->inputOrderField.SessionID = id;
+	m_DB2.submit(std::bind(&EchoServer::processReq, this, PackageSPtr(pClone), std::placeholders::_1, id));
 }
 
 

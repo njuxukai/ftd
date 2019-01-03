@@ -74,3 +74,5 @@ ipch/*
 /dbcore/disk_file.log
 /export/Debug
 
+/swtraderapi/XcpFtdcUserApiStruct.h
+/swtraderapi/XcpFtdcUserApiDataType.h
