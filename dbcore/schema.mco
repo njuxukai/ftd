@@ -12,63 +12,24 @@
 
 declare database genericdb;
 
-transient class A {
-    unsigned<4> ui4;
-    
-    list;
-};
-
-
-persistent class B {
-    unsigned<4> ui4;
-    
-    list;
-};
-
-struct Dimensions
-{
-  float width, length, height;
-};
-
-transient class Part
-{
-  string      type;
-  string      name;
-  float       price;
-  unsigned<4> code;
-  Dimensions  dim;
-  unsigned<4> options[10];
-
-  hash< code >        ByCode [ 10000 ];
-  tree< type, name >  ByType; // ordered by type, name
-  unique tree<code> IdxCode;
-};
-
-transient class Part2
-{
-	int4 broker_id;
-	char<8> password;
-	unsigned<4> user_id;
-	unique tree<user_id> IdxCode;
-};
-
 
 persistent class User
 {
 	int4 broker_id;
 	unsigned<4> user_id;
 	char<8> password;
-	unique tree<user_id> idx_user_id;
+
+	unique tree<user_id> UserIdIdx;
 };
 
 persistent class OrderInsert
 {
 	uint2 owner_type;
+	int4 user_id;
+	int4 investor_id;
 	int4 front_id;
 	int4 session_id;
 	int4 order_ref;
-	int4 user_id;
-	int4 investor_id;
 	char<10> secu_account;
 	string security_code;
 	uint1 exchange_type;
@@ -77,6 +38,9 @@ persistent class OrderInsert
 	uint1 price_type;
 	PriceType price;
 	VolumeType volume;
+
+	unique tree<front_id, session_id, order_ref> SessionIdx;
+	tree<investor_id> InvestorIdx;
 };
 
 persistent class Order
@@ -97,11 +61,21 @@ persistent class Order
 	VolumeType volume;
 	int4 branch_id;
 	int4 pbu_id;
-	char<10> order_sys_id;
-	char<10> order_exchange_id;
+	char<10> order_sys_sno;
+	char<10> order_exchange_sno;
 	uint1 status;
 	VolumeType volume_traded;
 	AmountType amount_traded;
+	VolumeType volume_cancelled;
+
+	tree<front_id, session_id, order_ref> SessionIdx;
+	tree<order_exchange_sno, exchange_type, branch_id> ExchangeIdx;
+	unique tree<order_sys_sno> SysIdx;
+	tree<investor_id> InvestorIdx;
+
+	event<new> OrderNewEvent;
+	event<volume_traded update> OrderTradedVolumeUpdateEvent;
+	event<status> OrderStatusUpdateEvent;
 };
 
 persistent class OrderAction
@@ -112,12 +86,45 @@ persistent class OrderAction
 	int4 front_id;
 	int4 session_id;
 	int4 order_ref;
-	char<10> order_sys_id;
+	char<10> order_sys_sno;
 	uint1 exchange_type;
-	char<10> order_exchange_id;
+	char<10> order_exchange_sno;
+	int4 branch_id;
 	char<10> secu_account;
 	string security_code;
 	uint1 bs_flag;
 	VolumeType volume;
 	PriceType price;
+	char<10> action_sys_sno;
+	char<10> action_exchange_sno;
+
+	unique tree<action_sys_sno> SysIdx;
+	tree<action_sys_sno, exchange_type, branch_id> ExchangeIdx;
+	tree<investor_id> InvestorIdx;
+
+};
+
+persistent class Trade
+{
+	int4 user_id;
+	int4 investor_id;
+	char<10> secu_account;
+	string security_code;
+	uint1 exchange_type;
+	uint1 bs_flag;
+	int4 business_code;
+	uint1 price_type;
+	PriceType price;
+	VolumeType volume;
+	int4 branch_id;
+	int4 pbu_id;
+	char<10> order_sys_sno;
+	char<10> order_exchange_sno;
+	uint1 status;
+	VolumeType volume_traded;
+	AmountType amount_traded;
+	int4 trade_sys_sno;
+	char<10> trade_exchange_sno;
+
+	tree<order_sys_sno> OrderSysIdx;
 };

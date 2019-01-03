@@ -95,7 +95,7 @@ echo stdafx.h &gt;&gt; EXCLUDE
 echo release\ &gt;&gt; EXCLUDE
 echo debug\ &gt;&gt; EXCLUDE
 echo double-conversion\ &gt;&gt; EXCLUDE
-xcopy *.h /S/Y/E/I /EXCLUDE:EXCLUDE ..\include\ftd 
+xcopy *.h /S/Y/E/I /EXCLUDE:EXCLUDE ..\export\include\ftd 
 del /F EXCLUDE
 </Command>
     </PostBuildEvent>

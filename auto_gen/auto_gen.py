@@ -4,7 +4,7 @@ import os
 path = '../spec/'
 files = ['ftd_3_0.xml',]
 target_path = '../ftd/'
-host_targe_path = '../include/xcp/'
+host_targe_path = '../swtraderapi/'
 testcase_target_path = '../test_unit/'
 
 project_code = 'Xcp'

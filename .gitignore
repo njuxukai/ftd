@@ -46,7 +46,8 @@
 ipch/*
 /include/*
 /build/*
-/ftd/Debug
+/export/*
+/dbcore/genericdb.*
 /UnitTest++/obj/UnitTest++_vs14/Debug/UnitTest++_vs14.tlog
 /test_unit/Debug/test_unit.tlog
 /UnitTest++/obj/UnitTest++_vs14/Debug
@@ -64,12 +65,8 @@ ipch/*
 /ftd/double-conversion
 
 /ftd/FTD30/*
-
-/include/*
 /test_unit/TestXcpStructTestCase.cpp
 /test_unit/TestFTDFieldWriteReadTestCase.cpp
-
-
 /dbcore/genericdb.h
 /dbcore/genericdb.c
 /dbcore/genericdb.hpp

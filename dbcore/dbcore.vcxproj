@@ -95,7 +95,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>ISLIB;LIB_API_EXPORT;WIN32;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>.;$(SolutionDir)\include;$(McobjectDir)\include;$(McobjectDir)\samples\native\common;$(McobjectDir)\include\ha;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;$(SolutionDir)\export\include;$(McobjectDir)\include;$(McobjectDir)\samples\native\common;$(McobjectDir)\include\ha;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4290;4267;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -112,9 +112,9 @@ echo stdafx.h &gt;&gt; EXCLUDE
 echo release\ &gt;&gt; EXCLUDE
 
 echo debug\ &gt;&gt; EXCLUDE
-xcopy *.h /S/Y/E/I /EXCLUDE:EXCLUDE ..\include\dbcore\ 
+xcopy *.h /S/Y/E/I /EXCLUDE:EXCLUDE ..\export\include\dbcore\ 
 
-xcopy *.hpp /S/Y/E/I /EXCLUDE:EXCLUDE ..\include\dbcore\ 
+xcopy *.hpp /S/Y/E/I /EXCLUDE:EXCLUDE ..\export\include\dbcore\ 
 
 del /F EXCLUDE</Command>
     </PostBuildEvent>
