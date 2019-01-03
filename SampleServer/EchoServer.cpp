@@ -91,11 +91,10 @@ void EchoServer::onHeartBeatWarning()
 
 void EchoServer::OnPackage(const ReqUserLogin& req, const SessionID& id)
 {
-	//RspUserLogin rsp;
-	//m_DB.processReqUerLogin(m_frontID, id, req, rsp);
-	//Session::sendToTarget(rsp, id);
-	//EchoServer::processReq
-	m_DB2.submit(std::bind(&EchoServer::processReq, this, PackageSPtr(req.clone()), std::placeholders::_1, id));
+	ReqUserLogin* pCopy = (ReqUserLogin*)req.clone();
+	pCopy->reqUserLoginField.FrontID = m_frontID;
+	pCopy->reqUserLoginField.SessionID = id;
+	m_DB2.submit(std::bind(&EchoServer::processReq, this, PackageSPtr(pCopy), std::placeholders::_1, id));
 }
 
 void EchoServer::OnPackage(const ReqQryPrivateInitialData& req, const SessionID& id)
@@ -121,4 +120,12 @@ void EchoServer::OnPackage(const ReqOrderInsert& req, const SessionID& id)
 		publishExecutionReport(reports[i]);
 	}
 
+}
+
+
+void EchoServer::OnPackage(RspUserLogin& package, const SessionID& id)
+{
+	package.rspUserLoginField.FrontID = m_frontID;
+	package.rspUserLoginField.SessionID = id;
+	package.rspUserLoginField.HeartbeatInterval = 5;
 }

@@ -10,7 +10,10 @@ Package* ftdcAll(const Package* pReq, mco_db_h db)
 		pRsp = processUserLogin(pReq, db);
 		break;
 	case TID_UserLogout:
-		pRsp = 0;
+		pRsp = processUserLogout(pReq, db);
+		break;
+	case TID_QryPrivateInitialData:
+		pRsp = processQryPrivateInitialData(pReq, db);
 		break;
 	case TID_OrderInsert:
 		pRsp = processOrderInsert(pReq, db);

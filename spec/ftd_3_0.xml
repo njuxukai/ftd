@@ -269,6 +269,8 @@
 			<item name="BrokerID" comment="经纪公司代码"/>
 			<item name="UserID" comment="用户代码"/>
 			<item name="Password" comment="密码"/>
+			<item name="FrontID" comment="前置编号"/>
+			<item name="SessionID" comment="会话编号"/>
 			<item name="UserProductInfo" comment="用户端产品信息"/>
 			<item name="InterfaceProductInfo" comment="接口端产品信息"/>
 			<item name="ProtocolInfo" comment="协议信息"/>
@@ -335,11 +337,13 @@
 			<item name="RequestID" comment="请求编号"/>
 			<item name="BrokerID" comment="经纪公司编码"/>
 			<item name="InvestorID" comment="投资者编码"/>
-			<item name="InstrumentCode" comment="证券代码"/>
 			<item name="ExchangeCode" comment="交易所代码"/>
+			<item name="SecurityAccount" comment="证券账户"/>
+			<item name="InstrumentCode" comment="证券代码"/>
 			<item name="OrderRef" comment="报单引用"/>
 			<item name="UserID" comment="用户编码"/>
 			<item name="Direction" comment="报单价格方向"/>
+			<item name="BusinessCode" comment="委托具体类型代码"/>
 			<item name="PriceType" comment="报单价格条件"/>
 			<item name="LimitPrice" comment="限制价格"/>
 			<item name="VolumeTotalOrginal" comment="报单数量"/>
@@ -666,6 +670,7 @@
 		<itemDefine name="BrokerID" type="FTDIntType" comment="经纪公司代码"/>
 		<itemDefine name="BranchID" type="FTDIntType" comment="营业部编码"/>
 		<itemDefine name="BeginDate" type="FTDDate" comment="开始日期"/>
+		<itemDefine name="BusinessCode" type="FTDIntType" comment="业务类型"/>
 		
 		<itemDefine name="CancelTime" type="FTDTime" comment="撤销时间"/>
 		<itemDefine name="ClientIPAddress" type="FTDStringType&lt;20&gt;" comment="终端IP地址"/>
@@ -746,7 +751,7 @@
 		<itemDefine name="StatusSplitMerge" type="FTDBoolFlag" comment="分级基金允许分拆合并状态"/>
 		<itemDefine name="StatusSubscribe" type="FTDBoolFlag" comment="ETF是否允许申购"/>
 		<itemDefine name="StatusRedemption" type="FTDBoolFlag" comment="ETF是否允许赎回"/>
-			
+		<itemDefine name="SecurityAccount" type="FTDSecurityAccount" comment="ETF是否允许赎回"/>	
 		<itemDefine name="TimeStamp" type="FTDTimeStamp" comment="时间戳"/>
 		<itemDefine name="TradingDay" type="FTDDate" comment="交易日"/>
 		<itemDefine name="TradeDate" type="FTDDate" comment="成交日期"/>
@@ -890,5 +895,6 @@
 			<enumValue name="1" comment="绝对量"/>
 		</typeDefine>
 		<typeDefine name="FTDSysID" baseType="FTDIntType" comment="系统唯一编号，用在报单委托成交等" length="4" precision="0"/>
+		<typeDefine name="FTDSecurityAccount" baseType="FTDStringType&lt;10&gt;" comment="沪深交易所证券账户" length="10" precision="0"/>
 	</types>
 </ftd>

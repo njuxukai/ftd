@@ -43,6 +43,8 @@ public:
 
 	virtual void OnPackage(const ReqOrderInsert& package, const SessionID& id);
 
+	virtual void OnPackage(RspUserLogin& package, const SessionID& id);
+
 	void processReq(PackageSPtr pReq, mco_db_h db, SessionID sessionID);
 
 	//私有流订阅管理

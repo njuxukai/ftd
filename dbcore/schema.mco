@@ -31,9 +31,9 @@ persistent class OrderInsert
 	int4 session_id;
 	int4 order_ref;
 	char<10> secu_account;
-	string security_code;
+	string instrument_code;
 	uint1 exchange_type;
-	uint1 bs_flag;
+	uint1 direction;
 	int4 business_code;
 	uint1 price_type;
 	PriceType price;
@@ -75,7 +75,7 @@ persistent class Order
 
 	event<new> OrderNewEvent;
 	event<volume_traded update> OrderTradedVolumeUpdateEvent;
-	event<status> OrderStatusUpdateEvent;
+	event<status update> OrderStatusUpdateEvent;
 };
 
 persistent class OrderAction

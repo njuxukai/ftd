@@ -43,7 +43,7 @@ public:
 : m_enabled( true ), m_receivedLogon( false ),
   m_sentLogout( false ), m_sentLogon( false ),
   m_sentReset( false ), m_receivedReset( false ),
-  m_initiate( false ), m_logonTimeout( 10 ), 
+  m_initiate( false ), m_logonTimeout( 5 ), 
   m_logoutTimeout( 2 ), m_testRequest( 0 ),
   m_pStore( 0 ), m_pLog( 0 ) {}
 

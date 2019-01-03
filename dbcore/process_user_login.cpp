@@ -53,7 +53,7 @@ Package* processUserLogin(const Package* pReq, mco_db_h db)
 void processUserLoginTransaction(const ReqUserLogin* pReq, mco_trans_h t, RspUserLogin* pRsp)
 {
 	User user;
-	MCO_RET rc = User_idx_user_id_find(t, pReq->reqUserLoginField.UserID, &user);
+	MCO_RET rc = User_UserIdIdx_find(t, pReq->reqUserLoginField.UserID, &user);
 	if (MCO_S_OK != rc)
 	{
 		throw(MCO::IndexFindError("用户不存在"));
@@ -76,6 +76,7 @@ Package* processUserLogin(const Package* pReq, mco_db_h db)
 	pRsp->rspUserLoginField.UserID = pReqUserLogin->reqUserLoginField.UserID;
 	pRsp->pErrorField = CFtdcErrorFieldPtr(new CFtdcErrorField());
 	memset(pRsp->pErrorField.get(), 0, sizeof(CFtdcErrorField));
+	pRsp->rspUserLoginField.HeartbeatInterval = 3;
 	mco_trans_h t = 0;
 	MCO_RET rc = MCO_S_OK;
 	rc = mco_trans_start(db, MCO_READ_WRITE, MCO_TRANS_FOREGROUND, &t);
