@@ -4,7 +4,7 @@
 
 using namespace genericdb;
 
-void processOrderInsertTransaction(const ReqOrderInsert* pReq, mco_trans_h t, RspOrderInsert* pRsp)
+void InsertToOrderInsert(const ReqOrderInsert* pReq, mco_trans_h t, RspOrderInsert* pRsp)
 {
 	MCO_RET rc;
 	OrderInsert orderInsert;
@@ -20,6 +20,9 @@ void processOrderInsertTransaction(const ReqOrderInsert* pReq, mco_trans_h t, Rs
 	}
 	
 }
+void insertToOrderInsert(const ReqOrderInsert* pReq, mco_trans_h t, RspOrderInsert* pRsp);
+
+void verifyInputOrderAndDeliverToExchange(const ReqOrderInsert* pReq, mco_trans_h t, RspOrderInsert* pRsp);
 
 Package* processOrderInsert(const Package* pReq, mco_db_h db)
 {
@@ -28,27 +31,46 @@ Package* processOrderInsert(const Package* pReq, mco_db_h db)
 	pRsp->m_header.sequenceNO = pReq->m_header.sequenceNO;
 	pRsp->m_header.sequenceSeries = pReq->m_header.sequenceSeries;
 	pRsp->m_header.transactionId = pReq->m_header.transactionId;
-
-	McoTrans trans(db, MCO_READ_WRITE, MCO_TRANS_FOREGROUND);
-	mco_trans_h t = 0;
-	MCO_RET rc = MCO_S_OK;
-	rc = mco_trans_start(db, MCO_READ_WRITE, MCO_TRANS_FOREGROUND, &t);
-	if (MCO_S_OK != rc)
+	pRsp->pErrorField = CFtdcErrorFieldPtr(new CFtdcErrorField());
+	try 
 	{
-		pRsp->pErrorField->ErrorCode = FTD_ERROR_CODE_TRANSACTION_ERROR;
-		strcpy(pRsp->pErrorField->ErrorText, FTD_ERROR_TEXT_TRANSACTION_ERROR);
-		return pRsp;
-	}
-	try
-	{
-		processOrderInsertTransaction((const ReqOrderInsert*)pReq, t, pRsp);
-		mco_trans_commit(t);
+		//插入委托表
+		{
+			McoTrans t(db, MCO_READ_WRITE, MCO_TRANS_FOREGROUND);
+			try
+			{
+				insertToOrderInsert((const ReqOrderInsert*)pReq, (mco_trans_h)t, pRsp);
+			}
+			catch (MCO::Exception& e)
+			{
+				t.rollback();
+				throw;
+			}
+		}
+		//判断业务权限,校验价格数量合法性后委托报送
+		{
+			McoTrans t(db, MCO_READ_WRITE, MCO_TRANS_FOREGROUND);
+			try
+			{
+				verifyInputOrderAndDeliverToExchange((const ReqOrderInsert*)pReq, (mco_trans_h)t, pRsp);
+			}
+			catch (MCO::Exception& e)
+			{
+				t.rollback();
+				throw;
+			}
+		}
 	}
 	catch (MCO::Exception& e)
 	{
-		mco_trans_rollback(t);
 		pRsp->pErrorField->ErrorCode = e.errorCode;
-		strcpy(pRsp->pErrorField->ErrorText, e.what());
+		strcpy(pRsp->pErrorField->ErrorText, e.errorText.data());
+	}
+	catch (McoException e)
+	{
 	}
 	return pRsp;
+	
+	
+
 }

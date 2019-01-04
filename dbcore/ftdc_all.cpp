@@ -41,7 +41,7 @@ void populate_db(mco_db_h db)
 {
 	mco_trans_h t = 0;
 	MCO_RET rc = MCO_S_OK;
-	int i, j;
+	int  j;
 	for (j = 0; j < 100 && MCO_S_OK == rc; j++)
 	{
 		User user;

@@ -142,7 +142,7 @@ public:
 private:
 	std::atomic<bool> m_done;
 	ThreadsafeQueue<DBTask> m_reqQueue;
-	JoinThreads m_joiner;
+	JoinThreads* m_joiner;
 	std::vector<std::thread> m_threads;
 	void initDB();
 	void initThreads();
@@ -159,7 +159,7 @@ private:
 
 
 
-McoDBWrapperImpl::McoDBWrapperImpl(): m_done(false),m_joiner(m_threads)
+McoDBWrapperImpl::McoDBWrapperImpl(): m_done(false), m_joiner(new JoinThreads(m_threads))
 {
 	initDB();
 	initThreads();
@@ -168,6 +168,11 @@ McoDBWrapperImpl::McoDBWrapperImpl(): m_done(false),m_joiner(m_threads)
 McoDBWrapperImpl::~McoDBWrapperImpl()
 {
 	m_done = true;
+	if (m_joiner)
+	{
+		delete m_joiner;
+		m_joiner = 0;
+	}
 	mco_runtime_stop();
 	free(dev[0].dev.conv.ptr);
 	free(dev[1].dev.conv.ptr);

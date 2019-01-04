@@ -15,3 +15,5 @@
 // TODO:  在此处引用程序需要的其他头文件
 #include <Winsock2.h>
 #include <process.h>
+
+#pragma warning(disable:4267)
