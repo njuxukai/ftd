@@ -18,10 +18,6 @@
 #include <sstream>
 
 
-
-
-
-
 //消息中额外头信息
 //    ftd消息内容为业务层，本消息头提供补充信息
 //    目的:
@@ -47,6 +43,19 @@ struct PlainHeaders
 	//在req/rsp消息中无意义
 	int sequence_series;
 };
+
+/*
+M表示多条拼接，实际上应该只有RSP查询应答才有该情况
+*/
+#define QMSG_TYPE_REQ 0
+#define QMSG_TYPE_RSP 1
+#define QMSG_TYPE_PRIVATE 2
+#define QMSG_TYPE_BOARDCAST 3
+#define QMSG_TYPE_M_REQ 10
+#define QMSG_TYPE_M_RSP 11        
+#define QMSG_TYPE_M_PRIVATE 12
+#define QMSG_TYPE_M_BOARDCAST 13
+
 
 typedef std::function<void(const PlainHeaders&, const std::string& body)> 
 		ReceiveCallback;

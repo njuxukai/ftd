@@ -416,7 +416,8 @@ bool Session::sendToTarget( Package& message, const SessionID& sessionID )
 throw( SessionNotFound )
 {
   Session* pSession = lookupSession( sessionID );
-  if ( !pSession ) throw SessionNotFound();
+  if (!pSession)
+	  return false;
   return pSession->send( message );
 }
 
@@ -424,7 +425,8 @@ bool Session::sendToTarget(std::string& ftdMsg, const SessionID& sessionID)
 throw(SessionNotFound)
 {
 	Session* pSession = lookupSession(sessionID);
-	if (!pSession) throw SessionNotFound();
+	if (!pSession)
+		return false;
 	return pSession->send(ftdMsg);
 }
 

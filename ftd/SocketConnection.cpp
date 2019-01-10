@@ -99,7 +99,7 @@ bool SocketConnection::processQueue()
     m_sendQueue.pop_front();
   }
 
-  return !m_sendQueue.size();
+  return m_sendQueue.size() == 0;
 }
 
 void SocketConnection::disconnect()
