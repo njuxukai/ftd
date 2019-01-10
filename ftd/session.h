@@ -67,6 +67,8 @@ public:
   static bool sendToTarget(std::string& ftdMsg, const SessionID& sessionID)
   throw( SessionNotFound );
 
+  static bool sendToTarget(std::vector<std::string>& ftdMsgs, const SessionID& id)
+	  throw(SessionNotFound);
 
   static std::set<SessionID> getSessions();
   static bool doesSessionExist( const SessionID& );

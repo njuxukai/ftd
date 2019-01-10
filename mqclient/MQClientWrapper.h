@@ -25,8 +25,11 @@
 //      2 前置服务器得到交易服务器返回消息，无需进行解析直接转发客户端
 struct PlainHeaders
 {
-	//0 req 1 rsp 2 private 3boardcast
-	int msg_type;
+	//'0' req '1' rsp '2' private '3'boardcast
+	char msg_type;
+
+	//body是否为多条ftdc拼接
+	char multi_flag;
 
 	//在req消息中标记结果目标队列
 	//在rsp/private/boardcast消息中无意义
@@ -44,17 +47,15 @@ struct PlainHeaders
 	int sequence_series;
 };
 
-/*
-M表示多条拼接，实际上应该只有RSP查询应答才有该情况
-*/
-#define QMSG_TYPE_REQ 0
-#define QMSG_TYPE_RSP 1
-#define QMSG_TYPE_PRIVATE 2
-#define QMSG_TYPE_BOARDCAST 3
-#define QMSG_TYPE_M_REQ 10
-#define QMSG_TYPE_M_RSP 11        
-#define QMSG_TYPE_M_PRIVATE 12
-#define QMSG_TYPE_M_BOARDCAST 13
+
+#define QMSG_TYPE_REQ '0'
+#define QMSG_TYPE_RSP '1'
+#define QMSG_TYPE_PRIVATE '2'
+#define QMSG_TYPE_BOARDCAST '3'
+
+#define QMSG_MULTI_FTDC '0'
+#define QMSG_SINGLE_FTDC '1'
+
 
 
 typedef std::function<void(const PlainHeaders&, const std::string& body)> 

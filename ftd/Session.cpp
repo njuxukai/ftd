@@ -430,6 +430,13 @@ throw(SessionNotFound)
 	return pSession->send(ftdMsg);
 }
 
+bool Session::sendToTarget(std::vector<std::string>& ftdMsgs, const SessionID& sessionID)
+{
+	Session* pSession = lookupSession(sessionID);
+	if (!pSession)
+		return false;
+	return pSession->send(ftdMsgs);
+}
 
 std::set<SessionID> Session::getSessions()
 {

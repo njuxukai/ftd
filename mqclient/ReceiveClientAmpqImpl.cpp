@@ -140,7 +140,11 @@ void ReceiveClientAmpqImpl::formatHeaders(const Table& table, PlainHeaders& head
 
 	it = table.find(MSG_TYPE);
 	if (it != table.end())
-		headers.msg_type =  it->second.GetInt32();
+		headers.msg_type =  it->second.GetInt8();
+
+	it = table.find(MULTI_FLAG);
+	if (it != table.end())
+		headers.multi_flag = it->second.GetInt8();
 
 	it = table.find(TARGET_QUEUE);
 	if (it != table.end())

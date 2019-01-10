@@ -68,3 +68,6 @@ ipch/*
 /dbcore/disk_file.log
 /xcptraderapi/XcpFtdcUserApiStruct.h
 /xcpraderapi/XcpFtdcUserApiDataType.h
+/include
+/swtraderapi
+/UnitTest++/obj/UnitTest++_vs14/Debug/UnitTest++_vs14.tlog
