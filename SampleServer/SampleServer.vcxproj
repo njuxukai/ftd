@@ -164,7 +164,7 @@ xcopy  echo_server.cfg   /Y/I  ..\export\$(Configuration)\$(ProjectName)\</Comma
   <ItemGroup>
     <ClCompile Include="EchoServer.cpp" />
     <ClCompile Include="MockDB.cpp" />
-    <ClCompile Include="SampleServer.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

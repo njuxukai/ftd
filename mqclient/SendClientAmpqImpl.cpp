@@ -16,7 +16,9 @@ SendClientAmpqImpl::SendClientAmpqImpl(const std::string& host, int port, const 
 }
 
 SendClientAmpqImpl::~SendClientAmpqImpl()
-{}
+{
+	stop();
+}
 
 void SendClientAmpqImpl::submitTask(const SendTask& sendTask)
 {
@@ -92,5 +94,5 @@ bool SendClientAmpqImpl::send(const SendTask& task)
 void SendClientAmpqImpl::formatTable(const PlainHeaders& headers, Table& table)
 {
 	table.clear();
-	table["TARGET_QUEUE"] = "";
+	table[TARGET_QUEUE] = headers.rsp_target_queue;
 }

@@ -13,7 +13,7 @@ ReceiveClientAmpqImpl::ReceiveClientAmpqImpl(const std::string& host, int port ,
 //TODO
 ReceiveClientAmpqImpl::~ReceiveClientAmpqImpl()
 {
-
+	stop();
 }
 
 void ReceiveClientAmpqImpl::registerCallback(const ReceiveCallback& callback)
@@ -62,17 +62,15 @@ void ReceiveClientAmpqImpl::run()
 		consumeResult = m_channel->BasicConsumeMessage(pEnvelope, 10);
 		if (consumeResult)
 		{
-			//TO REMOVE
+			//TODO  <header process and exception handle is not so good/>
 			PlainHeaders headers;
 			try
 			{
-				//formatHeaders(pEnvelope->Message()->HeaderTable(), headers);
+				formatHeaders(pEnvelope->Message()->HeaderTable(), headers);
 			}
 			catch (...)
 			{
 			}
-
-			//std::cout << pEnvelope->Message()->Body() << std::endl;
 			if (m_callback)
 			{
 				m_callback(headers, pEnvelope->Message()->Body());
