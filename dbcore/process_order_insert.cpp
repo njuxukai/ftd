@@ -20,9 +20,9 @@ void InsertToOrderInsert(const ReqOrderInsert* pReq, mco_trans_h t, RspOrderInse
 	}
 	
 }
-void insertToOrderInsert(const ReqOrderInsert* pReq, mco_trans_h t, RspOrderInsert* pRsp);
+void insertToOrderInsert(const ReqOrderInsert* pReq, mco_trans_h t, RspOrderInsert* pRsp) {}
 
-void verifyInputOrderAndDeliverToExchange(const ReqOrderInsert* pReq, mco_trans_h t, RspOrderInsert* pRsp);
+void verifyInputOrderAndDeliverToExchange(const ReqOrderInsert* pReq, mco_trans_h t, RspOrderInsert* pRsp) {}
 
 Package* processOrderInsert(const Package* pReq, mco_db_h db)
 {
