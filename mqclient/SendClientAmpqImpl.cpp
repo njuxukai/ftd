@@ -2,8 +2,6 @@
 #include <iostream>
 
 #include <SimpleAmqpClient/SimpleAmqpClient.h>
-#include <amqp.h>
-#include <amqp_framing.h>
 #include <atomic>
 #include <thread>
 

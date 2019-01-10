@@ -93,7 +93,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>ISLIB;LIB_MQ_API_EXPORT;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>E:\beta_workspace\RabbitClient\SimpleAmqpClient\src\;E:\beta_workspace\RabbitClient\rabbitmq-c\librabbitmq\;d:\library\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDIr)\import\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
