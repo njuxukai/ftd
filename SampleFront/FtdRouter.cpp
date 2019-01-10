@@ -13,13 +13,19 @@ void FtdRouter::processReq(PackageSPtr pReq, mco_db_h db, SessionID sessionID)
 		Session::sendToTarget(*(pRsp.get()), sessionID);
 }
 
-FtdRouter::FtdRouter(std::string cfgFile, int frontID) :m_cfgFile(cfgFile), m_frontID(frontID), m_acceptor(0)
+FtdRouter::FtdRouter(const std::string& cfgFile, int frontID, 
+	const std::set<int>& validBrokerIDs) :
+		m_cfgFile(cfgFile), 
+		m_frontID(frontID), 
+		m_validBrokerIDs(validBrokerIDs), 
+		m_acceptor(0)
 {
-	m_DB2.populate(std::function<void(mco_db_h)>(populate_db));
+	//m_DB2.populate(std::function<void(mco_db_h)>(populate_db));
 }
 
 FtdRouter::~FtdRouter()
 {}
+
 
 void FtdRouter::start()
 {

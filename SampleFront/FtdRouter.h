@@ -9,7 +9,7 @@ using namespace FTD;
 class FtdRouter : public FTD::Application, public FTD::PackageCracker
 {
 public:
-	FtdRouter(std::string cfgFile, int frontID=1);
+	FtdRouter(const std::string& cfgFile, int frontID=1, const std::set<int>& validBrokerIDs);
 	~FtdRouter();
 
 	void start();
@@ -85,6 +85,7 @@ private:
 	std::string m_cfgFile;
 	FTD::Acceptor* m_acceptor;
 	const int m_frontID;
+	const std::set<int> m_validBrokerIDs;
 	MockDB m_DB;
 	McoDBWrapper m_DB2;
 };

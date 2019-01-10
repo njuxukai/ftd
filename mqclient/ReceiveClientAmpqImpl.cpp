@@ -6,8 +6,8 @@
 
 
 
-ReceiveClientAmpqImpl::ReceiveClientAmpqImpl(const std::string& host, int port , const std::string& user, const std::string& password ):
-	m_host(host), m_port(port), m_user(user), m_password(password)
+ReceiveClientAmpqImpl::ReceiveClientAmpqImpl(const QueueParameter& par):
+	m_host(par.host), m_port(par.port), m_user(par.user), m_password(par.password)
 {}
 
 //TODO
@@ -89,11 +89,11 @@ bool ReceiveClientAmpqImpl::connect()
 	try 
 	{
 		m_channel = AmqpClient::Channel::Create(m_host, m_port, m_user, m_password);
-		for (int i = 0; i < m_directQueues.size(); i++)
+		for (unsigned int i = 0; i < m_directQueues.size(); i++)
 		{
 			this->declareAndBasicConsumeDirectQueue(m_directQueues[i]);
 		}
-		for (int i = 0; i < m_fanoutExchanges.size(); i++)
+		for (unsigned int i = 0; i < m_fanoutExchanges.size(); i++)
 		{
 			this->decalreExchangeAndQueueThenConsumeQueue(m_fanoutExchanges[i]);
 		}
@@ -144,7 +144,7 @@ void ReceiveClientAmpqImpl::formatHeaders(const Table& table, PlainHeaders& head
 
 	it = table.find(TARGET_QUEUE);
 	if (it != table.end())
-		strcpy(headers.target_queue, it->second.GetString().data());
+		strncpy(headers.target_queue, it->second.GetString().data(), sizeof(headers.target_queue));
 
 	it = table.find(SOURCE_SESSION);
 	if (it != table.end())

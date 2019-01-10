@@ -2,7 +2,7 @@
 //
 
 #include "stdafx.h"
-#include "FtdRouter.h"
+#include "FrontServer.h"
 
 int main(int argc, char** argv)
 {
@@ -15,7 +15,7 @@ int main(int argc, char** argv)
 	{
 		file = argv[1];
 	}
-	FtdRouter server(file);
+	FrontServer server(file);
 	server.start();
 	
 	while (1 == 1)

@@ -6,11 +6,11 @@
 #include <thread>
 
 
-SendClientAmpqImpl::SendClientAmpqImpl(const std::string& host, int port, const std::string& user, const std::string& password):
-	m_host(host),
-	m_port(port),
-	m_user(user),
-	m_password(password)
+SendClientAmpqImpl::SendClientAmpqImpl(const QueueParameter& par):
+	m_host(par.host),
+	m_port(par.port),
+	m_user(par.user),
+	m_password(par.password)
 {
 
 }

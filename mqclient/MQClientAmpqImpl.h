@@ -21,7 +21,7 @@ using namespace AmqpClient;
 class ReceiveClientAmpqImpl : public ReceiveClient
 {
 public:
-	ReceiveClientAmpqImpl(const std::string& host, int port, const std::string& user, const std::string& password);
+	ReceiveClientAmpqImpl(const QueueParameter& par);
 	~ReceiveClientAmpqImpl();
 	void registerCallback(const ReceiveCallback& callback);
 	void registerDirectQueue(const std::string& queueName);
@@ -55,7 +55,7 @@ private:
 class SendClientAmpqImpl : public SendClient
 {
 public:
-	SendClientAmpqImpl(const std::string& host, int port, const std::string& user, const std::string& password);
+	SendClientAmpqImpl(const QueueParameter& par);
 	~SendClientAmpqImpl();
 	void submitTask(const SendTask& sendTask);
 	void start();

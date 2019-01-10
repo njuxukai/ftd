@@ -48,7 +48,8 @@ struct PlainHeaders
 	int sequence_series;
 };
 
-typedef std::function<void(const PlainHeaders&, const std::string& body)> ReceiveCallback;
+typedef std::function<void(const PlainHeaders&, const std::string& body)> 
+		ReceiveCallback;
 
 struct SendTask
 {
@@ -58,11 +59,19 @@ struct SendTask
 	std::string body;
 };
 
+struct QueueParameter
+{
+	std::string host;
+	int port;
+	std::string user;
+	std::string password;
+};
+
 class MQ_API_EXPORT ReceiveClient
 {
 public:
 	typedef std::shared_ptr<ReceiveClient> Sptr;
-	static Sptr CreateClient(const std::string& host = "localhost", int port = 5672, const std::string& user = "guest", const std::string& password = "guest");
+	static Sptr CreateClient(const QueueParameter& parameter);
 	virtual ~ReceiveClient() {}
 	virtual void registerCallback(const ReceiveCallback& callback) = 0;
 	virtual void registerDirectQueue(const std::string& queueName) = 0;
@@ -83,7 +92,7 @@ class MQ_API_EXPORT SendClient
 {
 public:
 	typedef std::shared_ptr<SendClient> Sptr;
-	static Sptr CreateClient(const std::string& host = "localhost", int port = 5672, const std::string& user = "guest", const std::string& password = "guest");
+	static Sptr CreateClient(const QueueParameter& parameter);
 	
 	virtual ~SendClient() {}
 	virtual void submitTask(const SendTask& sendTask) = 0;
