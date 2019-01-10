@@ -26,6 +26,7 @@
 #pragma warning( disable : 4503 4355 4786 4290 )
 #endif
 
+#include <common/usual_macro.h>
 #include "Initiator.h"
 #include "SocketConnector.h"
 #include "SocketConnection.h"
@@ -36,40 +37,42 @@ namespace FTD
 class SocketInitiator : public Initiator, SocketConnector::Strategy
 {
 public:
-  SocketInitiator( Application&, const PortSettings& ) throw( ConfigError );
+	SocketInitiator( Application&, const PortSettings& ) throw( ConfigError );
 
-  virtual ~SocketInitiator();
+	virtual ~SocketInitiator();
 
 private:
-  typedef std::map < int, SocketConnection* > SocketConnections;
-  typedef std::map < int, SessionID > SocketSessionMap;
-  typedef std::map < SessionID, int > SessionToHostNum;
+	DISABLE_COPY_AND_ASSIGN(SocketInitiator)
 
-  void onConfigure( const PortSettings& ) throw ( ConfigError );
-  void onInitialize( const PortSettings& ) throw ( RuntimeError );
+	typedef std::map < int, SocketConnection* > SocketConnections;
+	typedef std::map < int, SessionID > SocketSessionMap;
+	typedef std::map < SessionID, int > SessionToHostNum;
 
-  void onStart();
-  bool onPoll( double timeout );
-  void onStop();
+	void onConfigure( const PortSettings& ) throw ( ConfigError );
+	void onInitialize( const PortSettings& ) throw ( RuntimeError );
 
-  int doConnect( const PortID&, const Dictionary& d );
-  void onConnect( SocketConnector&, int );
-  void onWrite( SocketConnector&, int );
-  bool onData( SocketConnector&, int );
-  void onDisconnect( SocketConnector&, int );
-  void onError( SocketConnector& );
-  void onTimeout( SocketConnector& );
+	void onStart();
+	bool onPoll( double timeout );
+	void onStop();
 
-  void getHost( const PortID&, const Dictionary&, std::string&, short&, std::string&, short& );
+	int doConnect( const PortID&, const Dictionary& d );
+	void onConnect( SocketConnector&, int );
+	void onWrite( SocketConnector&, int );
+	bool onData( SocketConnector&, int );
+	void onDisconnect( SocketConnector&, int );
+	void onError( SocketConnector& );
+	void onTimeout( SocketConnector& );
 
-  SocketConnector m_connector;
-  SocketConnections m_pendingConnections;
-  SocketConnections m_connections;
-  time_t m_lastConnect;
-  int m_reconnectInterval;
-  bool m_noDelay;
-  int m_sendBufSize;
-  int m_rcvBufSize;
+	void getHost( const PortID&, const Dictionary&, std::string&, short&, std::string&, short& );
+
+	SocketConnector m_connector;
+	SocketConnections m_pendingConnections;
+	SocketConnections m_connections;
+	time_t m_lastConnect;
+	int m_reconnectInterval;
+	bool m_noDelay;
+	int m_sendBufSize;
+	int m_rcvBufSize;
 };
 /*! @} */
 }

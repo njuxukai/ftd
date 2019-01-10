@@ -7,6 +7,7 @@ MQ Client(using rabbitmq with simpleAmqpClient)
 
 #include "MQClientWrapper.h"
 #include <SimpleAmqpClient/SimpleAmqpClient.h>
+#include <common/usual_macro.h>
 
 using namespace AmqpClient;
 
@@ -27,8 +28,8 @@ private:
 	bool disconnect();
 	void run();
 	static void formatHeaders(const Table& table, PlainHeaders& headers);
-	ReceiveClientAmpqImpl(const ReceiveClientAmpqImpl&) = delete;
-	ReceiveClientAmpqImpl& operator=(const ReceiveClientAmpqImpl&) = delete;
+	
+	DISABLE_COPY_AND_ASSIGN(ReceiveClientAmpqImpl)
 
 private:
 	std::atomic<bool> m_stopping;
@@ -59,8 +60,8 @@ private:
 	bool send(const SendTask& task);
 	static void formatTable(const PlainHeaders& headers, Table& table);
 
-	SendClientAmpqImpl(const SendClientAmpqImpl&) = delete;
-	SendClientAmpqImpl& operator=(const SendClientAmpqImpl&) = delete;
+	DISABLE_COPY_AND_ASSIGN(SendClientAmpqImpl)
+
 private:
 	std::atomic<bool> m_stopping;
 	std::string m_host;

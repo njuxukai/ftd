@@ -5,6 +5,7 @@
 #pragma warning( disable : 4503 4355 4786 4290 )
 #endif
 
+#include <common/usual_macro.h>
 #include "Acceptor.h"
 #include "SocketServer.h"
 #include "SocketConnection.h"
@@ -14,38 +15,40 @@ namespace FTD
 /// Socket implementation of Acceptor.
 class SocketAcceptor : public Acceptor, SocketServer::Strategy
 {
-  friend class SocketConnection;
+	friend class SocketConnection;
 public:
-  SocketAcceptor( Application&, const PortSettings& ) throw( ConfigError );
+	SocketAcceptor( Application&, const PortSettings& ) throw( ConfigError );
 
-  virtual ~SocketAcceptor();
-  Session* lookupSession(int socket);
+	virtual ~SocketAcceptor();
+	Session* lookupSession(int socket);
 private:
-  bool readSettings( const PortSettings& );
+	DISABLE_COPY_AND_ASSIGN(SocketAcceptor)
 
-  typedef std::set < SessionID > Sessions;
-  typedef std::map < int, Sessions > PortToSessions;
-  typedef std::map < int, SocketConnection* > SocketConnections;
-  typedef std::map < int, SessionID> SocketSessionIDMap;
-  typedef std::map <ClientID, Sessions> ClientIDToSessions;
-  void onConfigure( const PortSettings& ) throw ( ConfigError );
-  void onInitialize( const PortSettings& ) throw ( RuntimeError );
+	bool readSettings( const PortSettings& );
 
-  void onStart();
-  bool onPoll( double timeout );
-  void onStop();
+	typedef std::set < SessionID > Sessions;
+	typedef std::map < int, Sessions > PortToSessions;
+	typedef std::map < int, SocketConnection* > SocketConnections;
+	typedef std::map < int, SessionID> SocketSessionIDMap;
+	typedef std::map <ClientID, Sessions> ClientIDToSessions;
+	void onConfigure( const PortSettings& ) throw ( ConfigError );
+	void onInitialize( const PortSettings& ) throw ( RuntimeError );
 
-  void onConnect( SocketServer&, int, int );
-  void onWrite( SocketServer&, int );
-  bool onData( SocketServer&, int );
-  void onDisconnect( SocketServer&, int );
-  void onError( SocketServer& );
-  void onTimeout( SocketServer& );
+	void onStart();
+	bool onPoll( double timeout );
+	void onStop();
 
-  SocketServer* m_pServer;
-  PortToSessions m_portToSessions;
-  SocketConnections m_connections;
-  ClientIDToSessions m_clientIDToSessions;
+	void onConnect( SocketServer&, int, int );
+	void onWrite( SocketServer&, int );
+	bool onData( SocketServer&, int );
+	void onDisconnect( SocketServer&, int );
+	void onError( SocketServer& );
+	void onTimeout( SocketServer& );
+
+	SocketServer* m_pServer;
+	PortToSessions m_portToSessions;
+	SocketConnections m_connections;
+	ClientIDToSessions m_clientIDToSessions;
 };
 /*! @} */
 }
