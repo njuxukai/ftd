@@ -9,6 +9,13 @@ MQ Client(using rabbitmq with simpleAmqpClient)
 #include <SimpleAmqpClient/SimpleAmqpClient.h>
 #include <common/usual_macro.h>
 
+#define MSG_TYPE "msg_type"
+#define TARGET_QUEUE "target_queue"
+#define SOURCE_SESSION "source_session"
+#define SEQUENCE_SERIES "sequence_series"
+
+
+
 using namespace AmqpClient;
 
 class ReceiveClientAmpqImpl : public ReceiveClient

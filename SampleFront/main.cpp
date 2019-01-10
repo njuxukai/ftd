@@ -2,7 +2,7 @@
 //
 
 #include "stdafx.h"
-#include "EchoServer.h"
+#include "FtdRouter.h"
 
 int main(int argc, char** argv)
 {
@@ -15,8 +15,8 @@ int main(int argc, char** argv)
 	{
 		file = argv[1];
 	}
-	EchoServer server(file);
-	server.connect();
+	FtdRouter server(file);
+	server.start();
 	
 	while (1 == 1)
 	{

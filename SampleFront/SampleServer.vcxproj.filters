@@ -24,10 +24,13 @@
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="EchoServer.h">
+    <ClInclude Include="MockDB.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="MockDB.h">
+    <ClInclude Include="FtdRouter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="FrontServer.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -35,13 +38,16 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="EchoServer.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="MockDB.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="FtdRouter.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="FrontServer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

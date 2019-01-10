@@ -20,12 +20,32 @@
 
 
 
-#define TARGET_QUEUE "target_queue"
 
 
+//消息中额外头信息
+//    ftd消息内容为业务层，本消息头提供补充信息
+//    目的:
+//      1 使得系统间传递消息逻辑简化
+//      2 前置服务器得到交易服务器返回消息，无需进行解析直接转发客户端
 struct PlainHeaders
 {
-	std::string rsp_target_queue;
+	//0 req 1 rsp 2 private 3boardcast
+	int msg_type;
+
+	//在req消息中标记结果目标队列
+	//在rsp/private/boardcast消息中无意义
+	char target_queue[21];
+
+	//在客户发起的req消息中标记前置会话编号
+	//在客户发起的rsp消息中标记前置会话编号
+	//在private/boardcast消息中无意义
+	//在系统间的req/rsp消息中无意义
+	int source_session;
+
+	//在private/boardcast中表明私有/广播数据主题
+	//   私有数据应同资金账号，广播数据=8
+	//在req/rsp消息中无意义
+	int sequence_series;
 };
 
 typedef std::function<void(const PlainHeaders&, const std::string& body)> ReceiveCallback;

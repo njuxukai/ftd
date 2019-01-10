@@ -6,14 +6,14 @@
 #include "MockDB.h"
 
 using namespace FTD;
-class EchoServer : public FTD::Application, public FTD::PackageCracker
+class FtdRouter : public FTD::Application, public FTD::PackageCracker
 {
 public:
-	EchoServer(std::string cfgFile, int frontID=1);
-	~EchoServer();
+	FtdRouter(std::string cfgFile, int frontID=1);
+	~FtdRouter();
 
-	void connect();
-	void disconnect();
+	void start();
+	void stop();
 
 	virtual void onCreate(const SessionID&);
 	///connected

@@ -134,9 +134,25 @@ void ReceiveClientAmpqImpl::decalreExchangeAndQueueThenConsumeQueue(const std::s
 
 void ReceiveClientAmpqImpl::formatHeaders(const Table& table, PlainHeaders& headers)
 {
-	auto it = table.find(TARGET_QUEUE);
+	memset(&headers, 0, sizeof(headers));
+	
+	Table::const_iterator it = table.end();
+
+	it = table.find(MSG_TYPE);
 	if (it != table.end())
-		headers.rsp_target_queue = it->second.GetString();
+		headers.msg_type =  it->second.GetInt32();
+
+	it = table.find(TARGET_QUEUE);
+	if (it != table.end())
+		strcpy(headers.target_queue, it->second.GetString().data());
+
+	it = table.find(SOURCE_SESSION);
+	if (it != table.end())
+		headers.source_session = it->second.GetInt32();
+
+	it = table.find(SEQUENCE_SERIES);
+	if (it != table.end())
+		headers.sequence_series = it->second.GetInt32();
 }
 
 

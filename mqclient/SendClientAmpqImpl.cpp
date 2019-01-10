@@ -94,5 +94,8 @@ bool SendClientAmpqImpl::send(const SendTask& task)
 void SendClientAmpqImpl::formatTable(const PlainHeaders& headers, Table& table)
 {
 	table.clear();
-	table[TARGET_QUEUE] = headers.rsp_target_queue;
+	table[MSG_TYPE] = headers.msg_type;
+	table[TARGET_QUEUE] = headers.target_queue;
+	table[SOURCE_SESSION] = headers.source_session;
+	table[SEQUENCE_SERIES] = headers.sequence_series;
 }
