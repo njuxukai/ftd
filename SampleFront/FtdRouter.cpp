@@ -2,17 +2,16 @@
 #include "FtdRouter.h"
 #include <boost/format.hpp>
 #include <ftd/session.h>
-#include <dbcore/ftdc_all.h>
 #include <functional>
 
-
+/*
 void FtdRouter::processReq(PackageSPtr pReq, mco_db_h db, SessionID sessionID)
 {
 	PackageSPtr pRsp = PackageSPtr(ftdcAll(pReq.get(), db));
 	if (pRsp.get())
 		Session::sendToTarget(*(pRsp.get()), sessionID);
 }
-
+*/
 FtdRouter::FtdRouter(const std::string& cfgFile, int frontID, 
 	const std::set<int>& validBrokerIDs) :
 		m_cfgFile(cfgFile), 
@@ -26,6 +25,10 @@ FtdRouter::FtdRouter(const std::string& cfgFile, int frontID,
 FtdRouter::~FtdRouter()
 {}
 
+void FtdRouter::registerUplinkFunction(const UplinkFunction& func)
+{
+	m_uplinkFunction = func;
+}
 
 void FtdRouter::start()
 {
@@ -100,7 +103,7 @@ void FtdRouter::OnPackage(const ReqUserLogin& req, const SessionID& id)
 	ReqUserLogin* pCopy = (ReqUserLogin*)req.clone();
 	pCopy->reqUserLoginField.FrontID = m_frontID;
 	pCopy->reqUserLoginField.SessionID = id;
-	m_DB2.submit(std::bind(&FtdRouter::processReq, this, PackageSPtr(pCopy), std::placeholders::_1, id));
+	//m_DB2.submit(std::bind(&FtdRouter::processReq, this, PackageSPtr(pCopy), std::placeholders::_1, id));
 }
 
 void FtdRouter::OnPackage(const ReqQryPrivateInitialData& req, const SessionID& id)
@@ -108,7 +111,7 @@ void FtdRouter::OnPackage(const ReqQryPrivateInitialData& req, const SessionID& 
 	//1 服务器端注册会话私有流订阅
 	resigterSequenceSubscription(id, req.dissenminationstartField.SequenceSeries);
 	//2 按需查询私有数据返回
-	m_DB2.submit(std::bind(&FtdRouter::processReq, this, PackageSPtr(req.clone()), std::placeholders::_1, id));
+	//m_DB2.submit(std::bind(&FtdRouter::processReq, this, PackageSPtr(req.clone()), std::placeholders::_1, id));
 }
 
 void FtdRouter::OnPackage(const ReqOrderInsert& req, const SessionID& id)
@@ -116,7 +119,7 @@ void FtdRouter::OnPackage(const ReqOrderInsert& req, const SessionID& id)
 	ReqOrderInsert *pClone = (ReqOrderInsert*)req.clone();
 	pClone->inputOrderField.FrontID = m_frontID;
 	pClone->inputOrderField.SessionID = id;
-	m_DB2.submit(std::bind(&FtdRouter::processReq, this, PackageSPtr(pClone), std::placeholders::_1, id));
+	//m_DB2.submit(std::bind(&FtdRouter::processReq, this, PackageSPtr(pClone), std::placeholders::_1, id));
 }
 
 

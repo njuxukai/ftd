@@ -2,19 +2,21 @@
 #include <ftd/SocketAcceptor.h>
 #include <ftd/FTD30/PackageCracker.h>
 #include <ftd/session.h>
-#include <dbcore/DBWrapper.h>
-#include "MockDB.h"
+
+#include "FrontFunctions.h"
 
 using namespace FTD;
 class FtdRouter : public FTD::Application, public FTD::PackageCracker
 {
 public:
-	FtdRouter(const std::string& cfgFile, int frontID=1, const std::set<int>& validBrokerIDs);
+	FtdRouter(const std::string& cfgFile, int frontID, const std::set<int>& validBrokerIDs);
 	~FtdRouter();
 
+	void registerUplinkFunction(const UplinkFunction& func);
 	void start();
 	void stop();
 
+	//void DeliveryFtdcMessage(const )
 	virtual void onCreate(const SessionID&);
 	///connected
 	virtual void onConnect(const SessionID&);
@@ -45,7 +47,7 @@ public:
 
 	virtual void OnPackage(RspUserLogin& package, const SessionID& id);
 
-	void processReq(PackageSPtr pReq, mco_db_h db, SessionID sessionID);
+	///void processReq(PackageSPtr pReq, mco_db_h db, SessionID sessionID);
 
 	//私有流订阅管理
 	void resigterSequenceSubscription(const SessionID& id,int sequenceSerie)
@@ -81,11 +83,10 @@ public:
 	}
 
 private:
+	UplinkFunction m_uplinkFunction;
 	std::map<int, std::set<SessionID>> m_subMap;
 	std::string m_cfgFile;
 	FTD::Acceptor* m_acceptor;
 	const int m_frontID;
 	const std::set<int> m_validBrokerIDs;
-	MockDB m_DB;
-	McoDBWrapper m_DB2;
 };

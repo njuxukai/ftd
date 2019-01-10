@@ -420,6 +420,13 @@ throw( SessionNotFound )
   return pSession->send( message );
 }
 
+bool Session::sendToTarget(std::string& ftdMsg, const SessionID& sessionID)
+throw(SessionNotFound)
+{
+	Session* pSession = lookupSession(sessionID);
+	if (!pSession) throw SessionNotFound();
+	return pSession->send(ftdMsg);
+}
 
 
 std::set<SessionID> Session::getSessions()

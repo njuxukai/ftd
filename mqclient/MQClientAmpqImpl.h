@@ -57,14 +57,14 @@ class SendClientAmpqImpl : public SendClient
 public:
 	SendClientAmpqImpl(const QueueParameter& par);
 	~SendClientAmpqImpl();
-	void submitTask(const SendTask& sendTask);
+	void submitTask(const DeliveryPack& sendTask);
 	void start();
 	void stop();
 private:
 	bool connect();
 	bool disconnect();
 	void run();
-	bool send(const SendTask& task);
+	bool send(const DeliveryPack& task);
 	static void formatTable(const PlainHeaders& headers, Table& table);
 
 	DISABLE_COPY_AND_ASSIGN(SendClientAmpqImpl)
@@ -77,7 +77,7 @@ private:
 	std::string m_password;
 	std::thread m_workThread;
 	AmqpClient::Channel::ptr_t m_channel;
-	ThreadsafeQueue<SendTask> m_taskQueue;
+	ThreadsafeQueue<DeliveryPack> m_taskQueue;
 private:
 	
 };

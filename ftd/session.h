@@ -64,6 +64,7 @@ public:
   static bool sendToTarget( Package& message, const SessionID& sessionID )
   throw( SessionNotFound );
 
+  static bool sendToTarget(std::string& ftdMsg, const SessionID& sessionID);
 
 
   static std::set<SessionID> getSessions();

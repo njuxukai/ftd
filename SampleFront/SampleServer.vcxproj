@@ -157,6 +157,7 @@ xcopy  echo_server.cfg   /Y/I  ..\export\$(Configuration)\$(ProjectName)\</Comma
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FrontServer.h" />
+    <ClInclude Include="FrontFunctions.h" />
     <ClInclude Include="FtdRouter.h" />
     <ClInclude Include="MockDB.h" />
     <ClInclude Include="stdafx.h" />

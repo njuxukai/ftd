@@ -51,7 +51,7 @@ struct PlainHeaders
 typedef std::function<void(const PlainHeaders&, const std::string& body)> 
 		ReceiveCallback;
 
-struct SendTask
+struct DeliveryPack
 {
 	std::string exchange;
 	std::string routing_key;
@@ -95,7 +95,7 @@ public:
 	static Sptr CreateClient(const QueueParameter& parameter);
 	
 	virtual ~SendClient() {}
-	virtual void submitTask(const SendTask& sendTask) = 0;
+	virtual void submitTask(const DeliveryPack& sendTask) = 0;
 	virtual void start() = 0;
 	virtual void stop() = 0;
 protected:

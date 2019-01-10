@@ -20,7 +20,7 @@ SendClientAmpqImpl::~SendClientAmpqImpl()
 	stop();
 }
 
-void SendClientAmpqImpl::submitTask(const SendTask& sendTask)
+void SendClientAmpqImpl::submitTask(const DeliveryPack& sendTask)
 {
 	m_taskQueue.push(std::move(sendTask));
 }
@@ -49,7 +49,7 @@ void SendClientAmpqImpl::run()
 {
 	while (!m_stopping || !m_taskQueue.empty())
 	{
-		std::shared_ptr<SendTask> task = m_taskQueue.wait_and_pop(20);
+		std::shared_ptr<DeliveryPack> task = m_taskQueue.wait_and_pop(20);
 		if (task.get())
 		{
 			send(*task);
@@ -77,7 +77,7 @@ bool SendClientAmpqImpl::disconnect()
 	return true;
 }
 
-bool SendClientAmpqImpl::send(const SendTask& task)
+bool SendClientAmpqImpl::send(const DeliveryPack& task)
 {
 	if (!m_channel.get())
 		return false;
