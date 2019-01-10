@@ -1,20 +1,27 @@
 #pragma once
 
+#if defined(ISLIB) && defined(WIN32)
+#ifdef LIB_MQ_API_EXPORT
+#define MQ_API_EXPORT __declspec(dllexport)
+#else
+#define MQ_API_EXPORT __declspec(dllimport)
+#endif
+#else
+#define MQ_API_EXPORT 
+#endif
+
+
 #include <common/ThreadsafeQueue.h>
 #include <map>
 #include <functional>
 #include <stdint.h>
 #include <sstream>
-#include <windows.h>
+
+
+
 
 #define TARGET_QUEUE "target_queue"
 
-static uint64_t now_microseconds(void) {
-	FILETIME ft;
-	GetSystemTimeAsFileTime(&ft);
-	return (((uint64_t)ft.dwHighDateTime << 32) | (uint64_t)ft.dwLowDateTime) /
-		10;
-}
 
 struct PlainHeaders
 {
@@ -31,9 +38,7 @@ struct SendTask
 	std::string body;
 };
 
-class ReceiveClientImpl;
-
-class ReceiveClient
+class MQ_API_EXPORT ReceiveClient
 {
 public:
 	typedef std::shared_ptr<ReceiveClient> Sptr;
@@ -54,7 +59,7 @@ private:
 };
 
 
-class SendClient
+class MQ_API_EXPORT SendClient
 {
 public:
 	typedef std::shared_ptr<SendClient> Sptr;

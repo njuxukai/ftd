@@ -63,7 +63,6 @@ void ReceiveClientAmpqImpl::run()
 		if (consumeResult)
 		{
 			//TO REMOVE
-			std::cout << "At Receive " << now_microseconds() << std::endl;
 			PlainHeaders headers;
 			try
 			{

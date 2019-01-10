@@ -87,7 +87,6 @@ bool SendClientAmpqImpl::send(const SendTask& task)
 	pMsg->Body(task.body);
 	pMsg->HeaderTable(table);
 	//TO REMOVE
-	std::cout <<"At send " << now_microseconds() << std::endl;
 	m_channel->BasicPublish(task.exchange, task.routing_key, pMsg, false, false);
 	return true;
 }
