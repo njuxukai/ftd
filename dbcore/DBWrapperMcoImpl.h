@@ -23,28 +23,14 @@
 #define  MAX_DEVICES           10
 #define  N_DEVICES             4
 
-char sample_descr[] = {
-	"Sample 'disk_file' opens a database using FILE memory devices.\n"
-};
-const char * db_name = "disk_file";
 
-/* Define relatively small memory segment sizes to facilitate testing */
-
-
-/* Define nRecords large enough to cause creation of sufficient data to necessitate
-use of multifile segments */
-const int nRecords = 1000000;
-/* Define transaction block size to reduce time for inserts */
-const int nInsertsPerTransaction = 10000;
-
-const int nThreadCount = 2;
 
 
 
 typedef std::function<void(mco_db_h)> DBTask;
 
 
-class  DBWrapperMcoImpl
+class  DBWrapperMcoImpl : public DBWrapper
 {
 public:
 	DBWrapperMcoImpl();
@@ -52,12 +38,17 @@ public:
 	~DBWrapperMcoImpl();
 
 	void submit(PlainHeaders& headers, FTD::PackageSPtr pPackage);
+	virtual void registerUplinkFunction(const UplinkFunction& function);
+	virtual void uplink(PlainHeaders& headers, FTD::PackageSPtr pPackage);
 private:
-	void processTaskPack(PlainHeaders& headers, FTD::PackageSPtr pPackage, mco_db_h db);
+	static void processTaskPack(DBWrapperMcoImpl* pWrapper, 
+		PlainHeaders& headers, FTD::PackageSPtr pPackage, mco_db_h db);
 	//void populate(const DBTask& pf);
 private:
+
+	UplinkFunction m_uplinkFunction;
 	std::atomic<bool> m_done;
-	ThreadsafeQueue<DBTask> m_reqQueue;
+	ThreadsafeQueue<DBTask> m_packageQueue;
 	JoinThreads* m_joiner;
 	std::vector<std::thread> m_threads;
 	void initDB();

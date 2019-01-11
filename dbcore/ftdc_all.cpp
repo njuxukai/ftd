@@ -1,40 +1,37 @@
 #include "ftdc_all.h"
 using namespace genericdb;
 
-Package* ftdcAll(const Package* pReq, mco_db_h db)
+void ftdcAll(PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapper* pWrapper, mco_db_h db)
 {
-	Package* pRsp = 0;
 	switch (pReq->m_transactionId)
 	{
 	case TID_UserLogin:
-		pRsp = processUserLogin(pReq, db);
+		processUserLogin(headers, pReq, pWrapper, db);
 		break;
 	case TID_UserLogout:
-		pRsp = processUserLogout(pReq, db);
+		//processUserLogout(headers, pReq, pWrapper, db);
 		break;
 	case TID_QryPrivateInitialData:
-		pRsp = processQryPrivateInitialData(pReq, db);
+		processQryPrivateInitialData(headers, pReq, pWrapper, db);
 		break;
 	case TID_OrderInsert:
-		pRsp = processOrderInsert(pReq, db);
+		processOrderInsert(headers, pReq, pWrapper, db);
 		break;
 	case TID_OrderAction:
-		pRsp = processOrderAction(pReq, db);
+		processOrderAction(headers, pReq, pWrapper, db);
 		break;
 	case TID_FundTransfer:
-		pRsp = processFundTransfer(pReq, db);
+		processFundTransfer(headers, pReq, pWrapper, db);
 		break;
 	case TID_QryOrder:
-		pRsp = processQryOrder(pReq, db);
+		processQryOrder(headers, pReq, pWrapper, db);
 		break;
 	case TID_QryTrade:
-		pRsp = processQryTrade(pReq, db);
+		processQryTrade(headers, pReq, pWrapper, db);
 		break;
 	default:
-		pRsp = 0;
 		break;
 	}
-	return pRsp;
 }
 
 void populate_db(mco_db_h db)

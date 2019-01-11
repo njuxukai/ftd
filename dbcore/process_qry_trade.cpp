@@ -1,6 +1,5 @@
 #include "ftdc_all.h"
 
-Package* processQryTrade(const Package* pReq, mco_db_h db)
+void processQryTrade(PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapper* pWrapper, mco_db_h db)
 {
-	return 0;
 }

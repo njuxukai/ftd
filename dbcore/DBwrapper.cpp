@@ -6,3 +6,4 @@ DBWrapper::SPtr DBWrapper::CreateWrapper()
 {
 	return std::make_shared<DBWrapperMcoImpl>();
 }
+

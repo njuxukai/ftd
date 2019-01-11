@@ -1,4 +1,22 @@
 #include "DBWrapperMcoImpl.h"
+#include "functional"
+
+
+char sample_descr[] = {
+	"Sample 'disk_file' opens a database using FILE memory devices.\n"
+};
+const char * db_name = "disk_file";
+
+/* Define relatively small memory segment sizes to facilitate testing */
+
+
+/* Define nRecords large enough to cause creation of sufficient data to necessitate
+use of multifile segments */
+const int nRecords = 1000000;
+/* Define transaction block size to reduce time for inserts */
+const int nInsertsPerTransaction = 10000;
+
+const int nThreadCount = 2;
 
 
 DBWrapperMcoImpl::DBWrapperMcoImpl(): m_done(false), m_joiner(new JoinThreads(m_threads))
@@ -103,18 +121,38 @@ void DBWrapperMcoImpl::worker()
 		return;
 	}
 	mco_disk_transaction_policy(db, MCO_COMMIT_BUFFERED);
-	while (!m_done || !m_reqQueue.empty())
+	while (!m_done || !m_packageQueue.empty())
 	{
-		auto pTask = m_reqQueue.wait_and_pop(20);
+		auto pTask = m_packageQueue.wait_and_pop(20);
 		if (pTask.get())
 		{
-			processTaskPack(*pTask.get(), db);
+			(*pTask)(db);
 		}
 	}
 	mco_db_disconnect(db);
 }
 
-void DBWrapperMcoImpl::processTaskPack(DBTaskPack& pack, mco_db_h db)
+void DBWrapperMcoImpl::submit(PlainHeaders& headers, FTD::PackageSPtr pPackage)
+{
+	m_packageQueue.push(std::bind(&DBWrapperMcoImpl::processTaskPack, this, 
+		headers, pPackage, std::placeholders::_1));
+}
+
+void DBWrapperMcoImpl::processTaskPack(DBWrapperMcoImpl* pWrapper, 
+	PlainHeaders& headers, FTD::PackageSPtr pPackage, mco_db_h db)
 {
 
+}
+
+void DBWrapperMcoImpl::registerUplinkFunction(const UplinkFunction& function)
+{
+	m_uplinkFunction = function;
+}
+
+void DBWrapperMcoImpl::uplink(PlainHeaders& headers, FTD::PackageSPtr pPackage)
+{
+	if (m_uplinkFunction)
+	{
+		m_uplinkFunction(headers, pPackage);
+	}
 }

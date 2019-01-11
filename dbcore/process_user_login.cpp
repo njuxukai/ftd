@@ -68,10 +68,11 @@ void processUserLoginTransaction(const ReqUserLogin* pReq, mco_trans_h t, RspUse
 	strcpy(pRsp->pErrorField->ErrorText, "µÇÂ¼³É¹¦");
 }
 
-Package* processUserLogin(const Package* pReq, mco_db_h db)
+void processUserLogin(PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapper* pWrapper, mco_db_h db)
 {
-	RspUserLogin *pRsp = new RspUserLogin();
-	const ReqUserLogin* pReqUserLogin = (const ReqUserLogin*)pReq;
+	PlainHeaders rspHeaders = { 0 };
+	std::shared_ptr<RspUserLogin> pRsp = std::make_shared<RspUserLogin>();
+	const ReqUserLogin* pReqUserLogin = (const ReqUserLogin*)pReq.get();
 	pRsp->rspUserLoginField.BrokerID = pReqUserLogin->reqUserLoginField.BrokerID;
 	pRsp->rspUserLoginField.UserID = pReqUserLogin->reqUserLoginField.UserID;
 	pRsp->pErrorField = CFtdcErrorFieldPtr(new CFtdcErrorField());
@@ -84,11 +85,12 @@ Package* processUserLogin(const Package* pReq, mco_db_h db)
 	{
 		pRsp->pErrorField->ErrorCode = FTD_ERROR_CODE_TRANSACTION_ERROR;
 		strcpy(pRsp->pErrorField->ErrorText, FTD_ERROR_TEXT_TRANSACTION_ERROR);
-		return pRsp;
+		pWrapper->uplink(rspHeaders, pRsp);
+		return;
 	}
 	try
 	{
-		processUserLoginTransaction(pReqUserLogin, t, pRsp);
+		processUserLoginTransaction(pReqUserLogin, t, pRsp.get());
 		mco_trans_commit(t);
 	}
 	catch (MCO::Exception& e)
@@ -97,5 +99,5 @@ Package* processUserLogin(const Package* pReq, mco_db_h db)
 		pRsp->pErrorField->ErrorCode = e.errorCode;
 		strcpy(pRsp->pErrorField->ErrorText, e.what());
 	}
-	return pRsp;
+	pWrapper->uplink(rspHeaders, pRsp);
 }
