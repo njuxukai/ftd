@@ -17,7 +17,7 @@
 #include <condition_variable>
 #include <queue>
 #include <atomic>
-
+#include <functional>
 
 
 #define  MAX_DEVICES           10
@@ -41,7 +41,7 @@ const int nThreadCount = 2;
 
 
 
-
+typedef std::function<void(mco_db_h)> DBTask;
 
 
 class  DBWrapperMcoImpl
@@ -51,16 +51,13 @@ public:
 
 	~DBWrapperMcoImpl();
 
-	void submit(const DBTaskPack& f)
-	{
-		m_reqQueue.push(std::move(f));
-	}
+	void submit(PlainHeaders& headers, FTD::PackageSPtr pPackage);
 private:
-	void processTaskPack(DBTaskPack& pack, mco_db_h db);
+	void processTaskPack(PlainHeaders& headers, FTD::PackageSPtr pPackage, mco_db_h db);
 	//void populate(const DBTask& pf);
 private:
 	std::atomic<bool> m_done;
-	ThreadsafeQueue<DBTaskPack> m_reqQueue;
+	ThreadsafeQueue<DBTask> m_reqQueue;
 	JoinThreads* m_joiner;
 	std::vector<std::thread> m_threads;
 	void initDB();

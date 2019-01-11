@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "CoreServer.h"
 
 CoreServer::CoreServer(const std::string& cfgName)

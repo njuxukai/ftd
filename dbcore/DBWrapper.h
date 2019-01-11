@@ -11,23 +11,15 @@
 #define API_EXPORT 
 #endif
 
-#include <functional>
-#include <memory>
-
 #include <common/usual_macro.h>
 
 #include <ftd/FTD30/Packages.h>
 #include <mqclient/MQClientWrapper.h>
+#include <mco.hpp>
 
 
-struct DBTaskPack
-{
-	PlainHeaders header;
-	FTD::PackageSPtr pPackage;
-};
-
-typedef std::function<void(PlainHeaders, FTD::PackageSPtr)> UplinkFunction;
-typedef std::function<void(PlainHeaders, FTD::PackageSPtr)> DownlinkFunction;
+typedef std::function<void(PlainHeaders&, FTD::PackageSPtr)> UplinkFunction;
+typedef std::function<void(PlainHeaders&, FTD::PackageSPtr)> DownlinkFunction;
 
 class API_EXPORT DBWrapper
 {
@@ -36,7 +28,7 @@ public:
 
 	SPtr CreateWrapper();
 	virtual ~DBWrapper() {}
-	virtual void submit(const DBTaskPack& pack) = 0;
+	virtual void submit(PlainHeaders& headers, FTD::PackageSPtr) = 0;
 
 protected:
 	DBWrapper() {}
