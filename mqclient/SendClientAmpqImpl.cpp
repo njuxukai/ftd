@@ -47,6 +47,7 @@ void SendClientAmpqImpl::stop()
 
 void SendClientAmpqImpl::run()
 {
+	std::cout << "SendClientImpl Run Begin\n";
 	while (!m_stopping || !m_taskQueue.empty())
 	{
 		std::shared_ptr<DeliveryPack> task = m_taskQueue.wait_and_pop(20);
@@ -55,6 +56,7 @@ void SendClientAmpqImpl::run()
 			send(*task);
 		}
 	}
+	std::cout << "SendClientImpl Run End\n";
 }
 
 bool SendClientAmpqImpl::connect()
@@ -64,7 +66,7 @@ bool SendClientAmpqImpl::connect()
 	{
 		m_channel = AmqpClient::Channel::Create(m_host, m_port, m_user, m_password);
 	}
-	catch (...)
+	catch (std::exception& e)
 	{
 		connectResult = false;
 	}

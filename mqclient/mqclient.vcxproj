@@ -99,7 +99,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>simpleamqpclient.2.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)\import\lib\win32\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\import\lib\win32\debug</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>echo test\ &gt; EXCLUDE

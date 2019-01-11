@@ -8,6 +8,7 @@
 FrontServer::FrontServer(const std::string& cfgFname)
 {
 	m_parseResult = parseCfgFile(cfgFname);
+	m_routeParameter.cfgFname = cfgFname;
 	if (m_parseResult)
 	{
 		m_pSender = SendClient::CreateClient(m_qParameter);

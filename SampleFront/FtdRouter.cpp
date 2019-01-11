@@ -178,13 +178,16 @@ void FtdRouter::OnPackage(const ReqUserLogin& req, const SessionID& id)
 	ReqUserLogin* pCopy = (ReqUserLogin*)req.clone();
 	pCopy->reqUserLoginField.FrontID = m_parameter.frontID;
 	pCopy->reqUserLoginField.SessionID = id;
+
 	PlainHeaders headers = { 0 };
 	headers.admin_flag = QMSG_FLAG_ADMIN;
 	headers.msg_type = QMSG_TYPE_REQ;
 	headers.multi_flag = QMSG_FLAG_SINGLE_FTDC;
+
 	std::string body;
 	int count;
 	pCopy->toSingleConcatFtdcMessage(body, count, true);
+
 	m_uplinkFunction(headers, body);
 }
 
