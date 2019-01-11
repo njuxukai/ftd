@@ -12,27 +12,37 @@
 #endif
 
 #include <functional>
-#include <mco.hpp>
+#include <memory>
+
+#include <common/usual_macro.h>
+
+#include <ftd/FTD30/Packages.h>
+#include <mqclient/MQClientWrapper.h>
 
 
+struct DBTaskPack
+{
+	PlainHeaders header;
+	FTD::PackageSPtr pPackage;
+};
 
+typedef std::function<void(PlainHeaders, FTD::PackageSPtr)> UplinkFunction;
+typedef std::function<void(PlainHeaders, FTD::PackageSPtr)> DownlinkFunction;
 
-
-
-
-class McoDBWrapperImpl;
-
-typedef std::function<void(mco_db_h)> DBTask;
-
-class API_EXPORT McoDBWrapper
+class API_EXPORT DBWrapper
 {
 public:
-	McoDBWrapper();
-	~McoDBWrapper();
-	void submit(const DBTask& f);
-	void populate(const DBTask& f);
+	typedef std::shared_ptr<DBWrapper> SPtr;
+
+	SPtr CreateWrapper();
+	virtual ~DBWrapper() {}
+	virtual void submit(const DBTaskPack& pack) = 0;
+
+protected:
+	DBWrapper() {}
+
 private:
-	McoDBWrapperImpl *m_pImpl;
+	DISABLE_COPY_AND_ASSIGN(DBWrapper)
 };
 
 

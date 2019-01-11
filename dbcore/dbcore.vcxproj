@@ -186,6 +186,7 @@ del /F EXCLUDE</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DBWrapper.h" />
+    <ClInclude Include="DBWrapperMcoImpl.h" />
     <ClInclude Include="Exceptions.h" />
     <ClInclude Include="ftdc_all.h" />
     <ClInclude Include="stdafx.h" />
@@ -193,7 +194,8 @@ del /F EXCLUDE</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(McobjectDir)\samples\native\common\common.c" />
-    <ClCompile Include="DBwrapper.cpp" />
+    <ClCompile Include="DBWrapper.cpp" />
+    <ClCompile Include="DBwrapperMcoImpl.cpp" />
     <ClCompile Include="ftdc_all.cpp" />
     <ClCompile Include="process_fund_transfer.cpp" />
     <ClCompile Include="genericdb.c" />
