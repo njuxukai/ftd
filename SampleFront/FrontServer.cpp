@@ -1,7 +1,8 @@
+#include "stdafx.h"
 #include "FrontServer.h"
 #include <fstream>
 #include <ftd/Settings.h>
-#include <fstream>
+
 
 
 FrontServer::FrontServer(const std::string& cfgFname)
@@ -14,14 +15,13 @@ FrontServer::FrontServer(const std::string& cfgFname)
 		m_pReceiver->registerDirectQueue(m_rspQueue);
 		m_pReceiver->registerFanoutExchange(m_privateExchange);
 		m_pReceiver->registerFanoutExchange(m_boardcastExchange);
-		//TODO 
-		//register callback
-		//m_pReceiver->registerCallback()
-	}
-	m_pRouter = std::make_shared<FtdRouter>(cfgFname);
 
-	m_pRouter->registerUplinkFunction(std::bind(&FrontServer::uplink, this));
-	m_pReceiver->registerCallback(std::bind(&FrontServer::downlink, this));
+		m_pRouter = std::make_shared<FtdRouter>(m_routeParameter);
+		m_pRouter->registerUplinkFunction(std::bind(&FrontServer::uplink, this,
+			std::placeholders::_1, std::placeholders::_2));
+		m_pReceiver->registerCallback(std::bind(&FrontServer::downlink, this,
+			std::placeholders::_1, std::placeholders::_2));
+	}
 }
 
 
@@ -47,38 +47,24 @@ void FrontServer::stop()
 	m_pSender->stop();
 }
 
-void FrontServer::uplink(const PlainHeaders& headers, const std::string& ftdcMsg)
+//在acceptor的工作线程上执行
+void FrontServer::uplink(PlainHeaders& headers, const std::string& ftdcMsg)
 {
-	//called by ftd router
 	DeliveryPack pack;
-	pack.body = ftdcMsg;
-	pack.exchange = "";
-	pack.routing_key = m_reqQueue;
+	//headers & body
+	strncpy(headers.target_queue, m_rspQueue.data(), sizeof(headers.target_queue));
 	memcpy(&pack.plain_headers, &headers, sizeof(PlainHeaders));
+	pack.body = ftdcMsg;
+	//exchange & routingKey
+	pack.exchange = "";
+	pack.routing_key = m_reqQueue;	
 	m_pSender->submitTask(pack);
 }
 
 //在receive线程中顺序执行
 void FrontServer::downlink(const PlainHeaders& headers, const std::string& ftdcMsgs)
-{
-	if (headers.msg_type == QMSG_TYPE_M_RSP)
-	{
-		std::vector<std::string> ftdcMsgs;
-
-	}
-	std::string ftdMsg;
-	//called by receive client
-	if (headers.msg_type == QMSG_TYPE_RSP)
-	{
-		Session::sendToTarget(ftdMsg, headers.source_session);
-		return;
-	}
-	if (headers.msg_type == QMSG_TYPE_PRIVATE || headers.msg_type == QMSG_TYPE_BOARDCAST)
-	{
-		//交给FtdRoute处理
-		return;
-	}
-	std::cout << "在下行处理函数中出现不该出现的消息类型" << headers.msg_type << std::endl;
+{	
+	m_pRouter->processDownlink(headers, ftdcMsgs);
 }
 
 
@@ -96,12 +82,12 @@ bool FrontServer::parseCfgFile(const std::string& fname)
 		if (section.size() == 0)
 			return false;
 		Dictionary frontDict = section[0];
-		m_frontID = frontDict.getInt("FrontID");
+		m_routeParameter.frontID = frontDict.getInt("FrontID");
 		for (auto it = frontDict.begin(); it != frontDict.end(); it++)
 		{
 			if (it->first.find("BrokerID") == 0)
 			{
-				m_validBrokerIDs.insert(IntConvertor::convert(it->second));
+				m_routeParameter.allowedSessionIDs.insert(IntConvertor::convert(it->second));
 			}
 		}
 		section = settings.get("QUEUE");
@@ -114,7 +100,7 @@ bool FrontServer::parseCfgFile(const std::string& fname)
 		m_qParameter.password = queueDict.getString("Password");
 
 		m_reqQueue = queueDict.getString("ReqQueue");
-		m_rspQueue = queueDict.getInt("RspQueue");
+		m_rspQueue = queueDict.getString("RspQueue");
 		m_privateExchange = queueDict.getString("PrivateExchange");
 		m_boardcastExchange = queueDict.getString("BoardcastExchange");
 	}

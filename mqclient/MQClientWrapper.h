@@ -28,6 +28,10 @@ struct PlainHeaders
 	//'0' req '1' rsp '2' private '3'boardcast
 	char msg_type;
 
+	//消息是否为管理信息 '0'管理信息 '1'业务信息
+	//ftd package :None 为Admin 其他为APP 
+	char admin_flag;
+
 	//body是否为多条ftdc拼接
 	char multi_flag;
 
@@ -53,8 +57,11 @@ struct PlainHeaders
 #define QMSG_TYPE_PRIVATE '2'
 #define QMSG_TYPE_BOARDCAST '3'
 
-#define QMSG_MULTI_FTDC '0'
-#define QMSG_SINGLE_FTDC '1'
+#define QMSG_FLAG_MULTI_FTDC '0'
+#define QMSG_FLAG_SINGLE_FTDC '1'
+
+#define QMSG_FLAG_ADMIN '0'
+#define QMSG_FLAG_APP  '1'
 
 
 

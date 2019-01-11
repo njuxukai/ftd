@@ -6,15 +6,32 @@
 #include "FrontFunctions.h"
 
 using namespace FTD;
+
+struct FtdRouterParameter
+{
+	std::string cfgFname;
+	int frontID;
+	std::set<SessionID> allowedSessionIDs;
+	bool uplinkMultiFlag;
+};
+
 class FtdRouter : public FTD::Application, public FTD::PackageCracker
 {
 public:
-	FtdRouter(const std::string& cfgFile, int frontID, const std::set<int>& validBrokerIDs);
+	FtdRouter(const FtdRouterParameter& parameter);
 	~FtdRouter();
 
-	void registerUplinkFunction(const UplinkFunction& func);
+	void registerUplinkFunction(UplinkFunction func);
 	void start();
 	void stop();
+
+	void processDownlink(const PlainHeaders& headers, const std::string& body);
+
+	void processDownlinkAdmin(const PlainHeaders& headers, const std::string& body);
+
+	void processDownlinkAppRsp(const PlainHeaders& headers, const std::string& body);
+
+	void processDownlinkPrivateAndBoardcast(const PlainHeaders& headers, const std::string& body);
 
 	//void DeliveryFtdcMessage(const )
 	virtual void onCreate(const SessionID&);
@@ -49,7 +66,7 @@ public:
 
 	///void processReq(PackageSPtr pReq, mco_db_h db, SessionID sessionID);
 
-	//私有流订阅管理
+	//私有流/公有流订阅管理
 	void resigterSequenceSubscription(const SessionID& id,int sequenceSerie)
 	{
 		if (m_subMap.find(sequenceSerie) == m_subMap.end())
@@ -83,10 +100,13 @@ public:
 	}
 
 private:
-	UplinkFunction m_uplinkFunction;
-	std::map<int, std::set<SessionID>> m_subMap;
-	std::string m_cfgFile;
+	FtdRouterParameter m_parameter;
+
+	
 	FTD::Acceptor* m_acceptor;
-	const int m_frontID;
-	const std::set<int> m_validBrokerIDs;
+	std::map<int, std::set<SessionID>> m_subMap;
+	//消息队列上传回调
+	UplinkFunction m_uplinkFunction;
+	//处理下行的管理信息
+	FTD::PackageBuffer m_downlinkAdminBuffer;
 };

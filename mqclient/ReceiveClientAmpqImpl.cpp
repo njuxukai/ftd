@@ -142,6 +142,10 @@ void ReceiveClientAmpqImpl::formatHeaders(const Table& table, PlainHeaders& head
 	if (it != table.end())
 		headers.msg_type =  it->second.GetInt8();
 
+	it = table.find(ADMIN_FLAG);
+	if (it != table.end())
+		headers.admin_flag = it->second.GetInt8();
+
 	it = table.find(MULTI_FLAG);
 	if (it != table.end())
 		headers.multi_flag = it->second.GetInt8();

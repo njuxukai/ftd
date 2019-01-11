@@ -14,7 +14,7 @@ class FtdMessageUtil
 {
 public:
 	//Á¬½Ó Î´Ñ¹ËõµÄftdcMesg
-	static bool concatenateFtdcMessages(const std::vector<std::string>& msgs, std::string& result)
+	static bool concateFtdcMessages(const std::vector<std::string>& msgs, std::string& result)
 	{
 		
 		if (msgs.size() == 0)

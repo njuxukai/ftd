@@ -23,57 +23,53 @@ namespace FTD
 		virtual Package* clone() const = 0;
 		virtual void clear() = 0;
 		
-		void toFtdMesssages(std::vector<std::string>& ftdMsgs, const FtdExt* pExt=0)
+		void toFtdMesssages(std::vector<std::string>& ftdMsgs, bool needFormat=false, const FtdExt* pExt=0)
 		{
-			ftdMsgs.clear();
-			std::vector<std::string> ftdcMsgs;
-			toMessages(ftdcMsgs);
-			for (unsigned int i = 0; i < ftdcMsgs.size(); i++)
+			if (needFormat)
 			{
-				ftdMsgs.push_back(FtdMessageUtil::formatFtdMessage(ftdcMsgs[i], pExt));
+				formatFtdcMessages();
+			}
+			ftdMsgs.clear();
+			for (unsigned int i = 0; i < m_ftdcMessages.size(); i++)
+			{
+				ftdMsgs.push_back(FtdMessageUtil::formatFtdMessage(m_ftdcMessages[i], pExt));
 			}			
 		}
 
-		virtual  void toMessages(std::vector<std::string>& resultBuf) { }
-	
-
-		bool mergeFtdcMessage(const FtdcHeader& ftdcHeader, const std::string& ftdcContent)
+		void toFtdcMessages(std::vector<std::string>& ftdcMsgs, bool needFormat = false)
 		{
-			if (ftdcHeader.contentLength != ftdcContent.size())
-				return false;
-			if (m_transactionId != ftdcHeader.transactionId)
+			if (needFormat)
 			{
-				return false;
+				formatFtdcMessages();
 			}
-			if (ftdcHeader.chain == FTDCChainSingle || ftdcHeader.chain == FTDCChainFirst)
+			ftdcMsgs.clear();
+			for (unsigned int i = 0; i < m_ftdcMessages.size(); i++)
 			{
-				clear();
-				m_header.sequenceNO = ftdcHeader.sequenceNO;
-				m_header.sequenceSeries = ftdcHeader.sequenceSeries;
-				m_header.version = ftdcHeader.version;
+				ftdcMsgs.push_back(m_ftdcMessages[i]);
 			}
-			if (m_header.sequenceNO != ftdcHeader.sequenceNO
-				|| m_header.sequenceSeries != ftdcHeader.sequenceSeries)
-				return false;
-			m_header.fieldCount += ftdcHeader.fieldCount;
-			m_header.contentLength += ftdcHeader.contentLength;
-			FtdcFieldHeader fieldHeader = { 0 };
-			const char* buffer = ftdcContent.c_str();
-			const char* pos = buffer;
-			for (int i = 0; i < ftdcHeader.fieldCount; i++)
-			{
-				pos += readFtdcFieldHeader(pos, fieldHeader);
-				int readLen = 0;
-				mergeFieldMessage(fieldHeader, pos);
-				pos += fieldHeader.fidLength;
-			}
-			if (pos - buffer != ftdcHeader.contentLength)
-				return false;
-			if (ftdcHeader.chain == FTDCChainSingle || ftdcHeader.chain == FTDCChainLast)
-				return true;
-			else
-				return false;
 		}
+
+		void toSingleConcatFtdcMessage(std::string& result, int& count, bool needFormat=false)
+		{
+			if (needFormat)
+			{
+				formatFtdcMessages();
+			}
+			count = m_ftdcMessages.size();
+			if (count == 1)
+				result = m_ftdcMessages[0];
+			else
+				FtdMessageUtil::concateFtdcMessages(m_ftdcMessages, result);
+		}
+
+		void formatFtdcMessages() 
+		{
+			toMessages(m_ftdcMessages);
+		}
+	
+		virtual void toMessages(std::vector<std::string>& ftdcMsgs) = 0;
+
+		
 
 
 		bool mergeFtdcMessage(const std::string& ftdcMsg)
@@ -81,7 +77,14 @@ namespace FTD
 			FtdcHeader header;
 			const char* ftdcBegin = ftdcMsg.c_str() + readFtdcHeader(ftdcMsg.c_str(), header);
 			std::string ftdcContent(ftdcBegin, header.contentLength);
-			return mergeFtdcMessage(header, ftdcContent);
+			bool mergeResult = false;
+			bool packageFinished = false;
+			mergeFtdcMessage(header, ftdcContent, mergeResult, packageFinished);
+			if (mergeResult)
+			{
+				m_ftdcMessages.push_back(ftdcMsg);
+			}
+			return packageFinished;
 		}
 		
 		bool isPrivteMode()const
@@ -117,8 +120,49 @@ namespace FTD
 
 	protected:
 		virtual bool mergeFieldMessage(const FtdcFieldHeader& header, const char* msg) = 0;
-
-		
+		std::vector<std::string> m_ftdcMessages;
+	private:
+		void mergeFtdcMessage(const FtdcHeader& ftdcHeader, const std::string& ftdcContent, bool& mergeSucceed, bool& packageFinished)
+		{
+			mergeSucceed = false;
+			packageFinished = false;
+			if (ftdcHeader.contentLength != ftdcContent.size())
+				return;
+			if (m_transactionId != ftdcHeader.transactionId)
+			{
+				return;
+			}
+			if (ftdcHeader.chain == FTDCChainSingle || ftdcHeader.chain == FTDCChainFirst)
+			{
+				clear();
+				m_ftdcMessages.clear();
+				m_header.sequenceNO = ftdcHeader.sequenceNO;
+				m_header.sequenceSeries = ftdcHeader.sequenceSeries;
+				m_header.version = ftdcHeader.version;
+			}
+			if (m_header.sequenceNO != ftdcHeader.sequenceNO
+				|| m_header.sequenceSeries != ftdcHeader.sequenceSeries)
+				return;
+			m_header.fieldCount += ftdcHeader.fieldCount;
+			m_header.contentLength += ftdcHeader.contentLength;
+			FtdcFieldHeader fieldHeader = { 0 };
+			const char* buffer = ftdcContent.c_str();
+			const char* pos = buffer;
+			for (int i = 0; i < ftdcHeader.fieldCount; i++)
+			{
+				pos += readFtdcFieldHeader(pos, fieldHeader);
+				int readLen = 0;
+				mergeFieldMessage(fieldHeader, pos);
+				pos += fieldHeader.fidLength;
+			}
+			if (pos - buffer != ftdcHeader.contentLength)
+				return;
+			mergeSucceed = true;
+			if (ftdcHeader.chain == FTDCChainSingle || ftdcHeader.chain == FTDCChainLast)
+			{
+				packageFinished = true;
+			}
+		}
 	};
 }
 

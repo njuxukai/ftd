@@ -10,6 +10,7 @@ MQ Client(using rabbitmq with simpleAmqpClient)
 #include <common/usual_macro.h>
 
 #define MSG_TYPE "msg_type"
+#define ADMIN_FLAG "admin_flag"
 #define MULTI_FLAG "multi_flag"
 #define TARGET_QUEUE "target_queue"
 #define SOURCE_SESSION "source_session"

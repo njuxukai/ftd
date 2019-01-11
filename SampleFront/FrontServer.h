@@ -3,6 +3,7 @@
 #include <common/usual_macro.h>
 #include <mqclient/MQClientWrapper.h>
 #include "FtdRouter.h"
+#include "FrontFunctions.h"
 #include <set>
 
 class FrontServer
@@ -13,7 +14,7 @@ public:
 	void start();
 	void stop();
 private:
-	void uplink(const PlainHeaders& headers, const std::string& ftdcMsg);
+	void uplink(PlainHeaders& headers, const std::string& ftdcMsg);
 	void downlink(const PlainHeaders& headers, const std::string& ftdcMsg);
 	bool parseCfgFile(const std::string& fname);
 	bool m_parseResult;
@@ -22,9 +23,7 @@ private:
 	std::shared_ptr<FtdRouter> m_pRouter;
 	
 	//AppID
-	int m_frontID;
-	std::set<int> m_validBrokerIDs;
-	
+	FtdRouterParameter m_routeParameter;
 	//
 	QueueParameter m_qParameter;
 	std::string m_reqQueue;
