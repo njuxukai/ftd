@@ -14,19 +14,23 @@ public:
 	void stop();
 
 private:
-	void uplink(PlainHeaders& headers, FTD::PackageSPtr pPackage);
+	
 	void downlink(const PlainHeaders& headers, FTD::PackageSPtr ftdcMsg);
+	void uplink(PlainHeaders& headers, FTD::PackageSPtr pPackage);
+	//called by receiver
+	void receiveCallback(const PlainHeaders& headers, const std::string& body);
 	bool parseCfgFile(const std::string& fname);
 	bool m_parseResult;
 
 	QueueParameter m_queueParameter;
 	std::set<std::string> m_listenQueues;
 	std::map<std::string, std::string> m_rpcQueuePairs;
-	std::string m_publicExchange;
+	std::string m_boardcastExchange;
 	std::string m_privateExchange;
+	bool m_ftdcMulitFlag;
+
 	SendClient::Sptr m_pSender;
 	ReceiveClient::Sptr m_pReceiver;
-
-	std::shared_ptr<McoDBWrapper> m_pDB;
-	//std::map<std::string, PackageBuffer
+	std::shared_ptr<DBWrapper> m_pDB;
+	std::map<std::string, std::shared_ptr<FTD::PackageBuffer>> m_queueBuffers;
 };

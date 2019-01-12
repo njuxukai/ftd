@@ -1,6 +1,6 @@
 #include "DBWrapperMcoImpl.h"
 #include "functional"
-
+#include "ftdc_all.h"
 
 char sample_descr[] = {
 	"Sample 'disk_file' opens a database using FILE memory devices.\n"
@@ -132,16 +132,16 @@ void DBWrapperMcoImpl::worker()
 	mco_db_disconnect(db);
 }
 
-void DBWrapperMcoImpl::submit(PlainHeaders& headers, FTD::PackageSPtr pPackage)
+void DBWrapperMcoImpl::submit(const PlainHeaders& pHeaders, FTD::PackageSPtr pPackage)
 {
 	m_packageQueue.push(std::bind(&DBWrapperMcoImpl::processTaskPack, this, 
-		headers, pPackage, std::placeholders::_1));
+		pHeaders, pPackage, std::placeholders::_1));
 }
 
 void DBWrapperMcoImpl::processTaskPack(DBWrapperMcoImpl* pWrapper, 
-	PlainHeaders& headers, FTD::PackageSPtr pPackage, mco_db_h db)
+	const PlainHeaders& headers, FTD::PackageSPtr pPackage, mco_db_h db)
 {
-
+	ftdcAll(headers, pPackage, pWrapper, db);
 }
 
 void DBWrapperMcoImpl::registerUplinkFunction(const UplinkFunction& function)

@@ -37,12 +37,12 @@ public:
 
 	~DBWrapperMcoImpl();
 
-	void submit(PlainHeaders& headers, FTD::PackageSPtr pPackage);
+	void submit(const PlainHeaders& headers, FTD::PackageSPtr pPackage);
 	virtual void registerUplinkFunction(const UplinkFunction& function);
 	virtual void uplink(PlainHeaders& headers, FTD::PackageSPtr pPackage);
 private:
 	static void processTaskPack(DBWrapperMcoImpl* pWrapper, 
-		PlainHeaders& headers, FTD::PackageSPtr pPackage, mco_db_h db);
+		const PlainHeaders& headers, FTD::PackageSPtr pPackage, mco_db_h db);
 	//void populate(const DBTask& pf);
 private:
 

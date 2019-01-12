@@ -8,7 +8,7 @@ void InsertToOrderInsert(const ReqOrderInsert* pReq, mco_trans_h t, RspOrderInse
 void insertToOrderInsert(const ReqOrderInsert* pReq, mco_trans_h t, RspOrderInsert* pRsp);
 void verifyInputOrderAndDeliverToExchange(const ReqOrderInsert* pReq, mco_trans_h t, RspOrderInsert* pRsp);
 
-void processOrderInsert(PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapper* pWrapper, mco_db_h db)
+void processOrderInsert(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapper* pWrapper, mco_db_h db)
 {
 	PlainHeaders rspHeaders;
 	std::shared_ptr<RspOrderInsert> pRsp = std::make_shared<RspOrderInsert>();
@@ -55,7 +55,7 @@ void processOrderInsert(PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapper*
 	{
 	}
 	//上行到消息队列
-	pWrapper->uplink(headers, pRsp);
+	pWrapper->uplink(rspHeaders, pRsp);
 }
 
 

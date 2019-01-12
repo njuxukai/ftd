@@ -89,18 +89,23 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)\import\include\;$(SolutionDir)\export\include\;$(McobjectDir)\include;$(McobjectDir)\samples\native\common;$(McobjectDir)\include\ha</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)\export\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ws2_32.lib;ftd.lib;dbcore.lib;mqclient.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>xcopy  sample_core.cfg   /Y/I  ..\export\$(Configuration)\$(ProjectName)\
+
 xcopy  ..\export\$(Configuration)\dbcore.dll   /Y/I  ..\export\$(Configuration)\$(ProjectName)\
+
 xcopy  ..\export\$(Configuration)\mqclient.dll   /Y/I  ..\export\$(Configuration)\$(ProjectName)\
+
 xcopy  ..\import\lib\win32\debug\SimpleAmqpClient.2.*   /Y/I  ..\export\$(Configuration)\$(ProjectName)\</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>

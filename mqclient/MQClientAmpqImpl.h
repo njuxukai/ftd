@@ -12,6 +12,7 @@ MQ Client(using rabbitmq with simpleAmqpClient)
 #define MSG_TYPE "msg_type"
 #define ADMIN_FLAG "admin_flag"
 #define MULTI_FLAG "multi_flag"
+#define SOURCE_QUEUE "source_queue"
 #define TARGET_QUEUE "target_queue"
 #define SOURCE_SESSION "source_session"
 #define SEQUENCE_SERIES "sequence_series"

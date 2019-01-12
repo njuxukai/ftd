@@ -9,16 +9,16 @@
 #include <ftd/Errors.h>
 using namespace FTD;
 
-void ftdcAll(PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapper* pWrapper, mco_db_h db);
+void ftdcAll(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapper* pWrapper, mco_db_h db);
 
-void processUserLogin(PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapper* pWrapper, mco_db_h db);
+void processUserLogin(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapper* pWrapper, mco_db_h db);
 //void processUserLogout(PlainHeaders& headers, FTD::PackageSPtr, DBWrapper* pWrapper, mco_db_h db);
-void processOrderInsert(PlainHeaders& headers, FTD::PackageSPtr, DBWrapper* pWrapper, mco_db_h db);
-void processOrderAction(PlainHeaders& headers, FTD::PackageSPtr, DBWrapper* pWrapper, mco_db_h db);
-void processFundTransfer(PlainHeaders& headers, FTD::PackageSPtr, DBWrapper* pWrapper, mco_db_h db);
-void processQryOrder(PlainHeaders& headers, FTD::PackageSPtr, DBWrapper* pWrapper, mco_db_h db);
-void processQryTrade(PlainHeaders& headers, FTD::PackageSPtr, DBWrapper* pWrapper, mco_db_h db);
-void processQryPrivateInitialData(PlainHeaders& headers, FTD::PackageSPtr, DBWrapper* pWrapper, mco_db_h db);
+void processOrderInsert(const PlainHeaders& headers, FTD::PackageSPtr, DBWrapper* pWrapper, mco_db_h db);
+void processOrderAction(const PlainHeaders& headers, FTD::PackageSPtr, DBWrapper* pWrapper, mco_db_h db);
+void processFundTransfer(const PlainHeaders& headers, FTD::PackageSPtr, DBWrapper* pWrapper, mco_db_h db);
+void processQryOrder(const PlainHeaders& headers, FTD::PackageSPtr, DBWrapper* pWrapper, mco_db_h db);
+void processQryTrade(const PlainHeaders& headers, FTD::PackageSPtr, DBWrapper* pWrapper, mco_db_h db);
+void processQryPrivateInitialData(const PlainHeaders& headers, FTD::PackageSPtr, DBWrapper* pWrapper, mco_db_h db);
 
 void populate_db(mco_db_h db);
 

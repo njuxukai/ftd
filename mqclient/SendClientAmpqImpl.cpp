@@ -99,6 +99,7 @@ void SendClientAmpqImpl::formatTable(const PlainHeaders& headers, Table& table)
 	table[MSG_TYPE] = headers.msg_type;
 	table[ADMIN_FLAG] = headers.admin_flag;
 	table[MULTI_FLAG] = headers.multi_flag;
+	table[SOURCE_QUEUE] = headers.source_queue;
 	table[TARGET_QUEUE] = headers.target_queue;
 	table[SOURCE_SESSION] = headers.source_session;
 	table[SEQUENCE_SERIES] = headers.sequence_series;

@@ -150,6 +150,10 @@ void ReceiveClientAmpqImpl::formatHeaders(const Table& table, PlainHeaders& head
 	if (it != table.end())
 		headers.multi_flag = it->second.GetInt8();
 
+	it = table.find(SOURCE_QUEUE);
+	if (it != table.end())
+		strncpy(headers.source_queue, it->second.GetString().data(), sizeof(headers.source_queue));
+
 	it = table.find(TARGET_QUEUE);
 	if (it != table.end())
 		strncpy(headers.target_queue, it->second.GetString().data(), sizeof(headers.target_queue));

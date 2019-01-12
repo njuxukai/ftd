@@ -68,7 +68,7 @@ void processUserLoginTransaction(const ReqUserLogin* pReq, mco_trans_h t, RspUse
 	strcpy(pRsp->pErrorField->ErrorText, "µÇÂ¼³É¹¦");
 }
 
-void processUserLogin(PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapper* pWrapper, mco_db_h db)
+void processUserLogin(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapper* pWrapper, mco_db_h db)
 {
 	PlainHeaders rspHeaders = { 0 };
 	std::shared_ptr<RspUserLogin> pRsp = std::make_shared<RspUserLogin>();

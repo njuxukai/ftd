@@ -1,7 +1,7 @@
 #include "ftdc_all.h"
 using namespace genericdb;
 
-void ftdcAll(PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapper* pWrapper, mco_db_h db)
+void ftdcAll(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapper* pWrapper, mco_db_h db)
 {
 	switch (pReq->m_transactionId)
 	{

@@ -165,7 +165,7 @@ xcopy  ..\import\lib\win32\debug\SimpleAmqpClient.2.*   /Y/I  ..\export\$(Config
   <ItemGroup>
     <ClCompile Include="FrontServer.cpp" />
     <ClCompile Include="FtdRouter.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="SampleFront.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

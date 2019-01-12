@@ -19,16 +19,16 @@
 
 
 typedef std::function<void(PlainHeaders&, FTD::PackageSPtr)> UplinkFunction;
-typedef std::function<void(PlainHeaders&, FTD::PackageSPtr)> DownlinkFunction;
+
 
 class API_EXPORT DBWrapper
 {
 public:
 	typedef std::shared_ptr<DBWrapper> SPtr;
 
-	SPtr CreateWrapper();
+	static SPtr CreateWrapper();
 	virtual ~DBWrapper() {}
-	virtual void submit(PlainHeaders& headers, FTD::PackageSPtr) = 0;
+	virtual void submit(const PlainHeaders& headers, FTD::PackageSPtr pPackage) = 0;
 	virtual void registerUplinkFunction(const UplinkFunction& function) = 0 ;
 	virtual void uplink(PlainHeaders& headers, FTD::PackageSPtr pPackage) = 0 ;
 protected:
