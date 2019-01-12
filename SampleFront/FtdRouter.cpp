@@ -15,7 +15,7 @@ FtdRouter::FtdRouter(const FtdRouterParameter& parameter) :
 FtdRouter::~FtdRouter()
 {}
 
-void FtdRouter::registerUplinkFunction( UplinkFunction func)
+void FtdRouter::registerUplinkFunction(RouterUplinkFunction func)
 {
 	m_uplinkFunction = func;
 }

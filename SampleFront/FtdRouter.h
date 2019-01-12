@@ -7,6 +7,8 @@
 
 using namespace FTD;
 
+typedef std::function<void(PlainHeaders& headers, const std::string&)> RouterUplinkFunction;
+
 struct FtdRouterParameter
 {
 	std::string cfgFname;
@@ -21,7 +23,7 @@ public:
 	FtdRouter(const FtdRouterParameter& parameter);
 	~FtdRouter();
 
-	void registerUplinkFunction(UplinkFunction func);
+	void registerUplinkFunction(RouterUplinkFunction func);
 	void start();
 	void stop();
 
@@ -106,7 +108,7 @@ private:
 	FTD::Acceptor* m_acceptor;
 	std::map<int, std::set<SessionID>> m_subMap;
 	//消息队列上传回调
-	UplinkFunction m_uplinkFunction;
+	RouterUplinkFunction m_uplinkFunction;
 	//处理下行的管理信息
 	FTD::PackageBuffer m_downlinkAdminBuffer;
 };

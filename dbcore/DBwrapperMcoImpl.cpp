@@ -144,7 +144,7 @@ void DBWrapperMcoImpl::processTaskPack(DBWrapperMcoImpl* pWrapper,
 	ftdcAll(headers, pPackage, pWrapper, db);
 }
 
-void DBWrapperMcoImpl::registerUplinkFunction(const UplinkFunction& function)
+void DBWrapperMcoImpl::registerUplinkCallback(const DBUplinkCallback& function)
 {
 	m_uplinkFunction = function;
 }

@@ -7,9 +7,7 @@ CoreServer::CoreServer(const std::string& cfgName)
 	m_parseResult = parseCfgFile(cfgName);
 	if (m_parseResult)
 	{
-		m_pSender = SendClient::CreateClient(m_queueParameter);
-		m_pReceiver = ReceiveClient::CreateClient(m_queueParameter);
-		m_pDB = std::shared_ptr<DBWrapper>(DBWrapper::CreateWrapper());
+		init();
 	}
 }
 
@@ -37,7 +35,7 @@ void CoreServer::stop()
 }
 
 //被pDB的线程池调用，需要线程安全
-void CoreServer::uplink(PlainHeaders& headers, FTD::PackageSPtr pPackage)
+void CoreServer::dbUplinkCallback(PlainHeaders& headers, FTD::PackageSPtr pPackage)
 {
 	//报盘请求，需要补充报盘Rsp的期望队列 headers.target_queue
 	if (headers.msg_type == QMSG_TYPE_REQ)
@@ -100,13 +98,14 @@ void CoreServer::uplink(PlainHeaders& headers, FTD::PackageSPtr pPackage)
 }
 
 //简单的链接到DBWrapper
-void CoreServer::downlink(const PlainHeaders& headers, FTD::PackageSPtr pPack)
+void CoreServer::submitTaskToDB(const PlainHeaders& headers, FTD::PackageSPtr pPack)
 {
-	m_pDB->submit(headers, pPack);
+	if(m_pDB)
+		m_pDB->submit(headers, pPack);
 }
 
 //被m_pReceiver调用
-void CoreServer::receiveCallback(const PlainHeaders& headers, const std::string& body)
+void CoreServer::queueReceiveCallback(const PlainHeaders& headers, const std::string& body)
 {
 	if (m_queueBuffers.find(headers.source_queue) == m_queueBuffers.end())
 		return;
@@ -118,15 +117,36 @@ void CoreServer::receiveCallback(const PlainHeaders& headers, const std::string&
 		{
 			FTD::Package* pack = m_queueBuffers[headers.source_queue]->OnFtdcMessage(ftdcMessages[i]);
 			if (pack)
-				downlink(headers, FTD::PackageSPtr(pack->clone()));
+				submitTaskToDB(headers, FTD::PackageSPtr(pack->clone()));
 		}
 	}
 	if (headers.multi_flag == QMSG_FLAG_SINGLE_FTDC)
 	{
 		FTD::Package* pack = m_queueBuffers[headers.source_queue]->OnFtdcMessage(body);
 		if (pack)		
-			downlink(headers, FTD::PackageSPtr(pack->clone()));
+			submitTaskToDB(headers, FTD::PackageSPtr(pack->clone()));
 	}	
+}
+
+void CoreServer::init()
+{
+	m_queueBuffers.clear();
+	for (auto it = m_listenQueues.begin(); it != m_listenQueues.end(); it++)
+	{
+		m_queueBuffers[*it] = std::make_shared<FTD::PackageBuffer>(true);
+	}
+
+	m_pSender = SendClient::CreateClient(m_queueParameter);
+	m_pReceiver = ReceiveClient::CreateClient(m_queueParameter);
+	m_pDB = std::shared_ptr<DBWrapper>(DBWrapper::CreateWrapper());
+	for (auto it = m_listenQueues.begin(); it != m_listenQueues.end(); it++)
+	{
+		m_pReceiver->registerDirectQueue(*it);
+	}
+	m_pDB->registerUplinkCallback(std::bind(&CoreServer::dbUplinkCallback, this, 
+		std::placeholders::_1, std::placeholders::_2));
+	m_pReceiver->registerCallback(std::bind(&CoreServer::queueReceiveCallback, this,
+		std::placeholders::_1, std::placeholders::_2));
 }
 
 bool CoreServer::parseCfgFile(const std::string& fname)
@@ -176,6 +196,12 @@ bool CoreServer::parseCfgFile(const std::string& fname)
 		Dictionary exchangeDict = section[0];
 		m_privateExchange = exchangeDict.getString("PrivateExchange");
 		m_boardcastExchange = exchangeDict.getString("BoardcastExchange");
+
+		section = settings.get("CONTROL");
+		if (section.size() != 1)
+			return false;
+		Dictionary controlDict = section[0];
+		m_ftdcMulitFlag = controlDict.getBool("AllowMultiFtdcPerMsg");
 	}
 	catch (...)
 	{

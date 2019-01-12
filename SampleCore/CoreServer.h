@@ -14,12 +14,14 @@ public:
 	void stop();
 
 private:
-	
-	void downlink(const PlainHeaders& headers, FTD::PackageSPtr ftdcMsg);
-	void uplink(PlainHeaders& headers, FTD::PackageSPtr pPackage);
-	//called by receiver
-	void receiveCallback(const PlainHeaders& headers, const std::string& body);
+	//submit task to db
+	void submitTaskToDB(const PlainHeaders& headers, FTD::PackageSPtr ftdcMsg);
+	//called by dbwrapper
+	void dbUplinkCallback(PlainHeaders& headers, FTD::PackageSPtr pPackage);
+	//called by queue receiver
+	void queueReceiveCallback(const PlainHeaders& headers, const std::string& body);
 	bool parseCfgFile(const std::string& fname);
+	void init();
 	bool m_parseResult;
 
 	QueueParameter m_queueParameter;

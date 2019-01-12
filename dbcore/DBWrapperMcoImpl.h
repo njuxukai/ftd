@@ -38,7 +38,7 @@ public:
 	~DBWrapperMcoImpl();
 
 	void submit(const PlainHeaders& headers, FTD::PackageSPtr pPackage);
-	virtual void registerUplinkFunction(const UplinkFunction& function);
+	virtual void registerUplinkCallback(const DBUplinkCallback& function);
 	virtual void uplink(PlainHeaders& headers, FTD::PackageSPtr pPackage);
 private:
 	static void processTaskPack(DBWrapperMcoImpl* pWrapper, 
@@ -46,7 +46,7 @@ private:
 	//void populate(const DBTask& pf);
 private:
 
-	UplinkFunction m_uplinkFunction;
+	DBUplinkCallback m_uplinkFunction;
 	std::atomic<bool> m_done;
 	ThreadsafeQueue<DBTask> m_packageQueue;
 	JoinThreads* m_joiner;

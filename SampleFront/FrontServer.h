@@ -3,8 +3,7 @@
 #include <common/usual_macro.h>
 #include <mqclient/MQClientWrapper.h>
 #include "FtdRouter.h"
-#include "FrontFunctions.h"
-#include <set>
+
 
 class FrontServer
 {

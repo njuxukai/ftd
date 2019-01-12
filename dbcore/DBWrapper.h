@@ -18,7 +18,7 @@
 #include <mco.hpp>
 
 
-typedef std::function<void(PlainHeaders&, FTD::PackageSPtr)> UplinkFunction;
+typedef std::function<void(PlainHeaders&, FTD::PackageSPtr)> DBUplinkCallback;
 
 
 class API_EXPORT DBWrapper
@@ -29,7 +29,7 @@ public:
 	static SPtr CreateWrapper();
 	virtual ~DBWrapper() {}
 	virtual void submit(const PlainHeaders& headers, FTD::PackageSPtr pPackage) = 0;
-	virtual void registerUplinkFunction(const UplinkFunction& function) = 0 ;
+	virtual void registerUplinkCallback(const DBUplinkCallback& function) = 0 ;
 	virtual void uplink(PlainHeaders& headers, FTD::PackageSPtr pPackage) = 0 ;
 protected:
 	DBWrapper() {}
