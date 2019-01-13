@@ -99,6 +99,6 @@ void SendClientAmpqImpl::formatTable(const PlainHeaders& headers, Table& table)
 	table[MULTI_FLAG] = (boost::int8_t)headers.multi_flag;
 	table[SOURCE_QUEUE] = headers.source_queue;
 	table[TARGET_QUEUE] = headers.target_queue;
-	table[SOURCE_SESSION] = (boost::int8_t)headers.source_session;
-	table[SEQUENCE_SERIES] = (boost::int8_t)headers.sequence_series;
+	table[SOURCE_SESSION] = (boost::int32_t)headers.source_session;
+	table[SEQUENCE_SERIES] = (boost::int32_t)headers.sequence_series;
 }

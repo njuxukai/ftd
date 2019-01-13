@@ -24,7 +24,7 @@ public:
 	~FtdRouter();
 
 	void registerUplinkCallback(RouterUplinkCallback func);
-	void uplink(const Package& package);
+	void uplink(const Package& package, const SessionID& id);
 	void uplink(PlainHeaders& headers, const std::string& body);
 	void start();
 	void stop();

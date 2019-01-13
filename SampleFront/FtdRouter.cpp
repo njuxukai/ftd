@@ -20,9 +20,10 @@ void FtdRouter::registerUplinkCallback(RouterUplinkCallback func)
 	m_uplinkCallback = func;
 }
 
-void FtdRouter::uplink(const Package& package)
+void FtdRouter::uplink(const Package& package, const SessionID& id)
 {
 	PlainHeaders headers = { 0 };
+	headers.source_session = id;
 	if ( package.isNoneMode() )
 		headers.admin_flag = QMSG_FLAG_ADMIN;
 	else
@@ -211,7 +212,7 @@ void FtdRouter::OnPackage(const ReqUserLogin& req, const SessionID& id)
 	pCopy->reqUserLoginField.FrontID = m_parameter.frontID;
 	pCopy->reqUserLoginField.SessionID = id;
 	pCopy->formatFtdcMessages();
-	uplink(*pCopy);
+	uplink(*pCopy, id);
 }
 
 void FtdRouter::OnPackage(const ReqQryPrivateInitialData& req, const SessionID& id)
