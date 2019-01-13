@@ -1,8 +1,17 @@
 # -*- coding: utf-8 -*- 
 
 import os
-code_dirs = ['../ftd', '../xcptraderapi', '../mqclient','.', '../include/', '../dbcore', '../SampleClient', '../SampleServer', '../SampleCore']
-code_types = set(['.cpp', '.h', '.py'])
+code_dirs = ['../ftd', 
+             '../xcptraderapi', 
+             '../mqclient',
+             '.',
+             '../include/', 
+             '../XcpApiCSharp/',
+             '../dbcore', 
+             '../SampleClient', 
+             '../SampleServer', 
+             '../SampleCore']
+code_types = set(['.cpp', '.h', '.py', '.cs'])
 
 def stat_dir(dir, stat, stated_file_set):
     list_dirs = os.walk(dir) 

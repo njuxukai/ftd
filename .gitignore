@@ -71,3 +71,5 @@ ipch/*
 /include
 /swtraderapi
 /UnitTest++/obj/UnitTest++_vs14/Debug/UnitTest++_vs14.tlog
+/XcpApiCSharp/obj/Debug
+/XcpApiCSharp/ApiStructure.cs

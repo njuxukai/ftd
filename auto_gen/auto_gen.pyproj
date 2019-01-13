@@ -35,6 +35,9 @@
     <Compile Include="gen_fields_def.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="gen_host_csharp_fields_def.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="gen_host_types_def.py">
       <SubType>Code</SubType>
     </Compile>
@@ -61,6 +64,12 @@
     <Folder Include="templates\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="templates\cs_single_struct_def.template">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="templates\cs_struct.template">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="templates\fields.template" />
     <Content Include="templates\field_struct.template" />
     <Content Include="templates\host_data_type.template">

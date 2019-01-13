@@ -207,6 +207,9 @@ del /F EXCLUDE
     <ClInclude Include="Utility.h" />
     <ClInclude Include="Values.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\spec\ftd_3_0.xml" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

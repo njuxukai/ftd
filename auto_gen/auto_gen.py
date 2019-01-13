@@ -4,9 +4,9 @@ import os
 path = '../spec/'
 files = ['ftd_3_0.xml',]
 target_path = '../ftd/'
-host_targe_path = '../swtraderapi/'
+host_targe_path = '../xcptraderapi/'
+host_csharp_target_path = '../XcpApiCSharp/'
 testcase_target_path = '../test_unit/'
-
 project_code = 'Xcp'
 
 
@@ -16,6 +16,7 @@ import gen_packages_def
 import gen_id_def
 import gen_host_types_def
 import gen_host_fields_def
+import gen_host_csharp_fields_def
 import gen_testcase
 
 from dtd_parse import *
@@ -47,6 +48,11 @@ def generate_host_files(path, file, target_path):
                                                      target_path)
     gen_host_fields_def.generate_host_struct_file(fields, items, types, project_code,data_type_file_name, target_path)
 
+def generate_csharp_files(path, file, target_path):
+    types,items,fields, packages, tids = load_dtd_file_fields(path, file)
+    gen_host_csharp_fields_def.generate_host_struct_file(fields, items, types, project_code, target_path)
+
+
 def generate_testcase(path, file, target_path):
     struct_type_prefix = 'C%sFtdc' % project_code
     version = file.split('.')[0]
@@ -62,4 +68,5 @@ if __name__ == "__main__":
         generate_ftd(path, file, target_path)
         generate_host_files(path, file, host_targe_path)
         generate_testcase(path,file, testcase_target_path)
+        generate_csharp_files(path, file, host_csharp_target_path)
         #generate_ftd(path, file, target_path2)

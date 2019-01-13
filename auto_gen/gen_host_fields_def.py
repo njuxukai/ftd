@@ -10,7 +10,7 @@ host_struct_template = './templates/host_struct.template'
 
 single_struct_template = './templates/host_single_struct_def.template'
 
-def generate_host_struct_file(fields, items, types, project_code, api_data_type_file_name,                                              target_path):
+def generate_host_struct_file(fields, items, types, project_code, api_data_type_file_name, target_path):
     struct_file_name = '%sFtdcUserApiStruct.h' % project_code
     lines = []
     template = load_template_file(host_struct_template)

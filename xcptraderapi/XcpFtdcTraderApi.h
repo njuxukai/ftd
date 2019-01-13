@@ -1,7 +1,7 @@
 #ifndef XCP_FTDC_TRADER_API_H
 #define XCP_FTDC_TRADER_API_H
 
-#if defined(ISLIB) && defined(WIN32)
+#if defined(WIN32)
 #ifdef LIB_TRADER_API_EXPORT
 #define TRADER_API_EXPORT __declspec(dllexport)
 #else
@@ -12,6 +12,8 @@
 #endif
 
 #include "XcpFtdcUserApiStruct.h"
+
+#ifdef __cplusplus
 class CXcpFtdcTraderSpi
 {
 public:
@@ -25,11 +27,11 @@ public:
 	///        0x2001 接收心跳超时
 	///        0x2002 发送心跳失败
 	///        0x2003 收到错误报文
-	virtual void OnFrontDisconnected(int nReason) {};
+	virtual void OnFrontDisconnected(int nReason) {}
 
 	///心跳超时警告。当长时间未收到报文时，该方法被调用。
 	///@param nTimeLapse 距离上次接收报文的时间
-	virtual void OnHeartBeatWarning(int nTimeLapse) {};
+	virtual void OnHeartBeatWarning(int nTimeLapse) {}
 
 	///客户登录请求响应
 	virtual void OnRspUserLogin(CXcpFtdcRspUserLoginField* pRspUserLogin, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast) {}
@@ -195,4 +197,98 @@ public:
 protected:
 	~CXcpFtdcTraderApi() {}
 };
+#endif
+
+typedef void(__cdecl *FuncPtrOnFrontConnected) ();
+typedef void(__cdecl *FuncPtrOnFrontDisconnected) (int nReason);
+typedef void(__cdecl *FuncPtrOnHeartBeatWarning) (int nTimeLapse);
+typedef void(__cdecl *FuncPtrOnRspUserLogin) (CXcpFtdcRspUserLoginField* pRspUserLogin, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
+typedef void(__cdecl *FuncPtrOnRspUserLogout) (CXcpFtdcRspUserLogoutField* pRspUserLogout, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
+typedef void(__cdecl *FuncPtrOnRspInputOrder) (CXcpFtdcInputOrderField* pInputOrder, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
+typedef void(__cdecl *FuncPtrOnRspInputOrderAction) (CXcpFtdcInputOrderActionField* pInputOrderAction, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
+typedef void(__cdecl *FuncPtrOnRspInputFundTransfer) (CXcpFtdcInputFundTransferField* pInputFundTransfer, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
+typedef void(__cdecl *FuncPtrOnRspQryFund) (CXcpFtdcFundField* pFund, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
+typedef void(__cdecl *FuncPtrOnRspQryPosition) (CXcpFtdcPositionField* pPosition, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
+typedef void(__cdecl *FuncPtrOnRspQryOrder) (CXcpFtdcOrderField* pOrder, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
+typedef void(__cdecl *FuncPtrOnRspQryTrade) (CXcpFtdcTradeField* pTrade, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
+typedef void(__cdecl *FuncPtrOnRspQryFundTransfer) (CXcpFtdcFundTransferField* pFundTransfer, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
+typedef void(__cdecl *FuncPtrOnRspQryHisOrder) (CXcpFtdcOrderField* pOrder, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
+typedef void(__cdecl *FuncPtrOnRspQryHisTrade) (CXcpFtdcTradeField* pTrade, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
+typedef void(__cdecl *FuncPtrOnRspQryHisFundTransfer) (CXcpFtdcFundTransferField* pFundTransfer, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
+typedef void(__cdecl *FuncPtrOnRspQryInstrument) (CXcpFtdcInstrumentField* pInstrument, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
+typedef void(__cdecl *FuncPtrOnRspQryStructuredFund) (CXcpFtdcStructuredFundField* pStructuredFund, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
+typedef void(__cdecl *FuncPtrOnRspQryETF) (CXcpFtdcETFField* pETF, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
+typedef void(__cdecl *FuncPtrOnRspQryETFComposition) (CXcpFtdcETFCompositionField* pETFComposition, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
+typedef void(__cdecl *FuncPtrOnRspQryPurchasableNewIssueSecurity) (CXcpFtdcNewIssueSecurityField* pPurchasableNewIssueSecurity, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
+typedef void(__cdecl *FuncPtrOnRspQryPurchaseQuota) (CXcpFtdcPurchaseQuotaField* pPurchaseQuota, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
+typedef void(__cdecl *FuncPtrOnRtnOrderExecutionReport) (CXcpFtdcExecutionReportField* pExecutionReport);
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+	typedef void* TraderApi;
+	TRADER_API_EXPORT void create_trader(TraderApi* p_trader);
+	TRADER_API_EXPORT void release_trader(TraderApi* trader);
+
+	
+	TRADER_API_EXPORT int connect_trader(TraderApi trader);
+	TRADER_API_EXPORT int disconnect_trader(TraderApi trader);
+
+	//交易函数 应在connect后,OnRspUserLogin回调收到成功登录后再调用，如未登录调用返回错误代码
+	TRADER_API_EXPORT int req_order_insert(TraderApi trader, CXcpFtdcInputOrderField* pInputOrder, int nRequestID);
+	TRADER_API_EXPORT int req_order_action(TraderApi trader, CXcpFtdcInputOrderActionField* pInputOrderAction, int nRequestID);
+	TRADER_API_EXPORT int req_fund_transfer(TraderApi trader, CXcpFtdcInputFundTransferField* pInputFundTransfer, int nRequestID);
+	TRADER_API_EXPORT int Req_qry_order(TraderApi trader, CXcpFtdcQryOrderField* pQryOrder, int nRquestID);
+	TRADER_API_EXPORT int Req_qry_trade(TraderApi trader, CXcpFtdcQryTradeField* pQryTrade, int nRequestID);
+	TRADER_API_EXPORT int Req_qry_fund(TraderApi trader, CXcpFtdcQryFundField *pQryFund, int nRequestID);
+	TRADER_API_EXPORT int req_qry_position(TraderApi trader, CXcpFtdcQryPositionField *pQryPosition, int nRequestID);
+	TRADER_API_EXPORT int req_qry_fund_transfer(TraderApi trader, CXcpFtdcQryFundTransferField *pQryFundTransfer, int nRequestID);
+	TRADER_API_EXPORT int req_qry_his_order(TraderApi trader, CXcpFtdcQryHisOrderField *pQryHisOrder, int nRequestID);
+	TRADER_API_EXPORT int req_qry_his_trade(TraderApi trader, CXcpFtdcQryHisTradeField *pQryHisTrade, int nRequestID);
+	TRADER_API_EXPORT int req_qry_his_fund_transfer(TraderApi trader, CXcpFtdcQryHisFundTransferField *pQryHisFundTransfer, int nRequestID);
+	TRADER_API_EXPORT int req_qry_instrument(TraderApi trader, CXcpFtdcQryInstrumentField *pQryInstrument, int nRequestID);
+	TRADER_API_EXPORT int req_qry_etf(TraderApi trader, CXcpFtdcQryETFField *pQryETF, int nRequestID);
+	TRADER_API_EXPORT int req_qry_etf_composition(TraderApi trader, CXcpFtdcQryETFCompositionField *pQryEtfComposition, int nRequestID);
+	TRADER_API_EXPORT int req_qry_structured_fund(TraderApi trader, CXcpFtdcQryStructuredFundField *pQryStructuredFund, int nRequestID);
+	TRADER_API_EXPORT int req_qry_purchasable_new_issue_security(TraderApi trader, CXcpFtdcQryNewIssueSecurityField *pQryPurchasableNewSecurity, int nRequestID);
+	TRADER_API_EXPORT int req_qry_purchase_quota(TraderApi trader, CXcpFtdcQryPurchaseQuotaField *pQryPurchaseQuota, int nRequestID);
+
+	//配置函数 应在connect_trader前调用
+	TRADER_API_EXPORT void register_flow_path(TraderApi trader, const char* path = "");
+	TRADER_API_EXPORT void register_front(TraderApi trader, const char* front_address);
+	TRADER_API_EXPORT void subscribe_private_topic(TraderApi trader, THOST_TE_RESUME_TYPE resume_type);
+	TRADER_API_EXPORT void subscribe_public_topic(TraderApi trader, THOST_TE_RESUME_TYPE resume_type);
+	TRADER_API_EXPORT void attach_userloginfield(TraderApi trader, const CXcpFtdcReqUserLoginField* field);
+    //注册回调 应在connect_trader前调用（只需要注册需要的回调）
+	TRADER_API_EXPORT void registerFP_OnFrontConnected(TraderApi* trader, FuncPtrOnFrontConnected fp);
+	TRADER_API_EXPORT void registerFP_OnFrontDisconnected(TraderApi* trader, FuncPtrOnFrontDisconnected fp);
+	TRADER_API_EXPORT void registerFP_OnHeartBeatWarning(TraderApi* trader, FuncPtrOnHeartBeatWarning fp);
+	TRADER_API_EXPORT void registerFP_OnRspUserLogin(TraderApi* trader, FuncPtrOnRspUserLogin fp);
+	TRADER_API_EXPORT void registerFP_OnRspUserLogout(TraderApi* trader, FuncPtrOnRspUserLogout fp);
+	TRADER_API_EXPORT void registerFP_OnRspInputOrder(TraderApi* trader, FuncPtrOnRspInputOrder fp);
+	TRADER_API_EXPORT void registerFP_OnRspInputOrderAction(TraderApi* trader, FuncPtrOnRspInputOrderAction fp);
+	TRADER_API_EXPORT void registerFP_OnRspInputFundTransfer(TraderApi* trader, FuncPtrOnRspInputFundTransfer fp);
+	TRADER_API_EXPORT void registerFP_OnRspQryFund(TraderApi* trader, FuncPtrOnRspQryFund fp);
+	TRADER_API_EXPORT void registerFP_OnRspQryPosition(TraderApi* trader, FuncPtrOnRspQryPosition fp);
+	TRADER_API_EXPORT void registerFP_OnRspQryOrder(TraderApi* trader, FuncPtrOnRspQryOrder fp);
+	TRADER_API_EXPORT void registerFP_OnRspQryTrade(TraderApi* trader, FuncPtrOnRspQryTrade fp);
+	TRADER_API_EXPORT void registerFP_OnRspQryFundTransfer(TraderApi* trader, FuncPtrOnRspQryFundTransfer fp);
+	TRADER_API_EXPORT void registerFP_OnRspQryHisOrder(TraderApi* trader, FuncPtrOnRspQryHisOrder fp);
+	TRADER_API_EXPORT void registerFP_OnRspQryHisTrade(TraderApi* trader, FuncPtrOnRspQryHisTrade fp);
+	TRADER_API_EXPORT void registerFP_OnRspQryHisFundTransfer(TraderApi* trader, FuncPtrOnRspQryHisFundTransfer fp);
+	TRADER_API_EXPORT void registerFP_OnRspQryInstrument(TraderApi* trader, FuncPtrOnRspQryInstrument fp);
+	TRADER_API_EXPORT void registerFP_OnRspQryStructuredFund(TraderApi* trader, FuncPtrOnRspQryStructuredFund   fp);
+	TRADER_API_EXPORT void registerFP_OnRspQryETF(TraderApi* trader, FuncPtrOnRspQryETF fp);
+	TRADER_API_EXPORT void registerFP_OnRspQryETFComposition(TraderApi* trader, FuncPtrOnRspQryETFComposition fp);
+	TRADER_API_EXPORT void registerFP_OnRspQryPurchasableNewIssueSecurity(TraderApi* trader, FuncPtrOnRspQryPurchasableNewIssueSecurity fp);
+	TRADER_API_EXPORT void registerFP_OnRspQryPurchaseQuota(TraderApi* trader, FuncPtrOnRspQryPurchaseQuota  fp);
+	TRADER_API_EXPORT void registerFP_OnRtnOrderExecutionReport(TraderApi* trader, FuncPtrOnRtnOrderExecutionReport fp);
+
+	
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

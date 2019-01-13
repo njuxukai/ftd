@@ -118,6 +118,7 @@ class TypeDTD:
 
 
 
+
 class ItemDTD:
     def __init__(self):
         self.name = ""
@@ -145,7 +146,7 @@ def get_universal_field_item_define_lines(field_item_dict, items, types, project
     lines.append('')
     return lines
 
-          
+       
 
     
 

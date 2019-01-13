@@ -1,0 +1,12 @@
+using System;
+using System.Runtime.InteropServices;
+using System.Text;
+
+namespace Xcp
+{{
+
+
+{stuct_define_entrys}
+
+
+}}

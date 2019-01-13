@@ -143,10 +143,13 @@ del /F EXCLUDE</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="XcpCTrader.h" />
     <ClInclude Include="XcpFtdcTraderApi.h" />
     <ClInclude Include="XcpFtdcTraderApiImpl.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="XcpCExport.cpp" />
+    <ClCompile Include="XcpCTrader.cpp" />
     <ClCompile Include="XcpFtdcTraderApi.cpp" />
     <ClCompile Include="XcpFtdcTraderApiImpl.cpp" />
   </ItemGroup>
