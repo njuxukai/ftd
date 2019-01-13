@@ -1,12 +1,9 @@
 #include "XcpCTrader.h"
 
-CXcpTrader::CXcpTrader()
+CXcpTrader::CXcpTrader(const char* psw) 
+	:m_pApi(CXcpFtdcTraderApi::CreateFtdcTraderApi(psw))
 {
-	m_pApi = 0;
-	m_flowPath = "";
-	m_privateResumeType = -1;
-	m_publicResumeType = -1;
-
+	
 	//spi init
 	m_onFrontConnectedRegistered = false;
 	m_onFrontDisconnectedRegistered = false;
@@ -35,50 +32,51 @@ CXcpTrader::CXcpTrader()
 
 //TODO
 CXcpTrader::~CXcpTrader()
-{}
-
-void CXcpTrader::RegisterFlowPath(const char* path)
 {
-	m_flowPath = path;
+	if (m_pApi)
+		m_pApi->Release();
+}
+
+const char* CXcpTrader::GetApiVersion()
+{
+	if (m_pApi)
+		return m_pApi->GetApiVersion();
+	else
+		return "";
+}
+
+const char* CXcpTrader::GetTradingDay()
+{
+	if (m_pApi)
+		return m_pApi->GetTradingDay();
+	else
+		return "";
 }
 
 void CXcpTrader::RegisterFront(const char* frontAddress)
 {
-	m_frontAddresses.insert(frontAddress);
+	m_pApi->RegisterFront(frontAddress);
 }
 
 void CXcpTrader::SubscribePrivateTopic(THOST_TE_RESUME_TYPE resumeType)
 {
-	m_privateResumeType = resumeType;
+	m_pApi->SubscribePrivateTopic(resumeType);
 }
 
 void CXcpTrader::SubscribePublicTopic(THOST_TE_RESUME_TYPE resumeType)
 {
-	m_publicResumeType = resumeType;
+	m_pApi->SubscribePublicTopic(resumeType);
 }
 
-void CXcpTrader::AttachUserLoginField(const CXcpFtdcReqUserLoginField* field)
-{
-	memcpy(&m_userField, field, sizeof(CXcpFtdcReqUserLoginField));
-}
 
-void CXcpTrader::Connect()
+
+void CXcpTrader::Init()
 {
-	m_pApi = CXcpFtdcTraderApi::CreateFtdcTraderApi(m_flowPath.data());
-	m_pApi->RegisterSpi(this);
-	for (auto it = m_frontAddresses.begin(); it != m_frontAddresses.end(); it++)
-	{
-		m_pApi->RegisterFront((*it).data());
-	}
-	if (m_privateResumeType > 0)
-		m_pApi->SubscribePrivateTopic((THOST_TE_RESUME_TYPE)m_privateResumeType);
-	if (m_publicResumeType > 0)
-		m_pApi->SubscribePublicTopic((THOST_TE_RESUME_TYPE)m_publicResumeType);
 	m_pApi->Init();
 }
 
 //TODO
-void CXcpTrader::Disconnect()
+void CXcpTrader::Release()
 {
 	if (m_pApi)
 	{
@@ -89,6 +87,22 @@ void CXcpTrader::Disconnect()
 }
 
 //api export
+int CXcpTrader::ReqUserLogin(CXcpFtdcReqUserLoginField* pReqUserLogin, int nRequestID)
+{
+	if (m_pApi)
+		return m_pApi->ReqUserLogin(pReqUserLogin, nRequestID);
+	else
+		return C_API_ERROR_NULL_TRADER_API;
+}
+
+int CXcpTrader::ReqUserLogout(CXcpFtdcReqUserLogoutField* pReqUserLogout, int nRequestID)
+{
+	if (m_pApi)
+		return m_pApi->ReqUserLogout(pReqUserLogout, nRequestID);
+	else
+		return C_API_ERROR_NULL_TRADER_API;
+}
+
 int CXcpTrader::ReqOrderInsert(CXcpFtdcInputOrderField* pInputOrder, int nRequestID)
 {
 	if (m_pApi)
@@ -232,9 +246,6 @@ void CXcpTrader::OnFrontConnected()
 {
 	if (m_onFrontConnectedRegistered)
 		m_fpOnFrontConnected();
-	//Automatic login!!!
-	m_nextReqID = 1;
-	m_pApi->ReqUserLogin(&m_userField, m_nextReqID++);
 }
 
 void CXcpTrader::OnFrontDisconnected(int nReason)

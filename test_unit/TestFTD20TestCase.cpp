@@ -13,6 +13,7 @@
 #include <ftd/FTD30/Error.h>
 
 #include <ftd/FtdMessageUtil.h>
+#include <iostream>
 using namespace FTD;
 
 SUITE(FTDTest)
@@ -49,7 +50,11 @@ SUITE(FTDTest)
 		CHECK_EQUAL(ext.sessionState, ext2.sessionState);
 		CHECK_EQUAL(strcmp(ext2.target, "aa") , 0);
 	}
-	
+	TEST(PInvokerSizeTest)
+	{
+		std::cout << sizeof(CFtdcReqUserLoginField) << std::endl;
+		CHECK_EQUAL(sizeof(CFtdcReqUserLoginField), 224);
+	}
 	TEST(SplitFtdcMessagesTest)
 	{
 		RspQryOrder package;

@@ -10,17 +10,19 @@
 class CXcpTrader : public CXcpFtdcTraderSpi
 {
 public:
-	CXcpTrader();
+	CXcpTrader(const char* psw);
 	~CXcpTrader();
 
-	void RegisterFlowPath(const char* path = "");
+	const char* GetApiVersion();
+	const char* GetTradingDay();
 	void RegisterFront(const char* frontAddress);
 	void SubscribePrivateTopic(THOST_TE_RESUME_TYPE resumeType);
 	void SubscribePublicTopic(THOST_TE_RESUME_TYPE resumeType);
-	void AttachUserLoginField(const CXcpFtdcReqUserLoginField* field);
-	void Connect();
-	void Disconnect();
+	void Init();
+	void Release();
 
+	int ReqUserLogin(CXcpFtdcReqUserLoginField* pReqUserLogin, int nRequestID);
+	int ReqUserLogout(CXcpFtdcReqUserLogoutField* pReqUserLogout, int nRequestID);
 	int ReqOrderInsert(CXcpFtdcInputOrderField* pInputOrder, int nRequestID) ;
 	int ReqOrderAction(CXcpFtdcInputOrderActionField* pInputOrderAction, int nRequestID) ;
 	int ReqFundTransfer(CXcpFtdcInputFundTransferField* pInputFundTransfer, int nRequestID) ;
@@ -90,12 +92,12 @@ public:
 	void registerFP_OnRtnOrderExecutionReport(FuncPtrOnRtnOrderExecutionReport fp);
 private:
 	CXcpFtdcTraderApi* m_pApi;
-	std::string m_flowPath;
-	std::set<std::string> m_frontAddresses;
-	int m_privateResumeType;
-	int m_publicResumeType;
+	//std::string m_flowPath;
+	//std::set<std::string> m_frontAddresses;
+	//int m_privateResumeType;
+	//int m_publicResumeType;
 	CXcpFtdcReqUserLoginField m_userField;
-	int m_nextReqID;
+	//int m_nextReqID;
 
 	bool m_onFrontConnectedRegistered;
 	bool m_onFrontDisconnectedRegistered;

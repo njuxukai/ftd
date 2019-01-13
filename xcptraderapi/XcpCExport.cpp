@@ -1,9 +1,9 @@
 #include "XcpFtdcTraderApi.h"
 #include "XcpCTrader.h"
 
-void create_trader(TraderApi* p_trader)
+void create_trader(TraderApi* p_trader, const char* psw)
 {
-	*p_trader = (TraderApi)new CXcpTrader();
+	*p_trader = (TraderApi)new CXcpTrader(psw);
 }
 
 void release_trader(TraderApi* ptrader)
@@ -14,19 +14,34 @@ void release_trader(TraderApi* ptrader)
 	*ptrader = 0;
 }
 
-int connect_trader(TraderApi trader) 
+void init_trader(TraderApi trader) 
 {
-	((CXcpTrader*)trader)->Connect();
-	return 0;
+	((CXcpTrader*)trader)->Init();
 }
 
-int disconnect_trader(TraderApi trader)
-{
-	((CXcpTrader*)trader)->Disconnect();
-	return 0;
-}
+
 
 //交易函数 应在connect后,OnRspUserLogin回调收到成功登录后再调用，如未登录调用返回错误代码
+const char* get_api_version(TraderApi trader)
+{
+	return ((CXcpTrader*)trader)->GetApiVersion();
+}
+
+const char* get_trading_day(TraderApi trader)
+{
+	return ((CXcpTrader*)trader)->GetTradingDay();
+}
+
+int req_user_login(TraderApi trader, CXcpFtdcReqUserLoginField* pReqUserLogin, int nRequestID)
+{
+	return ((CXcpTrader*)trader)->ReqUserLogin(pReqUserLogin, nRequestID);
+}
+
+int req_user_logout(TraderApi trader, CXcpFtdcReqUserLogoutField* pReqUserLogout, int nRequestID)
+{
+	return ((CXcpTrader*)trader)->ReqUserLogout(pReqUserLogout, nRequestID);
+}
+
 int req_order_insert(TraderApi trader, CXcpFtdcInputOrderField* pInputOrder, int nRequestID) 
 {
 	return ((CXcpTrader*)trader)->ReqOrderInsert(pInputOrder, nRequestID);
@@ -113,12 +128,6 @@ int req_qry_purchase_quota(TraderApi trader, CXcpFtdcQryPurchaseQuotaField *pQry
 }
 
 
-//配置函数 应在connect_trader前调用
-void register_flow_path(TraderApi trader, const char* path)
-{
-	((CXcpTrader*)trader)->RegisterFlowPath(path);
-}
-
 void register_front(TraderApi trader, const char* front_address) 
 {
 	((CXcpTrader*)trader)->RegisterFront(front_address);
@@ -134,10 +143,6 @@ void subscribe_public_topic(TraderApi trader, THOST_TE_RESUME_TYPE resume_type)
 	((CXcpTrader*)trader)->SubscribePublicTopic(resume_type);
 }
 
-void attach_userloginfield(TraderApi trader, const CXcpFtdcReqUserLoginField* field) 
-{
-	((CXcpTrader*)trader)->AttachUserLoginField(field);
-}
 
 //注册回调 应在connect_trader前调用（只需要注册需要的回调）
 void registerFP_OnFrontConnected(TraderApi* trader, FuncPtrOnFrontConnected fp)

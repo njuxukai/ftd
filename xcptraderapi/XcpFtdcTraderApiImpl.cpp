@@ -97,13 +97,14 @@ const char* CXcpFtdcTraderApiImpl::GetApiVersion()
 
 void CXcpFtdcTraderApiImpl::Release()
 {
-	m_pSpi ;
+	
 	if (m_pInitiator)
 	{
 		m_pInitiator->stop();
 		delete m_pInitiator;
 		m_pInitiator = 0 ;
 	}
+	m_pSpi = NULL;
 }
 
 void CXcpFtdcTraderApiImpl::Init()

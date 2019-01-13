@@ -228,20 +228,23 @@ extern "C"
 {
 #endif
 	typedef void* TraderApi;
-	TRADER_API_EXPORT void create_trader(TraderApi* p_trader);
-	TRADER_API_EXPORT void release_trader(TraderApi* trader);
-
+	TRADER_API_EXPORT void create_trader(void** p_trader, const char* psw="");
+	TRADER_API_EXPORT void init_trader(TraderApi trader);
+	TRADER_API_EXPORT void release_trader(TraderApi* trader);	
 	
-	TRADER_API_EXPORT int connect_trader(TraderApi trader);
-	TRADER_API_EXPORT int disconnect_trader(TraderApi trader);
+
 
 	//交易函数 应在connect后,OnRspUserLogin回调收到成功登录后再调用，如未登录调用返回错误代码
+	TRADER_API_EXPORT const char* get_api_version(TraderApi trader);
+	TRADER_API_EXPORT const char* get_trading_day(TraderApi trader);
+	TRADER_API_EXPORT int req_user_login(TraderApi trader, CXcpFtdcReqUserLoginField* pReqUserLogin, int nRequestID);
+	TRADER_API_EXPORT int req_user_logout(TraderApi trader, CXcpFtdcReqUserLogoutField* pReqUserLogout, int nRequestID);
 	TRADER_API_EXPORT int req_order_insert(TraderApi trader, CXcpFtdcInputOrderField* pInputOrder, int nRequestID);
 	TRADER_API_EXPORT int req_order_action(TraderApi trader, CXcpFtdcInputOrderActionField* pInputOrderAction, int nRequestID);
 	TRADER_API_EXPORT int req_fund_transfer(TraderApi trader, CXcpFtdcInputFundTransferField* pInputFundTransfer, int nRequestID);
-	TRADER_API_EXPORT int Req_qry_order(TraderApi trader, CXcpFtdcQryOrderField* pQryOrder, int nRquestID);
-	TRADER_API_EXPORT int Req_qry_trade(TraderApi trader, CXcpFtdcQryTradeField* pQryTrade, int nRequestID);
-	TRADER_API_EXPORT int Req_qry_fund(TraderApi trader, CXcpFtdcQryFundField *pQryFund, int nRequestID);
+	TRADER_API_EXPORT int req_qry_order(TraderApi trader, CXcpFtdcQryOrderField* pQryOrder, int nRquestID);
+	TRADER_API_EXPORT int req_qry_trade(TraderApi trader, CXcpFtdcQryTradeField* pQryTrade, int nRequestID);
+	TRADER_API_EXPORT int req_qry_fund(TraderApi trader, CXcpFtdcQryFundField *pQryFund, int nRequestID);
 	TRADER_API_EXPORT int req_qry_position(TraderApi trader, CXcpFtdcQryPositionField *pQryPosition, int nRequestID);
 	TRADER_API_EXPORT int req_qry_fund_transfer(TraderApi trader, CXcpFtdcQryFundTransferField *pQryFundTransfer, int nRequestID);
 	TRADER_API_EXPORT int req_qry_his_order(TraderApi trader, CXcpFtdcQryHisOrderField *pQryHisOrder, int nRequestID);
@@ -255,11 +258,9 @@ extern "C"
 	TRADER_API_EXPORT int req_qry_purchase_quota(TraderApi trader, CXcpFtdcQryPurchaseQuotaField *pQryPurchaseQuota, int nRequestID);
 
 	//配置函数 应在connect_trader前调用
-	TRADER_API_EXPORT void register_flow_path(TraderApi trader, const char* path = "");
 	TRADER_API_EXPORT void register_front(TraderApi trader, const char* front_address);
 	TRADER_API_EXPORT void subscribe_private_topic(TraderApi trader, THOST_TE_RESUME_TYPE resume_type);
 	TRADER_API_EXPORT void subscribe_public_topic(TraderApi trader, THOST_TE_RESUME_TYPE resume_type);
-	TRADER_API_EXPORT void attach_userloginfield(TraderApi trader, const CXcpFtdcReqUserLoginField* field);
     //注册回调 应在connect_trader前调用（只需要注册需要的回调）
 	TRADER_API_EXPORT void registerFP_OnFrontConnected(TraderApi* trader, FuncPtrOnFrontConnected fp);
 	TRADER_API_EXPORT void registerFP_OnFrontDisconnected(TraderApi* trader, FuncPtrOnFrontDisconnected fp);
