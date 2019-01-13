@@ -57,9 +57,11 @@ void ReceiveClientAmpqImpl::run()
 {
 	Envelope::ptr_t pEnvelope;
 	bool consumeResult = false;
+	bool parseHeadersResult = true;
 	while (!m_stopping)
 	{
 		consumeResult = m_channel->BasicConsumeMessage(pEnvelope, 10);
+		
 		if (consumeResult)
 		{
 			//TODO  <header process and exception handle is not so good/>
@@ -68,10 +70,11 @@ void ReceiveClientAmpqImpl::run()
 			{
 				formatHeaders(pEnvelope->Message()->HeaderTable(), headers);
 			}
-			catch (...)
+			catch (const std::exception& e)
 			{
+				parseHeadersResult = false;
 			}
-			if (m_callback)
+			if (parseHeadersResult && m_callback)
 			{
 				m_callback(headers, pEnvelope->Message()->Body());
 			}

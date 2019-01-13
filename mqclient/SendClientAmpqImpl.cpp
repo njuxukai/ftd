@@ -47,7 +47,6 @@ void SendClientAmpqImpl::stop()
 
 void SendClientAmpqImpl::run()
 {
-	std::cout << "SendClientImpl Run Begin\n";
 	while (!m_stopping || !m_taskQueue.empty())
 	{
 		std::shared_ptr<DeliveryPack> task = m_taskQueue.wait_and_pop(20);
@@ -56,7 +55,6 @@ void SendClientAmpqImpl::run()
 			send(*task);
 		}
 	}
-	std::cout << "SendClientImpl Run End\n";
 }
 
 bool SendClientAmpqImpl::connect()
@@ -96,11 +94,11 @@ bool SendClientAmpqImpl::send(const DeliveryPack& task)
 void SendClientAmpqImpl::formatTable(const PlainHeaders& headers, Table& table)
 {
 	table.clear();
-	table[MSG_TYPE] = headers.msg_type;
-	table[ADMIN_FLAG] = headers.admin_flag;
-	table[MULTI_FLAG] = headers.multi_flag;
+	table[MSG_TYPE] = (boost::int8_t)headers.msg_type;
+	table[ADMIN_FLAG] = (boost::int8_t)headers.admin_flag;
+	table[MULTI_FLAG] = (boost::int8_t)headers.multi_flag;
 	table[SOURCE_QUEUE] = headers.source_queue;
 	table[TARGET_QUEUE] = headers.target_queue;
-	table[SOURCE_SESSION] = headers.source_session;
-	table[SEQUENCE_SERIES] = headers.sequence_series;
+	table[SOURCE_SESSION] = (boost::int8_t)headers.source_session;
+	table[SEQUENCE_SERIES] = (boost::int8_t)headers.sequence_series;
 }

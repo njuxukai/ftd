@@ -15,11 +15,43 @@ FtdRouter::FtdRouter(const FtdRouterParameter& parameter) :
 FtdRouter::~FtdRouter()
 {}
 
-void FtdRouter::registerUplinkFunction(RouterUplinkFunction func)
+void FtdRouter::registerUplinkCallback(RouterUplinkCallback func)
 {
-	m_uplinkFunction = func;
+	m_uplinkCallback = func;
 }
 
+void FtdRouter::uplink(const Package& package)
+{
+	PlainHeaders headers = { 0 };
+	if ( package.isNoneMode() )
+		headers.admin_flag = QMSG_FLAG_ADMIN;
+	else
+		headers.admin_flag = QMSG_FLAG_APP;
+
+	if ( package.isRequest() )
+		headers.msg_type = QMSG_TYPE_REQ;
+	else if ( package.isResponse() )
+		headers.msg_type = QMSG_TYPE_RSP;
+	else if ( package.isPrivteMode() )
+		headers.msg_type = QMSG_TYPE_PRIVATE;
+	else
+		headers.msg_type = QMSG_TYPE_BOARDCAST;
+
+	headers.multi_flag = QMSG_FLAG_SINGLE_FTDC;
+	std::string body;
+	int count;
+	package.toSingleConcatFtdcMessage(body, count);
+
+	uplink(headers, body);
+}
+
+void FtdRouter::uplink(PlainHeaders& headers, const std::string& body)
+{
+	if (m_uplinkCallback)
+	{
+		m_uplinkCallback(headers, body);
+	}
+}
 void FtdRouter::start()
 {
 	//1 create initiator 
@@ -175,20 +207,11 @@ void FtdRouter::onHeartBeatWarning()
 ******************************************************************************/
 void FtdRouter::OnPackage(const ReqUserLogin& req, const SessionID& id)
 {
-	ReqUserLogin* pCopy = (ReqUserLogin*)req.clone();
+	std::shared_ptr<ReqUserLogin> pCopy = std::shared_ptr<ReqUserLogin>((ReqUserLogin*)req.clone());
 	pCopy->reqUserLoginField.FrontID = m_parameter.frontID;
 	pCopy->reqUserLoginField.SessionID = id;
-
-	PlainHeaders headers = { 0 };
-	headers.admin_flag = QMSG_FLAG_ADMIN;
-	headers.msg_type = QMSG_TYPE_REQ;
-	headers.multi_flag = QMSG_FLAG_SINGLE_FTDC;
-
-	std::string body;
-	int count;
-	pCopy->toSingleConcatFtdcMessage(body, count, true);
-
-	m_uplinkFunction(headers, body);
+	pCopy->formatFtdcMessages();
+	uplink(*pCopy);
 }
 
 void FtdRouter::OnPackage(const ReqQryPrivateInitialData& req, const SessionID& id)

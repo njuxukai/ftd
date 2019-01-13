@@ -7,7 +7,7 @@
 
 using namespace FTD;
 
-typedef std::function<void(PlainHeaders& headers, const std::string&)> RouterUplinkFunction;
+typedef std::function<void(PlainHeaders& headers, const std::string&)> RouterUplinkCallback;
 
 struct FtdRouterParameter
 {
@@ -23,7 +23,9 @@ public:
 	FtdRouter(const FtdRouterParameter& parameter);
 	~FtdRouter();
 
-	void registerUplinkFunction(RouterUplinkFunction func);
+	void registerUplinkCallback(RouterUplinkCallback func);
+	void uplink(const Package& package);
+	void uplink(PlainHeaders& headers, const std::string& body);
 	void start();
 	void stop();
 
@@ -108,7 +110,7 @@ private:
 	FTD::Acceptor* m_acceptor;
 	std::map<int, std::set<SessionID>> m_subMap;
 	//消息队列上传回调
-	RouterUplinkFunction m_uplinkFunction;
+	RouterUplinkCallback m_uplinkCallback;
 	//处理下行的管理信息
 	FTD::PackageBuffer m_downlinkAdminBuffer;
 };

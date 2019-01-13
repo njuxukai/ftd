@@ -18,9 +18,9 @@ FrontServer::FrontServer(const std::string& cfgFname)
 		m_pReceiver->registerFanoutExchange(m_boardcastExchange);
 
 		m_pRouter = std::make_shared<FtdRouter>(m_routeParameter);
-		m_pRouter->registerUplinkFunction(std::bind(&FrontServer::uplink, this,
+		m_pRouter->registerUplinkCallback(std::bind(&FrontServer::routerUplinkCallback, this,
 			std::placeholders::_1, std::placeholders::_2));
-		m_pReceiver->registerCallback(std::bind(&FrontServer::downlink, this,
+		m_pReceiver->registerCallback(std::bind(&FrontServer::queueReceiveCallback, this,
 			std::placeholders::_1, std::placeholders::_2));
 	}
 }
@@ -49,11 +49,13 @@ void FrontServer::stop()
 }
 
 //在acceptor的工作线程上执行
-void FrontServer::uplink(PlainHeaders& headers, const std::string& ftdcMsg)
+void FrontServer::routerUplinkCallback(PlainHeaders& headers, const std::string& ftdcMsg)
 {
 	DeliveryPack pack;
 	//headers & body
+	//注意 如果要实现当前库和历史库的分离，则需要在Router内指定target_queue, source_queue
 	strncpy(headers.target_queue, m_rspQueue.data(), sizeof(headers.target_queue));
+	strncpy(headers.source_queue, m_reqQueue.data(), sizeof(headers.source_queue));
 	memcpy(&pack.plain_headers, &headers, sizeof(PlainHeaders));
 	pack.body = ftdcMsg;
 	//exchange & routingKey
@@ -63,7 +65,7 @@ void FrontServer::uplink(PlainHeaders& headers, const std::string& ftdcMsg)
 }
 
 //在receive线程中顺序执行
-void FrontServer::downlink(const PlainHeaders& headers, const std::string& ftdcMsgs)
+void FrontServer::queueReceiveCallback(const PlainHeaders& headers, const std::string& ftdcMsgs)
 {	
 	m_pRouter->processDownlink(headers, ftdcMsgs);
 }

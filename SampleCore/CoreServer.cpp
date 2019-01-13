@@ -68,12 +68,14 @@ void CoreServer::dbUplinkCallback(PlainHeaders& headers, FTD::PackageSPtr pPacka
 		pack.exchange = m_boardcastExchange;
 		pack.routing_key = "";
 	}
+
+	//Important
 	pPackage->formatFtdcMessages();
 
 	if (m_ftdcMulitFlag)
 	{
 		int ftdcCount = 0;
-		pPackage->toSingleConcatFtdcMessage(pack.body, ftdcCount, false);
+		pPackage->toSingleConcatFtdcMessage(pack.body, ftdcCount);
 		if (ftdcCount > 1)
 			pack.plain_headers.multi_flag = QMSG_FLAG_MULTI_FTDC;
 		else
@@ -85,7 +87,7 @@ void CoreServer::dbUplinkCallback(PlainHeaders& headers, FTD::PackageSPtr pPacka
 		//在客户端有可能出现同一个tid的多个package的FtdMessage乱序
 		//TODO 要保证正确性，当ftdcMessages.size()>0时 应该加锁
 		std::vector<std::string> ftdcMessages;
-		pPackage->toFtdcMessages(ftdcMessages, false);
+		pPackage->toFtdcMessages(ftdcMessages);
 		pack.plain_headers.multi_flag = QMSG_FLAG_SINGLE_FTDC;
 		for (unsigned int i = 0; i < ftdcMessages.size(); i++)
 		{

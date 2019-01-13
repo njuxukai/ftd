@@ -22,26 +22,18 @@ namespace FTD
 		virtual ~Package() {};
 		virtual Package* clone() const = 0;
 		virtual void clear() = 0;
-		
-		void toFtdMesssages(std::vector<std::string>& ftdMsgs, bool needFormat=false, const FtdExt* pExt=0)
+
+		void toFtdMesssages(std::vector<std::string>& ftdMsgs, const FtdExt* pExt = 0)const
 		{
-			if (needFormat)
-			{
-				formatFtdcMessages();
-			}
 			ftdMsgs.clear();
 			for (unsigned int i = 0; i < m_ftdcMessages.size(); i++)
 			{
 				ftdMsgs.push_back(FtdMessageUtil::formatFtdMessage(m_ftdcMessages[i], pExt));
-			}			
+			}
 		}
 
-		void toFtdcMessages(std::vector<std::string>& ftdcMsgs, bool needFormat = false)
+		void toFtdcMessages(std::vector<std::string>& ftdcMsgs)const
 		{
-			if (needFormat)
-			{
-				formatFtdcMessages();
-			}
 			ftdcMsgs.clear();
 			for (unsigned int i = 0; i < m_ftdcMessages.size(); i++)
 			{
@@ -49,12 +41,8 @@ namespace FTD
 			}
 		}
 
-		void toSingleConcatFtdcMessage(std::string& result, int& count, bool needFormat=false)
+		void toSingleConcatFtdcMessage(std::string& result, int& count)const
 		{
-			if (needFormat)
-			{
-				formatFtdcMessages();
-			}
 			count = m_ftdcMessages.size();
 			if (count == 1)
 				result = m_ftdcMessages[0];
@@ -62,14 +50,14 @@ namespace FTD
 				FtdMessageUtil::concateFtdcMessages(m_ftdcMessages, result);
 		}
 
-		void formatFtdcMessages() 
+		void formatFtdcMessages()
 		{
 			toMessages(m_ftdcMessages);
 		}
-	
+
 		virtual void toMessages(std::vector<std::string>& ftdcMsgs) = 0;
 
-		
+
 
 
 		bool mergeFtdcMessage(const std::string& ftdcMsg)
@@ -86,7 +74,7 @@ namespace FTD
 			}
 			return packageFinished;
 		}
-		
+
 		bool isPrivteMode()const
 		{
 			return (m_mode & FTD_MODE_PRIVATE) == FTD_MODE_PRIVATE;
@@ -122,6 +110,10 @@ namespace FTD
 		virtual bool mergeFieldMessage(const FtdcFieldHeader& header, const char* msg) = 0;
 		std::vector<std::string> m_ftdcMessages;
 	private:
+
+		Package(const Package&) = delete;
+		Package& operator=(const Package&) = delete;
+
 		void mergeFtdcMessage(const FtdcHeader& ftdcHeader, const std::string& ftdcContent, bool& mergeSucceed, bool& packageFinished)
 		{
 			mergeSucceed = false;

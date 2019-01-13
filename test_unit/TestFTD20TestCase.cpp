@@ -62,7 +62,7 @@ SUITE(FTDTest)
 		std::vector<std::string> mss;
 		package.toMessages(mss);
 		std::string catString;
-		FtdMessageUtil::concatenateFtdcMessages(mss, catString);
+		FtdMessageUtil::concateFtdcMessages(mss, catString);
 		std::vector<std::string> mss2;
 		bool splitResult = FtdMessageUtil::splitFtdcMessages(catString, mss2);
 		RspQryOrder package2;

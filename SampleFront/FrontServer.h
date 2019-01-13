@@ -13,8 +13,8 @@ public:
 	void start();
 	void stop();
 private:
-	void uplink(PlainHeaders& headers, const std::string& ftdcMsg);
-	void downlink(const PlainHeaders& headers, const std::string& ftdcMsg);
+	void routerUplinkCallback(PlainHeaders& headers, const std::string& ftdcMsg);
+	void queueReceiveCallback(const PlainHeaders& headers, const std::string& ftdcMsg);
 	bool parseCfgFile(const std::string& fname);
 	bool m_parseResult;
 	SendClient::Sptr m_pSender;
