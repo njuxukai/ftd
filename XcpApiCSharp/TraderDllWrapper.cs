@@ -11,7 +11,7 @@ namespace Xcp
     {
         [DllImport("xcptraderapi.dll", CharSet = CharSet.Auto, EntryPoint = "create_trader",
             CallingConvention = CallingConvention.Cdecl)]
-        public static extern void CreateTrader(out IntPtr phandler);
+        public static extern void CreateTrader(out IntPtr phandler, String pswDir);
 
         [DllImport("xcptraderapi.dll", CharSet = CharSet.Auto, EntryPoint = "connect_trader",
             CallingConvention = CallingConvention.Cdecl)]
@@ -110,15 +110,15 @@ namespace Xcp
 
         [DllImport("xcptraderapi.dll", CharSet = CharSet.Auto, EntryPoint = "register_front",
             CallingConvention = CallingConvention.Cdecl)]
-        public static extern int RegisterFront(IntPtr phandler, String frontAddress);
+        public static extern void RegisterFront(IntPtr phandler, String frontAddress);
 
         [DllImport("xcptraderapi.dll", CharSet = CharSet.Auto, EntryPoint = "subscribe_private_topic",
             CallingConvention = CallingConvention.Cdecl)]
-        public static extern int SubscribePrivateTopic(IntPtr phandler, THOST_TE_RESUME_TYPE resumeType);
+        public static extern void SubscribePrivateTopic(IntPtr phandler, THOST_TE_RESUME_TYPE resumeType);
 
         [DllImport("xcptraderapi.dll", CharSet = CharSet.Auto, EntryPoint = "subscribe_public_topic",
             CallingConvention = CallingConvention.Cdecl)]
-        public static extern int SubscribePublicTopic(IntPtr phandler, THOST_TE_RESUME_TYPE resumeType);
+        public static extern void SubscribePublicTopic(IntPtr phandler, THOST_TE_RESUME_TYPE resumeType);
 
         [DllImport("xcptraderapi.dll", CharSet = CharSet.Auto, EntryPoint = "registerFP_OnFrontConnected",
             CallingConvention = CallingConvention.Cdecl)]

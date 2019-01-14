@@ -17,83 +17,83 @@ namespace Xcp
     public delegate void OnHeartBeatWarningDelegate(int nTimeLapse);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void OnRspUserLoginDelegate ( ref RspUserLoginField rspUserLogin, 
-        ref ErrorField rspInfo, int nRequestID, bool isLast);
+    public delegate void OnRspUserLoginDelegate ( IntPtr rspUserLogin,
+        IntPtr rspInfo, int nRequestID, bool isLast);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void OnRspUserLogoutDelegate ( ref RspUserLogoutField rspUserLogout, 
-        ref ErrorField rspInfo, int nRequestID, bool isLast);
+    public delegate void OnRspUserLogoutDelegate ( IntPtr rspUserLogout, 
+        IntPtr rspInfo, int nRequestID, bool isLast);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void OnRspInputOrderDelegate ( ref InputOrderField  inputOrder, 
-        ref ErrorField  rspInfo, int nRequestID, bool isLast);
+    public delegate void OnRspInputOrderDelegate ( IntPtr  inputOrder, 
+        IntPtr  rspInfo, int nRequestID, bool isLast);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void OnRspInputOrderActionDelegate ( ref InputOrderActionField  inputOrderAction, 
-        ref ErrorField  rspInfo, int nRequestID, bool isLast);
+    public delegate void OnRspInputOrderActionDelegate ( IntPtr  inputOrderAction, 
+        IntPtr  rspInfo, int nRequestID, bool isLast);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void OnRspInputFundTransferDelegate ( ref InputFundTransferField  inputFundTransfer, 
-        ref ErrorField  rspInfo, int nRequestID, bool isLast);
+    public delegate void OnRspInputFundTransferDelegate ( IntPtr  inputFundTransfer, 
+        IntPtr  rspInfo, int nRequestID, bool isLast);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void OnRspQryFundDelegate (ref FundField  fund, ref ErrorField  rspInfo, 
+    public delegate void OnRspQryFundDelegate (IntPtr  fund, IntPtr  rspInfo, 
         int nRequestID, bool isLast);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void OnRspQryPositionDelegate(ref PositionField?  position, ref ErrorField  rspInfo, 
+    public delegate void OnRspQryPositionDelegate(IntPtr   position, IntPtr  rspInfo, 
         int nRequestID, bool isLast);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void OnRspQryOrderDelegate (ref OrderField  pOrder, ref ErrorField  rspInfo, 
+    public delegate void OnRspQryOrderDelegate (IntPtr  pOrder, IntPtr  rspInfo, 
         int nRequestID, bool isLast);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void OnRspQryTradeDelegate (ref TradeField  pTrade, ref ErrorField  rspInfo, 
+    public delegate void OnRspQryTradeDelegate (IntPtr  pTrade, IntPtr  rspInfo, 
         int nRequestID, bool isLast);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void OnRspQryFundTransferDelegate (ref FundTransferField  fundTransfer, 
-        ref ErrorField  rspInfo, int nRequestID, bool isLast);
+    public delegate void OnRspQryFundTransferDelegate (IntPtr  fundTransfer, 
+        IntPtr  rspInfo, int nRequestID, bool isLast);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void OnRspQryHisOrderDelegate(ref OrderField  pOrder, ref ErrorField  rspInfo, 
+    public delegate void OnRspQryHisOrderDelegate(IntPtr  pOrder, IntPtr  rspInfo, 
         int nRequestID, bool isLast);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void OnRspQryHisTradeDelegate(ref TradeField  pTrade, ref ErrorField  rspInfo, 
+    public delegate void OnRspQryHisTradeDelegate(IntPtr  pTrade, IntPtr  rspInfo, 
         int nRequestID, bool isLast);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void OnRspQryHisFundTransferDelegate(ref FundTransferField  fundTransfer, 
-        ref ErrorField  rspInfo, int nRequestID, bool isLast);
+    public delegate void OnRspQryHisFundTransferDelegate(IntPtr  fundTransfer, 
+        IntPtr  rspInfo, int nRequestID, bool isLast);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void OnRspQryInstrumentDelegate(ref InstrumentField  pInstrument, 
-        ref ErrorField  rspInfo, int nRequestID, bool isLast);
+    public delegate void OnRspQryInstrumentDelegate(IntPtr  pInstrument, 
+        IntPtr  rspInfo, int nRequestID, bool isLast);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void OnRspQryStructuredFundDelegate(ref StructuredFundField  pStructuredFund, 
-        ref ErrorField  rspInfo, int nRequestID, bool isLast);
+    public delegate void OnRspQryStructuredFundDelegate(IntPtr  pStructuredFund, 
+        IntPtr  rspInfo, int nRequestID, bool isLast);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void OnRspQryETFDelegate(ref ETFField  pETF, ref ErrorField  rspInfo, 
+    public delegate void OnRspQryETFDelegate(IntPtr  pETF, IntPtr  rspInfo, 
         int nRequestID, bool isLast);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void OnRspQryETFCompositionDelegate(ref ETFCompositionField  pETFComposition, 
-        ref ErrorField  rspInfo, int nRequestID, bool isLast);
+    public delegate void OnRspQryETFCompositionDelegate(IntPtr  pETFComposition, 
+        IntPtr  rspInfo, int nRequestID, bool isLast);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void OnRspQryPurchasableNewIssueSecurityDelegate(ref NewIssueSecurityField  newIssueSecurity, 
-        ref ErrorField  rspInfo, int nRequestID, bool isLast);
+    public delegate void OnRspQryPurchasableNewIssueSecurityDelegate(IntPtr  newIssueSecurity, 
+        IntPtr  rspInfo, int nRequestID, bool isLast);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void OnRspQryPurchaseQuotaDelegate(ref PurchaseQuotaField  pPurchaseQuota, 
-        ref ErrorField  rspInfo, int nRequestID, bool isLast);
+    public delegate void OnRspQryPurchaseQuotaDelegate(IntPtr  pPurchaseQuota, 
+        IntPtr  rspInfo, int nRequestID, bool isLast);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void OnRtnOrderExecutionReportDelegate (ref ExecutionReportField pExecutionReport);
+    public delegate void OnRtnOrderExecutionReportDelegate (IntPtr pExecutionReport);
 
 
     

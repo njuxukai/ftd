@@ -1,6 +1,6 @@
 [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
 [Serializable]
-public class {field_name}
+public struct {field_name}
 {{
 {item_lines}
 }}
