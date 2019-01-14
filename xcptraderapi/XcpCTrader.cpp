@@ -4,6 +4,7 @@ CXcpTrader::CXcpTrader(const char* psw)
 	:m_pApi(CXcpFtdcTraderApi::CreateFtdcTraderApi(psw))
 {
 	
+	m_pApi->RegisterSpi(this);
 	//spi init
 	m_onFrontConnectedRegistered = false;
 	m_onFrontDisconnectedRegistered = false;

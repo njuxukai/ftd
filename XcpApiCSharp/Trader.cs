@@ -269,137 +269,109 @@ namespace Xcp
             ErrorField? error = null;
             if (rspUserLogin != IntPtr.Zero)
             {
-                RspUserLoginField data = new RspUserLoginField();
-                Marshal.PtrToStructure(rspUserLogin, data);
-                rsp = data;
+                rsp = Marshal.PtrToStructure<RspUserLoginField>(rspUserLogin);
             }
             if (errorField != IntPtr.Zero)
             {
-                ErrorField data = new ErrorField();
-                Marshal.PtrToStructure(errorField, data);
-                error = data;
+                error = Marshal.PtrToStructure<ErrorField>(errorField);
             }
             RspUserLoginEventArgs eventArgs = new RspUserLoginEventArgs(rsp, error, nRequestID, isLast);
             Volatile.Read(ref onRspUserLogin)?.Invoke(this, eventArgs);
         }
 
-        private void RaiseRspUserLogout(IntPtr rspUserLogout, IntPtr errorField, int nRequestID, bool isLast)
+        private void RaiseRspUserLogout(IntPtr pRsp, IntPtr pError, int nRequestID, bool isLast)
         {
 
             RspUserLogoutField? rsp = null;
             ErrorField? error = null;
-            if (rspUserLogout != IntPtr.Zero)
+            if (pRsp != IntPtr.Zero)
             {
-                RspUserLogoutField data = new RspUserLogoutField();
-                Marshal.PtrToStructure(rspUserLogout, data);
-                rsp = data;
+                rsp = Marshal.PtrToStructure<RspUserLogoutField>(pRsp);
             }
-            if (errorField != IntPtr.Zero)
+            if (pError != IntPtr.Zero)
             {
-                ErrorField data = new ErrorField();
-                Marshal.PtrToStructure(errorField, data);
-                error = data;
+                error = Marshal.PtrToStructure<ErrorField>(pError);
             }
             RspUserLogoutEventArgs eventArgs = new RspUserLogoutEventArgs(rsp, error, nRequestID, isLast);
             Volatile.Read(ref onRspUserLogout)?.Invoke(this, eventArgs);
 
         }
 
-        private void RaiseRspInputOrder(IntPtr inputOrder, IntPtr errorField, int nRequestID, bool isLast)
+        private void RaiseRspInputOrder(IntPtr pRsp, IntPtr pError, int nRequestID, bool isLast)
         {
             InputOrderField? rsp = null;
             ErrorField? error = null;
-            if (inputOrder != IntPtr.Zero)
+            if (pRsp != IntPtr.Zero)
             {
-                InputOrderField data = new InputOrderField();
-                Marshal.PtrToStructure(inputOrder, data);
-                rsp = data;
+                rsp = Marshal.PtrToStructure<InputOrderField>(pRsp);
             }
-            if (errorField != IntPtr.Zero)
+            if (pError != IntPtr.Zero)
             {
-                ErrorField data = new ErrorField();
-                Marshal.PtrToStructure(errorField, data);
-                error = data;
+                error = Marshal.PtrToStructure<ErrorField>(pError);
             }
             RspInputOrderEventArgs eventArgs = new RspInputOrderEventArgs(rsp, error, nRequestID, isLast);
             Volatile.Read(ref onRspInputOrder)?.Invoke(this, eventArgs);
         }
 
-        private void RaiseRspInputOrderAction(IntPtr inputOrderAction, IntPtr errorField, int nRequestID, bool isLast)
+        private void RaiseRspInputOrderAction(IntPtr pRsp, IntPtr pError, int nRequestID, bool isLast)
         {
             InputOrderActionField? rsp = null;
             ErrorField? error = null;
-            if (inputOrderAction != IntPtr.Zero)
+            if (pRsp != IntPtr.Zero)
             {
-                InputOrderActionField data = new InputOrderActionField();
-                Marshal.PtrToStructure(inputOrderAction, data);
-                rsp = data;
+                rsp = Marshal.PtrToStructure<InputOrderActionField>(pRsp);
             }
-            if (errorField != IntPtr.Zero)
+            if (pError != IntPtr.Zero)
             {
-                ErrorField data = new ErrorField();
-                Marshal.PtrToStructure(errorField, data);
-                error = data;
+                error = Marshal.PtrToStructure<ErrorField>(pError);
             }
             RspInputOrderActionEventArgs eventArgs = new RspInputOrderActionEventArgs(rsp, error, nRequestID, isLast);
             Volatile.Read(ref onRspInputOrderAction)?.Invoke(this, eventArgs);
         }
 
-        private void RaiseRspInputFundTransfer(IntPtr inputFundTransfer, IntPtr errorField, int nRequestID, bool isLast)
+        private void RaiseRspInputFundTransfer(IntPtr pRsp, IntPtr pError, int nRequestID, bool isLast)
         {
             InputFundTransferField? rsp = null;
             ErrorField? error = null;
-            if (inputFundTransfer != IntPtr.Zero)
+            if (pRsp != IntPtr.Zero)
             {
-                InputFundTransferField data = new InputFundTransferField();
-                Marshal.PtrToStructure(inputFundTransfer, data);
-                rsp = data;
+                rsp = Marshal.PtrToStructure<InputFundTransferField>(pRsp);
             }
-            if (errorField != IntPtr.Zero)
+            if (pError != IntPtr.Zero)
             {
-                ErrorField data = new ErrorField();
-                Marshal.PtrToStructure(errorField, data);
-                error = data;
+                error = Marshal.PtrToStructure<ErrorField>(pError);
             }
             RspInputFundTransferEventArgs eventArgs = new RspInputFundTransferEventArgs(rsp, error, nRequestID, isLast);
             Volatile.Read(ref onRspInputFundTransfer)?.Invoke(this, eventArgs);
         }
 
-        private void RaiseRspQryFund(IntPtr fund, IntPtr errorField, int nRequestID, bool isLast)
+        private void RaiseRspQryFund(IntPtr pRsp, IntPtr pError, int nRequestID, bool isLast)
         {
             FundField? rsp = null;
             ErrorField? error = null;
-            if (fund != IntPtr.Zero)
+            if (pRsp != IntPtr.Zero)
             {
-                FundField data = new FundField();
-                Marshal.PtrToStructure(fund, data);
-                rsp = data;
+                rsp = Marshal.PtrToStructure<FundField>(pRsp);
             }
-            if (errorField != IntPtr.Zero)
+            if (pError != IntPtr.Zero)
             {
-                ErrorField data = new ErrorField();
-                Marshal.PtrToStructure(errorField, data);
-                error = data;
+                error = Marshal.PtrToStructure<ErrorField>(pError);
             }
             RspQryFundEventArgs eventArgs = new RspQryFundEventArgs(rsp, error, nRequestID, isLast);
             Volatile.Read(ref onRspQryFund)?.Invoke(this, eventArgs);
         }
 
-        private void RaiseRspQryPosition(IntPtr position, IntPtr errorField, int nRequestID, bool isLast)
+        private void RaiseRspQryPosition(IntPtr pRsp, IntPtr pError, int nRequestID, bool isLast)
         {
             PositionField? rsp = null;
             ErrorField? error = null;
-            if (position != IntPtr.Zero)
+            if (pRsp != IntPtr.Zero)
             {
-                PositionField data = new PositionField();
-                Marshal.PtrToStructure(position, data);
-                rsp = data;
+                rsp = Marshal.PtrToStructure<PositionField>(pRsp);
             }
-            if (errorField != IntPtr.Zero)
+            if (pError != IntPtr.Zero)
             {
-                ErrorField data = new ErrorField();
-                Marshal.PtrToStructure(errorField, data);
-                error = data;
+                error = Marshal.PtrToStructure<ErrorField>(pError);
             }
             RspQryPositionEventArgs eventArgs = new RspQryPositionEventArgs(rsp, error, nRequestID, isLast);
             Volatile.Read(ref onRspQryPosition)?.Invoke(this, eventArgs);
@@ -411,15 +383,11 @@ namespace Xcp
             ErrorField? error = null;
             if (pRsp != IntPtr.Zero)
             {
-                OrderField data = new OrderField();
-                Marshal.PtrToStructure(pRsp, data);
-                rsp = data;
+                rsp = Marshal.PtrToStructure<OrderField>(pRsp);
             }
             if (pError != IntPtr.Zero)
             {
-                ErrorField data = new ErrorField();
-                Marshal.PtrToStructure(pError, data);
-                error = data;
+                error = Marshal.PtrToStructure<ErrorField>(pError);
             }
             RspQryOrderEventArgs eventArgs = new RspQryOrderEventArgs(rsp, error, nRequestID, isLast);
             Volatile.Read(ref onRspQryOrder)?.Invoke(this, eventArgs);
@@ -431,15 +399,11 @@ namespace Xcp
             ErrorField? error = null;
             if (pRsp != IntPtr.Zero)
             {
-                TradeField data = new TradeField();
-                Marshal.PtrToStructure(pRsp, data);
-                rsp = data;
+                rsp = Marshal.PtrToStructure<TradeField>(pRsp);
             }
             if (pError != IntPtr.Zero)
             {
-                ErrorField data = new ErrorField();
-                Marshal.PtrToStructure(pError, data);
-                error = data;
+                error = Marshal.PtrToStructure<ErrorField>(pError);
             }
             RspQryTradeEventArgs eventArgs = new RspQryTradeEventArgs(rsp, error, nRequestID, isLast);
             Volatile.Read(ref onRspQryTrade)?.Invoke(this, eventArgs);
@@ -452,15 +416,11 @@ namespace Xcp
             ErrorField? error = null;
             if (pRsp != IntPtr.Zero)
             {
-                FundTransferField data = new FundTransferField();
-                Marshal.PtrToStructure(pRsp, data);
-                rsp = data;
+                rsp = Marshal.PtrToStructure<FundTransferField>(pRsp);
             }
             if (pError != IntPtr.Zero)
             {
-                ErrorField data = new ErrorField();
-                Marshal.PtrToStructure(pError, data);
-                error = data;
+                error = Marshal.PtrToStructure<ErrorField>(pError);
             }
             RspQryFundTransferEventArgs eventArgs = new RspQryFundTransferEventArgs(rsp, error, nRequestID, isLast);
             Volatile.Read(ref onRspQryFundTransfer)?.Invoke(this, eventArgs);
@@ -472,15 +432,11 @@ namespace Xcp
             ErrorField? error = null;
             if (pRsp != IntPtr.Zero)
             {
-                OrderField data = new OrderField();
-                Marshal.PtrToStructure(pRsp, data);
-                rsp = data;
+                rsp = Marshal.PtrToStructure<OrderField>(pRsp);
             }
             if (pError != IntPtr.Zero)
             {
-                ErrorField data = new ErrorField();
-                Marshal.PtrToStructure(pError, data);
-                error = data;
+                error = Marshal.PtrToStructure<ErrorField>(pError);
             }
             RspQryHisOrderEventArgs eventArgs = new RspQryHisOrderEventArgs(rsp, error, nRequestID, isLast);
             Volatile.Read(ref onRspQryHisOrder)?.Invoke(this, eventArgs);
@@ -492,15 +448,11 @@ namespace Xcp
             ErrorField? error = null;
             if (pRsp != IntPtr.Zero)
             {
-                TradeField data = new TradeField();
-                Marshal.PtrToStructure(pRsp, data);
-                rsp = data;
+                rsp = Marshal.PtrToStructure<TradeField>(pRsp);
             }
             if (pError != IntPtr.Zero)
             {
-                ErrorField data = new ErrorField();
-                Marshal.PtrToStructure(pError, data);
-                error = data;
+                error = Marshal.PtrToStructure<ErrorField>(pError);
             }
             RspQryHisTradeEventArgs eventArgs = new RspQryHisTradeEventArgs(rsp, error, nRequestID, isLast);
             Volatile.Read(ref onRspQryHisTrade)?.Invoke(this, eventArgs);
@@ -512,15 +464,11 @@ namespace Xcp
             ErrorField? error = null;
             if (pRsp != IntPtr.Zero)
             {
-                FundTransferField data = new FundTransferField();
-                Marshal.PtrToStructure(pRsp, data);
-                rsp = data;
+                rsp = Marshal.PtrToStructure<FundTransferField>(pRsp);
             }
             if (pError != IntPtr.Zero)
             {
-                ErrorField data = new ErrorField();
-                Marshal.PtrToStructure(pError, data);
-                error = data;
+                error = Marshal.PtrToStructure<ErrorField>(pError);
             }
             RspQryHisFundTransferEventArgs eventArgs = new RspQryHisFundTransferEventArgs(rsp, error, nRequestID, isLast);
             Volatile.Read(ref onRspQryHisFundTransfer)?.Invoke(this, eventArgs);
@@ -532,15 +480,11 @@ namespace Xcp
             ErrorField? error = null;
             if (pRsp != IntPtr.Zero)
             {
-                InstrumentField data = new InstrumentField();
-                Marshal.PtrToStructure(pRsp, data);
-                rsp = data;
+                rsp = Marshal.PtrToStructure<InstrumentField>(pRsp);
             }
             if (pError != IntPtr.Zero)
             {
-                ErrorField data = new ErrorField();
-                Marshal.PtrToStructure(pError, data);
-                error = data;
+                error = Marshal.PtrToStructure<ErrorField>(pError);
             }
             RspQryInstrumentEventArgs eventArgs = new RspQryInstrumentEventArgs(rsp, error, nRequestID, isLast);
             Volatile.Read(ref onRspQryInstrument)?.Invoke(this, eventArgs);
@@ -552,15 +496,11 @@ namespace Xcp
             ErrorField? error = null;
             if (pRsp != IntPtr.Zero)
             {
-                StructuredFundField data = new StructuredFundField();
-                Marshal.PtrToStructure(pRsp, data);
-                rsp = data;
+                rsp = Marshal.PtrToStructure<StructuredFundField>(pRsp);
             }
             if (pError != IntPtr.Zero)
             {
-                ErrorField data = new ErrorField();
-                Marshal.PtrToStructure(pError, data);
-                error = data;
+                error = Marshal.PtrToStructure<ErrorField>(pError);
             }
             RspQryStructuredFundEventArgs eventArgs = new RspQryStructuredFundEventArgs(rsp, error, nRequestID, isLast);
             Volatile.Read(ref onRspQryStructuredFund)?.Invoke(this, eventArgs);
@@ -572,15 +512,11 @@ namespace Xcp
             ErrorField? error = null;
             if (pRsp != IntPtr.Zero)
             {
-                ETFField data = new ETFField();
-                Marshal.PtrToStructure(pRsp, data);
-                rsp = data;
+                rsp = Marshal.PtrToStructure<ETFField>(pRsp);
             }
             if (pError != IntPtr.Zero)
             {
-                ErrorField data = new ErrorField();
-                Marshal.PtrToStructure(pError, data);
-                error = data;
+                error = Marshal.PtrToStructure<ErrorField>(pError);
             }
             RspQryETFEventArgs eventArgs = new RspQryETFEventArgs(rsp, error, nRequestID, isLast);
             Volatile.Read(ref onRspQryETF)?.Invoke(this, eventArgs);
@@ -592,15 +528,11 @@ namespace Xcp
             ErrorField? error = null;
             if (pRsp != IntPtr.Zero)
             {
-                ETFCompositionField data = new ETFCompositionField();
-                Marshal.PtrToStructure(pRsp, data);
-                rsp = data;
+                rsp = Marshal.PtrToStructure<ETFCompositionField>(pRsp);
             }
             if (pError != IntPtr.Zero)
             {
-                ErrorField data = new ErrorField();
-                Marshal.PtrToStructure(pError, data);
-                error = data;
+                error = Marshal.PtrToStructure<ErrorField>(pError);
             }
             RspQryETFCompositionEventArgs eventArgs = new RspQryETFCompositionEventArgs(rsp, error, nRequestID, isLast);
             Volatile.Read(ref onRspQryETFComposition)?.Invoke(this, eventArgs);
@@ -612,15 +544,11 @@ namespace Xcp
             ErrorField? error = null;
             if (pRsp != IntPtr.Zero)
             {
-                NewIssueSecurityField data = new NewIssueSecurityField();
-                Marshal.PtrToStructure(pRsp, data);
-                rsp = data;
+                rsp = Marshal.PtrToStructure<NewIssueSecurityField>(pRsp);
             }
             if (pError != IntPtr.Zero)
             {
-                ErrorField data = new ErrorField();
-                Marshal.PtrToStructure(pError, data);
-                error = data;
+                error = Marshal.PtrToStructure<ErrorField>(pError);
             }
             var eventArgs = 
                 new RspQryPurchasableNewIssueSecurityEventArgs(rsp, error, nRequestID, isLast);
@@ -634,15 +562,11 @@ namespace Xcp
             ErrorField? error = null;
             if (pRsp != IntPtr.Zero)
             {
-                PurchaseQuotaField data = new PurchaseQuotaField();
-                Marshal.PtrToStructure(pRsp, data);
-                rsp = data;
+                rsp = Marshal.PtrToStructure<PurchaseQuotaField>(pRsp);
             }
             if (pError != IntPtr.Zero)
             {
-                ErrorField data = new ErrorField();
-                Marshal.PtrToStructure(pError, data);
-                error = data;
+                error = Marshal.PtrToStructure<ErrorField>(pError);
             }
             var eventArgs = new RspQryPurchaseQuotaEventArgs(rsp, error, nRequestID, isLast);
             Volatile.Read(ref onRspQryPurchaseQuota)?.Invoke(this, eventArgs);

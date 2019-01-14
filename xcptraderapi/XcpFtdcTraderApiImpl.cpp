@@ -115,6 +115,7 @@ void CXcpFtdcTraderApiImpl::Init()
 	//TODO default setting
 	defaultDictionary.setBool(FTD::SCREEN_LOG_SHOW_OUTGOING, false);
 	defaultDictionary.setBool(FTD::SCREEN_LOG_SHOW_INCOMING, false);
+	defaultDictionary.setBool(FTD::SCREEN_LOG_SHOW_EVENTS, false);
 	settings.set(defaultDictionary);
 	for (auto it = m_frontAddresses.begin(); it != m_frontAddresses.end(); it++)
 	{
@@ -189,7 +190,6 @@ void CXcpFtdcTraderApiImpl::onConnect(const FTD::SessionID& id)
 
 void CXcpFtdcTraderApiImpl::onDisconnect(const FTD::SessionID& id)
 {
-
 }
 /// Notification of a session successfully logging on
 void CXcpFtdcTraderApiImpl::onLogon(const FTD::SessionID&)
@@ -228,6 +228,9 @@ void CXcpFtdcTraderApiImpl::onHeartBeatWarning()
 ///
 int CXcpFtdcTraderApiImpl::send(FTD::Package& package, bool checkLogged)
 {
+	//!!!
+	package.formatFtdcMessages();
+
 	if (!m_pInitiator)
 	{
 		return XCP_ERR_CODE_INITIATOR_NULL;

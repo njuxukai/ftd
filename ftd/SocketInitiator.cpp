@@ -34,8 +34,8 @@ SocketInitiator::SocketInitiator( Application& application,
                                   const PortSettings& settings )
 throw( ConfigError )
 : Initiator( application, settings ),
-  m_connector( 1 ), m_lastConnect( 0 ),
-  m_reconnectInterval( 2 ), m_noDelay( false ), m_sendBufSize( 0 ),
+  m_connector( 3 ), m_lastConnect( 0 ),
+  m_reconnectInterval( 10 ), m_noDelay( false ), m_sendBufSize( 0 ),
   m_rcvBufSize( 0 ) 
 {
 }
