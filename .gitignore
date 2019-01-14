@@ -74,3 +74,5 @@ ipch/*
 /XcpApiCSharp/obj/Debug
 /XcpApiCSharp/ApiStructure.cs
 /TestMarshal/obj/Debug
+/SampleClientGui/bin/Debug
+/SampleClientGui/obj/Debug

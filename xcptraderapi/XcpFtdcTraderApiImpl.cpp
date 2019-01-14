@@ -427,11 +427,43 @@ int CXcpFtdcTraderApiImpl::ReqQryPurchaseQuota(CXcpFtdcQryPurchaseQuotaField *pQ
 
 void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspUserLogin& package, const FTD::SessionID& id)
 {
+	if (package.pErrorField && package.pErrorField->ErrorCode != 0)
+	{
+		OnRspUserLoginFailure(package, id);
+	}
+	else
+	{
+		OnRspUserLoginSucceed(package, id);
+	}
+
+	if (m_pSpi)
+	{
+		CXcpFtdcRspUserLoginField contentField = { 0 };
+		CXcpFtdcErrorField errorField = { 0 };
+		memcpy(&contentField, &package.rspUserLoginField, sizeof(CXcpFtdcRspUserLoginField));
+		if (package.pErrorField.get())
+			memcpy(&errorField, package.pErrorField.get(), sizeof(CXcpFtdcErrorField));
+		m_pSpi->OnRspUserLogin(&contentField, &errorField, package.rspUserLoginField.RequestID, true);
+	}
+	
+}
+
+void CXcpFtdcTraderApiImpl::OnRspUserLoginFailure(const FTD::RspUserLogin& package, const FTD::SessionID& id)
+{
+	if (m_pInitiator)
+	{
+		m_pInitiator->stop();
+		m_pInitiator = 0;
+	}
+}
+
+void CXcpFtdcTraderApiImpl::OnRspUserLoginSucceed(const FTD::RspUserLogin& package, const FTD::SessionID& id)
+{
 	/*
 	1 restart  给0查起 +  订阅流
 	2 resume   给x查起 +   订阅流
 	3 quick    不查询  +   订阅流
-	4 -1       不查询  + 不订阅 
+	4 -1       不查询  + 不订阅
 	*/
 	m_tradingDay.assign(package.rspUserLoginField.TradingDay);
 	std::string fileTradingDay;
@@ -443,7 +475,7 @@ void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspUserLogin& package, const FT
 		m_pPrivateConn->writeDate(m_tradingDay);
 		m_pPrivateConn->writeSequenceSno(0);
 	}
-    m_pPrivateConn->readSequenceSno(lastReceivedSno);
+	m_pPrivateConn->readSequenceSno(lastReceivedSno);
 	//std::cout << "**************************lastReceivedSno=" << lastReceivedSno << std::endl;
 	bool qryBackward = true;
 	if (m_privateResumeType < 0 || m_privateResumeType == THOST_TERT_QUICK)
@@ -476,19 +508,8 @@ void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspUserLogin& package, const FT
 		req.dissenminationstartField.SequenceNo = lastReceivedSno;
 		send(req);
 	}
-	
-
-	if (m_pSpi)
-	{
-		CXcpFtdcRspUserLoginField contentField = { 0 };
-		CXcpFtdcErrorField errorField = { 0 };
-		memcpy(&contentField, &package.rspUserLoginField, sizeof(CXcpFtdcRspUserLoginField));
-		if (package.pErrorField.get())
-			memcpy(&errorField, package.pErrorField.get(), sizeof(CXcpFtdcErrorField));
-		m_pSpi->OnRspUserLogin(&contentField, &errorField, package.rspUserLoginField.RequestID, true);
-	}
-	
 }
+
 
 void CXcpFtdcTraderApiImpl::OnPackage(const FTD::ForceExit& package, const FTD::SessionID& id) 
 {

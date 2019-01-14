@@ -182,6 +182,9 @@ public:
 	///
 	////////////////////////////////////////////////////////////////////////////
 	virtual void OnPackage(const FTD::RspUserLogin& package, const FTD::SessionID& id);
+	void OnRspUserLoginFailure(const FTD::RspUserLogin& package, const FTD::SessionID& id);
+	void OnRspUserLoginSucceed(const FTD::RspUserLogin& package, const FTD::SessionID& id);
+
 	virtual void OnPackage(const FTD::ForceExit& package, const FTD::SessionID& id);
 	virtual void OnPackage(const FTD::RspUserLogout& package, const FTD::SessionID& id);
 	virtual void OnPackage(const FTD::RspOrderInsert& package, const FTD::SessionID& id);
