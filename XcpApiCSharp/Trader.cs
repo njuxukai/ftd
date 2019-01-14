@@ -9,12 +9,15 @@ using System.Threading.Tasks;
 namespace Xcp
 {
 
-    
 
     public class Trader : IDisposable
     {
-        public Trader(String pswDir="") 
+        public Trader(int brokerID, int userID, int investorID, String password, String pswDir="") 
         {
+            m_brokerID = brokerID;
+            m_userID = userID;
+            m_investorID = investorID;
+            m_password = password;
             TraderDllWrapper.CreateTrader(out m_handler, pswDir);
             RegisterEventHandlers();
         }
@@ -24,7 +27,8 @@ namespace Xcp
             Dispose(false);
         }
 
-        void Init()
+
+        public void Init()
         {
             TraderDllWrapper.InitTrader(m_handler);
         }
@@ -83,122 +87,122 @@ namespace Xcp
         }
 
         #region TraderApi
-        String GetApiVersion()
+        public String GetApiVersion()
         {
             return TraderDllWrapper.GetApiVersion(m_handler);
         }
 
-        String GetTradingDay()
+        public String GetTradingDay()
         {
             return TraderDllWrapper.GetTradingDay(m_handler);
         }
 
-        int ReqUserLogin(ReqUserLoginField field, int reqID)
+        public int ReqUserLogin(ReqUserLoginField field, int reqID)
         {
             return TraderDllWrapper.ReqUserLogin(m_handler, ref field, reqID);
         }
 
-        int ReqUserLogout(ReqUserLogoutField field, int reqID)
+        public int ReqUserLogout(ReqUserLogoutField field, int reqID)
         {
             return TraderDllWrapper.ReqUserLogout(m_handler, ref field, reqID);
         }
 
-        int ReqOrderInsert(InputOrderField field, int reqID)
+        public int ReqOrderInsert(InputOrderField field, int reqID)
         {
             return TraderDllWrapper.ReqOrderInsert(m_handler, ref field, reqID);
         }
 
-        int ReqOrderAction(InputOrderActionField field, int reqID)
+        public int ReqOrderAction(InputOrderActionField field, int reqID)
         {
             return TraderDllWrapper.ReqOrderAction(m_handler, ref field, reqID);
         }
 
-        int ReqFundTransfer(InputFundTransferField field, int reqID)
+        public int ReqFundTransfer(InputFundTransferField field, int reqID)
         {
             return TraderDllWrapper.ReqFundTransfer(m_handler, ref field, reqID);
         }
 
-        int ReqQryOrder(QryOrderField field, int reqID)
+        public int ReqQryOrder(QryOrderField field, int reqID)
         {
             return TraderDllWrapper.ReqQryOrder(m_handler, ref field, reqID);
         }
 
-        int ReqQryTrade(QryTradeField field, int reqID)
+        public int ReqQryTrade(QryTradeField field, int reqID)
         {
             return TraderDllWrapper.ReqQryTrade(m_handler, ref field, reqID);
         }
 
-        int ReqQryFund(QryFundField field, int reqID)
+        public int ReqQryFund(QryFundField field, int reqID)
         {
             return TraderDllWrapper.ReqQryFund(m_handler, ref field, reqID);
         }
 
-        int ReqQryPosition(QryPositionField field, int reqID)
+        public int ReqQryPosition(QryPositionField field, int reqID)
         {
             return TraderDllWrapper.ReqQryPosition(m_handler, ref field, reqID);
         }
 
-        int ReqQryFundTransfer(QryFundTransferField field, int reqID)
+        public int ReqQryFundTransfer(QryFundTransferField field, int reqID)
         {
             return TraderDllWrapper.ReqQryFundTransfer(m_handler, ref field, reqID);
         }
 
-        int ReqQryHisOrder(QryHisOrderField field, int reqID)
+        public int ReqQryHisOrder(QryHisOrderField field, int reqID)
         {
             return TraderDllWrapper.ReqQryHisOrder(m_handler, ref field, reqID);
         }
 
-        int ReqQryHisTrade(QryHisTradeField field, int reqID)
+        public int ReqQryHisTrade(QryHisTradeField field, int reqID)
         {
                 return TraderDllWrapper.ReqQryHisTrade(m_handler, ref field, reqID);
         }
 
-        int ReqQryHisFundTransfer(QryHisFundTransferField field, int reqID)
+        public int ReqQryHisFundTransfer(QryHisFundTransferField field, int reqID)
         {
             return TraderDllWrapper.ReqQryHisFundTransfer(m_handler, ref field, reqID);
         }
 
-        int ReqQryInstrument(QryInstrumentField field, int reqID)
+        public int ReqQryInstrument(QryInstrumentField field, int reqID)
         {
             return TraderDllWrapper.ReqQryInstrument(m_handler, ref field, reqID);
         }
 
-        int ReqQryETF(QryETFField field, int reqID)
+        public int ReqQryETF(QryETFField field, int reqID)
         {
             return TraderDllWrapper.ReqQryETF(m_handler, ref field, reqID);
         }
 
-        int ReqQryETFComposition(QryETFCompositionField field, int reqID)
+        public int ReqQryETFComposition(QryETFCompositionField field, int reqID)
         {
             return TraderDllWrapper.ReqQryETFComposition(m_handler, ref field, reqID);
         }
 
-        int ReqQryStructuredFund(QryStructuredFundField field, int reqID)
+        public int ReqQryStructuredFund(QryStructuredFundField field, int reqID)
         {
             return TraderDllWrapper.ReqQryStructuredFund(m_handler, ref field, reqID);
         }
 
-        int ReqQryPurchasableNewIssueSecurity(QryNewIssueSecurityField field, int reqID)
+        public int ReqQryPurchasableNewIssueSecurity(QryNewIssueSecurityField field, int reqID)
         {
             return TraderDllWrapper.ReqQryPurchasableNewIssueSecurity(m_handler, ref field, reqID);
         }
 
-        int ReqQryPurchaseQuota(QryPurchaseQuotaField field, int reqID)
+        public int ReqQryPurchaseQuota(QryPurchaseQuotaField field, int reqID)
         {
             return TraderDllWrapper.ReqQryPurchaseQuota(m_handler, ref field, reqID);
         }
 
-        void RegisterFront(String frontAddress)
+        public void RegisterFront(String frontAddress)
         {
             TraderDllWrapper.RegisterFront(m_handler, frontAddress);
         }
 
-        void SubscribePrivateTopic(THOST_TE_RESUME_TYPE resumeType)
+        public void SubscribePrivateTopic(THOST_TE_RESUME_TYPE resumeType)
         {
             TraderDllWrapper.SubscribePrivateTopic(m_handler, resumeType);
         }
 
-        void SubscribePublicTopic(THOST_TE_RESUME_TYPE resumeType)
+        public void SubscribePublicTopic(THOST_TE_RESUME_TYPE resumeType)
         {
             TraderDllWrapper.SubscribePublicTopic(m_handler, resumeType);
         }
@@ -234,6 +238,14 @@ namespace Xcp
         private void RaiseFrontConnected()
         {
             //TODO Login here
+            m_nextReqID = 1;
+            ReqUserLoginField field = new ReqUserLoginField
+                {
+                    BrokerID = m_brokerID,
+                    UserID = m_userID,
+                    Password = m_password
+                };
+            ReqUserLogin(field, m_nextReqID++);
             EventHandler<EventArgs> temp = Volatile.Read(ref OnFrontConnected);
             if (temp != null)
                 temp(this, EventArgs.Empty);
@@ -647,6 +659,12 @@ namespace Xcp
         }
         #endregion
 
+        private int m_brokerID;
+        private int m_userID;
+        private int m_investorID;
+        private String m_password;
+
+        private int m_nextReqID;
         private IntPtr m_handler;
     }
 }

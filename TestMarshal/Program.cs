@@ -11,20 +11,18 @@ namespace TestMarshal
     };
     class Program
     {
+        static void OnRspUserLogin(object sender, RspUserLoginEventArgs eventArgs)
+        {
+            Console.WriteLine("OnRspUserLogin");
+        }
         static void Main(string[] args)
         {
-             
-            A v = new A();
-            v.x = 20;
-            A? a = v;
-
-            A? b = a;
-            v.x = 10;
-            a = v;
-            Console.WriteLine("{0},{1}", a.Value.x, b.Value.x);
             ReqUserLoginField field = new ReqUserLoginField();
             Console.WriteLine(Marshal.SizeOf(field));
-            Trader trader = new Trader();
+            Trader trader = new Trader(99,99,99, "test");
+            trader.onRspUserLogin += OnRspUserLogin;
+            trader.RegisterFront ("tcp:\\127.0.0.1:8000");
+            trader.Init();
             while (1 == 1)
             {
                 Console.ReadLine();

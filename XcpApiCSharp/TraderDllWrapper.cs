@@ -13,7 +13,7 @@ namespace Xcp
             CallingConvention = CallingConvention.Cdecl)]
         public static extern void CreateTrader(out IntPtr phandler, String pswDir);
 
-        [DllImport("xcptraderapi.dll", CharSet = CharSet.Auto, EntryPoint = "connect_trader",
+        [DllImport("xcptraderapi.dll", CharSet = CharSet.Auto, EntryPoint = "init_trader",
             CallingConvention = CallingConvention.Cdecl)]
         public static extern void InitTrader(IntPtr phandler);
 
@@ -110,7 +110,7 @@ namespace Xcp
 
         [DllImport("xcptraderapi.dll", CharSet = CharSet.Auto, EntryPoint = "register_front",
             CallingConvention = CallingConvention.Cdecl)]
-        public static extern void RegisterFront(IntPtr phandler, String frontAddress);
+        public static extern void RegisterFront(IntPtr phandler, [MarshalAs(UnmanagedType.LPStr)]String frontAddress);
 
         [DllImport("xcptraderapi.dll", CharSet = CharSet.Auto, EntryPoint = "subscribe_private_topic",
             CallingConvention = CallingConvention.Cdecl)]
