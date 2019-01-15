@@ -43,6 +43,15 @@ throw( ConfigError )
 
 SocketInitiator::~SocketInitiator()
 {
+	SocketConnections::iterator it;
+	for (it = m_connections.begin(); it != m_connections.end(); it++)
+	{
+		it->second->setSession(0);
+	}
+	for (it = m_pendingConnections.begin(); it != m_pendingConnections.end(); it++)
+	{
+		it->second->setSession(0);
+	}
 	m_connections.clear();
 	m_pendingConnections.clear();
 }

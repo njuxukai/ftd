@@ -64,7 +64,7 @@ Session::Session( Application& application,
 
   m_application.onCreate( m_sessionID );
   m_state.onEvent( "Created session" );
-  std::cout << "~Session()\n";
+  std::cout << "Session()\n";
 }
 
 Session::~Session()

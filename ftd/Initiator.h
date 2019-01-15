@@ -70,16 +70,16 @@ public:
 
   ///Set stop flag called in the work thread
   void stopDoConnect() { m_doConnect = false; }
+
   //join thread 
   void join();
 
   /// Check to see if any sessions are currently logged on
   bool isLoggedOn();
 
-  Session* getSession( const SessionID& sessionID, Responder& );
 
   const std::set<SessionID>& getSessions() const { return m_sessionIDs; }
-  Session* getSession( const SessionID& sessionID ) const;
+  
   const Dictionary* const getPortSettings( const PortID& portID ) const;
 
   bool has( const SessionID& id )

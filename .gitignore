@@ -76,3 +76,4 @@ ipch/*
 /TestMarshal/obj/Debug
 /SampleClientGui/bin/Debug
 /SampleClientGui/obj/Debug
+/XcpApiCSharp/ApiEnum.cs
