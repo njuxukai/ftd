@@ -29,8 +29,15 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mqclient", "mqclient\mqclient.vcxproj", "{2ABF7A72-E5FF-499B-A866-7D31DE3D2BEC}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SampleCore", "SampleCore\SampleCore.vcxproj", "{6F781E95-7879-4761-9F18-36D9EA0B5C8B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2ABF7A72-E5FF-499B-A866-7D31DE3D2BEC} = {2ABF7A72-E5FF-499B-A866-7D31DE3D2BEC}
+		{FB3F75D0-C31A-4A3C-AD44-C1E317B2F768} = {FB3F75D0-C31A-4A3C-AD44-C1E317B2F768}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xcptraderapi", "xcptraderapi\xcptraderapi.vcxproj", "{48310061-76FF-4C1C-B89A-39BE8E03D97A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D3B28290-1A56-4B7E-816E-9811C6E77693} = {D3B28290-1A56-4B7E-816E-9811C6E77693}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demo", "Demo", "{EF8885A6-26B6-4028-89D0-9B6129081F90}"
 EndProject
@@ -39,14 +46,24 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AutoGen", "AutoGen", "{7B78397B-DD4A-4D52-AF1B-E42F4BEAEBF2}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SampleFront", "SampleFront\SampleServer.vcxproj", "{3025E94C-F349-43A3-B592-0E7DFAE7EDEC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2ABF7A72-E5FF-499B-A866-7D31DE3D2BEC} = {2ABF7A72-E5FF-499B-A866-7D31DE3D2BEC}
+		{D3B28290-1A56-4B7E-816E-9811C6E77693} = {D3B28290-1A56-4B7E-816E-9811C6E77693}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ClientApi", "ClientApi", "{46E2ED4A-0FDA-403F-AD5F-116574478FDD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XcpApiCSharp", "XcpApiCSharp\XcpApiCSharp.csproj", "{A5C1982E-6BA4-4B44-A0E9-96CC50A26CFC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{48310061-76FF-4C1C-B89A-39BE8E03D97A} = {48310061-76FF-4C1C-B89A-39BE8E03D97A}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMarshal", "TestMarshal\TestMarshal.csproj", "{59C3909A-E069-48AF-9287-27FCC9F13469}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleClientGui", "SampleClientGui\SampleClientGui.csproj", "{2AEB2F5A-3157-40B8-823D-225F888BA185}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A5C1982E-6BA4-4B44-A0E9-96CC50A26CFC} = {A5C1982E-6BA4-4B44-A0E9-96CC50A26CFC}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
