@@ -135,7 +135,7 @@ void CoreServer::init()
 	m_queueBuffers.clear();
 	for (auto it = m_listenQueues.begin(); it != m_listenQueues.end(); it++)
 	{
-		m_queueBuffers[*it] = std::make_shared<FTD::PackageBuffer>(true);
+		m_queueBuffers[*it] = std::make_shared<FTD::PackageBuffer>();
 	}
 
 	m_pSender = SendClient::CreateClient(m_queueParameter);

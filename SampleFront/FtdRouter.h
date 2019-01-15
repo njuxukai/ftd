@@ -93,8 +93,8 @@ public:
 		if (m_subMap.find(field.SequenceSeries) != m_subMap.end())
 		{
 			IncExecutionReports package;
-			package.m_header.sequenceSeries = field.SequenceSeries;
-			package.m_header.sequenceNO = field.SequenceNo;
+			package.m_sequenceSeries = field.SequenceSeries;
+			package.m_sequenceNO = field.SequenceNo;
 			package.executionReportFields.push_back(field);
 			for (auto it = m_subMap[field.SequenceSeries].begin(); it != m_subMap[field.SequenceSeries].end(); it++)
 			{

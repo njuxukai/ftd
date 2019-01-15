@@ -219,6 +219,9 @@ static int readFtdcHeader(const char* buffer, FtdcHeader& header)
 	readLen += readUInt8(pos, header.version);
 
 	pos = buffer + readLen;
+	readLen += readUInt8(pos, header.ftdMode);
+
+	pos = buffer + readLen;
 	readLen += readUInt32(pos, header.transactionId);
 
 	pos = buffer + readLen;
@@ -246,6 +249,9 @@ static int writeFtdcHeader(const FtdcHeader& header, char* buffer)
 
 	char* pos = buffer;
 	writeLen += writeUInt8(header.version, pos);
+
+	pos = buffer + writeLen;
+	writeLen += writeUInt8(header.ftdMode, pos);
 
 	pos = buffer + writeLen;
 	writeLen += writeUInt32(header.transactionId, pos);

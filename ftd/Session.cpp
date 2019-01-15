@@ -51,7 +51,7 @@ Session::Session( Application& application,
   m_sessionID( sessionID ),
   m_pLogFactory( pLogFactory ),
   m_pResponder( 0 ),
-  m_packageBuffer(receiveReq)
+  m_packageBuffer()
 {
   m_state.heartBtInt( 0 );
   m_state.initiate(!receiveReq );
@@ -157,12 +157,12 @@ bool Session::sendRaw(Package& package, int num)
 
 	if (num > 0)
 	{
-		package.m_header.sequenceNO = num;
+		package.m_sequenceNO = num;
 	}
 
 	if (num == 0 && isInitiator() && package.isDialogMode() && package.isRequest())
 	{
-		package.m_header.sequenceNO = m_state.getNextSenderMsgSeqNum();
+		package.m_sequenceNO = m_state.getNextSenderMsgSeqNum();
 		m_state.incrNextSenderMsgSeqNum();
 	}
 
@@ -321,7 +321,7 @@ void Session::next( const Package& package, const UtcTimeStamp& timeStamp, bool 
 	///<2> Acceptor (dialog–Ú∫≈£©
 	if (isAcceptor() && package.isDialogMode())
 	{
-		if (package.m_header.sequenceNO != m_state.getNextTargetMsgSeqNum())
+		if (package.m_sequenceNO != m_state.getNextTargetMsgSeqNum())
 		{
 			disconnect();
 		}

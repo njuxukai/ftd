@@ -207,7 +207,7 @@ void SocketInitiator::onDisconnect( SocketConnector&, int s )
 	  delete pSocketConnection;
   }
   //connect();
-  m_needReconnect = true;
+  //m_needReconnect = true;
   
 }
 
@@ -221,11 +221,11 @@ void SocketInitiator::onTimeout( SocketConnector& )
   time_t now;
   ::time( &now );
 
-  if ( (now - m_lastConnect) >= m_reconnectInterval )
+  if ( m_doConnect && (now - m_lastConnect) >= m_reconnectInterval )
   {
     connect();
     m_lastConnect = now;
-	m_needReconnect = false;
+	//m_needReconnect = false;
   }
 
   SocketConnections::iterator i;

@@ -27,9 +27,6 @@ struct {package_name} : public Package
 
 	{package_name}() : Package(FTD_VERSION, {tid}, {mode})
 	{{
-		m_header.version = FTD_VERSION;
-		m_header.transactionId = {tid};
-		clear();
 	}}
 
 	virtual ~{package_name}()
@@ -38,7 +35,8 @@ struct {package_name} : public Package
 	virtual Package* clone() const
 	{{
 		{package_name}* pCopy = new {package_name}();
-		memcpy(&pCopy->m_header, &m_header, sizeof(FtdcHeader));
+		pCopy->m_sequenceNO = m_sequenceNO;
+		pCopy->m_sequenceSeries = m_sequenceSeries;
 		pCopy->clear();
 
 {member_clone_lines}
@@ -86,9 +84,15 @@ struct {package_name} : public Package
 		char* ftdcBuffer = new char[MAX_FTDC_LENGTH + 1];
 		char* fieldBuffer = new char[MAX_FTDC_LENGTH + 1];
 		char* ftdcHeaderBuffer = new char[FTDC_HEADER_LENGTH + 1];
+		
 		FtdcFieldHeader fieldHeader = {{0}};
 		FtdcHeader ftdcHeader = {{ 0 }};
-		memcpy(&ftdcHeader, &m_header, sizeof(FtdcHeader));
+		ftdcHeader.version = m_version;
+		ftdcHeader.ftdMode = m_mode;
+		ftdcHeader.transactionId = m_transactionId;
+		ftdcHeader.sequenceSeries = m_sequenceSeries;
+		ftdcHeader.sequenceNO = m_sequenceNO;
+
 		int writeFieldCount = 0;
 		char* nextWrite = ftdcBuffer;
 		int vecSize = 0;

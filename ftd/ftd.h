@@ -10,7 +10,7 @@
 #define MAX_FTDC_CONTENT_LENGTH 4096 - 16
 
 #define FTDC_FIELD_HEADER_LENGTH 6
-#define FTDC_HEADER_LENGTH 16
+#define FTDC_HEADER_LENGTH 17
 
 struct FtdHeader
 {
@@ -76,9 +76,11 @@ struct FtdExt
 #define FTD_REQUEST 0x01
 #define FTD_RESPONSE 0x02
 
+
 struct FtdcHeader
 {
 	uint8_t version;
+	uint8_t ftdMode;
 	uint32_t transactionId;
 	uint8_t chain;
 	uint16_t sequenceSeries;

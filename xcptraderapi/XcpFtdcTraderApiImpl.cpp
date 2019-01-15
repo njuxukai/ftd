@@ -452,8 +452,7 @@ void CXcpFtdcTraderApiImpl::OnRspUserLoginFailure(const FTD::RspUserLogin& packa
 {
 	if (m_pInitiator)
 	{
-		m_pInitiator->stop();
-		m_pInitiator = 0;
+		m_pInitiator->stopDoConnect();
 	}
 }
 

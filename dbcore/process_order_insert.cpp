@@ -13,9 +13,8 @@ void processOrderInsert(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWr
 	PlainHeaders rspHeaders;
 	std::shared_ptr<RspOrderInsert> pRsp = std::make_shared<RspOrderInsert>();
 
-	pRsp->m_header.sequenceNO = pReq->m_header.sequenceNO;
-	pRsp->m_header.sequenceSeries = pReq->m_header.sequenceSeries;
-	pRsp->m_header.transactionId = pReq->m_header.transactionId;
+	pRsp->m_sequenceNO = pReq->m_sequenceNO;
+	pRsp->m_sequenceSeries = pReq->m_sequenceSeries;
 	pRsp->pErrorField = CFtdcErrorFieldPtr(new CFtdcErrorField());
 	try 
 	{

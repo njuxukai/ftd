@@ -231,21 +231,21 @@ def generate_package_include(version, packages, target_path):
 {{
     if({1}.mergeFtdcMessage(message))
     {{
-        readResult = TID_{0};       
+        newArrivedPackage = &{1};       
     }}
     break;
 }}"""
     read_template_dialog = """case(TID_{0}):
 {{
     //bool parseRtn = false;
-    if(m_isReceiveReq && req{0}.mergeFtdcMessage(message))
+    if((header.ftdMode & FTD_REQUEST) == FTD_REQUEST && req{0}.mergeFtdcMessage(message))
     {{
-        readResult = TID_{0};
+        newArrivedPackage = &req{0};
         break;
     }}
-    if(!m_isReceiveReq && rsp{0}.mergeFtdcMessage(message))
+    if((header.ftdMode & FTD_RESPONSE) == FTD_RESPONSE && rsp{0}.mergeFtdcMessage(message))
     {{
-        readResult = TID_{0};
+        newArrivedPackage = &rsp{0};
         break;
     }}
     break;
@@ -295,7 +295,7 @@ def generate_package_include(version, packages, target_path):
     d['include_file_headers'] = '\n'.join(include_lines)
     d['declare_smart_ptr_lines'] = '\n'.join(ptr_lines)
     d['package_members'] = add_whitespaces('\n'.join(member_lines),4)
-    d['read_cases'] = add_whitespaces('\n'.join(read_cases_lines), 8)
+    d['read_cases'] = add_whitespaces('\n'.join(read_cases_lines), 12)
     d['retrieve_cases'] = add_whitespaces('\n'.join(retrieve_cases_lines),8)
     d['datetime'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 

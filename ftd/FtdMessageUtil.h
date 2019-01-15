@@ -166,7 +166,8 @@ public:
 		FtdHeader header = { 0 };
 		readFtdHeader(ftdMsg.c_str(), header);
 		std::ostringstream oss;
-		oss << boost::format("{FtdHeader[%d][%d][%d]}:") % (int)header.FTDType % (int)header.FTDExtHeaderLength % header.FTDCLength;
+		std::size_t ftdLength = ftdMsg.size();
+		oss << boost::format("{FtdHeader[%d][%d][%d][%d]}:") % (int)header.FTDType % (int)header.FTDExtHeaderLength % header.FTDCLength % ftdLength;
 		if (header.FTDType == FTDTypeFTDC)
 		{
 			oss << getFtdcBriefInfo(ftdMsg.substr(FTD_HEADER_LENGTH + header.FTDExtHeaderLength, header.FTDCLength));

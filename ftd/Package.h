@@ -15,10 +15,14 @@ namespace FTD
 		const uint8_t m_version;
 		const uint32_t m_transactionId;
 		const uint32_t m_mode;
-		FtdcHeader m_header;
+		uint16_t m_sequenceSeries;
+	    uint32_t m_sequenceNO;
 		Package(uint8_t version_, uint32_t transactionId_, uint32_t mode_) :
-			m_version(version_), m_transactionId(transactionId_), m_mode(mode_), m_header({ 0 })
-		{}
+			m_version(version_), m_transactionId(transactionId_), m_mode(mode_)
+		{
+			m_sequenceSeries = 0;
+			m_sequenceNO = 0;
+		}
 		virtual ~Package() {};
 		virtual Package* clone() const = 0;
 		virtual void clear() = 0;
@@ -128,15 +132,13 @@ namespace FTD
 			{
 				clear();
 				m_ftdcMessages.clear();
-				m_header.sequenceNO = ftdcHeader.sequenceNO;
-				m_header.sequenceSeries = ftdcHeader.sequenceSeries;
-				m_header.version = ftdcHeader.version;
+				m_sequenceNO = ftdcHeader.sequenceNO;
+				m_sequenceSeries = ftdcHeader.sequenceSeries;
+				//m_header.version = ftdcHeader.version;
 			}
-			if (m_header.sequenceNO != ftdcHeader.sequenceNO
-				|| m_header.sequenceSeries != ftdcHeader.sequenceSeries)
+			if (m_sequenceNO != ftdcHeader.sequenceNO
+				|| m_sequenceSeries != ftdcHeader.sequenceSeries)
 				return;
-			m_header.fieldCount += ftdcHeader.fieldCount;
-			m_header.contentLength += ftdcHeader.contentLength;
 			FtdcFieldHeader fieldHeader = { 0 };
 			const char* buffer = ftdcContent.c_str();
 			const char* pos = buffer;

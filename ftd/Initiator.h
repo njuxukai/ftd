@@ -68,6 +68,8 @@ public:
   /// Stop initiator.
   void stop( bool force = false );
 
+  ///Set stop flag called in the work thread
+  void stopDoConnect() { m_doConnect = false; }
   //join thread 
   void join();
 
@@ -148,6 +150,7 @@ protected:
   PortSettings m_settings;
   SessionFactory* m_pSessionFactory;
   bool m_needReconnect;
+  bool m_doConnect;
 private:
 	PackageStoreFactory* m_pPackageStoreFactory;
   LogFactory* m_pLogFactory;

@@ -23,20 +23,22 @@ DECLARE_PTR(Package);
 
 struct PackageBuffer
 {{
-    bool m_isReceiveReq;
-	PackageBuffer(bool isReceiveReq) : m_isReceiveReq(isReceiveReq)
+	PackageBuffer()
 	{{
 	}}
-{package_members}
+
+	Package* OnFtdMessage(const std::string& ftdMessage)
+	{{
+		return OnFtdcMessage(FtdMessageUtil::parseFtdMessage(ftdMessage));
+	}}
 
 	
-
-	int readFtdcMessage(const std::string& message)
+	Package* OnFtdcMessage(const std::string& message)
 	{{
+		Package* newArrivedPackage = 0;
 		FtdcHeader header;
 		readFtdcHeader(message.c_str(), header);
 
-		int readResult = -1;
 		switch(header.transactionId)
 		{{
 {read_cases}
@@ -45,34 +47,14 @@ struct PackageBuffer
 				break;
 			}}
 		}}
-		return readResult;
+		return newArrivedPackage;
 	}}
 
-	Package* retrievePackage(int transactionId)
-	{{
-		Package* retrieveResult = nullptr;
-		switch(transactionId)
-		{{
-{retrieve_cases}
-            default:
-			{{
-				break;
-			}}
-		}}
-		return retrieveResult;
-	}}
-
-	Package* OnFtdMessage(const std::string& message)
-	{{
-		return OnFtdcMessage(FtdMessageUtil::parseFtdMessage(message));
-	}}
-
-	///deprecating?
-	Package* OnFtdcMessage(const std::string& message)
-	{{
-		int transactionId = readFtdcMessage(message);
-		return retrievePackage(transactionId);
-	}}
+	private:
+	PackageBuffer (const PackageBuffer&) = delete;
+	PackageBuffer& operator=(const PackageBuffer&) = delete;
+	
+{package_members}
 }};
 
 	

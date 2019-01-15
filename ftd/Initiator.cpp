@@ -42,8 +42,9 @@ Initiator::Initiator( Application& application,
   m_pLog( 0 ),
   m_firstPoll( true ),
   m_stop( true ),
-  m_nextConnectPortIdx(0),
-	m_needReconnect(false)
+	m_doConnect(true),
+  m_nextConnectPortIdx(0)
+	//,m_needReconnect(false)
 { initialize(); }
 
 

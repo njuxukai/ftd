@@ -7,8 +7,7 @@
 
 FtdRouter::FtdRouter(const FtdRouterParameter& parameter) :
 		m_parameter(parameter), 
-		m_acceptor(0),
-		m_downlinkAdminBuffer(false)
+		m_acceptor(0)
 {
 }
 
