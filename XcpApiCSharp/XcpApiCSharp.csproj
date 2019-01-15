@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiEnum.cs" />
     <Compile Include="ApiStructure.cs" />
     <Compile Include="Trader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

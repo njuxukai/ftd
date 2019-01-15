@@ -10,14 +10,17 @@ host_struct_template = './templates/cs_struct.template'
 
 single_struct_template = './templates/cs_single_struct_def.template'
 
+host_enum_template = './templates/cs_enum.template'
+single_enum_template = './templates/cs_single_enum_def.template'
+single_static_string_template = './templates/cs_single_string_static_class_def.template'
 
-def generate_host_struct_file(fields, items, types, project_code, target_path):  
+def generate_host_cs_struct_file(fields, items, types, project_code, target_path):  
     struct_file_name = 'ApiStructure.cs'
     lines = []
     template = load_template_file(host_struct_template)
     single_field_template = load_template_file(single_struct_template)
     for field in fields.values():
-        section_lines = generate_field_struct_def_lines(field, items, types, 
+        section_lines = _generate_field_struct_def_lines(field, items, types, 
                                                          single_field_template, project_code)
         lines.extend(section_lines)
     d = {}
@@ -25,11 +28,29 @@ def generate_host_struct_file(fields, items, types, project_code, target_path):
     d['stuct_define_entrys'] = '\n'.join(lines)
     save_cpp_file(template.format_map(d),  '%s/%s' %(target_path, struct_file_name))
 
-def generate_field_struct_def_lines(field, items, types, template, project_code):
+def generate_host_cs_enum_file(types, project_code, target_path):
+    struct_file_name = 'ApiEnum.cs'
+    lines = []
+    template = load_template_file(host_enum_template)
+    for t in types.values():
+        if len(t.enum_value_dicts) == 0:
+            continue
+        if t.base_type_name.startswith('FTDStringType'):
+            lines.extend(_generate_static_string_class(t))
+        if t.base_type_name.startswith('FTDChar') or t.base_type_name.startswith('FTDInt'):
+            tmp_lines = _generate_single_enum(t)
+            lines.extend(tmp_lines)
+        lines.append('')
+    d = {}
+    d['enum_define_entrys'] = '\n'.join(lines)
+    save_cpp_file(template.format_map(d),  '%s/%s' %(target_path, struct_file_name))
+
+
+def _generate_field_struct_def_lines(field, items, types, template, project_code):
     lines = []
     item_lines = []
     for item_dict in field.item_dicts:
-        item_lines.extend(get_universal_field_item_csharp_define_lines(item_dict, items,types,project_code))
+        item_lines.extend(_get_universal_field_item_csharp_define_lines(item_dict, items,types,project_code))
     
     d = {}
     d['struct_prefix']  = 'C%sFtdc' % project_code
@@ -41,7 +62,7 @@ def generate_field_struct_def_lines(field, items, types, template, project_code)
     return lines
 
 
-def get_universal_field_item_csharp_define_lines(field_item_dict, items, types, project_code):
+def _get_universal_field_item_csharp_define_lines(field_item_dict, items, types, project_code):
     item_name = field_item_dict['name']
     item_comment = field_item_dict['comment']
     if item_name not in items:
@@ -51,13 +72,13 @@ def get_universal_field_item_csharp_define_lines(field_item_dict, items, types, 
     lines.append('///%s' % item_comment)
     item_entry = items[item_name]
     base_type_name = item_entry.base_type_name;
-    lines.append(get_csharpstore_marshal_spec(base_type_name))
-    lines.append('public %s %s;' %(get_csharpstore_name(base_type_name), item_name) )
+    lines.append(_get_csharpstore_marshal_spec(base_type_name))
+    lines.append('public %s %s;' %(_get_csharpstore_name(base_type_name), item_name) )
     lines.append('')
     return lines   
 
 
-def get_csharpstore_name(base_type_name):
+def _get_csharpstore_name(base_type_name):
     """
     public <String> itemname;
     public <Int32> itemname;
@@ -76,7 +97,7 @@ def get_csharpstore_name(base_type_name):
     if h == INT64_TYPE:
         return  'Int64'
 
-def get_csharpstore_marshal_spec(base_type_name):
+def _get_csharpstore_marshal_spec(base_type_name):
     """
         <[MarshalAs(UnmanagedType.I4)]>
         <[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 20)]>
@@ -99,3 +120,61 @@ def get_csharpstore_marshal_spec(base_type_name):
     if h == INT64_TYPE:
         t1 =  'I8'
     return template.format(t1, t2)
+
+
+def _generate_static_string_class(t):
+    lines = []
+    template = load_template_file(single_static_string_template)
+    td ={}
+    lines = []
+    raw_name = t.name
+    if raw_name.startswith('FTD'):
+        raw_name = raw_name[3:]
+    for d in t.enum_value_dicts:
+        entry_item_name = ''
+        if 'enname' in d and len(d['enname']) > 0:
+            entry_item_name = d['enname']
+        else:
+            entry_item_name = raw_name + '_' + d['name']
+
+        lines.append('/// %s' % d['comment'])
+        lines.append('public static readonly string %s = "%s";' %(entry_item_name, d['name']))
+    td['static_class_name'] = raw_name + 's';
+    td['item_lines'] = add_whitespaces('\n'.join(lines), 4)
+    return template.format_map(td).split('\n')
+
+
+
+def _generate_single_enum(t):
+    lines = []
+    entry_template = load_template_file(single_enum_template)
+    td ={}
+    lines = []
+    raw_name = t.name
+    if raw_name.startswith('FTD'):
+        raw_name = raw_name[3:]
+    quoter = ''
+    converter = ''
+    if t.base_type_name.startswith('FTDChar'):
+        quoter = "'"
+        converter = '(byte)'
+    for d in t.enum_value_dicts:
+        lines.append('/// %s' % d['comment'])
+        item_name = raw_name +'_' + d['name']
+        if 'enname' in d and len(d['enname']) > 0:
+            item_name = d['enname']
+        value = d['name']
+        
+        template = "{0} = {3}{2}{1}{2},"
+        lines.append(template.format(item_name, value, quoter, converter))
+
+    raw_name = t.name
+    if raw_name.startswith('FTD'):
+        raw_name = raw_name[3:]
+    td['enum_type_name'] = raw_name
+    if t.base_type_name.startswith('FTDChar'):
+        td['int_type'] = 'byte'
+    else:
+        td['int_type'] = 'int'
+    td['item_lines'] = add_whitespaces('\n'.join(lines),4)
+    return entry_template.format_map(td).split('\n')

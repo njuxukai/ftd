@@ -64,6 +64,15 @@
     <Folder Include="templates\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="templates\cs_enum.template">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="templates\cs_single_enum_def.template">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="templates\cs_single_string_static_class_def.template">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="templates\cs_single_struct_def.template">
       <SubType>Code</SubType>
     </Content>

@@ -1,0 +1,4 @@
+public enum {enum_type_name} : {int_type}
+{{
+{item_lines}
+}}

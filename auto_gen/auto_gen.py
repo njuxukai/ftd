@@ -50,7 +50,8 @@ def generate_host_files(path, file, target_path):
 
 def generate_csharp_files(path, file, target_path):
     types,items,fields, packages, tids = load_dtd_file_fields(path, file)
-    gen_host_csharp_fields_def.generate_host_struct_file(fields, items, types, project_code, target_path)
+    gen_host_csharp_fields_def.generate_host_cs_struct_file(fields, items, types, project_code, target_path)
+    gen_host_csharp_fields_def.generate_host_cs_enum_file(types, project_code, target_path)
 
 
 def generate_testcase(path, file, target_path):
