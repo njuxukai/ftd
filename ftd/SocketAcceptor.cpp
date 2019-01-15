@@ -39,9 +39,14 @@ SocketAcceptor::SocketAcceptor( Application& application,
 
 SocketAcceptor::~SocketAcceptor()
 {
-  SocketConnections::iterator iter;
-  for ( iter = m_connections.begin(); iter != m_connections.end(); ++iter )
-    delete iter->second;
+
+	SocketConnections::iterator iter;
+	for (iter = m_connections.begin(); iter != m_connections.end(); ++iter)
+	{
+		iter->second->setSession(0);
+	}
+
+	m_connections.clear();
 }
 
 void SocketAcceptor::onConfigure( const PortSettings& s )
@@ -169,10 +174,10 @@ void SocketAcceptor::onConnect( SocketServer& server, int a, int s )
 	  return;
   Dictionary settings = m_setting[port];
   Sessions sessions = m_portToSessions[port];
-  Session* pSession = createSession(id, settings);
+  Session::SPtr pSession = createSession(id, settings);
   if (!pSession)
 	  return;   
-  SocketConnection *pSocketConnection = new SocketConnection( s, pSession, &server.getMonitor());
+  SocketConnection::SPtr pSocketConnection = std::make_shared<SocketConnection>( s, pSession, &server.getMonitor());
   m_connections[s] = pSocketConnection;
   pSession->setResponder(pSocketConnection);
 
@@ -187,7 +192,7 @@ void SocketAcceptor::onWrite( SocketServer& server, int s )
 {
   SocketConnections::iterator i = m_connections.find( s );
   if ( i == m_connections.end() ) return ;
-  SocketConnection* pSocketConnection = i->second;
+  SocketConnection::SPtr pSocketConnection = i->second;
   if( pSocketConnection->processQueue() )
     pSocketConnection->unsignal();
 }
@@ -196,7 +201,7 @@ bool SocketAcceptor::onData( SocketServer& server, int s )
 {
   SocketConnections::iterator i = m_connections.find( s );
   if ( i == m_connections.end() ) return false;
-  SocketConnection* pSocketConnection = i->second;
+  SocketConnection::SPtr pSocketConnection = i->second;
   return pSocketConnection->read( *this, server );
 }
 
@@ -204,17 +209,17 @@ void SocketAcceptor::onDisconnect( SocketServer&, int s )
 {
   SocketConnections::iterator i = m_connections.find( s );
   if ( i == m_connections.end() ) return ;
-  SocketConnection* pSocketConnection = i->second;
+  SocketConnection::SPtr pSocketConnection = i->second;
 
-  Session* pSession = pSocketConnection->getSession();
+  Session::SPtr pSession = pSocketConnection->getSession();
+  pSocketConnection->setSession(0);
   if (pSession)
   {
 	  pSession->disconnect();
 	  destroySession(pSession);
   }
-
-  delete pSocketConnection;
   m_connections.erase( s );
+  //delete pSocketConnection;
 }
 
 void SocketAcceptor::onError( SocketServer& ) 

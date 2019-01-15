@@ -70,8 +70,11 @@ Initiator::~Initiator()
 {
   //SocketInitiator²»¸ÃÓÃm_sessions
   Sessions::iterator i;
-  for ( i = m_sessions.begin(); i != m_sessions.end(); ++i )
-    delete i->second;
+  for (i = m_sessions.begin(); i != m_sessions.end(); ++i)
+  {
+	  m_pSessionFactory->destroy(i->second);
+  }
+  m_sessions.clear();
 
   if (m_pSessionFactory)
   {
@@ -98,6 +101,7 @@ Initiator::~Initiator()
   }
 }
 
+/*
 Session* Initiator::getSession( const SessionID& sessionID,
                                 Responder& responder )
 {
@@ -118,6 +122,7 @@ Session* Initiator::getSession( const SessionID& sessionID ) const
   else
     return 0;
 }
+*/
 
 const Dictionary* const Initiator::getPortSettings( const PortID& portID ) const
 {
@@ -250,7 +255,7 @@ void Initiator::stop( bool force )
   if( isStopped() ) return;
 
 
-  std::vector<Session*> enabledSessions;
+  std::vector<Session::SPtr> enabledSessions;
 
   SessionIDs connected;
 
@@ -262,7 +267,7 @@ void Initiator::stop( bool force )
   SessionIDs::iterator i = connected.begin();
   for ( ; i != connected.end(); ++i )
   {
-    Session* pSession = Session::lookupSession(*i);
+    Session::SPtr pSession = Session::lookupSession(*i);
     if( pSession && pSession->isEnabled() )
     {
       enabledSessions.push_back( pSession );
@@ -288,7 +293,7 @@ void Initiator::stop( bool force )
     thread_join( m_threadid );
   m_threadid = 0;
 
-  std::vector<Session*>::iterator session = enabledSessions.begin();
+  std::vector<Session::SPtr>::iterator session = enabledSessions.begin();
   for( ; session != enabledSessions.end(); ++session )
     (*session)->logon();
 }
@@ -314,18 +319,18 @@ THREAD_PROC Initiator::startThread( void* p )
   return 0;
 }
 
-Session* Initiator::createSession(const SessionID& id, const Dictionary& settings)
+Session::SPtr Initiator::createSession(const SessionID& id, const Dictionary& settings)
 {
 	if (!m_pSessionFactory)
 		return nullptr;
-	Session* pSession = m_pSessionFactory->create(id, settings, false);
+	Session::SPtr pSession = m_pSessionFactory->create(id, settings, false);
 	m_sessions[id] = pSession;
 	m_sessionIDs.insert(id);
 	setPending(id);
 	return pSession;
 }
 
-void Initiator::destroySession(Session* pSession)
+void Initiator::destroySession(Session::SPtr pSession)
 {
 	if (!pSession)
 		return;

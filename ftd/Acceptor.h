@@ -32,6 +32,7 @@
 #include "Responder.h"
 #include "PortSettings.h"
 #include "Exceptions.h"
+#include "session.h"
 #include "SessionFactory.h"
 #include <map>
 #include <string>
@@ -96,8 +97,8 @@ namespace FTD
 		}*/
 	protected:
 		///fix:initialize create all sessions ftd:a new socket accepted,new session created
-		Session* createSession(const SessionID& id, const Dictionary& settings);
-		void destroySession(Session* pSession);
+		Session::SPtr createSession(const SessionID& id, const Dictionary& settings);
+		void destroySession(Session::SPtr pSession);
 	private:
 		void initialize() throw (ConfigError);
 		/// Implemented to configure acceptor
@@ -114,7 +115,7 @@ namespace FTD
 		static THREAD_PROC startThread(void* p);
 
 		typedef std::set < SessionID > SessionIDs;
-		typedef std::map < SessionID, Session* > Sessions;
+		typedef std::map < SessionID, Session::SPtr > Sessions;
 
 		thread_id m_threadid;
 		Sessions m_sessions;

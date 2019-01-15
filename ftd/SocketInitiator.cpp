@@ -43,14 +43,8 @@ throw( ConfigError )
 
 SocketInitiator::~SocketInitiator()
 {
-  SocketConnections::iterator i;
-  for (i = m_connections.begin();
-       i != m_connections.end(); ++i)
-    delete i->second;
-
-  for (i = m_pendingConnections.begin();
-       i != m_pendingConnections.end(); ++i)
-    delete i->second;
+	m_connections.clear();
+	m_pendingConnections.clear();
 }
 
 void SocketInitiator::onConfigure( const PortSettings& s )
@@ -142,9 +136,9 @@ int SocketInitiator::doConnect( const PortID& p, const Dictionary& d )
 	SessionID s;
 	std::string randomString;
 	bool generateIDResult = Session::allocateNextSessionID(s, randomString);
-	Session* pSession = createSession(s, d);
+	Session::SPtr pSession = createSession(s, d);
     m_pendingConnections[ socket ] 
-      = new SocketConnection(socket, pSession, &m_connector.getMonitor());
+      = std::make_shared<SocketConnection>(socket, pSession, &m_connector.getMonitor());
 	pSession->setResponder(m_pendingConnections[socket]);
   }
   catch (std::exception&) { result = -1; }
@@ -155,7 +149,7 @@ void SocketInitiator::onConnect( SocketConnector&, int s )
 {
   SocketConnections::iterator i = m_pendingConnections.find( s );
   if( i == m_pendingConnections.end() ) return;
-  SocketConnection* pSocketConnection = i->second;
+  SocketConnection::SPtr pSocketConnection = i->second;
   
   m_connections[s] = pSocketConnection;
   m_pendingConnections.erase( i );
@@ -170,7 +164,7 @@ void SocketInitiator::onWrite( SocketConnector& connector, int s )
 {
   SocketConnections::iterator i = m_connections.find( s );
   if ( i == m_connections.end() ) return ;
-  SocketConnection* pSocketConnection = i->second;
+  SocketConnection::SPtr pSocketConnection = i->second;
   if( pSocketConnection->processQueue() )
     pSocketConnection->unsignal();
 }
@@ -179,7 +173,7 @@ bool SocketInitiator::onData( SocketConnector& connector, int s )
 {
   SocketConnections::iterator i = m_connections.find( s );
   if ( i == m_connections.end() ) return false;
-  SocketConnection* pSocketConnection = i->second;
+  SocketConnection::SPtr pSocketConnection = i->second;
   return pSocketConnection->read( connector );
 }
 
@@ -188,14 +182,20 @@ void SocketInitiator::onDisconnect( SocketConnector&, int s )
   SocketConnections::iterator i = m_connections.find( s );
   SocketConnections::iterator j = m_pendingConnections.find( s );
 
-  SocketConnection* pSocketConnection = 0;
-  if( i != m_connections.end() ) 
-    pSocketConnection = i->second;
-  if( j != m_pendingConnections.end() )
-    pSocketConnection = j->second;
+  SocketConnection::SPtr pSocketConnection = 0;
+  if (i != m_connections.end())
+  {
+	  pSocketConnection = i->second;
+  }
+    
+  if (j != m_pendingConnections.end())
+  {
+	  pSocketConnection = j->second;
+  }
+    
   if(pSocketConnection )
   {
-	  Session* pSession = pSocketConnection->getSession();
+	  Session::SPtr pSession = pSocketConnection->getSession();
 	  if (pSession)
 	  {
 		  pSession->disconnect();
@@ -204,7 +204,6 @@ void SocketInitiator::onDisconnect( SocketConnector&, int s )
 
 	  m_connections.erase(s);
 	  m_pendingConnections.erase(s);
-	  delete pSocketConnection;
   }
   //connect();
   //m_needReconnect = true;

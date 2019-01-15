@@ -29,6 +29,7 @@
 #include "Parser.h"
 #include "Responder.h"
 #include "SessionID.h"
+#include "session.h"
 #include "SocketMonitor.h"
 #include "Utility.h"
 #include "Mutex.h"
@@ -37,6 +38,7 @@
 
 namespace FTD
 {
+
 class SocketAcceptor;
 class SocketServer;
 class SocketConnector;
@@ -47,14 +49,15 @@ class Session;
 class SocketConnection : public Responder
 {
 public:
-  typedef std::set<SessionID> Sessions;
+	typedef std::shared_ptr<SocketConnection> SPtr;
+	typedef std::set<SessionID> Sessions;
 
-  SocketConnection( int s, Session* pSession, SocketMonitor* pMonitor);
+  SocketConnection( int s, Session::SPtr pSession, SocketMonitor* pMonitor);
   virtual ~SocketConnection();
 
   int getSocket() const { return m_socket; }
-  void setSession(Session* session) { m_pSession = session; }
-  Session* getSession() const { return m_pSession; }
+  void setSession(Session::SPtr session) { m_pSession = session; }
+  Session::SPtr getSession() const { return m_pSession; }
 
   bool read( SocketConnector& s );
   bool read( SocketAcceptor&, SocketServer& );
@@ -94,11 +97,12 @@ private:
   Queue m_sendQueue;
   unsigned m_sendLength;
   Sessions m_sessions;
-  Session* m_pSession;
+  Session::SPtr m_pSession;
   SocketMonitor* m_pMonitor;
   Mutex m_mutex;
   fd_set m_fds;
 };
-}
+
+};
 
 #endif //FIX_SOCKETCONNECTION_H

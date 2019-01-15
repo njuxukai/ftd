@@ -35,16 +35,21 @@ SessionFactory::~SessionFactory()
 {
 }
 
-Session* SessionFactory::create( const SessionID& sessionID,
+Session::SPtr SessionFactory::create( const SessionID& sessionID,
 							     const Dictionary& settings,
 	bool receiveReq) throw( ConfigError )
 {
-  return new Session(m_application, m_packageStoreFactory,
+
+	Session::SPtr pSession = std::make_shared<Session>(m_application, m_packageStoreFactory,
     sessionID, m_pLogFactory, receiveReq );
+	Session::addSession(pSession);
+	return pSession;
 }
 
-void SessionFactory::destroy( Session* pSession )
+void SessionFactory::destroy( Session::SPtr pSession )
 {
-  delete pSession;
+	Session::removeSession(pSession->getSessionID());
+  //delete pSession;
 }
+
 }

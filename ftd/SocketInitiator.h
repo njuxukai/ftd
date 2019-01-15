@@ -44,7 +44,7 @@ public:
 private:
 	DISABLE_COPY_AND_ASSIGN(SocketInitiator)
 
-	typedef std::map < int, SocketConnection* > SocketConnections;
+	typedef std::map < int, SocketConnection::SPtr > SocketConnections;
 	typedef std::map < int, SessionID > SocketSessionMap;
 	typedef std::map < SessionID, int > SessionToHostNum;
 

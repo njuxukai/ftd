@@ -65,9 +65,12 @@ void Acceptor::initialize() throw ( ConfigError )
 
 Acceptor::~Acceptor()
 {
-  Sessions::iterator i;
-  for ( i = m_sessions.begin(); i != m_sessions.end(); ++i )
-    delete i->second;
+    Sessions::iterator i;
+	for (i = m_sessions.begin(); i != m_sessions.end(); ++i)
+	{
+		m_pSessionFactory->destroy(i->second);
+	}
+	m_sessions.clear();
 
   if (m_pSessionFactory)
   {
@@ -106,17 +109,17 @@ Session* Acceptor::getSession( const SessionID& sessionID ) const
 
 */
 
-Session* Acceptor::createSession(const SessionID& id, const Dictionary& settings)
+Session::SPtr Acceptor::createSession(const SessionID& id, const Dictionary& settings)
 {
 	if (!m_pSessionFactory)
 		return nullptr;
-	Session* pSession = m_pSessionFactory->create(id, settings, true);
+	Session::SPtr pSession = m_pSessionFactory->create(id, settings, true);
 	m_sessions[id] = pSession;
 	m_sessionIDs.insert(id);
 	return pSession;
 }
 
-void Acceptor::destroySession(Session* pSession)
+void Acceptor::destroySession(Session::SPtr pSession)
 {
 	if (!pSession)
 		return;
@@ -180,13 +183,13 @@ void Acceptor::stop( bool force )
   if( isStopped() ) return;
 
 
-  std::vector<Session*> enabledSessions;
+  std::vector<Session::SPtr> enabledSessions;
 
   Sessions sessions = m_sessions;
   Sessions::iterator i = sessions.begin();
   for ( ; i != sessions.end(); ++i )
   {
-    Session* pSession = Session::lookupSession(i->first);
+    Session::SPtr pSession = Session::lookupSession(i->first);
     if( pSession && pSession->isEnabled() )
     {
       enabledSessions.push_back( pSession );
@@ -207,7 +210,7 @@ void Acceptor::stop( bool force )
     thread_join( m_threadid );
   m_threadid = 0;
 
-  std::vector<Session*>::iterator session = enabledSessions.begin();
+  std::vector<Session::SPtr>::iterator session = enabledSessions.begin();
   for( ; session != enabledSessions.end(); ++session )
     (*session)->logon();
 }

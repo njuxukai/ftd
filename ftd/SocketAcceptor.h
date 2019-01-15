@@ -28,7 +28,7 @@ private:
 
 	typedef std::set < SessionID > Sessions;
 	typedef std::map < int, Sessions > PortToSessions;
-	typedef std::map < int, SocketConnection* > SocketConnections;
+	typedef std::map < int, SocketConnection::SPtr > SocketConnections;
 	typedef std::map < int, SessionID> SocketSessionIDMap;
 	typedef std::map <ClientID, Sessions> ClientIDToSessions;
 	void onConfigure( const PortSettings& ) throw ( ConfigError );

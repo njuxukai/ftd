@@ -61,19 +61,20 @@ Session::Session( Application& application,
 
 
 
-  addSession( *this );
+
   m_application.onCreate( m_sessionID );
   m_state.onEvent( "Created session" );
+  std::cout << "~Session()\n";
 }
 
 Session::~Session()
 {
 	m_application.onDisconnect(m_sessionID);
-	removeSession( *this );
+	removeSession( m_sessionID );
 	m_packageStoreFactory.destroy( m_state.store() );
 	if ( m_pLogFactory && m_state.log() )
 		m_pLogFactory->destroy( m_state.log() );
-  
+	std::cout << "~Session()\n";
 }
 
 
@@ -225,12 +226,12 @@ void Session::disconnect()
 {
   Locker l(m_mutex);
 
-  if ( m_pResponder )
+  if (m_pResponder)
   {
     m_state.onEvent( "Disconnecting" );
 
-    m_pResponder->disconnect();
-    m_pResponder = 0;
+	m_pResponder->disconnect();
+	m_pResponder = 0;
   }
 
   if ( m_state.receivedLogon() || m_state.sentLogon() )
@@ -415,7 +416,7 @@ void Session::onSendForceExit(Package& package)
 bool Session::sendToTarget( Package& message, const SessionID& sessionID )
 throw( SessionNotFound )
 {
-  Session* pSession = lookupSession( sessionID );
+  Session::SPtr pSession = lookupSession( sessionID );
   if (!pSession)
 	  return false;
   return pSession->send( message );
@@ -424,7 +425,7 @@ throw( SessionNotFound )
 bool Session::sendToTarget(std::string& ftdMsg, const SessionID& sessionID)
 throw(SessionNotFound)
 {
-	Session* pSession = lookupSession(sessionID);
+	Session::SPtr pSession = lookupSession(sessionID);
 	if (!pSession)
 		return false;
 	return pSession->send(ftdMsg);
@@ -432,7 +433,7 @@ throw(SessionNotFound)
 
 bool Session::sendToTarget(std::vector<std::string>& ftdMsgs, const SessionID& sessionID)
 {
-	Session* pSession = lookupSession(sessionID);
+	Session::SPtr pSession = lookupSession(sessionID);
 	if (!pSession)
 		return false;
 	return pSession->send(ftdMsgs);
@@ -449,7 +450,7 @@ bool Session::doesSessionExist( const SessionID& sessionID )
   return s_sessions.end() != s_sessions.find( sessionID );
 }
 
-Session* Session::lookupSession( const SessionID& sessionID )
+Session::SPtr Session::lookupSession( const SessionID& sessionID )
 {
   Locker locker( s_mutex );
   Sessions::iterator find = s_sessions.find( sessionID );
@@ -466,10 +467,10 @@ bool Session::isSessionRegistered( const SessionID& sessionID )
   return s_registered.end() != s_registered.find( sessionID );
 }
 
-Session* Session::registerSession( const SessionID& sessionID )
+Session::SPtr Session::registerSession( const SessionID& sessionID )
 {
   Locker locker( s_mutex );
-  Session* pSession = lookupSession( sessionID );
+  Session::SPtr pSession = lookupSession( sessionID );
   if ( pSession == 0 ) return 0;
   if ( isSessionRegistered( sessionID ) ) return 0;
   s_registered[ sessionID ] = pSession;
@@ -488,25 +489,25 @@ size_t Session::numSessions()
   return s_sessions.size();
 }
 
-bool Session::addSession( Session& s )
+bool Session::addSession( Session::SPtr s )
 {
   Locker locker( s_mutex );
-  Sessions::iterator it = s_sessions.find( s.m_sessionID );
+  Sessions::iterator it = s_sessions.find( s->m_sessionID );
   if ( it == s_sessions.end() )
   {
-    s_sessions[ s.m_sessionID ] = &s;
-    s_sessionIDs.insert( s.m_sessionID );
+    s_sessions[ s->m_sessionID ] = s;
+    s_sessionIDs.insert( s->m_sessionID );
     return true;
   }
   else
     return false;
 }
 
-void Session::removeSession( Session& s )
+void Session::removeSession( const SessionID& sessionID )
 {
   Locker locker( s_mutex );
-  s_sessions.erase( s.m_sessionID );
-  s_sessionIDs.erase( s.m_sessionID );
-  s_registered.erase( s.m_sessionID );
+  s_sessions.erase(sessionID);
+  s_sessionIDs.erase(sessionID );
+  s_registered.erase( sessionID);
 }
 }

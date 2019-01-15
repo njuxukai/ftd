@@ -33,8 +33,7 @@
 namespace FTD
 {
 
-SocketConnection::SocketConnection( int s, Session* pSession,
-                                    SocketMonitor* pMonitor)
+SocketConnection::SocketConnection(int s, Session::SPtr pSession, SocketMonitor* pMonitor)
 : m_socket( s ), m_sendLength( 0 ),
    m_pSession(pSession), m_pMonitor( pMonitor )
 {
@@ -42,6 +41,7 @@ SocketConnection::SocketConnection( int s, Session* pSession,
   FD_SET( m_socket, &m_fds );
   if(m_pSession)
 	Session::registerSession(m_pSession->getSessionID());
+  std::cout << "SocketConnection()\n";
 }
 
 /*
@@ -62,6 +62,7 @@ SocketConnection::~SocketConnection()
 {
   if ( m_pSession )
     Session::unregisterSession( m_pSession->getSessionID() );
+  std::cout << "~SocketConnection()\n";
 }
 
 bool SocketConnection::send( const std::string& msg )
@@ -210,7 +211,7 @@ bool SocketConnection::read( SocketAcceptor& a, SocketServer& s )
 
 bool SocketConnection::isValidSession()
 {
-  if( m_pSession == 0 )
+  if(m_pSession)
     return false;
   SessionID sessionID = m_pSession->getSessionID();
   if( Session::isSessionRegistered(sessionID) )

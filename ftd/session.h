@@ -26,6 +26,9 @@ namespace FTD
 class Session
 {
 public:
+	typedef std::shared_ptr<Session> SPtr;
+	typedef std::weak_ptr<Session> WPtr;
+	friend class SessionFactory;
   Session( Application&, PackageStoreFactory&,
            const SessionID&,
            LogFactory* pLogFactory,
@@ -72,9 +75,9 @@ public:
 
   static std::set<SessionID> getSessions();
   static bool doesSessionExist( const SessionID& );
-  static Session* lookupSession( const SessionID& );
+  static Session::SPtr lookupSession( const SessionID& );
   static bool isSessionRegistered( const SessionID& );
-  static Session* registerSession( const SessionID& );
+  static Session::SPtr registerSession( const SessionID& );
   static void unregisterSession( const SessionID& );
 
   static size_t numSessions();
@@ -98,7 +101,7 @@ public:
   void setLogoutTimeout ( int value )
     { m_state.logoutTimeout( value ); }
 
-  void setResponder( Responder* pR )
+  void setResponder( Responder::SPtr pR )
   {
     m_pResponder = pR;
   }
@@ -128,11 +131,11 @@ public:
   const PackageStore* getStore() { return &m_state; }
 
 private:
-  typedef std::map < SessionID, Session* > Sessions;
+  typedef std::map < SessionID, Session::SPtr > Sessions;
   typedef std::set < SessionID > SessionIDs;
 
-  static bool addSession( Session& );
-  static void removeSession( Session& );
+  static bool addSession(Session::SPtr);
+  static void removeSession( const SessionID&);
 
   //synced atomic operation
   bool sendRaw(std::string& ftdMsg);
@@ -156,7 +159,7 @@ private:
   SessionState m_state;
   PackageStoreFactory& m_packageStoreFactory;
   LogFactory* m_pLogFactory;
-  Responder* m_pResponder;
+  Responder::SPtr m_pResponder;
   Mutex m_mutex;
   PackageBuffer m_packageBuffer;
   static Sessions s_sessions;

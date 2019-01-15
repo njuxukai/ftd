@@ -11,6 +11,7 @@
 #include "Exceptions.h"
 #include "Dictionary.h"
 #include "SessionID.h"
+#include "session.h"
 
 namespace FTD
 {
@@ -36,10 +37,10 @@ public:
 
   ~SessionFactory();
 
-  Session* create( const SessionID& sessionID,
+  Session::SPtr create( const SessionID& sessionID,
 	               const Dictionary& settings,
 	  bool receiveReq) throw( ConfigError );
-  void destroy( Session* pSession );
+  void destroy( Session::SPtr pSession );
 
 private:
   Application& m_application;

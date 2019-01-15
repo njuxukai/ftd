@@ -107,8 +107,8 @@ protected:
   bool isDisconnected( const SessionID& );
   void connect();
   
-  Session* createSession(const SessionID& id, const Dictionary& settings);
-  void destroySession(Session* pSession);
+  Session::SPtr createSession(const SessionID& id, const Dictionary& settings);
+  void destroySession(Session::SPtr pSession);
 private:
   void initialize() throw ( ConfigError );
 
@@ -138,7 +138,7 @@ protected:
 	typedef std::vector < PortID > PortIDs;
 	typedef std::set < SessionID> SessionIDs;
 	typedef std::map < PortID, SessionID > PortIDSessionIDMap;
-	typedef std::map < SessionID, Session* > Sessions;
+	typedef std::map < SessionID, Session::SPtr > Sessions;
 
 
 	Sessions m_sessions;

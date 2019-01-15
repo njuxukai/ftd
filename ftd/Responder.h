@@ -13,6 +13,8 @@ namespace FTD
   class Responder
   {
   public:
+	  typedef std::shared_ptr<Responder> SPtr;
+	  typedef std::weak_ptr<Responder> WPtr;
     virtual ~Responder() {}
     virtual bool send( const std::string& ) = 0;
     virtual void disconnect() = 0;
