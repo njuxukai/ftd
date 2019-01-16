@@ -7,7 +7,18 @@ using System.Threading.Tasks;
 
 namespace SampleClientGui
 {
-    class FundUpdateEventArgs : EventArgs
+    public class  UILogEventArgs : EventArgs
+    {
+        public UILogEventArgs(string content)
+        {
+            m_line = String.Format("{mm:ss} {1}\n", DateTime.Now, content);
+
+        }
+        public string Line {
+            get { return m_line; } }
+        private string m_line;
+    }
+    public class FundUpdateEventArgs : EventArgs
     {
         public FundUpdateEventArgs(Xcp.FundField fund)
         {
@@ -18,7 +29,7 @@ namespace SampleClientGui
         Xcp.FundField m_fund;
     }
 
-    class PositionUpdateEventArgs : EventArgs
+    public class PositionUpdateEventArgs : EventArgs
     {
         public PositionUpdateEventArgs(List<Xcp.PositionField> positions)
         {
@@ -29,7 +40,7 @@ namespace SampleClientGui
         List<Xcp.PositionField> m_positions;
     }
 
-    class OrderUpdateEventArgs : EventArgs
+    public class OrderUpdateEventArgs : EventArgs
     {
         public OrderUpdateEventArgs(List<Xcp.OrderField> orders)
         {
@@ -40,7 +51,7 @@ namespace SampleClientGui
         List<Xcp.OrderField> m_orders;
     }
 
-    class TradeUpdateEventArgs : EventArgs
+    public class TradeUpdateEventArgs : EventArgs
     {
         public TradeUpdateEventArgs(List<Xcp.TradeField> trades)
         {
@@ -51,7 +62,7 @@ namespace SampleClientGui
         List<Xcp.TradeField> m_trades;
     }
 
-    class TraderDataBus
+    public class TraderEventBus
     {
 
         public void Connect(Xcp.Trader trader)
@@ -70,13 +81,33 @@ namespace SampleClientGui
             trader.onRspQryOrder -= OnRspQryOrder;
         }
         #region callback for trader
+        private void OnFrontConnected(object sender, EventArgs eventArgs)
+        {
+            RaiseUILogAddNewLine("前置连接成功");
+        }
+
+        private void OnRspUserLogin(object sender, Xcp.RspUserLoginEventArgs e)
+        {
+            string line = "";
+            if (e.ErrorField.HasValue && e.ErrorField.Value.ErrorCode != 0)
+            {
+                line = String.Format("登陆失败[{0}][{1}]", e.ErrorField.Value.ErrorCode,
+                    e.ErrorField.Value.ErrorText);
+            }
+            else
+            {
+                line = "登录失败";
+            }
+            RaiseUILogAddNewLine(line);
+        }
+
         private void OnRspQryFund(object sender, Xcp.RspQryFundEventArgs eventArgs)
         {
+            RaiseUILogAddNewLine("OnRspQryFund");
             currentFund =  eventArgs.FundField.GetValueOrDefault();
             if (eventArgs.IsLast)
             {
-                FundUpdateEventArgs args = new FundUpdateEventArgs(currentFund);
-                Volatile.Read(ref onFundUpdate) ? .Invoke(this, args);
+                RaiseFundUpdate();
             }
         }
 
@@ -95,8 +126,7 @@ namespace SampleClientGui
                 currentPositions.AddRange(receivePositionBuffer);
                 receivePositionBuffer.Clear();
 
-                PositionUpdateEventArgs args = new PositionUpdateEventArgs(currentPositions);
-                Volatile.Read(ref onPositionUpdate)?.Invoke(this, args);
+                RaisePositionUpdate();
             }
         }
 
@@ -115,8 +145,7 @@ namespace SampleClientGui
                 currentTrades.AddRange(receiveTradeBuffer);
                 receiveTradeBuffer.Clear();
 
-                TradeUpdateEventArgs args = new TradeUpdateEventArgs(currentTrades);
-                Volatile.Read(ref onTradeUpdate)?.Invoke(this, args);
+                RaiseTradeUpdate();
             }
         }
 
@@ -165,16 +194,58 @@ namespace SampleClientGui
         {
             //必须更新的部分
             order.VolumeTraded = report.VolumeTraded;
+            order.AmountTraded = report.AmountTraded;
+            order.OrderStatus = report.OrderStatus;
+            order.OrderSysID = report.OrderSysID;
+            order.OrderExchangeID = report.OrderExchangeID;
             //order.
             if (isAll)
-            { }
+            {
+                order.InstrumentCode = report.InstrumentCode;
+                order.ExchangeCode = report.ExchangeCode;
+                order.FrontID = report.FrontID;
+                order.SessionID = report.SessionID;
+                order.OrderRef = report.OrderRef;
+                order.Direction = report.Direction;
+                order.VolumeTotalOrginal = report.VolumeTotalOrginal;
+                order.InvestorID = report.InvestorID;
+            }
         }
+
+        #endregion
+
+
+        #region EventRaiser
+        private void RaiseUILogAddNewLine(string content)
+        {
+            UILogEventArgs args = new UILogEventArgs(content);
+            Volatile.Read(ref onUILogAddNewLine)?.Invoke(this, args);
+        }
+        private void RaiseFundUpdate()
+        {
+            FundUpdateEventArgs args = new FundUpdateEventArgs(currentFund);
+            Volatile.Read(ref onFundUpdate)?.Invoke(this, args);
+        }
+
+        private void RaisePositionUpdate()
+        {
+            PositionUpdateEventArgs args = new PositionUpdateEventArgs(currentPositions);
+            Volatile.Read(ref onPositionUpdate)?.Invoke(this, args);
+        }
+
         private void RaiseOrderUpdate()
         {
             OrderUpdateEventArgs eventArgs = new OrderUpdateEventArgs(currentOrderDict.Values.ToList());
             Volatile.Read(ref onOrderUpdate)?.Invoke(this, eventArgs);
         }
+
+        private void RaiseTradeUpdate()
+        {
+            TradeUpdateEventArgs args = new TradeUpdateEventArgs(currentTrades);
+            Volatile.Read(ref onTradeUpdate)?.Invoke(this, args);
+        }
         #endregion
+
         private Xcp.FundField currentFund;
 
         private List<Xcp.PositionField> currentPositions = new List<Xcp.PositionField>();
@@ -189,7 +260,8 @@ namespace SampleClientGui
         private List<Xcp.TradeField> receiveTradeBuffer = new List<Xcp.TradeField>();
         private int receiveTradeRequestID = 0;
 
-        #region events
+        #region 
+        public event EventHandler<UILogEventArgs> onUILogAddNewLine;
         public event EventHandler<FundUpdateEventArgs> onFundUpdate;
         public event EventHandler<PositionUpdateEventArgs> onPositionUpdate;
         public event EventHandler<OrderUpdateEventArgs> onOrderUpdate;
