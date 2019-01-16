@@ -14,6 +14,7 @@ namespace Xcp
     {
         public Trader(String pswDir="") 
         {
+            InitDelegates();
             TraderDllWrapper.CreateTrader(out m_handler, pswDir);
             RegisterEventHandlers();
         }
@@ -23,7 +24,6 @@ namespace Xcp
             Dispose(false);
         }
 
-        
         public void Init()
         {
             TraderDllWrapper.InitTrader(m_handler);
@@ -59,14 +59,21 @@ namespace Xcp
             Dispose(true);
         }
 
+        private void InitDelegates()
+        {
+            onFronConnectedDelegate = RaiseFrontConnected;
+            onFrontDisconnectedDelegate = RaiseFrontDisconnected;
+            onHeartBeatWarningDelegate = RaiseHeartBeatWarning;
+            onRspUserLoginDelegate = RaiseRspUserLogin;
+        }
         private void RegisterEventHandlers()
         {
             if (m_handler != IntPtr.Zero)
             {
-                TraderDllWrapper.RegisterOnFrontConnectedCallback(m_handler, RaiseFrontConnected);
-                TraderDllWrapper.RegisterOnFrontDisconnectedCallback(m_handler, RaiseFrontDisconnected);
-                TraderDllWrapper.RegisterOnHeartBeatWarningCallback(m_handler, RaiseHeartBeatWarning);
-                TraderDllWrapper.RegisterOnRspUserLoginCallback(m_handler, RaiseRspUserLogin);
+                TraderDllWrapper.RegisterOnFrontConnectedCallback(m_handler, onFronConnectedDelegate);
+                TraderDllWrapper.RegisterOnFrontDisconnectedCallback(m_handler, onFrontDisconnectedDelegate);
+                TraderDllWrapper.RegisterOnHeartBeatWarningCallback(m_handler, onHeartBeatWarningDelegate);
+                TraderDllWrapper.RegisterOnRspUserLoginCallback(m_handler, onRspUserLoginDelegate);
                 TraderDllWrapper.RegisterOnRspUserLogoutCallback(m_handler, RaiseRspUserLogout);
                 TraderDllWrapper.RegisterOnRspInputOrderCallback(m_handler, RaiseRspInputOrder);
                 TraderDllWrapper.RegisterOnRspInputOrderActionCallback(m_handler, RaiseRspInputOrderAction);
@@ -588,12 +595,12 @@ namespace Xcp
         }
         #endregion
 
-        private int m_brokerID;
-        private int m_userID;
-        private int m_investorID;
-        private String m_password;
-
-        private int m_nextReqID;
+        #region  delegate save
+        OnFrontConnectedDelegate onFronConnectedDelegate;// = RaiseFrontConnected;
+        OnFrontDisconnectedDelegate onFrontDisconnectedDelegate;
+        OnHeartBeatWarningDelegate onHeartBeatWarningDelegate;
+        OnRspUserLoginDelegate onRspUserLoginDelegate;
+        #endregion
         private IntPtr m_handler;
     }
 }

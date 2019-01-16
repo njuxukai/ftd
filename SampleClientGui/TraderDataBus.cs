@@ -64,7 +64,9 @@ namespace SampleClientGui
 
     public class TraderEventBus
     {
-
+        public TraderEventBus()
+        {
+        }
         public void Connect(Xcp.Trader trader)
         {
             trader.onRspUserLogin += OnRspUserLogin;
@@ -268,5 +270,7 @@ namespace SampleClientGui
         public event EventHandler<OrderUpdateEventArgs> onOrderUpdate;
         public event EventHandler<TradeUpdateEventArgs> onTradeUpdate;
         #endregion
+
+
     }
 }
