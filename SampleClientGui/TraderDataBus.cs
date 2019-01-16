@@ -11,7 +11,7 @@ namespace SampleClientGui
     {
         public UILogEventArgs(string content)
         {
-            m_line = String.Format("{mm:ss} {1}\n", DateTime.Now, content);
+            m_line = String.Format("{0:mm:ss} {1}\n", DateTime.Now, content);
 
         }
         public string Line {
@@ -67,6 +67,7 @@ namespace SampleClientGui
 
         public void Connect(Xcp.Trader trader)
         {
+            trader.onRspUserLogin += OnRspUserLogin;
             trader.onRspQryFund += OnRspQryFund;
             trader.onRspQryPosition += OnRspQryPosition;
             trader.onRspQryTrade += OnRspQryTrade;

@@ -57,9 +57,11 @@ namespace SampleClientGui
 
         public string FrontAddress2 { get; }
 
+        public TraderEventBus EventBus { get { return eventBus; } }
 
         private TraderEventBus eventBus = new TraderEventBus();
         private Trader trader;
+
         public App()
         {
             InitializeComponent();

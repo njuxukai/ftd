@@ -101,7 +101,9 @@
     </Link>
     <PreBuildEvent>
       <Command>xcopy  echo_server.cfg   /Y/I  ..\export\$(Configuration)\$(ProjectName)\
+
 xcopy  ..\export\$(Configuration)\mqclient.dll   /Y/I  ..\export\$(Configuration)\$(ProjectName)\
+
 xcopy  ..\import\lib\win32\debug\SimpleAmqpClient.2.*   /Y/I  ..\export\$(Configuration)\$(ProjectName)\</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>

@@ -29,7 +29,14 @@ namespace Xcp
             TraderDllWrapper.InitTrader(m_handler);
         }
 
-
+        public void Release()
+        {
+            if (m_handler != IntPtr.Zero)
+            {
+                TraderDllWrapper.ReleaseTrader(out m_handler);
+                m_handler = IntPtr.Zero;
+            }
+        }
         protected virtual void Dispose(bool disposing)
         {
             //use called(release managed object)

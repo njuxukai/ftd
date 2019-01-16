@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SampleClientGui"
         mc:Ignorable="d"
-        Title="XCP测试客户端" Height="768" Width="1024">
+        Title="XCP测试客户端" Height="900" Width="1200">
     <Grid Margin="10,23,0,0.5">
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4*"/>
             <ColumnDefinition Width="3*"/>
-            <ColumnDefinition Width="1*"/>
 
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -19,7 +19,7 @@
             <RowDefinition Height="2*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <DataGrid x:Name="positionDataGrid" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding}" AutoGenerateColumns="false" CanUserAddRows="False" >
+        <DataGrid x:Name="positionDataGrid" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding}" AutoGenerateColumns="false" CanUserAddRows="False" SelectionChanged="positionDataGrid_SelectionChanged" >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="代码" Binding="{Binding SECU_CODE}" Width="*"/>
                 <DataGridTextColumn Header="名称" Binding="{Binding ORDER_TYPE}" Width="*"/>
@@ -58,11 +58,20 @@
                  TextWrapping="Wrap" Foreground="Green"                
                  VerticalScrollBarVisibility="Auto"
                  HorizontalScrollBarVisibility="Auto"
-                 Grid.Row="2"
+                 Grid.Row="1"
                  Grid.Column="1"
-                 Grid.RowSpan="2" TextChanged="txtLog_TextChanged"/>
+                 Grid.RowSpan="3" TextChanged="txtLog_TextChanged"/>
         
-        <Grid HorizontalAlignment="Left" Height="330" Margin="512,42,0,0" VerticalAlignment="Top" Width="484"/>
+        
+        <Button x:Name="button_login" Content="登录" Grid.Column="1" HorizontalAlignment="Left" Margin="29,10,0,0" VerticalAlignment="Top" Width="75" Click="button_login_Click"/>
+        <Button x:Name="button_reqOrderInsert" Content="委托" Grid.Column="1" HorizontalAlignment="Left" Margin="29,38,0,0" VerticalAlignment="Top" Width="75" Click="button_reqOrderInsert_Click"/>
+        <Button x:Name="button_qryFund" Content="查委托" Grid.Column="1" HorizontalAlignment="Left" Margin="217,64,0,0" VerticalAlignment="Top" Width="75" Click="button_qryFund_Click"/>
+        <Button x:Name="button_qryPosition" Content="查仓位" Grid.Column="1" HorizontalAlignment="Left" Margin="120,64,0,0" VerticalAlignment="Top" Width="75" Click="button_qryPosition_Click"/>
+        <Button x:Name="button_qryOrder" Content="查资金" Grid.Column="1" HorizontalAlignment="Left" Margin="29,64,0,0" VerticalAlignment="Top" Width="75" Click="button_qryOrder_Click"/>
+        <Button x:Name="button_qryTrade" Content="查成交" Grid.Column="1" HorizontalAlignment="Left" Margin="320,64,0,0" VerticalAlignment="Top" Width="75" Click="button_qryTrade_Click"/>
+
+
+
 
     </Grid>
 </Window>
