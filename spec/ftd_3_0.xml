@@ -299,7 +299,10 @@
 			<item name="RandomString" comment="随机串"/>
 		</fieldDefine>
 		
-		<fieldDefine name="SecurityAccountField" fid="FID_SecurityAccountField" fidValue="0x0006" comment="股东账号域">		
+		<fieldDefine name="SecurityAccountField" fid="FID_SecurityAccountField" fidValue="0x0006" comment="股东账号域">	
+			<item name="InvestorID" comment="资金账号"/>
+			<item name="ExchangeType" comment="交易所编码"/>
+			<item name="SecurityAccount" comment="证券账号"/>
 		</fieldDefine>
 		
 		<fieldDefine name="ReqUserLogoutField" fid="FID_ReqUserLogoutField" fidValue="0x0007" comment="交易员退出登录请求域">
@@ -390,40 +393,51 @@
 		</fieldDefine>
 		
 		
-		<fieldDefine name="QryFundField" fid="FID_QryFundField" fidValue="0x000E" comment="资金余额查询域">		
+		<fieldDefine name="QryFundField" fid="FID_QryFundField" fidValue="0x000E" comment="资金余额查询域">
+			<item name="RequestID" comment="请求编号"/>		
 			<item name="BrokerID" comment="经纪公司编码"/>
 			<item name="UserID" comment="用户编码"/>
-			<item name="InvestorID" comment="投资者编码"/>
-			<item name="RequestID" comment="请求编号"/>
+			<item name="InvestorID" comment="投资者编码"/>			
 		</fieldDefine>
 		
 		<fieldDefine name="FundField" fid="FID_FundField" fidValue="0x000F" comment="资金余额域">		
 			<item name="BrokerID" comment="经纪公司编码"/>
-			<item name="UserID" comment="用户编码"/>
 			<item name="InvestorID" comment="投资者编码"/>
+			<item name="BranchID" comment="营业部代码"/>
+			<item name="CurrencyType" comment="币种代码"/>
+			<item name="AmountPre" comment="盘前余额"/>
+			<item name="AmountAvailable" comment="可用余额"/>
+			<item name="AmountDrawable" comment="可取资金"/>
+			<item name="AmountFrozen" comment="冻结资金"/>
 		</fieldDefine>
 		
 		<fieldDefine name="QryPositionField" fid="FID_QryPositionField" fidValue="0x0010" comment="持仓查询域">		
+			<item name="RequestID" comment="请求编号"/>
 			<item name="BrokerID" comment="经纪公司编码"/>
 			<item name="UserID" comment="用户编码"/>
 			<item name="InvestorID" comment="投资者编码"/>
-			<item name="RequestID" comment="请求编号"/>
-			<item name="ExchangeCode" comment="交易所代码"/>
-			<item name="InstrumentCode" comment="证券代码"/>
+			<item name="ExchangeType" comment="交易所编号"/>
+			<item name="InstrumentCode" comment="证券代码"/>			
 		</fieldDefine>
 		
 		<fieldDefine name="PositionField" fid="FID_PositionField" fidValue="0x0011" comment="持仓域">		
 			<item name="BrokerID" comment="经纪公司编码"/>
-			<item name="UserID" comment="用户编码"/>
 			<item name="InvestorID" comment="投资者编码"/>
-			<item name="ExchangeCode" comment="交易所代码"/>
+			<item name="ExchangeType" comment="交易所编号"/>
+			<item name="SecurityAccount" comment="证券账号"/>
 			<item name="InstrumentCode" comment="证券代码"/>
+			<item name="InstrumentName" comment="证券简称"/>
+			<item name="VolumePre" comment="盘前数量"/>
+			<item name="VolumeAvailable" comment="可卖数量"/>
+			<item name="Volume" comment="当前余额"/>
+			<item name="VolumeFrozen" comment="冻结数量"/>
 		</fieldDefine>
 		
 		<fieldDefine name="QryOrderField" fid="FID_QryOrderField" fidValue="0x0012" comment="报单查询请求域">		
-			<item name="UserID" comment="用户代码"/>
-			<item name="InvestorID" comment="投资者代码"/>
 			<item name="RequestID" comment="请求编号"/>
+			<item name="BrokerID" comment="经纪公司代码"/>
+			<item name="UserID" comment="用户编号"/>
+			<item name="InvestorID" comment="投资者代码"/>
 			<item name="FrontID" comment="前置编号"/>
 			<item name="SessionID" comment="会话编号"/>
 			<item name="OrderRef" comment="报单引用"/>
@@ -463,9 +477,10 @@
 		</fieldDefine>
 		
 		<fieldDefine name="QryTradeField" fid="FID_QryTradeField" fidValue="0x0014" comment="报单成交查询请求域">
-			<item name="UserID" comment="用户代码"/>
-			<item name="InvestorID" comment="投资者代码"/>
 			<item name="RequestID" comment="请求编号"/>
+			<item name="BrokerID" comment="经纪公司代码"/>
+			<item name="UserID" comment="用户编号"/>
+			<item name="InvestorID" comment="投资者代码"/>
 		</fieldDefine>
 		
 		<fieldDefine name="TradeField" fid="FID_TradeField" fidValue="0x0015" comment="报单成交域">	
@@ -491,37 +506,43 @@
 		</fieldDefine>
 		
 		<fieldDefine name="QryFundTransferField" fid="FID_QryFundTransferField" fidValue="0x0016" comment="资金划转查询请求域">
-			<item name="UserID" comment="用户代码"/>
-			<item name="InvestorID" comment="投资者代码"/>
 			<item name="RequestID" comment="请求编号"/>
+			<item name="BrokerID" comment="经纪公司代码"/>
+			<item name="UserID" comment="用户编号"/>
+			<item name="InvestorID" comment="投资者代码"/>
 		</fieldDefine>
 		
 		<fieldDefine name="QryHisOrderField" fid="FID_QryHisOrderField" fidValue="0x0017" comment="历史报单查询请求域">
-			<item name="UserID" comment="用户代码"/>
-			<item name="InvestorID" comment="投资者代码"/>
 			<item name="RequestID" comment="请求编号"/>
+			<item name="BrokerID" comment="经纪公司代码"/>
+			<item name="UserID" comment="用户编号"/>
+			<item name="InvestorID" comment="投资者代码"/>
 			<item name="BeginDate" comment="开始日期"/>
 			<item name="EndDate" comment="结束日期"/>
 		</fieldDefine>
 		
 		<fieldDefine name="QryHisTradeField" fid="FID_QryHisTradeField" fidValue="0x0018" comment="报单成交查询请求域">
-			<item name="UserID" comment="用户代码"/>
-			<item name="InvestorID" comment="投资者代码"/>
 			<item name="RequestID" comment="请求编号"/>
+			<item name="BrokerID" comment="经纪公司代码"/>
+			<item name="UserID" comment="用户编号"/>
+			<item name="InvestorID" comment="投资者代码"/>
 			<item name="BeginDate" comment="开始日期"/>
 			<item name="EndDate" comment="结束日期"/>
 		</fieldDefine>
 		
 		<fieldDefine name="QryHisFundTransferField" fid="FID_QryHisFundTransferField" fidValue="0x0019" comment="历史资金划转查询请求域">
-			<item name="UserID" comment="用户代码"/>
-			<item name="InvestorID" comment="投资者代码"/>
 			<item name="RequestID" comment="请求编号"/>
+			<item name="BrokerID" comment="经纪公司代码"/>
+			<item name="UserID" comment="用户编号"/>
+			<item name="InvestorID" comment="投资者代码"/>
 			<item name="BeginDate" comment="开始日期"/>
 			<item name="EndDate" comment="结束日期"/>
 		</fieldDefine>
 		
 		<fieldDefine name="QryInstrumentField" fid="FID_QryInstrumentField" fidValue="0x001A" comment="证券查询请求请求域">
 			<item name="RequestID" comment="请求编号"/>
+			<item name="BrokerID" comment="经纪公司代码"/>
+			<item name="UserID" comment="用户编号"/>
 			<item name="InstrumentCode" comment="证券代码"/>
 			<item name="ExchangeCode" comment="交易所代码"/>
 		</fieldDefine>
@@ -534,6 +555,8 @@
 		
 		<fieldDefine name="QryStructuredFundField" fid="FID_QryStructuredFundField" fidValue="0x001C" comment="分级基金查询请求域">
 			<item name="RequestID" comment="请求编号"/>
+			<item name="BrokerID" comment="经纪公司代码"/>
+			<item name="UserID" comment="用户编号"/>
 			<item name="InstrumentCode" comment="证券代码"/>
 			<item name="ExchangeCode" comment="交易所代码"/>
 		</fieldDefine>
@@ -556,6 +579,8 @@
 		
 		<fieldDefine name="QryETFField" fid="FID_QryETFField" fidValue="0x001E" comment="ETF查询请求请求域">
 			<item name="RequestID" comment="请求编号"/>
+			<item name="BrokerID" comment="经纪公司代码"/>
+			<item name="UserID" comment="用户编号"/>
 			<item name="InstrumentCode" comment="证券代码"/>
 			<item name="ExchangeCode" comment="交易所代码"/>			
 		</fieldDefine>
@@ -576,6 +601,8 @@
 		
 		<fieldDefine name="QryETFCompositionField" fid="FID_QryETFCompositionField" fidValue="0x0020" comment="ETF成分股查询请求请求域">
 			<item name="RequestID" comment="请求编号"/>
+			<item name="BrokerID" comment="经纪公司代码"/>
+			<item name="UserID" comment="用户编号"/>
 			<item name="ExchangeCode" comment="交易所代码"/>
 			<item name="InstrumentCode" comment="ETF代码"/>			
 		</fieldDefine>
@@ -593,6 +620,9 @@
 		</fieldDefine>
 		
 		<fieldDefine name="QryNewIssueSecurityField" fid="FID_QryNewIssueSecurityField" fidValue="0x0022" comment="可申购新发行证券信息查询请求域">
+		<item name="RequestID" comment="请求编号"/>
+		<item name="BrokerID" comment="经纪公司代码"/>
+		<item name="UserID" comment="用户编号"/>
 		</fieldDefine>
 		
 		<fieldDefine name="NewIssueSecurityField" fid="FID_NewIssueSecurityField" fidValue="0x0023" comment="可申购新发行证券信息域">
@@ -606,10 +636,11 @@
 		</fieldDefine>
 		
 		<fieldDefine name="QryPurchaseQuotaField" fid="FID_QryPurchaseQuotaField" fidValue="0x0024" comment="新股申购额度信息查询请求域">
+			<item name="RequestID" comment="请求编码"/>
 			<item name="BrokerID" comment="经纪公司代码"/>
 			<item name="UserID" comment="用户代码"/>
 			<item name="InvestorID" comment="投资者代码"/>
-			<item name="RequestID" comment="请求编码"/>
+			
 		</fieldDefine>
 		
 		<fieldDefine name="PurchaseQuotaField" fid="FID_PurchaseQuotaField" fidValue="0x0025" comment="新股申购额度信息域">		
@@ -668,6 +699,10 @@
 		<itemDefine name="ActionTime" type="FTDDate" comment="操作时间"/>
 		<itemDefine name="AmountTraded" type="FTDValue" comment="已成交金额"/>
 		<itemDefine name="AmountTrade" type="FTDValue" comment="成交金额"/>
+		<itemDefine name="AmountPre" type="FTDValue" comment="昨日余额"/>
+		<itemDefine name="AmountAvailable" type="FTDValue" comment="可用资金"/>
+		<itemDefine name="AmountDrawable" type="FTDValue" comment="可取资金"/>
+		<itemDefine name="AmountFrozen" type="FTDValue" comment="交易冻结资金"/>
 		
 		<itemDefine name="BrokerID" type="FTDIntType" comment="经纪公司代码"/>
 		<itemDefine name="BranchID" type="FTDIntType" comment="营业部编码"/>
@@ -678,7 +713,7 @@
 		<itemDefine name="ClientIPAddress" type="FTDStringType&lt;20&gt;" comment="终端IP地址"/>
 		<itemDefine name="ClientUUID" type="FTDStringType&lt;40&gt;" comment="本地请求唯一编号"/>
 		<itemDefine name="CancelFlag" type="FTDTradeCancelFlag" comment="成交&#47;撤单标记"/>
-		
+		<itemDefine name="CurrencyType" type="FTDCurrencyType" comment="币种编码"/>
 		
 		<itemDefine name="Direction" type="FTDDirection" comment="报单价格方向"/>
 		
@@ -686,6 +721,7 @@
 		<itemDefine name="ErrorCode" type="FTDErrorCode"  comment="错误代码"/>
 		<itemDefine name="ErrorText" type="FTDStringType&lt;100&gt;" comment="错误正文"/>
 		<itemDefine name="ExchangeCode" type="FTDExchangeCode" comment="交易所代码"/>
+		<itemDefine name="ExchangeType" type="FTDExchangeType" comment="交易所编码"/>
 		<itemDefine name="ExchangeCodeETFComposition" type="FTDExchangeCode" comment="ETF成分股交易所代码"/>
 		<itemDefine name="EndDate" type="FTDDate" comment="结束日期"/>
 		<itemDefine name="ETFEstimateAmount" type="FTDValue" comment="ETF_T日预估金额"/>
@@ -700,16 +736,17 @@
 		<itemDefine name="InvestorID" type="FTDIntType" comment="投资者编码"/>
 		<itemDefine name="InvestUnitID" type="FTDIntType" comment="投资单元编号"/>
 		<itemDefine name="InstrumentCode" type="FTDInstrumentCode" comment="证券代码"/>
+		<itemDefine name="InstrumentName" type="FTDInstrumentName" comment="证券简称"/>
 		<itemDefine name="IPAddress" type="FTDStringType&lt;20&gt;" comment="IP地址"/>
 		<itemDefine name="InstrumentCodeSF" type="FTDInstrumentCode" comment="分级基金母基金代码"/>			
-		<itemDefine name="InstrumentNameSF" type="FTDInstrumentCode" comment="分级基金母基金名称"/>
+		<itemDefine name="InstrumentNameSF" type="FTDInstrumentName" comment="分级基金母基金名称"/>
 		<itemDefine name="InstrumentCodeSFA" type="FTDInstrumentCode" comment="分级基金A子基金代码"/>
-		<itemDefine name="InstrumentNameSFA" type="FTDInstrumentCode" comment="分级基金A子基金名称"/>
+		<itemDefine name="InstrumentNameSFA" type="FTDInstrumentName" comment="分级基金A子基金名称"/>
 		<itemDefine name="InstrumentCodeSFB" type="FTDInstrumentCode" comment="分级基金B子基金代码"/>
-		<itemDefine name="InstrumentNameSFB" type="FTDInstrumentCode" comment="分级基金B子基金名称"/>
+		<itemDefine name="InstrumentNameSFB" type="FTDInstrumentName" comment="分级基金B子基金名称"/>
 		<itemDefine name="InstrumentCodeSubRed" type="FTDInstrumentCode" comment="ETF申购赎回代码"/>
 		<itemDefine name="InstrumentCodeETFComposition" type="FTDInstrumentCode" comment="ETF成分股证券代码"/>
-		<itemDefine name="InstrumentNameETFComposition" type="FTDInstrumentCode" comment="ETF成分股证券名称"/>
+		<itemDefine name="InstrumentNameETFComposition" type="FTDInstrumentName" comment="ETF成分股证券名称"/>
 		<itemDefine name="InstrumentCodePurchase" type="FTDInstrumentCode" comment="新股申购代码"/>
 		<itemDefine name="InsertDate" type="FTDDate" comment="报单日期"/>
 		<itemDefine name="InsertTime" type="FTDTime" comment="报单时间"/>
@@ -753,7 +790,7 @@
 		<itemDefine name="StatusSplitMerge" type="FTDBoolFlag" comment="分级基金允许分拆合并状态"/>
 		<itemDefine name="StatusSubscribe" type="FTDBoolFlag" comment="ETF是否允许申购"/>
 		<itemDefine name="StatusRedemption" type="FTDBoolFlag" comment="ETF是否允许赎回"/>
-		<itemDefine name="SecurityAccount" type="FTDSecurityAccount" comment="ETF是否允许赎回"/>	
+		<itemDefine name="SecurityAccount" type="FTDSecurityAccount" comment="证券账号"/>	
 		<itemDefine name="TimeStamp" type="FTDTimeStamp" comment="时间戳"/>
 		<itemDefine name="TradingDay" type="FTDDate" comment="交易日"/>
 		<itemDefine name="TradeDate" type="FTDDate" comment="成交日期"/>
@@ -779,6 +816,10 @@
 		<itemDefine name="VolumePurchaseUnit" type="FTDVolume" comment="新股申购单元数量"/>
 		<itemDefine name="VolumePurchaseUpperLimit" type="FTDVolume" comment="最大允许新股申购数量"/>
 		<itemDefine name="VolumePurchaseQuota" type="FTDVolume" comment="新股申购额度"/>
+		<itemDefine name="VolumePre" type="FTDVolume" comment="报单数量"/>
+		<itemDefine name="VolumeAvailable" type="FTDVolume" comment="已成交数量"/>
+		<itemDefine name="Volume" type="FTDVolume" comment="总数量"/>
+		<itemDefine name="VolumeFrozen" type="FTDVolume" comment="交易冻结数量"/>
 	</items>
 	
 	<types>
@@ -792,6 +833,12 @@
 			<enumValue name="1" comment="真" enname="True"/>
 			<enumValue name="0" comment="假" enname="False"/>
 		</typeDefine>
+		<typeDefine name="FTDCurrencyType" baseType="FTDCharType" comment="币种编码" length="1" precision="0">
+			<enumValue name="0" comment="人民币" enname="RMB"/>
+			<enumValue name="1" comment="美元" enname="USD"/>
+			<enumValue name="2" comment="港币" enname="HKD"/>
+		</typeDefine>
+		
 		<typeDefine name="FTDDate" baseType="FTDStringType&lt;8&gt;" comment="yyyymmdd" length="8" precision="0"/>
 		<typeDefine name="FTDDateTime" baseType="FTDStringType&lt;20&gt;" comment="yyyymmddhh24nnsscc" length="20" precision="0"/>
 		<typeDefine name="FTDDirection" baseType="FTDCharType" length="1" precision="0">
@@ -810,10 +857,18 @@
 			<enumValue name="XSHG" comment="上海证券交易所" enname="SH"/>
 			<enumValue name="XSHE" comment="深圳证券交易所" enname="SZ"/>
 		</typeDefine>
+		
+		<typeDefine name="FTDExchangeType" baseType="FTDCharType" length="1" precision="0">
+			<enumValue name="1" comment="上海证券交易所" enname="SH"/>
+			<enumValue name="2" comment="深圳证券交易所" enname="SZ"/>
+		</typeDefine>
+		
 		<typeDefine name="FTDForceExitCode" baseType="FTDCharType" length="1" precision="0">
 			<enumValue name="0" comment="目前应该为0"/>
 		</typeDefine>
 		<typeDefine name="FTDInstrumentCode" baseType="FTDStringType&lt;10&gt;" length="10" precision="0"/>
+		<typeDefine name="FTDInstrumentName" baseType="FTDStringType&lt;10&gt;" length="10" precision="0"/>
+		
 		<typeDefine name="FTDInstrumentStatus" baseType="FTDCharType" length="1" precision="0">
 			<enumValue name="0" comment="连续交易"/>
 			<enumValue name="1" comment="开盘集合竞价"/>
@@ -861,13 +916,13 @@
 			<enumValue name="5" comment="撤单"/>
 		</typeDefine>
 		<typeDefine name="FTDOrderPriceType" baseType="FTDCharType" length="1" precision="0">
-			<enumValue name="0" comment="限价" enname="Limit"/>
-			<enumValue name="1" comment="市价" enname="Market"/>
-			<enumValue name="2" comment="止损限价"/>
-			<enumValue name="3" comment="止损市价"/>
-			<enumValue name="4" comment="市价转限价"/>
-			<enumValue name="5" comment="最好价格"/>
-			<enumValue name="6" comment="均价"/>
+			<enumValue name="0" comment="沪深:限价" enname="HS_Limit"/>
+			<enumValue name="1" comment="沪深:市价最优五档全额成交剩余转限价"  enname="HS_L5_THEN_LIMIT"/>
+			<enumValue name="a" comment="沪  :市价最优五档全额成交剩余撤销"    enname="H_L5_FAK"/>
+			<enumValue name="h" comment="深  :本方最优"                         enname="S_SL1"/>
+			<enumValue name="i" comment="深  :对手方最优剩余转限价"            enname= "S_L1_THEN_LIMIT"/>
+			<enumValue name="j" comment="深  :市价立即成交剩余撤销"             enname="S_FAK"/>
+			<enumValue name="k" comment="深  :市价立即成交或撤销"               enname="S_FOK"/>
 		</typeDefine>
 		<typeDefine name="FTDPassword" baseType="FTDStringType&lt;40&gt;" length="40" precision="0"/>
 		<typeDefine name="FTDPercent" baseType="FTDFloatType&lt;4,2&gt;" length="4" precision="2"/>

@@ -65,7 +65,7 @@ public:
 			strcpy(field.InstrumentCode , "600000");
 			strcpy(field.ExchangeCode, XCP_FTDC_EC_SH);
 			field.VolumeTotalOrginal = 1000;
-			field.PriceType = XCP_FTDC_OPT_2;
+			field.PriceType = XCP_FTDC_OPT_HS_Limit;
 			field.LimitPrice = 10;
 			field.Direction = XCP_FTDC_D_0;
 			//order_ref request_id

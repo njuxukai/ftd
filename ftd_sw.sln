@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ftd", "ftd\ftd.vcxproj", "{D3B28290-1A56-4B7E-816E-9811C6E77693}"
 EndProject
@@ -64,7 +64,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleClientGui", "SampleClientGui\SampleClientGui.csproj", "{2AEB2F5A-3157-40B8-823D-225F888BA185}"
 	ProjectSection(ProjectDependencies) = postProject
 		{A5C1982E-6BA4-4B44-A0E9-96CC50A26CFC} = {A5C1982E-6BA4-4B44-A0E9-96CC50A26CFC}
-		{48310061-76FF-4C1C-B89A-39BE8E03D97A} = {48310061-76FF-4C1C-B89A-39BE8E03D97A}
 	EndProjectSection
 EndProject
 Global

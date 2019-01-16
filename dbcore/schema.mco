@@ -73,9 +73,9 @@ persistent class Order
 	unique tree<order_sys_sno> SysIdx;
 	tree<investor_id> InvestorIdx;
 
-	event<new> OrderNewEvent;
-	event<volume_traded update> OrderTradedVolumeUpdateEvent;
-	event<status update> OrderStatusUpdateEvent;
+	//event<new> OrderNewEvent;
+	//event<volume_traded update> OrderTradedVolumeUpdateEvent;
+	//event<status update> OrderStatusUpdateEvent;
 };
 
 persistent class OrderAction
@@ -125,6 +125,33 @@ persistent class Trade
 	AmountType amount_traded;
 	int4 trade_sys_sno;
 	char<10> trade_exchange_sno;
-
+    unique tree<trade_exchange_sno> ExchangeIdx;
 	tree<order_sys_sno> OrderSysIdx;
+};
+
+persistent class Fund
+{
+	int4 investor_id;
+	int4 branch_id;
+	uint1 currency_type;
+	AmountType amount_pre;
+	AmountType amount_available;
+	AmountType amount_drawable;
+	AmountType amount_frozen;
+
+	unique tree<investor_id, currency_type> FundIdx;
+};
+
+persistent class Position
+{
+	int4 investor_id;
+	char<10> secu_account;
+	uint1 exchange_type;
+	string security_code;
+	string security_name;
+	VolumeType volume_pre;
+	VolumeType volume_available;
+	VolumeType volume;
+	VolumeType volume_frozen;
+	unique tree<investor_id, secu_account, exchange_type, security_code> PositionIdx;
 };
