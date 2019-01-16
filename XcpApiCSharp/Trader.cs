@@ -12,12 +12,8 @@ namespace Xcp
 
     public class Trader : IDisposable
     {
-        public Trader(int brokerID, int userID, int investorID, String password, String pswDir="") 
+        public Trader(String pswDir="") 
         {
-            m_brokerID = brokerID;
-            m_userID = userID;
-            m_investorID = investorID;
-            m_password = password;
             TraderDllWrapper.CreateTrader(out m_handler, pswDir);
             RegisterEventHandlers();
         }
@@ -27,7 +23,7 @@ namespace Xcp
             Dispose(false);
         }
 
-
+        
         public void Init()
         {
             TraderDllWrapper.InitTrader(m_handler);
@@ -237,6 +233,7 @@ namespace Xcp
         #region callback 回调函数触发事件 FrontConnected时应自动登录
         private void RaiseFrontConnected()
         {
+            /*
             //TODO Login here
             m_nextReqID = 1;
             ReqUserLoginField field = new ReqUserLoginField
@@ -246,6 +243,7 @@ namespace Xcp
                     Password = m_password
                 };
             ReqUserLogin(field, m_nextReqID++);
+            */
             EventHandler<EventArgs> temp = Volatile.Read(ref OnFrontConnected);
             if (temp != null)
                 temp(this, EventArgs.Empty);

@@ -29,5 +29,10 @@ namespace SampleClientGui
         {
             
         }
+
+        private void txtLog_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
     }
 }

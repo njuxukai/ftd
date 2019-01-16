@@ -19,17 +19,48 @@
             <RowDefinition Height="2*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <DataGrid x:Name="dataGridPosition" HorizontalAlignment="Left" Grid.Row="2"  Margin="0,15,0,0" VerticalAlignment="Top"  />
-        <DataGrid x:Name="dataGridOrder" HorizontalAlignment="Left" Grid.Row="3"  Margin="0,15,0,0" VerticalAlignment="Top"  />
-        <DataGrid x:Name="dataGridTrade" HorizontalAlignment="Left" Grid.Row="4"   Margin="0,15,0,0" VerticalAlignment="Top"  />
-        
+        <DataGrid x:Name="positionDataGrid" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding}" AutoGenerateColumns="false" CanUserAddRows="False" >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="代码" Binding="{Binding SECU_CODE}" Width="*"/>
+                <DataGridTextColumn Header="名称" Binding="{Binding ORDER_TYPE}" Width="*"/>
+                <DataGridTextColumn Header="库存数量" Binding="{Binding ORDER_QTY}" Width="*"/>
+                <DataGridTextColumn Header="可卖数量" Binding="{Binding ORDER_PRICE}" Width="*"/>
+                <DataGridTextColumn Header="冻结数量" Binding="{Binding KNOCK_QTY}" Width="*"/>
+                <DataGridTextColumn Header="开盘数量" Binding="{Binding KNOCK_PRICE}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <DataGrid x:Name="orderDataGrid" Grid.Row="2" Grid.Column="0" ItemsSource="{Binding}" AutoGenerateColumns="false" CanUserAddRows="False" >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="代码" Binding="{Binding SECU_CODE}" Width="*"/>
+                <DataGridTextColumn Header="交易方向" Binding="{Binding ORDER_TYPE}" Width="*"/>
+                <DataGridTextColumn Header="委托数量" Binding="{Binding ORDER_QTY}" Width="*"/>
+                <DataGridTextColumn Header="委托价格" Binding="{Binding ORDER_PRICE}" Width="*"/>
+                <DataGridTextColumn Header="成交数量" Binding="{Binding KNOCK_QTY}" Width="*"/>
+                <DataGridTextColumn Header="成交价格" Binding="{Binding KNOCK_PRICE}" Width="*"/>
+                <DataGridTextColumn Header="委托状态" Binding="{Binding ORDER_STATUS}" Width="*"/>
+                <DataGridTextColumn Header="系统编号" Binding="{Binding ORDER_STATUS}" Width="*"/>
+                <DataGridTextColumn Header="交易所编号" Binding="{Binding ORDER_STATUS}" Width="*"/>
+                </DataGrid.Columns>
+        </DataGrid>
+        <DataGrid x:Name="tradeDataGrid" Grid.Row="3" Grid.Column="0" ItemsSource="{Binding}" AutoGenerateColumns="false" CanUserAddRows="False" >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="代码" Binding="{Binding SECU_CODE}" Width="*"/>
+                <DataGridTextColumn Header="交易方向" Binding="{Binding ORDER_TYPE}" Width="*"/>
+                <DataGridTextColumn Header="成交数量" Binding="{Binding KNOCK_QTY}" Width="*"/>
+                <DataGridTextColumn Header="成交价格" Binding="{Binding KNOCK_PRICE}" Width="*"/>
+                <DataGridTextColumn Header="委托系统编号" Binding="{Binding ORDER_STATUS}" Width="*"/>
+                <DataGridTextColumn Header="系统编号" Binding="{Binding ORDER_STATUS}" Width="*"/>
+                <DataGridTextColumn Header="交易所编号" Binding="{Binding ORDER_STATUS}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
         <TextBox Name="txtLog" AcceptsReturn="True" 
                  TextWrapping="Wrap" Foreground="Green"                
                  VerticalScrollBarVisibility="Auto"
                  HorizontalScrollBarVisibility="Auto"
                  Grid.Row="2"
                  Grid.Column="1"
-                 Grid.RowSpan="2"/>
+                 Grid.RowSpan="2" TextChanged="txtLog_TextChanged"/>
         
         <Grid HorizontalAlignment="Left" Height="330" Margin="512,42,0,0" VerticalAlignment="Top" Width="484"/>
 

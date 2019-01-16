@@ -11,16 +11,21 @@ namespace TestMarshal
     };
     class Program
     {
+        static void OnFrontConnected(object sender, EventArgs eventArgs)
+        {
+            ReqUserLoginField field = new ReqUserLoginField { BrokerID = 99, UserID = 99, Password="test"};
+            trader.ReqUserLogin(field, 1);
+        }
+
         static void OnRspUserLogin(object sender, RspUserLoginEventArgs eventArgs)
         {
             Console.WriteLine("OnRspUserLogin");
         }
         static void Main(string[] args)
         {
-            ReqUserLoginField field = new ReqUserLoginField();
-            Console.WriteLine(Marshal.SizeOf(field));
-            Trader trader = new Trader(99,99,99, "test");
+            
             trader.onRspUserLogin += OnRspUserLogin;
+            trader.OnFrontConnected += OnFrontConnected;
             trader.RegisterFront ("tcp:\\127.0.0.1:8000");
             trader.Init();
             while (1 == 1)
@@ -28,5 +33,6 @@ namespace TestMarshal
                 Console.ReadLine();
             }
         }
+        static Trader trader = new Trader();
     }
 }
