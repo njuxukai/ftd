@@ -32,10 +32,10 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="SampleCore.cpp">
+    <ClCompile Include="CoreServer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="CoreServer.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

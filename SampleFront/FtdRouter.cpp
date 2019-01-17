@@ -207,6 +207,7 @@ void FtdRouter::onHeartBeatWarning()
 ******************************************************************************/
 void FtdRouter::OnPackage(const ReqUserLogin& req, const SessionID& id)
 {
+	std::cout << "At router, ON Package[ReqUserLogin]\n";
 	std::shared_ptr<ReqUserLogin> pCopy = std::shared_ptr<ReqUserLogin>((ReqUserLogin*)req.clone());
 	pCopy->reqUserLoginField.FrontID = m_parameter.frontID;
 	pCopy->reqUserLoginField.SessionID = id;
@@ -217,6 +218,7 @@ void FtdRouter::OnPackage(const ReqUserLogin& req, const SessionID& id)
 void FtdRouter::OnPackage(const ReqQryPrivateInitialData& req, const SessionID& id)
 {
 	//1 服务器端注册会话私有流订阅
+	std::cout << "At router, ON Package[ReqQryPrivateInitialData]\n";
 	resigterSequenceSubscription(id, req.dissenminationstartField.SequenceSeries);
 	
 	std::shared_ptr<ReqQryPrivateInitialData> pCopy = std::shared_ptr<ReqQryPrivateInitialData>((ReqQryPrivateInitialData*)req.clone());
