@@ -56,6 +56,7 @@ SUITE(AutoGen)
             CHECK(sizeof(CXcpFtdcPurchaseQuotaField) >= 0);
             CHECK(sizeof(CXcpFtdcExecutionReportField) >= 0);
             CHECK(sizeof(CXcpFtdcQryInitialDataField) >= 0);
+            CHECK(sizeof(CXcpFtdcDialogSpecField) >= 0);
 
             CHECK(sizeof(CXcpFtdcErrorField) == sizeof(CFtdcErrorField));
             CHECK(sizeof(CXcpFtdcRequestSourceField) == sizeof(CFtdcRequestSourceField));
@@ -96,6 +97,7 @@ SUITE(AutoGen)
             CHECK(sizeof(CXcpFtdcPurchaseQuotaField) == sizeof(CFtdcPurchaseQuotaField));
             CHECK(sizeof(CXcpFtdcExecutionReportField) == sizeof(CFtdcExecutionReportField));
             CHECK(sizeof(CXcpFtdcQryInitialDataField) == sizeof(CFtdcQryInitialDataField));
+            CHECK(sizeof(CXcpFtdcDialogSpecField) == sizeof(CFtdcDialogSpecField));
 		//CHECK(sizeof(CXcpFtdcOrderField) == sizeof(OrderField));
 	}
 }

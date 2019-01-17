@@ -77,3 +77,4 @@ ipch/*
 /SampleClientGui/bin/Debug
 /SampleClientGui/obj/Debug
 /XcpApiCSharp/ApiEnum.cs
+/SampleClientGui2/obj/Debug

@@ -27,22 +27,12 @@ namespace SampleClientGui2
         {
             InitializeComponent();
 
-            var section = ConfigurationManager.GetSection("USER_INFO") as NameValueCollection;
-            BrokerID = int.Parse(section["BrokerID"]);
-            UserID = int.Parse(section["UserID"]);
-            Password = section["Password"];
-            FrontAddress = section["FrontAddress"];
-            FrontAddress2 = section["FrontAddress2"];
-            InvestorID = UserID;
-
-            eventBus.onUILogAddNewLine += OnLog;
-
-
-            CreateTrader();
+           
 
             //trader = new Trader();
             //trader.Init();
         }
+
 
         private void RegisterCallback()
         {
@@ -184,23 +174,39 @@ namespace SampleClientGui2
                 trader.ReqUserLogin(field, NextRequestID);
         }
 
-        public int BrokerID { get; }
-        public int UserID { get; }
-        public int InvestorID { get; }
-        public string Password { get; }
+        public int BrokerID { get; set; }
+        public int UserID { get; set; }
+        public int InvestorID { get; set; }
+        public string Password { get; set; }
 
         public int NextRequestID { get; set; }
 
-        public string FrontAddress { get; }
+        public string FrontAddress { get; set; }
 
-        public string FrontAddress2 { get; }
+        public string FrontAddress2 { get; set; }
 
         public TraderEventBus EventBus { get { return eventBus; } }
 
         private TraderEventBus eventBus = new TraderEventBus();
         private Trader trader;
 
-        
+
         #endregion
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            var section = ConfigurationManager.GetSection("USER_INFO") as NameValueCollection;
+            BrokerID = int.Parse(section["BrokerID"]);
+            UserID = int.Parse(section["UserID"]);
+            Password = section["Password"];
+            FrontAddress = section["FrontAddress"];
+            FrontAddress2 = section["FrontAddress2"];
+            InvestorID = UserID;
+
+            eventBus.onUILogAddNewLine += OnLog;
+
+
+            CreateTrader();
+        }
     }
 }
