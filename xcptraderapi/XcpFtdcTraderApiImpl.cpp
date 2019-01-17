@@ -228,8 +228,8 @@ void CXcpFtdcTraderApiImpl::onHeartBeatWarning()
 ///
 int CXcpFtdcTraderApiImpl::send(FTD::Package& package, bool checkLogged)
 {
-	//!!!
-	package.formatFtdcMessages();
+	//if (package.isNoneMode())
+	//	package.formatFtdcMessages();
 
 	if (!m_pInitiator)
 	{

@@ -5,17 +5,19 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SampleClientGui
+namespace SampleClientGui2
 {
-    public class  UILogEventArgs : EventArgs
+    public class UILogEventArgs : EventArgs
     {
         public UILogEventArgs(string content)
         {
             m_line = String.Format("{0:mm:ss} {1}\n", DateTime.Now, content);
 
         }
-        public string Line {
-            get { return m_line; } }
+        public string Line
+        {
+            get { return m_line; }
+        }
         private string m_line;
     }
     public class FundUpdateEventArgs : EventArgs
@@ -25,7 +27,7 @@ namespace SampleClientGui
             m_fund = fund;
         }
 
-        public Xcp.FundField Fund{ get { return m_fund ; } }
+        public Xcp.FundField Fund { get { return m_fund; } }
         Xcp.FundField m_fund;
     }
 
@@ -97,12 +99,12 @@ namespace SampleClientGui
             string line = "";
             if (e.ErrorField.HasValue && e.ErrorField.Value.ErrorCode != 0)
             {
-                line = String.Format("登陆失败[{0}][{1}]", e.ErrorField.Value.ErrorCode,
+                line = String.Format("登录失败[{0}][{1}]", e.ErrorField.Value.ErrorCode,
                     e.ErrorField.Value.ErrorText);
             }
             else
             {
-                line = "登录失败";
+                line = String.Format("登录成功,心跳间隔设置为{0}秒", e.RspUserLoginField.HeartbeatInterval);
             }
             RaiseUILogAddNewLine(line);
         }
@@ -110,7 +112,7 @@ namespace SampleClientGui
         private void OnRspQryFund(object sender, Xcp.RspQryFundEventArgs eventArgs)
         {
             RaiseUILogAddNewLine("OnRspQryFund");
-            currentFund =  eventArgs.FundField.GetValueOrDefault();
+            currentFund = eventArgs.FundField.GetValueOrDefault();
             if (eventArgs.IsLast)
             {
                 RaiseFundUpdate();
@@ -168,16 +170,16 @@ namespace SampleClientGui
             if (eventArgs.IsLast)
             {
                 currentOrderDict.Clear();
-                foreach(var order in receiveOrderBuffer)
+                foreach (var order in receiveOrderBuffer)
                 {
                     string key = string.Format("{0}:{1}:{2}", order.FrontID, order.SessionID, order.OrderRef);
                     currentOrderDict.Add(key, order);
                 }
                 RaiseOrderUpdate();
-            }            
+            }
         }
 
-        private void onRtnExecutionReport(object sender, Xcp.RtnOrderExecutionEventArgs eventArgs )
+        private void onRtnExecutionReport(object sender, Xcp.RtnOrderExecutionEventArgs eventArgs)
         {
             Xcp.ExecutionReportField report = eventArgs.ExecutionReportField;
             Xcp.OrderField order;

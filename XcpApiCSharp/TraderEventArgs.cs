@@ -29,7 +29,7 @@ namespace Xcp
 
     public class RspUserLoginEventArgs : EventArgs
     {
-        public RspUserLoginEventArgs(RspUserLoginField? rspUserLoginField,
+        public RspUserLoginEventArgs(RspUserLoginField rspUserLoginField,
                                      ErrorField? errorField,
                                      int requestID,
                                      bool isLast)
@@ -39,12 +39,12 @@ namespace Xcp
             m_requestID = requestID;
             m_isLast = isLast;
         }
-        public RspUserLoginField? RspUserLoginField{get{ return m_rspUserLoginField; } }
+        public RspUserLoginField RspUserLoginField{get{ return m_rspUserLoginField; } }
         public ErrorField? ErrorField { get { return m_errorField; } }
         public int RequestID { get { return m_requestID; } }
         public bool IsLast { get { return m_isLast; } }
 
-        private readonly RspUserLoginField? m_rspUserLoginField;
+        private readonly RspUserLoginField m_rspUserLoginField;
         private readonly ErrorField? m_errorField;
         private readonly int m_requestID;
         private readonly bool m_isLast;

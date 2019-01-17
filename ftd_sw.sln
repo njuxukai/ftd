@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ftd", "ftd\ftd.vcxproj", "{D3B28290-1A56-4B7E-816E-9811C6E77693}"
 EndProject
@@ -63,6 +63,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleClientGui", "SampleCl
 	ProjectSection(ProjectDependencies) = postProject
 		{A5C1982E-6BA4-4B44-A0E9-96CC50A26CFC} = {A5C1982E-6BA4-4B44-A0E9-96CC50A26CFC}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleClientGui2", "SampleClientGui2\SampleClientGui2.csproj", "{A960DBDD-1F21-4F5F-8A9F-EA5743527DF6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -197,6 +199,18 @@ Global
 		{2AEB2F5A-3157-40B8-823D-225F888BA185}.Release|x64.Build.0 = Release|Any CPU
 		{2AEB2F5A-3157-40B8-823D-225F888BA185}.Release|x86.ActiveCfg = Release|Any CPU
 		{2AEB2F5A-3157-40B8-823D-225F888BA185}.Release|x86.Build.0 = Release|Any CPU
+		{A960DBDD-1F21-4F5F-8A9F-EA5743527DF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A960DBDD-1F21-4F5F-8A9F-EA5743527DF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A960DBDD-1F21-4F5F-8A9F-EA5743527DF6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A960DBDD-1F21-4F5F-8A9F-EA5743527DF6}.Debug|x64.Build.0 = Debug|Any CPU
+		{A960DBDD-1F21-4F5F-8A9F-EA5743527DF6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A960DBDD-1F21-4F5F-8A9F-EA5743527DF6}.Debug|x86.Build.0 = Debug|Any CPU
+		{A960DBDD-1F21-4F5F-8A9F-EA5743527DF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A960DBDD-1F21-4F5F-8A9F-EA5743527DF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A960DBDD-1F21-4F5F-8A9F-EA5743527DF6}.Release|x64.ActiveCfg = Release|Any CPU
+		{A960DBDD-1F21-4F5F-8A9F-EA5743527DF6}.Release|x64.Build.0 = Release|Any CPU
+		{A960DBDD-1F21-4F5F-8A9F-EA5743527DF6}.Release|x86.ActiveCfg = Release|Any CPU
+		{A960DBDD-1F21-4F5F-8A9F-EA5743527DF6}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -211,5 +225,6 @@ Global
 		{3025E94C-F349-43A3-B592-0E7DFAE7EDEC} = {EF8885A6-26B6-4028-89D0-9B6129081F90}
 		{A5C1982E-6BA4-4B44-A0E9-96CC50A26CFC} = {46E2ED4A-0FDA-403F-AD5F-116574478FDD}
 		{2AEB2F5A-3157-40B8-823D-225F888BA185} = {EF8885A6-26B6-4028-89D0-9B6129081F90}
+		{A960DBDD-1F21-4F5F-8A9F-EA5743527DF6} = {EF8885A6-26B6-4028-89D0-9B6129081F90}
 	EndGlobalSection
 EndGlobal

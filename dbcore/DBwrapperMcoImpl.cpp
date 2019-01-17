@@ -23,6 +23,9 @@ DBWrapperMcoImpl::DBWrapperMcoImpl(): m_done(false), m_joiner(new JoinThreads(m_
 {
 	initDB();
 	initThreads();
+#ifdef _DEBUG
+	populateDB();
+#endif
 }
 
 DBWrapperMcoImpl::~DBWrapperMcoImpl()
@@ -89,10 +92,26 @@ void DBWrapperMcoImpl::initDB()
 	rc = mco_db_open_dev(db_name, genericdb_get_dictionary(), dev, N_DEVICES, &db_params);
 	if (MCO_S_OK == rc)
 	{
-		std::cout << "open db succ\n";
+		std::cout << "Open ExtremeDB Succeed\n";
 	}
 }
 
+#ifdef _DEBUG
+
+void DBWrapperMcoImpl::populateDB()
+{
+	mco_db_h db = 0;
+	auto rc = mco_db_connect(db_name, &db);
+	if (MCO_S_OK != rc)
+	{
+		printf("mco_db_connect failure[%d]\n", (int)rc);
+		return;
+	}
+	mco_disk_transaction_policy(db, MCO_COMMIT_BUFFERED);
+	populate_db(db);
+}
+
+#endif
 
 void DBWrapperMcoImpl::initThreads()
 {

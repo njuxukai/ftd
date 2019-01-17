@@ -22,7 +22,7 @@ namespace SampleClientGui
                 eventBus.Disconnect(trader);
             trader = new Trader();
             eventBus.Connect(trader);
-            trader.OnFrontConnected += OnFrontConnected;
+            trader.onFrontConnected += OnFrontConnected;
             trader.RegisterFront(FrontAddress);
             trader.RegisterFront(FrontAddress2);
             trader.SubscribePrivateTopic(THOST_TE_RESUME_TYPE.THOST_TERT_RESTART);

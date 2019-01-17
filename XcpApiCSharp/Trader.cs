@@ -219,8 +219,8 @@ namespace Xcp
         #endregion
 
         #region event
-        public event EventHandler<EventArgs> OnFrontConnected;
-        public event EventHandler<FrontDisconnectedEventArgs> OnFrontDisconnected;
+        public event EventHandler<EventArgs> onFrontConnected;
+        public event EventHandler<FrontDisconnectedEventArgs> onFrontDisconnected;
         public event EventHandler<HeartBeatWarningEventArgs> onHeartBeatWarning;
         public event EventHandler<RspUserLoginEventArgs> onRspUserLogin;
         public event EventHandler<RspUserLogoutEventArgs> onRspUserLogout;
@@ -258,7 +258,7 @@ namespace Xcp
                 };
             ReqUserLogin(field, m_nextReqID++);
             */
-            EventHandler<EventArgs> temp = Volatile.Read(ref OnFrontConnected);
+            EventHandler<EventArgs> temp = Volatile.Read(ref onFrontConnected);
             if (temp != null)
                 temp(this, EventArgs.Empty);
         }
@@ -266,7 +266,7 @@ namespace Xcp
         private void RaiseFrontDisconnected(int nReason)
         {
             FrontDisconnectedEventArgs eventArgs = new FrontDisconnectedEventArgs(nReason);
-            Volatile.Read(ref OnFrontDisconnected)?.Invoke(this, eventArgs);
+            Volatile.Read(ref onFrontDisconnected)?.Invoke(this, eventArgs);
         }
 
         private void RaiseHeartBeatWarning(int nTimeLapse)
@@ -277,12 +277,8 @@ namespace Xcp
 
         private void RaiseRspUserLogin(IntPtr rspUserLogin, IntPtr errorField, int nRequestID, bool isLast)
         {
-            RspUserLoginField? rsp = null;
+            RspUserLoginField  rsp = Marshal.PtrToStructure<RspUserLoginField>(rspUserLogin);
             ErrorField? error = null;
-            if (rspUserLogin != IntPtr.Zero)
-            {
-                rsp = Marshal.PtrToStructure<RspUserLoginField>(rspUserLogin);
-            }
             if (errorField != IntPtr.Zero)
             {
                 error = Marshal.PtrToStructure<ErrorField>(errorField);

@@ -34,8 +34,8 @@ SocketInitiator::SocketInitiator( Application& application,
                                   const PortSettings& settings )
 throw( ConfigError )
 : Initiator( application, settings ),
-  m_connector( 3 ), m_lastConnect( 0 ),
-  m_reconnectInterval( 10 ), m_noDelay( false ), m_sendBufSize( 0 ),
+  m_connector( 1 ), m_lastConnect( 0 ),
+  m_reconnectInterval( 5 ), m_noDelay( false ), m_sendBufSize( 0 ),
   m_rcvBufSize( 0 ) 
 {
 }
@@ -229,7 +229,10 @@ void SocketInitiator::onTimeout( SocketConnector& )
   time_t now;
   ::time( &now );
 
-  if ( m_doConnect && (now - m_lastConnect) >= m_reconnectInterval )
+  
+  if ( m_doConnect 
+	  && (m_connections.size() + m_pendingConnections.size() == 0)
+	  && (now - m_lastConnect) >= m_reconnectInterval )
   {
     connect();
     m_lastConnect = now;

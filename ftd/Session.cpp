@@ -59,12 +59,9 @@ Session::Session( Application& application,
   if ( m_pLogFactory )
     m_state.log( m_pLogFactory->create( m_sessionID ) );
 
-
-
-
   m_application.onCreate( m_sessionID );
   m_state.onEvent( "Created session" );
-  std::cout << "Session()\n";
+  
 }
 
 Session::~Session()
@@ -179,6 +176,7 @@ bool Session::sendRaw(Package& package, int num)
 	}
 	//out message
 	std::vector<std::string> ftdMsgs;
+	package.formatFtdcMessages();
 	package.toFtdMesssages(ftdMsgs);
 	for (unsigned int i = 0; i < ftdMsgs.size(); i++)
 	{
@@ -401,7 +399,7 @@ void Session::onSendLogin(Package& package)
 			m_state.heartBtInt(rspUserLogin.rspUserLoginField.HeartbeatInterval);
 		}
 	}
-	std::cout << "Log on sent\n";
+	//std::cout << "Log on sent\n";
 	m_state.sentLogon(true);
 }
 
