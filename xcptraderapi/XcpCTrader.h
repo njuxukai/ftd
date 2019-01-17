@@ -45,6 +45,7 @@ public:
 	virtual void OnFrontConnected();
 	virtual void OnFrontDisconnected(int nReason);
 	virtual void OnHeartBeatWarning(int nTimeLapse);
+	virtual void OnHeartBeat();
 	virtual void OnRspUserLogin(CXcpFtdcRspUserLoginField* pRspUserLogin, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
 	virtual void OnRspUserLogout(CXcpFtdcRspUserLogoutField* pRspUserLogout, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
 	virtual void OnRspInputOrder(CXcpFtdcInputOrderField* pInputOrder, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
@@ -70,6 +71,7 @@ public:
 	void registerFP_OnFrontConnected(FuncPtrOnFrontConnected fp);
 	void registerFP_OnFrontDisconnected(FuncPtrOnFrontDisconnected fp);
 	void registerFP_OnHeartBeatWarning(FuncPtrOnHeartBeatWarning fp);
+	void registerFP_OnHeartBeat(FuncPtrOnHeartBeat fp);
 	void registerFP_OnRspUserLogin(FuncPtrOnRspUserLogin fp);
 	void registerFP_OnRspUserLogout(FuncPtrOnRspUserLogout fp);
 	void registerFP_OnRspInputOrder(FuncPtrOnRspInputOrder fp);
@@ -102,6 +104,7 @@ private:
 	bool m_onFrontConnectedRegistered;
 	bool m_onFrontDisconnectedRegistered;
 	bool m_onHeartBeatWarningRegistered;
+	bool m_onHeartBeatRegistered;
 	bool m_onRspUserLoginRegistered;
 	bool m_onRspUserLogoutRegistered;
 	bool m_onRspInputOrderRegistered;
@@ -126,6 +129,7 @@ private:
 	FuncPtrOnFrontConnected   m_fpOnFrontConnected;
 	FuncPtrOnFrontDisconnected m_fpOnFrontDisconnected;
 	FuncPtrOnHeartBeatWarning m_fpOnHeartBeatWarning;
+	FuncPtrOnHeartBeat m_fpOnHeartBeat;
 	FuncPtrOnRspUserLogin  m_fpOnRspUserLogin;
 	FuncPtrOnRspUserLogout  m_fpOnRspUserLogout;
 	FuncPtrOnRspInputOrder  m_fpOnRspInputOrder;

@@ -73,6 +73,7 @@ namespace SampleClientGui2
         {
             trader.onFrontConnected += OnFrontConnected;
             trader.onRspUserLogin += OnRspUserLogin;
+            trader.onHeartBeat += OnHeartBeat;
             trader.onRspQryFund += OnRspQryFund;
             trader.onRspQryPosition += OnRspQryPosition;
             trader.onRspQryTrade += OnRspQryTrade;
@@ -94,6 +95,10 @@ namespace SampleClientGui2
             RaiseUILogAddNewLine("前置连接成功");
         }
 
+        private void OnHeartBeat(object sender, EventArgs eventArgs)
+        {
+            RaiseUILogAddNewLine("收到心跳");
+        }
         private void OnRspUserLogin(object sender, Xcp.RspUserLoginEventArgs e)
         {
             string line = "";

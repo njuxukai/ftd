@@ -64,6 +64,7 @@ namespace Xcp
             onFronConnectedDelegate = RaiseFrontConnected;
             onFrontDisconnectedDelegate = RaiseFrontDisconnected;
             onHeartBeatWarningDelegate = RaiseHeartBeatWarning;
+            onHeartBeatDelegate = RaiseHeartBeat;
             onRspUserLoginDelegate = RaiseRspUserLogin;
         }
         private void RegisterEventHandlers()
@@ -73,6 +74,7 @@ namespace Xcp
                 TraderDllWrapper.RegisterOnFrontConnectedCallback(m_handler, onFronConnectedDelegate);
                 TraderDllWrapper.RegisterOnFrontDisconnectedCallback(m_handler, onFrontDisconnectedDelegate);
                 TraderDllWrapper.RegisterOnHeartBeatWarningCallback(m_handler, onHeartBeatWarningDelegate);
+                TraderDllWrapper.RegisterOnHeartBeatCallback(m_handler, onHeartBeatDelegate);
                 TraderDllWrapper.RegisterOnRspUserLoginCallback(m_handler, onRspUserLoginDelegate);
                 TraderDllWrapper.RegisterOnRspUserLogoutCallback(m_handler, RaiseRspUserLogout);
                 TraderDllWrapper.RegisterOnRspInputOrderCallback(m_handler, RaiseRspInputOrder);
@@ -222,6 +224,7 @@ namespace Xcp
         public event EventHandler<EventArgs> onFrontConnected;
         public event EventHandler<FrontDisconnectedEventArgs> onFrontDisconnected;
         public event EventHandler<HeartBeatWarningEventArgs> onHeartBeatWarning;
+        public event EventHandler<EventArgs> onHeartBeat;
         public event EventHandler<RspUserLoginEventArgs> onRspUserLogin;
         public event EventHandler<RspUserLogoutEventArgs> onRspUserLogout;
         public event EventHandler<RspInputOrderEventArgs> onRspInputOrder;
@@ -261,6 +264,11 @@ namespace Xcp
             EventHandler<EventArgs> temp = Volatile.Read(ref onFrontConnected);
             if (temp != null)
                 temp(this, EventArgs.Empty);
+        }
+
+        private void RaiseHeartBeat()
+        {
+            Volatile.Read(ref onHeartBeat)?.Invoke(this, EventArgs.Empty);
         }
 
         private void RaiseFrontDisconnected(int nReason)
@@ -595,6 +603,7 @@ namespace Xcp
         OnFrontConnectedDelegate onFronConnectedDelegate;// = RaiseFrontConnected;
         OnFrontDisconnectedDelegate onFrontDisconnectedDelegate;
         OnHeartBeatWarningDelegate onHeartBeatWarningDelegate;
+        OnHeartBeatDelegate onHeartBeatDelegate;
         OnRspUserLoginDelegate onRspUserLoginDelegate;
         #endregion
         private IntPtr m_handler;

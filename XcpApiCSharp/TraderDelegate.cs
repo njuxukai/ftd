@@ -17,6 +17,9 @@ namespace Xcp
     public delegate void OnHeartBeatWarningDelegate(int nTimeLapse);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void OnHeartBeatDelegate();
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void OnRspUserLoginDelegate ( IntPtr rspUserLogin,
         IntPtr rspInfo, int nRequestID, bool isLast);
 

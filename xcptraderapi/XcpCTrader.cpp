@@ -260,6 +260,11 @@ void CXcpTrader::OnHeartBeatWarning(int nTimeLapse)
 	if (m_onHeartBeatWarningRegistered)
 		m_fpOnHeartBeatWarning(nTimeLapse);
 }
+void CXcpTrader::OnHeartBeat()
+{
+	if (m_onHeartBeatRegistered)
+		m_fpOnHeartBeat();
+}
 
 void CXcpTrader::OnRspUserLogin(CXcpFtdcRspUserLoginField* pRspUserLogin, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast)
 {
@@ -430,6 +435,12 @@ void CXcpTrader::registerFP_OnHeartBeatWarning(FuncPtrOnHeartBeatWarning fp)
 {
 	m_fpOnHeartBeatWarning = fp;
 	m_onHeartBeatWarningRegistered = true;
+}
+
+void CXcpTrader::registerFP_OnHeartBeat(FuncPtrOnHeartBeat fp)
+{
+	m_fpOnHeartBeat = fp;
+	m_onHeartBeatRegistered = true;
 }
 
 void CXcpTrader::registerFP_OnRspUserLogin(FuncPtrOnRspUserLogin fp)

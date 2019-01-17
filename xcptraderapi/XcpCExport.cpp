@@ -160,6 +160,11 @@ void registerFP_OnHeartBeatWarning(TraderApi* trader, FuncPtrOnHeartBeatWarning 
 	((CXcpTrader*)trader)->registerFP_OnHeartBeatWarning(fp);
 }
 
+void registerFP_OnHeartBeat(TraderApi* trader, FuncPtrOnHeartBeat fp)
+{
+	((CXcpTrader*)trader)->registerFP_OnHeartBeat(fp);
+}
+
 void registerFP_OnRspUserLogin(TraderApi* trader, FuncPtrOnRspUserLogin fp) 
 {
 	((CXcpTrader*)trader)->registerFP_OnRspUserLogin(fp);

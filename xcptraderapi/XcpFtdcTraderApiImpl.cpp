@@ -219,7 +219,13 @@ void CXcpFtdcTraderApiImpl::fromApp(const FTD::Package& package, const FTD::Sess
 }
 
 void CXcpFtdcTraderApiImpl::onHeartBeat()
-{}
+{
+	if (m_pSpi)
+	{
+		m_pSpi->OnHeartBeat();
+	}
+
+}
 
 void CXcpFtdcTraderApiImpl::onHeartBeatWarning()
 {}

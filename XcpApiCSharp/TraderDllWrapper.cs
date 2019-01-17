@@ -135,6 +135,11 @@ namespace Xcp
         public static extern int RegisterOnHeartBeatWarningCallback(IntPtr phandler,
             OnHeartBeatWarningDelegate callback);
 
+        [DllImport("xcptraderapi.dll", CharSet = CharSet.Auto, EntryPoint = "registerFP_OnHeartBeat",
+            CallingConvention = CallingConvention.Cdecl)]
+        public static extern int RegisterOnHeartBeatCallback(IntPtr phandler,
+            OnHeartBeatDelegate callback);
+
         [DllImport("xcptraderapi.dll", CharSet = CharSet.Auto, EntryPoint = "registerFP_OnRspUserLogin",
             CallingConvention = CallingConvention.Cdecl)]
         public static extern int RegisterOnRspUserLoginCallback(IntPtr phandler,

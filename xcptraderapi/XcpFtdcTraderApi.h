@@ -33,6 +33,8 @@ public:
 	///@param nTimeLapse 距离上次接收报文的时间
 	virtual void OnHeartBeatWarning(int nTimeLapse) {}
 
+	///
+	virtual void OnHeartBeat() {}
 	///客户登录请求响应
 	virtual void OnRspUserLogin(CXcpFtdcRspUserLoginField* pRspUserLogin, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast) {}
 
@@ -202,6 +204,7 @@ protected:
 typedef void(__cdecl *FuncPtrOnFrontConnected) ();
 typedef void(__cdecl *FuncPtrOnFrontDisconnected) (int nReason);
 typedef void(__cdecl *FuncPtrOnHeartBeatWarning) (int nTimeLapse);
+typedef void(__cdecl *FuncPtrOnHeartBeat) ();
 typedef void(__cdecl *FuncPtrOnRspUserLogin) (CXcpFtdcRspUserLoginField* pRspUserLogin, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
 typedef void(__cdecl *FuncPtrOnRspUserLogout) (CXcpFtdcRspUserLogoutField* pRspUserLogout, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
 typedef void(__cdecl *FuncPtrOnRspInputOrder) (CXcpFtdcInputOrderField* pInputOrder, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
@@ -265,6 +268,7 @@ extern "C"
 	TRADER_API_EXPORT void registerFP_OnFrontConnected(TraderApi* trader, FuncPtrOnFrontConnected fp);
 	TRADER_API_EXPORT void registerFP_OnFrontDisconnected(TraderApi* trader, FuncPtrOnFrontDisconnected fp);
 	TRADER_API_EXPORT void registerFP_OnHeartBeatWarning(TraderApi* trader, FuncPtrOnHeartBeatWarning fp);
+	TRADER_API_EXPORT void registerFP_OnHeartBeat(TraderApi* trader, FuncPtrOnHeartBeat fp);
 	TRADER_API_EXPORT void registerFP_OnRspUserLogin(TraderApi* trader, FuncPtrOnRspUserLogin fp);
 	TRADER_API_EXPORT void registerFP_OnRspUserLogout(TraderApi* trader, FuncPtrOnRspUserLogout fp);
 	TRADER_API_EXPORT void registerFP_OnRspInputOrder(TraderApi* trader, FuncPtrOnRspInputOrder fp);

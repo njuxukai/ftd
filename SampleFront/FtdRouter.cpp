@@ -239,5 +239,5 @@ void FtdRouter::OnPackage(RspUserLogin& package, const SessionID& id)
 {
 	package.rspUserLoginField.FrontID = m_parameter.frontID;
 	package.rspUserLoginField.SessionID = id;
-	package.rspUserLoginField.HeartbeatInterval = 5;
+	//package.rspUserLoginField.HeartbeatInterval = 5;
 }
