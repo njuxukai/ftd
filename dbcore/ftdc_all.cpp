@@ -45,21 +45,21 @@ void populate_db(mco_db_h db)
 		rc = mco_trans_start(db, MCO_READ_WRITE, MCO_TRANS_FOREGROUND, &t);
 		if (MCO_S_OK == rc)
 		{
-			mco_disk_transaction_policy(db, MCO_COMMIT_BUFFERED);
+			//mco_disk_transaction_policy(db, MCO_COMMIT_BUFFERED);
 			//MCO_COMMIT_NO_SYNC
 			user.create(t);
 			user.broker_id = 8080;
 			user.user_id = j + 1;
 			user.password = "test";
-			printf("[%d]To Insert[%d]\n", j, (uint4)user.user_id);
+			//printf("[%d]To Insert[%d]\n", j, (uint4)user.user_id);
 			rc = mco_trans_commit(t);
 			if (MCO_S_OK == rc)
 			{
-				//printf("[%d]Insert Success[%d]\n", j, (uint4)user.user_id);
+				//printf("[%d]Insert Success\n", j);
 			}
 			else
 			{
-				//printf("[%d]Insert failure[%d]\n", j, (uint4)user.user_id);
+				//printf("[%d]Insert failure\n", j );
 			}
 		}
 	}

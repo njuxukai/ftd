@@ -18,7 +18,6 @@ persistent class User
 	int4 broker_id;
 	unsigned<4> user_id;
 	char<8> password;
-
 	unique tree<user_id> UserIdIdx;
 };
 

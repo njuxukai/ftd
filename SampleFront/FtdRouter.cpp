@@ -218,8 +218,9 @@ void FtdRouter::OnPackage(const ReqQryPrivateInitialData& req, const SessionID& 
 {
 	//1 服务器端注册会话私有流订阅
 	resigterSequenceSubscription(id, req.dissenminationstartField.SequenceSeries);
-	//2 按需查询私有数据返回
-	//m_DB2.submit(std::bind(&FtdRouter::processReq, this, PackageSPtr(req.clone()), std::placeholders::_1, id));
+	
+	std::shared_ptr<ReqQryPrivateInitialData> pCopy = std::shared_ptr<ReqQryPrivateInitialData>((ReqQryPrivateInitialData*)req.clone());
+	uplink(*pCopy, id);
 }
 
 void FtdRouter::OnPackage(const ReqOrderInsert& req, const SessionID& id)

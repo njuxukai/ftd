@@ -22,10 +22,14 @@ const int nThreadCount = 2;
 DBWrapperMcoImpl::DBWrapperMcoImpl(): m_done(false), m_joiner(new JoinThreads(m_threads))
 {
 	initDB();
-	initThreads();
+	
 #ifdef _DEBUG
+	std::cout << "[DEBUG]Populate DB started.\n";
 	populateDB();
+	std::cout << "[DEBUG]Populate DB finished.\n";
 #endif
+
+	initThreads();
 }
 
 DBWrapperMcoImpl::~DBWrapperMcoImpl()

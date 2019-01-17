@@ -693,6 +693,11 @@
 			<item name="IsBackward" comment="是否请求过往流数据"/>
 		</fieldDefine>
 		
+		<fieldDefine name="DialogSpecField" fid="FID_DialogSpecField" fidValue="0x0028" comment="会话信息域">		
+			<item name="FrontID" comment="前置编号"/>
+			<item name="SessionID" comment="会话编号"/>
+		</fieldDefine>
+		
 	</fields>
 		
 		

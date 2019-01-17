@@ -102,7 +102,7 @@
     <PreBuildEvent>
       <Command>xcopy  sample_core.cfg   /Y/I  ..\export\$(Configuration)\$(ProjectName)\
 
-xcopy  ..\export\$(Configuration)\dbcore.dll   /Y/I  ..\export\$(Configuration)\$(ProjectName)\
+xcopy  ..\export\$(Configuration)\dbcore.*   /Y/I  ..\export\$(Configuration)\$(ProjectName)\
 
 xcopy  ..\export\$(Configuration)\mqclient.dll   /Y/I  ..\export\$(Configuration)\$(ProjectName)\
 
