@@ -197,11 +197,14 @@ del /F EXCLUDE</Command>
     <ClCompile Include="DBWrapper.cpp" />
     <ClCompile Include="DBwrapperMcoImpl.cpp" />
     <ClCompile Include="ftdc_all.cpp" />
+    <ClCompile Include="populate_db.cpp" />
     <ClCompile Include="process_fund_transfer.cpp" />
     <ClCompile Include="genericdb.c" />
     <ClCompile Include="process_order_action.cpp" />
     <ClCompile Include="process_order_insert.cpp" />
+    <ClCompile Include="process_qry_fund.cpp" />
     <ClCompile Include="process_qry_order.cpp" />
+    <ClCompile Include="process_qry_position.cpp" />
     <ClCompile Include="process_qry_private_initial_data.cpp" />
     <ClCompile Include="process_qry_trade.cpp" />
     <ClCompile Include="stdafx.cpp" />

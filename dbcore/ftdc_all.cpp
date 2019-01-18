@@ -23,6 +23,12 @@ void ftdcAll(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapper* pWra
 	case TID_FundTransfer:
 		processFundTransfer(headers, pReq, pWrapper, db);
 		break;
+	case TID_QryFund:
+		processQryFund(headers, pReq, pWrapper, db);
+		break;
+	case TID_QryPosition:
+		processQryPosition(headers, pReq, pWrapper, db);
+		break;
 	case TID_QryOrder:
 		processQryOrder(headers, pReq, pWrapper, db);
 		break;
@@ -33,6 +39,7 @@ void ftdcAll(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapper* pWra
 		break;
 	}
 }
+
 
 void populate_db(mco_db_h db)
 {
@@ -64,3 +71,4 @@ void populate_db(mco_db_h db)
 		}
 	}
 }
+

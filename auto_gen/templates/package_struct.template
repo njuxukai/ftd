@@ -27,6 +27,7 @@ struct {package_name} : public Package
 
 	{package_name}() : Package(FTD_VERSION, {tid}, {mode})
 	{{
+		clear();
 	}}
 
 	virtual ~{package_name}()

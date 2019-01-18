@@ -19,8 +19,9 @@ void FtdRouter::registerUplinkCallback(RouterUplinkCallback func)
 	m_uplinkCallback = func;
 }
 
-void FtdRouter::uplink(const Package& package, const SessionID& id)
+void FtdRouter::uplink(Package& package, const SessionID& id)
 {
+	package.formatFtdcMessages();
 	PlainHeaders headers = { 0 };
 	headers.source_session = id;
 	if ( package.isNoneMode() )
@@ -38,6 +39,7 @@ void FtdRouter::uplink(const Package& package, const SessionID& id)
 		headers.msg_type = QMSG_TYPE_BOARDCAST;
 
 	headers.multi_flag = QMSG_FLAG_SINGLE_FTDC;
+	
 	std::string body;
 	int count;
 	package.toSingleConcatFtdcMessage(body, count);
@@ -211,7 +213,6 @@ void FtdRouter::OnPackage(const ReqUserLogin& req, const SessionID& id)
 	std::shared_ptr<ReqUserLogin> pCopy = std::shared_ptr<ReqUserLogin>((ReqUserLogin*)req.clone());
 	pCopy->reqUserLoginField.FrontID = m_parameter.frontID;
 	pCopy->reqUserLoginField.SessionID = id;
-	pCopy->formatFtdcMessages();
 	uplink(*pCopy, id);
 }
 
@@ -227,10 +228,40 @@ void FtdRouter::OnPackage(const ReqQryPrivateInitialData& req, const SessionID& 
 
 void FtdRouter::OnPackage(const ReqOrderInsert& req, const SessionID& id)
 {
-	ReqOrderInsert *pClone = (ReqOrderInsert*)req.clone();
-	pClone->inputOrderField.FrontID = m_parameter.frontID;
-	pClone->inputOrderField.SessionID = id;
-	//m_DB2.submit(std::bind(&FtdRouter::processReq, this, PackageSPtr(pClone), std::placeholders::_1, id));
+	ReqOrderInsert *pCopy = (ReqOrderInsert*)req.clone();
+	pCopy->inputOrderField.FrontID = m_parameter.frontID;
+	pCopy->inputOrderField.SessionID = id;
+	uplink(*pCopy, id);
+}
+
+void FtdRouter::OnPackage(const ReqOrderAction& req, const SessionID& id)
+{
+	ReqOrderAction *pCopy = (ReqOrderAction*)req.clone();
+	uplink(*pCopy, id);
+}
+
+void FtdRouter::OnPackage(const ReqQryFund& req, const SessionID& id)
+{
+	ReqQryFund *pCopy = (ReqQryFund*)req.clone();
+	uplink(*pCopy, id);
+}
+
+void FtdRouter::OnPackage(const ReqQryPosition& req, const SessionID& id)
+{
+	ReqQryPosition *pCopy = (ReqQryPosition*)req.clone();
+	uplink(*pCopy, id);
+}
+
+void FtdRouter::OnPackage(const ReqQryOrder& req, const SessionID& id)
+{
+	ReqQryOrder *pCopy = (ReqQryOrder*)req.clone();
+	uplink(*pCopy, id);
+}
+
+void FtdRouter::OnPackage(const ReqQryTrade& req, const SessionID& id)
+{
+	ReqQryTrade *pCopy = (ReqQryTrade*)req.clone();
+	uplink(*pCopy, id);
 }
 
 
@@ -242,5 +273,7 @@ void FtdRouter::OnPackage(RspUserLogin& package, const SessionID& id)
 {
 	package.rspUserLoginField.FrontID = m_parameter.frontID;
 	package.rspUserLoginField.SessionID = id;
-	//package.rspUserLoginField.HeartbeatInterval = 5;
+#ifdef _DEBUG
+	package.rspUserLoginField.HeartbeatInterval = 0;
+#endif
 }

@@ -66,6 +66,26 @@ namespace Xcp
             onHeartBeatWarningDelegate = RaiseHeartBeatWarning;
             onHeartBeatDelegate = RaiseHeartBeat;
             onRspUserLoginDelegate = RaiseRspUserLogin;
+
+            onRspUserLogoutDelegate = RaiseRspUserLogout;
+            onRspInputOrderDelegate = RaiseRspInputOrder;
+            onRspInputOrderActionDelegate = RaiseRspInputOrderAction;
+            onRspInputFundTransferDelegate = RaiseRspInputFundTransfer;
+            onRspQryFundDelegate = RaiseRspQryFund;
+            onRspQryPositionDelegate = RaiseRspQryPosition;
+            onRspQryOrderDelegate = RaiseRspQryOrder;
+            onRspQryTradeDelegate = RaiseRspQryTrade;
+            onRspQryFundTransferDelegate = RaiseRspQryFundTransfer;
+            onRspQryHisOrderDelegate = RaiseRspQryHisOrder;
+            onRspQryHisTradeDelegate = RaiseRspQryHisTrade;
+            onRspQryHisFundTransferDelegate = RaiseRspQryHisFundTransfer;
+            onRspQryInstrumentDelegate = RaiseRspQryInstrument;
+            onRspQryStructuredFundDelegate = RaiseRspQryInstrument;
+            onRspQryETFDelegate = RaiseRspQryETF;
+            onRspQryETFCompositionDelegate = RaiseRspQryETFComposition;
+            onRspQryPurchasableNewIssueSecurityDelegate = RaiseRspQryPurchasableNewIssueSecurity;
+            onRspQryPurchaseQuotaDelegate = RaiseRspQryPurchaseQuota;
+            onRtnOrderExecutionReportDelegate = RaiseRtnOrderExecutionReport;
         }
         private void RegisterEventHandlers()
         {
@@ -76,25 +96,25 @@ namespace Xcp
                 TraderDllWrapper.RegisterOnHeartBeatWarningCallback(m_handler, onHeartBeatWarningDelegate);
                 TraderDllWrapper.RegisterOnHeartBeatCallback(m_handler, onHeartBeatDelegate);
                 TraderDllWrapper.RegisterOnRspUserLoginCallback(m_handler, onRspUserLoginDelegate);
-                TraderDllWrapper.RegisterOnRspUserLogoutCallback(m_handler, RaiseRspUserLogout);
-                TraderDllWrapper.RegisterOnRspInputOrderCallback(m_handler, RaiseRspInputOrder);
-                TraderDllWrapper.RegisterOnRspInputOrderActionCallback(m_handler, RaiseRspInputOrderAction);
-                TraderDllWrapper.RegisterOnRspInputFundTransferCallback(m_handler, RaiseRspInputFundTransfer);
-                TraderDllWrapper.RegisterOnRspQryFundCallback(m_handler, RaiseRspQryFund);
-                TraderDllWrapper.RegisterOnRspQryPositionCallback(m_handler, RaiseRspQryPosition);
-                TraderDllWrapper.RegisterOnRspQryOrderCallback(m_handler, RaiseRspQryOrder);
-                TraderDllWrapper.RegisterOnRspQryTradeCallback(m_handler, RaiseRspQryTrade);
-                TraderDllWrapper.RegisterOnRspQryFundTransferCallback(m_handler, RaiseRspQryFundTransfer);
-                TraderDllWrapper.RegisterOnRspQryHisOrderCallback(m_handler, RaiseRspQryHisOrder);
-                TraderDllWrapper.RegisterOnRspQryHisTradeCallback(m_handler, RaiseRspQryHisTrade);
-                TraderDllWrapper.RegisterOnRspQryHisFundTransferCallback(m_handler, RaiseRspQryHisFundTransfer);
-                TraderDllWrapper.RegisterOnRspQryInstrumentCallback(m_handler, RaiseRspQryInstrument);
-                TraderDllWrapper.RegisterOnRspQryStructuredFundCallback(m_handler, RaiseRspQryStructuredFund);
-                TraderDllWrapper.RegisterOnRspQryETFCallback(m_handler, RaiseRspQryETF);
-                TraderDllWrapper.RegisterOnRspQryETFCompositionCallback(m_handler, RaiseRspQryETFComposition);
-                TraderDllWrapper.RegisterOnRspQryPurchasableNewIssueSecurityCallback(m_handler, RaiseRspQryPurchasableNewIssueSecurity);
-                TraderDllWrapper.RegisterOnRspQryPurchaseQuotaCallback(m_handler, RaiseRspQryPurchaseQuota);
-                TraderDllWrapper.RegisterOnRtnOrderExecutionReportCallback(m_handler, RaiseRtnOrderExecutionReport);
+                TraderDllWrapper.RegisterOnRspUserLogoutCallback(m_handler, onRspUserLogoutDelegate);
+                TraderDllWrapper.RegisterOnRspInputOrderCallback(m_handler, onRspInputOrderDelegate);
+                TraderDllWrapper.RegisterOnRspInputOrderActionCallback(m_handler, onRspInputOrderActionDelegate);
+                TraderDllWrapper.RegisterOnRspInputFundTransferCallback(m_handler, onRspInputFundTransferDelegate);
+                TraderDllWrapper.RegisterOnRspQryFundCallback(m_handler, onRspQryFundDelegate);
+                TraderDllWrapper.RegisterOnRspQryPositionCallback(m_handler, onRspQryPositionDelegate);
+                TraderDllWrapper.RegisterOnRspQryOrderCallback(m_handler, onRspQryOrderDelegate);
+                TraderDllWrapper.RegisterOnRspQryTradeCallback(m_handler, onRspQryTradeDelegate);
+                TraderDllWrapper.RegisterOnRspQryFundTransferCallback(m_handler, onRspQryFundTransferDelegate);
+                TraderDllWrapper.RegisterOnRspQryHisOrderCallback(m_handler, onRspQryHisOrderDelegate);
+                TraderDllWrapper.RegisterOnRspQryHisTradeCallback(m_handler, onRspQryHisTradeDelegate);
+                TraderDllWrapper.RegisterOnRspQryHisFundTransferCallback(m_handler, onRspQryHisFundTransferDelegate);
+                TraderDllWrapper.RegisterOnRspQryInstrumentCallback(m_handler, onRspQryInstrumentDelegate);
+                TraderDllWrapper.RegisterOnRspQryStructuredFundCallback(m_handler, onRspQryStructuredFundDelegate);
+                TraderDllWrapper.RegisterOnRspQryETFCallback(m_handler, onRspQryETFDelegate);
+                TraderDllWrapper.RegisterOnRspQryETFCompositionCallback(m_handler, onRspQryETFCompositionDelegate);
+                TraderDllWrapper.RegisterOnRspQryPurchasableNewIssueSecurityCallback(m_handler, onRspQryPurchasableNewIssueSecurityDelegate);
+                TraderDllWrapper.RegisterOnRspQryPurchaseQuotaCallback(m_handler, onRspQryPurchaseQuotaDelegate);
+                TraderDllWrapper.RegisterOnRtnOrderExecutionReportCallback(m_handler, onRtnOrderExecutionReportDelegate);
             }
         }
 
@@ -605,6 +625,25 @@ namespace Xcp
         OnHeartBeatWarningDelegate onHeartBeatWarningDelegate;
         OnHeartBeatDelegate onHeartBeatDelegate;
         OnRspUserLoginDelegate onRspUserLoginDelegate;
+        OnRspUserLogoutDelegate onRspUserLogoutDelegate;
+        OnRspInputOrderDelegate onRspInputOrderDelegate;
+        OnRspInputOrderActionDelegate onRspInputOrderActionDelegate;
+        OnRspInputFundTransferDelegate onRspInputFundTransferDelegate;
+        OnRspQryFundDelegate onRspQryFundDelegate;
+        OnRspQryPositionDelegate onRspQryPositionDelegate;
+        OnRspQryOrderDelegate onRspQryOrderDelegate;
+        OnRspQryTradeDelegate onRspQryTradeDelegate;
+        OnRspQryFundTransferDelegate onRspQryFundTransferDelegate;
+        OnRspQryHisOrderDelegate onRspQryHisOrderDelegate;
+        OnRspQryHisTradeDelegate onRspQryHisTradeDelegate;
+        OnRspQryHisFundTransferDelegate onRspQryHisFundTransferDelegate;
+        OnRspQryInstrumentDelegate onRspQryInstrumentDelegate;
+        OnRspQryStructuredFundDelegate onRspQryStructuredFundDelegate;
+        OnRspQryETFDelegate onRspQryETFDelegate;
+        OnRspQryETFCompositionDelegate onRspQryETFCompositionDelegate;
+        OnRspQryPurchasableNewIssueSecurityDelegate onRspQryPurchasableNewIssueSecurityDelegate;
+        OnRspQryPurchaseQuotaDelegate onRspQryPurchaseQuotaDelegate;
+        OnRtnOrderExecutionReportDelegate onRtnOrderExecutionReportDelegate;
         #endregion
         private IntPtr m_handler;
     }

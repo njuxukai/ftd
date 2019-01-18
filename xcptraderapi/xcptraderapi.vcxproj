@@ -147,6 +147,7 @@ del /F EXCLUDE</Command>
     <ClInclude Include="XcpFtdcTraderApi.h" />
     <ClInclude Include="XcpFtdcTraderApiImpl.h" />
     <ClInclude Include="XcpFtdcUserApiDataType.h" />
+    <ClInclude Include="XcpFtdcUserApiStruct.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="XcpCExport.cpp" />

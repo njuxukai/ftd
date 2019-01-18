@@ -11,7 +11,7 @@ namespace SampleClientGui2
     {
         public UILogEventArgs(string content)
         {
-            m_line = String.Format("{0:mm:ss} {1}\n", DateTime.Now, content);
+            m_line = content;// String.Format("{0:mm:ss} {1}\n", DateTime.Now, content);
 
         }
         public string Line
@@ -72,6 +72,7 @@ namespace SampleClientGui2
         public void Connect(Xcp.Trader trader)
         {
             trader.onFrontConnected += OnFrontConnected;
+            trader.onFrontDisconnected += OnFrontDisconnected;
             trader.onRspUserLogin += OnRspUserLogin;
             trader.onHeartBeat += OnHeartBeat;
             trader.onRspQryFund += OnRspQryFund;
@@ -92,13 +93,19 @@ namespace SampleClientGui2
         #region callback for trader
         private void OnFrontConnected(object sender, EventArgs eventArgs)
         {
-            RaiseUILogAddNewLine("前置连接成功");
+            RaiseUILogAddNewLine("前置会话连接成功");
         }
 
+        private void OnFrontDisconnected(object sender, Xcp.FrontDisconnectedEventArgs e)
+        {
+            RaiseUILogAddNewLine(String.Format("前置会话断开[{0}]", e.Reason));
+            RaiseUserLogout();
+        }
         private void OnHeartBeat(object sender, EventArgs eventArgs)
         {
             RaiseUILogAddNewLine("收到心跳");
         }
+
         private void OnRspUserLogin(object sender, Xcp.RspUserLoginEventArgs e)
         {
             string line = "";
@@ -110,22 +117,38 @@ namespace SampleClientGui2
             else
             {
                 line = String.Format("登录成功,心跳间隔设置为{0}秒", e.RspUserLoginField.HeartbeatInterval);
+                RaiseUserLogin();
             }
             RaiseUILogAddNewLine(line);
         }
 
-        private void OnRspQryFund(object sender, Xcp.RspQryFundEventArgs eventArgs)
+        private void OnRspUserLogout(object sender, Xcp.RspUserLogoutEventArgs e)
         {
-            RaiseUILogAddNewLine("OnRspQryFund");
-            currentFund = eventArgs.FundField.GetValueOrDefault();
-            if (eventArgs.IsLast)
+            RaiseUserLogout();
+            RaiseUILogAddNewLine("用户已登出");
+        }
+
+        private void OnRspQryFund(object sender, Xcp.RspQryFundEventArgs e)
+        {
+            if (e.ErrorField.HasValue && e.ErrorField.Value.ErrorCode != 0)
             {
+                RaiseUILogAddNewLine(String.Format("OnRspQryFund Error[{0}][{1}].", e.ErrorField.Value.ErrorCode, e.ErrorField.Value.ErrorText));
+            }
+            else
+            {
+                RaiseUILogAddNewLine("OnRspQryFund Succeed.");
+            }
+            if (e.FundField.HasValue && 
+                e.FundField.Value.CurrencyType == (char)Xcp.Enums.CurrencyType.RMB)
+            {
+                currentFund = e.FundField.Value;
                 RaiseFundUpdate();
             }
         }
 
         private void OnRspQryPosition(object sender, Xcp.RspQryPositionEventArgs eventArgs)
         {
+            RaiseUILogAddNewLine("OnRspQryPosition");
             if (eventArgs.RequestID != receivePositionRequestID)
             {
                 receivePositionBuffer.Clear();
@@ -145,6 +168,7 @@ namespace SampleClientGui2
 
         private void OnRspQryTrade(object sender, Xcp.RspQryTradeEventArgs eventArgs)
         {
+            RaiseUILogAddNewLine("OnRspQryTrade");
             if (eventArgs.RequestID != receiveTradeRequestID)
             {
                 receiveTradeBuffer.Clear();
@@ -164,6 +188,7 @@ namespace SampleClientGui2
 
         private void OnRspQryOrder(object sender, Xcp.RspQryOrderEventArgs eventArgs)
         {
+            RaiseUILogAddNewLine("OnRspQryOrder");
             if (eventArgs.RequestID != receiveOrderRequestID)
             {
                 receiveOrderBuffer.Clear();
@@ -234,6 +259,17 @@ namespace SampleClientGui2
             UILogEventArgs args = new UILogEventArgs(content);
             Volatile.Read(ref onUILogAddNewLine)?.Invoke(this, args);
         }
+
+        private void RaiseUserLogin()
+        {
+            Volatile.Read(ref onUserLogin)?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void RaiseUserLogout()
+        {
+            Volatile.Read(ref onUserLogout)?.Invoke(this, EventArgs.Empty);
+        }
+
         private void RaiseFundUpdate()
         {
             FundUpdateEventArgs args = new FundUpdateEventArgs(currentFund);
@@ -274,6 +310,8 @@ namespace SampleClientGui2
         private int receiveTradeRequestID = 0;
 
         #region 
+        public event EventHandler<EventArgs> onUserLogin;
+        public event EventHandler<EventArgs> onUserLogout;
         public event EventHandler<UILogEventArgs> onUILogAddNewLine;
         public event EventHandler<FundUpdateEventArgs> onFundUpdate;
         public event EventHandler<PositionUpdateEventArgs> onPositionUpdate;

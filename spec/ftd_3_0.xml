@@ -62,7 +62,7 @@
 		</packageDefine>
 		
 		<packageDefine name="RspQryFund" tid="TID_QryFund" model="dialog" comment="资金余额查询应答">
-			<field name="FundField" maxOccur="1" minOccur="1" comment="资金余额域"/>
+			<field name="FundField" maxOccur="任意" minOccur="1" comment="资金余额域"/>
 			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
@@ -397,7 +397,8 @@
 			<item name="RequestID" comment="请求编号"/>		
 			<item name="BrokerID" comment="经纪公司编码"/>
 			<item name="UserID" comment="用户编码"/>
-			<item name="InvestorID" comment="投资者编码"/>			
+			<item name="InvestorID" comment="投资者编码"/>
+      <item name="CurrencyType" comment="币种"/>
 		</fieldDefine>
 		
 		<fieldDefine name="FundField" fid="FID_FundField" fidValue="0x000F" comment="资金余额域">		

@@ -58,27 +58,61 @@ namespace SampleClientGui2
 
         private void button_reqOrderInsert_Click(object sender, RoutedEventArgs e)
         {
-
+            if (trader != null)
+            { }
         }
 
         private void button_qryOrder_Click(object sender, RoutedEventArgs e)
         {
-
+            if (trader != null)
+            {
+                Xcp.QryOrderField qry = new QryOrderField();
+                qry.BrokerID = BrokerID;
+                qry.UserID = UserID;
+                qry.InvestorID = InvestorID;
+                qry.RequestID = NextRequestID;
+                trader.ReqQryOrder(qry, NextRequestID++); 
+            }
         }
 
         private void button_qryPosition_Click(object sender, RoutedEventArgs e)
         {
-
+            if (trader != null)
+            {
+                Xcp.QryPositionField qry = new QryPositionField();
+                qry.BrokerID = BrokerID;
+                qry.UserID = UserID;
+                qry.InvestorID = InvestorID;
+                qry.RequestID = NextRequestID;
+                trader.ReqQryPosition(qry, NextRequestID++);
+            }
         }
 
         private void button_qryFund_Click(object sender, RoutedEventArgs e)
         {
-
+            if (trader != null)
+            {
+                Xcp.QryFundField qry = new QryFundField();
+                qry.BrokerID = BrokerID;
+                qry.UserID = UserID;
+                qry.InvestorID = InvestorID;
+                qry.RequestID = NextRequestID;
+                qry.CurrencyType = (char)Xcp.Enums.CurrencyType.RMB;
+                trader.ReqQryFund(qry, NextRequestID++);
+            }
         }
 
         private void button_qryTrade_Click(object sender, RoutedEventArgs e)
         {
-
+            if (trader != null)
+            {
+                Xcp.QryTradeField qry = new QryTradeField();
+                qry.BrokerID = BrokerID;
+                qry.UserID = UserID;
+                qry.InvestorID = InvestorID;
+                qry.RequestID = NextRequestID;
+                trader.ReqQryTrade(qry, NextRequestID++);
+            }
         }
 
         private void positionDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -104,7 +138,8 @@ namespace SampleClientGui2
         {
             if (txtLog.Text.Length > 10000)
                 txtLog.Text = "";
-            txtLog.AppendText(e.Line);
+            String line = String.Format("{0:hh:mm:ss} {1}\n", DateTime.Now, e.Line);
+            txtLog.AppendText(line);
             if (IsVerticalScrollBarAtBottom)
             {
                 this.txtLog.ScrollToEnd();
@@ -136,10 +171,6 @@ namespace SampleClientGui2
         #endregion
 
         #region order callback
-        #endregion
-
-        #region data
-
         private void CreateTrader()
         {
             if (trader != null)
@@ -151,16 +182,6 @@ namespace SampleClientGui2
             trader.RegisterFront(FrontAddress2);
             trader.SubscribePrivateTopic(THOST_TE_RESUME_TYPE.THOST_TERT_RESTART);
             trader.SubscribePublicTopic(THOST_TE_RESUME_TYPE.THOST_TERT_RESTART);
-        }
-        public void ConnetTrader()
-        {
-            
-            trader.Init();
-        }
-
-        public void DisconnectTrader()
-        {
-            trader = null;
         }
 
         private void OnFrontConnected(object sender, EventArgs e)
@@ -174,6 +195,91 @@ namespace SampleClientGui2
                 trader.ReqUserLogin(field, NextRequestID);
         }
 
+        
+
+        private void SetTradeButtonsOn()
+        {
+            button_qryFund.IsEnabled = true;
+            button_qryPosition.IsEnabled = true;
+            button_qryOrder.IsEnabled = true;
+            button_qryTrade.IsEnabled = true;
+            button_reqOrderInsert.IsEnabled = true;
+        }
+
+        private void SetTradeButtonsOff()
+        {
+            button_qryFund.IsEnabled = false;
+            button_qryPosition.IsEnabled = false;
+            button_qryOrder.IsEnabled = false;
+            button_qryTrade.IsEnabled = false;
+            button_reqOrderInsert.IsEnabled = false;
+        }
+
+        public delegate void EvenBusDelegate();
+        private void OnUserLogout(object sender, EventArgs e)
+        {
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.BeginInvoke(new EvenBusDelegate(SetTradeButtonsOff));
+            }
+            else
+            {
+                SetTradeButtonsOff();
+            }
+        }
+
+        
+        private void OnUserLogin(object sender, EventArgs e)
+        {
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.BeginInvoke(new EvenBusDelegate(SetTradeButtonsOn));
+            }
+            else
+            {
+                SetTradeButtonsOn();
+            }
+        }
+
+        private void DoShowFund(FundField fund)
+        {
+            labelAvailable.Content = fund.AmountAvailable.ToString("N2");
+            labelDrawable.Content = fund.AmountDrawable.ToString("N2");
+            labelFrozen.Content = fund.AmountFrozen.ToString("N2");
+            labelPre.Content = fund.AmountPre.ToString("N2");
+        }
+
+        public delegate void ShowFundDelegate(FundField fund);
+        private void OnFundUpdate(object sender, FundUpdateEventArgs e)
+        {
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.BeginInvoke(new ShowFundDelegate(DoShowFund), new object[] { e.Fund });
+            }
+            else
+            {
+                DoShowFund(e.Fund);
+            }
+        }
+
+
+        #endregion
+
+        #region data
+
+        
+        public void ConnetTrader()
+        {
+            
+            trader.Init();
+        }
+
+        public void DisconnectTrader()
+        {
+            trader = null;
+        }
+
+        
         public int BrokerID { get; set; }
         public int UserID { get; set; }
         public int InvestorID { get; set; }
@@ -204,9 +310,11 @@ namespace SampleClientGui2
             InvestorID = UserID;
 
             eventBus.onUILogAddNewLine += OnLog;
+            eventBus.onUserLogin += OnUserLogin;
+            eventBus.onUserLogout += OnUserLogout;
+            eventBus.onFundUpdate += OnFundUpdate;
 
-
-            CreateTrader();
+            SetTradeButtonsOff();
         }
     }
 }

@@ -70,6 +70,9 @@ void processUserLoginTransaction(const ReqUserLogin* pReq, mco_trans_h t, RspUse
 
 void processUserLogin(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapper* pWrapper, mco_db_h db)
 {
+#ifdef _DEBUG
+	std::cout << "[processUserLogin] called\n";
+#endif
 	PlainHeaders rspHeaders = { 0 };
 	rspHeaders.admin_flag = QMSG_FLAG_ADMIN;
 	rspHeaders.msg_type = QMSG_TYPE_RSP;

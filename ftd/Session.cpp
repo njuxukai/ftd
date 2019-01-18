@@ -138,6 +138,16 @@ bool Session::sendRaw(Package& package, int num)
 	*/
 	Locker l(m_mutex);
 
+	if (package.isNoneMode())
+	{
+		m_application.toAdmin(package, m_sessionID);
+	}
+	else
+	{
+		if (!isLoggedOn())
+			return false;
+		m_application.toApp(package, m_sessionID);
+	}
 
 	if (package.m_transactionId == TID_UserLogin)
 	{
@@ -164,16 +174,7 @@ bool Session::sendRaw(Package& package, int num)
 		m_state.incrNextSenderMsgSeqNum();
 	}
 
-	if (package.isNoneMode())
-	{
-		m_application.toAdmin(package, m_sessionID);
-	}
-	else
-	{ 
-		if (!isLoggedOn())
-			return false;
-		m_application.toApp(package, m_sessionID);
-	}
+	
 	//out message
 	std::vector<std::string> ftdMsgs;
 	package.formatFtdcMessages();

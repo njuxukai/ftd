@@ -111,8 +111,8 @@ void DBWrapperMcoImpl::populateDB()
 		printf("mco_db_connect failure[%d]\n", (int)rc);
 		return;
 	}
-	mco_disk_transaction_policy(db, MCO_COMMIT_BUFFERED);
-	populate_db(db);
+	mco_disk_transaction_policy(db, MCO_COMMIT_SYNC_FLUSH);
+	populate2_db(db);
 }
 
 #endif

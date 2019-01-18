@@ -5,6 +5,9 @@ void processQryPrivateIntialDataTransaction(const ReqQryPrivateInitialData* pReq
 
 void processQryPrivateInitialData(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapper* pWrapper, mco_db_h db)
 {
+#ifdef _DEBUG
+	std::cout << "[processQryPrivateInitialData] called\n";
+#endif
 	PlainHeaders rspHeaders = { 0 };
 	rspHeaders.admin_flag = QMSG_FLAG_APP;
 	rspHeaders.msg_type = QMSG_TYPE_RSP;
@@ -13,6 +16,8 @@ void processQryPrivateInitialData(const PlainHeaders& headers, FTD::PackageSPtr 
 
 	std::shared_ptr<RspQryPrivateInitialData> pRsp = std::make_shared<RspQryPrivateInitialData>();
 	ReqQryPrivateInitialData *pReqQryPrivateInitialData = (ReqQryPrivateInitialData*)pReq.get();
+	pRsp->m_sequenceSeries = pReq->m_sequenceSeries;
+	pRsp->m_sequenceNO = pReq->m_sequenceNO;
 	pWrapper->uplink(rspHeaders, pRsp);
 }
 

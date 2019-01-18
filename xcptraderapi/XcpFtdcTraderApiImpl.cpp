@@ -190,6 +190,10 @@ void CXcpFtdcTraderApiImpl::onConnect(const FTD::SessionID& id)
 
 void CXcpFtdcTraderApiImpl::onDisconnect(const FTD::SessionID& id)
 {
+	if (m_pSpi)
+	{
+		m_pSpi->OnFrontDisconnected(0);
+	}
 }
 /// Notification of a session successfully logging on
 void CXcpFtdcTraderApiImpl::onLogon(const FTD::SessionID&)
@@ -574,10 +578,24 @@ void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspQryFund& package, const FTD:
 		return;
 	CXcpFtdcFundField contentField = { 0 };
 	CXcpFtdcErrorField errorField = { 0 };
-	memcpy(&contentField, &package.fundField, sizeof(CXcpFtdcFundField));
 	if (package.pErrorField.get())
 		memcpy(&errorField, package.pErrorField.get(), sizeof(CXcpFtdcErrorField));
-	m_pSpi->OnRspQryFund(&contentField, &errorField, package.requestSourceField.RequestID, true);
+
+	if (package.fundFields.size() == 0)
+	{
+		m_pSpi->OnRspQryFund(0, &errorField, package.requestSourceField.RequestID, true);
+		return;
+	}
+	int dataLen = package.fundFields.size();
+	bool isLast = false;
+
+	for (int i = 0; i < dataLen; i++)
+	{
+		if (i == dataLen - 1)
+			isLast = true;
+		memcpy(&contentField, &package.fundFields[i], sizeof(CXcpFtdcFundField));
+		m_pSpi->OnRspQryFund(&contentField, &errorField, package.requestSourceField.RequestID, isLast);
+	}
 }
 
 void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspQryPosition& package, const FTD::SessionID& id) 

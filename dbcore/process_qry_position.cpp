@@ -1,9 +1,9 @@
 #include "ftdc_all.h"
 
-void processQryTrade(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapper* pWrapper, mco_db_h db)
+void processQryPosition(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapper* pWrapper, mco_db_h db)
 {
 #ifdef _DEBUG
-	std::cout << "[processQryTrade] called\n";
+	std::cout << "[processQryPosition] called\n";
 #endif
 	PlainHeaders rspHeaders = { 0 };
 	rspHeaders.admin_flag = QMSG_FLAG_APP;
@@ -11,10 +11,10 @@ void processQryTrade(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapp
 	strncpy(rspHeaders.source_queue, headers.target_queue, sizeof(rspHeaders.source_queue));
 	rspHeaders.source_session = headers.source_session;
 
-	std::shared_ptr<RspQryTrade> pRsp = std::make_shared<RspQryTrade>();
+	std::shared_ptr<RspQryPosition> pRsp = std::make_shared<RspQryPosition>();
 	pRsp->m_sequenceSeries = pReq->m_sequenceSeries;
 	pRsp->m_sequenceNO = pReq->m_sequenceNO;
 
-	ReqQryTrade *pReqQryTrade = (ReqQryTrade*)pReq.get();
+	ReqQryPosition *pReqQryPosition = (ReqQryPosition*)pReq.get();
 	pWrapper->uplink(rspHeaders, pRsp);
 }

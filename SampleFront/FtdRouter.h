@@ -24,7 +24,7 @@ public:
 	~FtdRouter();
 
 	void registerUplinkCallback(RouterUplinkCallback func);
-	void uplink(const Package& package, const SessionID& id);
+	void uplink(Package& package, const SessionID& id);
 	void uplink(PlainHeaders& headers, const std::string& body);
 	void start();
 	void stop();
@@ -65,6 +65,16 @@ public:
 	virtual void OnPackage(const ReqQryPrivateInitialData& package, const SessionID& id);
 
 	virtual void OnPackage(const ReqOrderInsert& package, const SessionID& id);
+
+	virtual void OnPackage(const ReqOrderAction& package, const SessionID& id);
+
+	virtual void OnPackage(const ReqQryFund& package, const SessionID& id);
+
+	virtual void OnPackage(const ReqQryPosition& package, const SessionID& id);
+
+	virtual void OnPackage(const ReqQryOrder& package, const SessionID& id);
+
+	virtual void OnPackage(const ReqQryTrade& package, const SessionID& id);
 
 	virtual void OnPackage(RspUserLogin& package, const SessionID& id);
 
