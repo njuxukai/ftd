@@ -157,7 +157,7 @@ public:
 	///
 	virtual void onConnect(const FTD::SessionID&);
 	//
-	virtual void onDisconnect(const FTD::SessionID&);
+	virtual void onDisconnect(const FTD::SessionID&, int reason);
 	/// Notification of a session successfully logging on
 
 	virtual void onLogon(const FTD::SessionID&);

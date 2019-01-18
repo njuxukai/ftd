@@ -98,7 +98,9 @@ namespace SampleClientGui2
                 qry.InvestorID = InvestorID;
                 qry.RequestID = NextRequestID;
                 qry.CurrencyType = (char)Xcp.Enums.CurrencyType.RMB;
-                trader.ReqQryFund(qry, NextRequestID++);
+                int returnValue = trader.ReqQryFund(qry, NextRequestID);
+                DoShowLog(String.Format("ReqQryFund.[ReqID={0}][Rtn={1}]", NextRequestID, returnValue));
+                NextRequestID++;
             }
         }
 
@@ -121,24 +123,24 @@ namespace SampleClientGui2
         }
 
         #region log 
-        private delegate void ShowLogDelegate(UILogEventArgs e);
+        private delegate void ShowLogDelegate(String content);
         public void OnLog(object sender, UILogEventArgs e)
         {
             if (!Dispatcher.CheckAccess())
             {
-                Dispatcher.BeginInvoke(new ShowLogDelegate(DoShowLog), new object[] { e });
+                Dispatcher.BeginInvoke(new ShowLogDelegate(DoShowLog), new object[] { e.Line });
             }
             else
             {
-                DoShowLog(e);
+                DoShowLog(e.Line);
             }
         }
 
-        private void DoShowLog(UILogEventArgs e)
+        private void DoShowLog(String content)
         {
             if (txtLog.Text.Length > 10000)
                 txtLog.Text = "";
-            String line = String.Format("{0:hh:mm:ss} {1}\n", DateTime.Now, e.Line);
+            String line = String.Format("{0:hh:mm:ss} {1}\n", DateTime.Now, content);
             txtLog.AppendText(line);
             if (IsVerticalScrollBarAtBottom)
             {

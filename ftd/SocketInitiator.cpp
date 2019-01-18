@@ -207,7 +207,7 @@ void SocketInitiator::onDisconnect( SocketConnector&, int s )
 	  Session::SPtr pSession = pSocketConnection->getSession();
 	  if (pSession)
 	  {
-		  pSession->disconnect();
+		  pSession->disconnect(DISCONNECT_DEFAULT);
 		  destroySession(pSession);
 	  }
 

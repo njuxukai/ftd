@@ -15,6 +15,11 @@ void processQryPosition(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWr
 	pRsp->m_sequenceSeries = pReq->m_sequenceSeries;
 	pRsp->m_sequenceNO = pReq->m_sequenceNO;
 
+	for (int i = 0; i < 100; i++)
+	{
+		CFtdcPositionField position = { 0 };
+		pRsp->positionFields.push_back(position);
+	}
 	ReqQryPosition *pReqQryPosition = (ReqQryPosition*)pReq.get();
 	pWrapper->uplink(rspHeaders, pRsp);
 }

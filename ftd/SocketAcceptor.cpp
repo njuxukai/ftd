@@ -215,7 +215,7 @@ void SocketAcceptor::onDisconnect( SocketServer&, int s )
   pSocketConnection->setSession(0);
   if (pSession)
   {
-	  pSession->disconnect();
+	  pSession->disconnect(DISCONNECT_DEFAULT);
 	  destroySession(pSession);
   }
   m_connections.erase( s );

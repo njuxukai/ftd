@@ -123,7 +123,7 @@ public:
   void onSendLogout(Package&);
   void onSendForceExit(Package&);
 
-  void disconnect();
+  void disconnect(int reason);
 
 
 

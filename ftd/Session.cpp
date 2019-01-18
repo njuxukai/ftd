@@ -66,7 +66,7 @@ Session::Session( Application& application,
 
 Session::~Session()
 {
-	m_application.onDisconnect(m_sessionID);
+	//m_application.onDisconnect(m_sessionID,DISCONNECT_DEFAULT);
 	removeSession( m_sessionID );
 	m_packageStoreFactory.destroy( m_state.store() );
 	if ( m_pLogFactory && m_state.log() )
@@ -86,7 +86,7 @@ void Session::next( const UtcTimeStamp& timeStamp )
 	if (m_state.logonTimedOut())
 	{
 		m_state.onEvent("Timed out waiting for logon response");
-		disconnect();
+		disconnect(DISCONNECT_LOGIN_TIMEOUT);
 		return;
 	}
 	if (m_state.heartBtInt() == 0)
@@ -96,7 +96,7 @@ void Session::next( const UtcTimeStamp& timeStamp )
 	if (m_state.timedOut())
 	{
 		m_state.onEvent("Timed out waiting for heartbeat");
-		disconnect();
+		disconnect(DISCONNECT_HEARTBEAT_TIMEOUT);
 		return;
 	}
 	if (m_state.warningTimeOut())
@@ -221,13 +221,14 @@ bool Session::responderSend( const std::string& string )
   return result;
 }
 
-void Session::disconnect()
+void Session::disconnect(int reason)
 {
   Locker l(m_mutex);
-
+  m_application.onDisconnect(m_sessionID, reason);
   if (m_pResponder)
   {
-    m_state.onEvent( "Disconnecting" );
+	 
+    m_state.onEvent((boost::format("Disconnecting,Reason=[%d]") % reason).str());
 
 	m_pResponder->disconnect();
 	m_pResponder = 0;
@@ -323,7 +324,7 @@ void Session::next( const Package& package, const UtcTimeStamp& timeStamp, bool 
 	{
 		if (package.m_sequenceNO != m_state.getNextTargetMsgSeqNum())
 		{
-			disconnect();
+			disconnect(DISCONNECT_WRONG_SNO);
 		}
 		m_state.incrNextTargetMsgSeqNum();
 	}

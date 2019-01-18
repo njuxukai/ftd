@@ -116,7 +116,7 @@ void FtdRouter::processDownlinkAppRsp(const PlainHeaders& headers, const std::st
 		FtdMessageUtil::splitFtdcMessages(body, ftdcMsgs);
 		for (unsigned int i = 0; i < ftdcMsgs.size(); i++)
 		{
-			ftdMsgs.push_back(FtdMessageUtil::formatFtdMessage(ftdMsgs[i]));
+			ftdMsgs.push_back(FtdMessageUtil::formatFtdMessage(ftdcMsgs[i]));
 		}
 		Session::sendToTarget(ftdMsgs, headers.source_session);
 	}
@@ -164,10 +164,10 @@ void FtdRouter::onConnect(const SessionID& id)
 
 
 //to be disconnected
-void FtdRouter::onDisconnect(const SessionID& id)
+void FtdRouter::onDisconnect(const SessionID& id, int reason)
 {
 	unresigterSequenceSubscription(id);
-	std::cout << boost::format("SessionID[%d]已断开\n") % id;
+	std::cout << boost::format("SessionID[%d]断开,原因[%d]\n") % id %reason;
 }
 
 /// Notification of a session successfully logging on

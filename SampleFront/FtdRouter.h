@@ -42,7 +42,7 @@ public:
 	///connected
 	virtual void onConnect(const SessionID&);
 	//to be disconnected
-	virtual void onDisconnect(const SessionID&);
+	virtual void onDisconnect(const SessionID&, int reason);
 	/// Notification of a session successfully logging on
 	virtual void onLogon(const SessionID&);
 	/// Notification of a session logging off or disconnecting

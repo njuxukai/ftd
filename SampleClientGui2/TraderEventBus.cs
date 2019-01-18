@@ -136,7 +136,8 @@ namespace SampleClientGui2
             }
             else
             {
-                RaiseUILogAddNewLine("OnRspQryFund Succeed.");
+                string line = String.Format("OnRspQryFund[ReqID={0}] Succeed.", e.RequestID);
+                RaiseUILogAddNewLine(line);
             }
             if (e.FundField.HasValue && 
                 e.FundField.Value.CurrencyType == (char)Xcp.Enums.CurrencyType.RMB)

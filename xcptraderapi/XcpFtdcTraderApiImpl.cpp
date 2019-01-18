@@ -188,11 +188,11 @@ void CXcpFtdcTraderApiImpl::onConnect(const FTD::SessionID& id)
 	}
 }
 
-void CXcpFtdcTraderApiImpl::onDisconnect(const FTD::SessionID& id)
+void CXcpFtdcTraderApiImpl::onDisconnect(const FTD::SessionID& id, int reason)
 {
 	if (m_pSpi)
 	{
-		m_pSpi->OnFrontDisconnected(0);
+		m_pSpi->OnFrontDisconnected(reason);
 	}
 }
 /// Notification of a session successfully logging on
