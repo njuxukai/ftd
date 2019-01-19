@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xcp;
 
-namespace SampleClientGui2
+namespace SampleClientGui
 {
     public class UILogEventArgs : EventArgs
     {
@@ -481,6 +481,39 @@ namespace SampleClientGui2
                 qry.RequestID = NextRequestID;
                 int returnValue = m_trader.ReqQryTrade(qry, NextRequestID);
                 RaiseUILogAddNewLine(String.Format("ReqQryTrade.[ReqID={0}][Rtn={1}]",
+                    NextRequestID, returnValue));
+                NextRequestID++;
+            }
+        }
+
+        public void ReqOrderAction(InputOrderActionField action)
+        {
+            if (m_trader != null)
+            {
+                action.BrokerID = BrokerID;
+                action.UserID = UserID;
+                action.InvestorID = InvestorID;
+                action.RequestID = NextRequestID;
+                int returnValue = m_trader.ReqOrderAction(action, NextRequestID);
+                RaiseUILogAddNewLine(String.Format("ReqOrderAction.[ReqID={0}][Rtn={1}]",
+                    NextRequestID, returnValue));
+                NextRequestID++;
+            }
+        }
+
+        public void ReqOrderInsert(InputOrderField order)
+        {
+            if (m_trader != null)
+            {
+                order.BrokerID = BrokerID;
+                order.UserID = UserID;
+                order.InvestorID = InvestorID;
+                order.RequestID = NextRequestID;
+                order.OrderRef = NextOrderRef;
+                order.FrontID = FrontID;
+                order.SessionID = SessionID;
+                int returnValue = m_trader.ReqOrderInsert(order, NextRequestID);
+                RaiseUILogAddNewLine(String.Format("ReqOrderOrder.[ReqID={0}][Rtn={1}]",
                     NextRequestID, returnValue));
                 NextRequestID++;
             }

@@ -10,6 +10,10 @@ void verifyInputOrderAndDeliverToExchange(const ReqOrderInsert* pReq, mco_trans_
 
 void processOrderInsert(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapper* pWrapper, mco_db_h db)
 {
+#ifdef _DEBUG
+	std::cout << "[processOrderInsert] called\n";
+#endif
+
 	PlainHeaders rspHeaders;
 	std::shared_ptr<RspOrderInsert> pRsp = std::make_shared<RspOrderInsert>();
 

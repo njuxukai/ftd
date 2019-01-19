@@ -16,7 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Xcp;
 
-namespace SampleClientGui2
+namespace SampleClientGui
 {
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
@@ -303,5 +303,53 @@ namespace SampleClientGui2
             RegisterWrapperEvent();
         }
 
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Order order = (Order)orderDataGrid.SelectedItem;
+            InputOrderActionField action = new InputOrderActionField();
+            Wrapper.ReqOrderAction(action);
+        }
+
+        private void orderDataGrid_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Right)
+            {
+                Point pt = e.GetPosition(orderDataGrid);
+                DataGridCell orderCell = null;
+                //Do the hittest to find the DataGridCell
+                VisualTreeHelper.HitTest(orderDataGrid, null, (result) =>
+                    {
+                        // Find the ancestor element form the hittested element
+                        // e.g., find the DataGridCell if we hittest on the inner TextBlock
+                        DataGridCell cell = FindVisualParent<DataGridCell>(result.VisualHit);
+                        if (cell != null)
+                        {
+                            orderCell = cell;
+                            return HitTestResultBehavior.Stop;
+                        }
+                        else
+                            return HitTestResultBehavior.Continue;
+                    },
+                    new PointHitTestParameters(pt));
+
+                if (orderCell != null)
+                {
+
+                    int rowIndex = DataGridRow.GetRowContainingElement(orderCell).GetIndex();
+                    orderDataGrid.SelectedIndex = rowIndex;
+                }
+            }
+        }
+
+        private T FindVisualParent<T>(DependencyObject child) where T : DependencyObject
+        {
+            DependencyObject parentObject = VisualTreeHelper.GetParent(child);
+            if (parentObject == null) return null;
+            T parent = parentObject as T;
+            if (parent != null)
+                return parent;
+            else
+                return FindVisualParent<T>(parentObject);
+        }
     }
 }

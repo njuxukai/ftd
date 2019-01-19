@@ -1,9 +1,9 @@
-﻿<Window x:Class="SampleClientGui2.MainWindow"
+﻿<Window x:Class="SampleClientGui.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SampleClientGui2"
+        xmlns:local="clr-namespace:SampleClientGui"
         mc:Ignorable="d"
         Title="XCP测试客户端" Height="900" Width="1200" Loaded="Window_Loaded">
     <Grid Margin="10,23,0,0.5">
@@ -29,7 +29,7 @@
                 <DataGridTextColumn Header="开盘数量" Binding="{Binding VolumePre}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
-        <DataGrid x:Name="orderDataGrid" Grid.Row="2" Grid.Column="0" ItemsSource="{Binding}" IsReadOnly="True" AutoGenerateColumns="false" CanUserAddRows="False" >
+        <DataGrid x:Name="orderDataGrid" Grid.Row="2" Grid.Column="0" ItemsSource="{Binding}" IsReadOnly="True" AutoGenerateColumns="false" CanUserAddRows="False" MouseDown="orderDataGrid_MouseDown" >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="代码" Binding="{Binding InstrumentCode}" Width="*"/>
                 <DataGridTextColumn Header="交易方向" Binding="{Binding Direction}" Width="*"/>
@@ -41,6 +41,11 @@
                 <DataGridTextColumn Header="系统编号" Binding="{Binding OrderSysID}" Width="*"/>
                 <DataGridTextColumn Header="交易所编号" Binding="{Binding OrderExchangeID}" Width="*"/>
             </DataGrid.Columns>
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="撤单" Click="MenuItem_Click"  />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
         </DataGrid>
         <DataGrid x:Name="tradeDataGrid" Grid.Row="3" Grid.Column="0" ItemsSource="{Binding}" IsReadOnly="True" AutoGenerateColumns="false" CanUserAddRows="False" >
             <DataGrid.Columns>

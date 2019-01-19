@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using Xcp;
-namespace SampleClientGui2
+namespace SampleClientGui
 {
     /// <summary>
     /// App.xaml 的交互逻辑

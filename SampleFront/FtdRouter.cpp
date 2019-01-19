@@ -222,13 +222,15 @@ void FtdRouter::OnPackage(const ReqQryPrivateInitialData& req, const SessionID& 
 	std::cout << "At router, ON Package[ReqQryPrivateInitialData]\n";
 	resigterSequenceSubscription(id, req.dissenminationstartField.SequenceSeries);
 	
-	std::shared_ptr<ReqQryPrivateInitialData> pCopy = std::shared_ptr<ReqQryPrivateInitialData>((ReqQryPrivateInitialData*)req.clone());
+	std::shared_ptr<ReqQryPrivateInitialData> pCopy 
+		= std::shared_ptr<ReqQryPrivateInitialData>((ReqQryPrivateInitialData*)req.clone());
 	uplink(*pCopy, id);
 }
 
 void FtdRouter::OnPackage(const ReqOrderInsert& req, const SessionID& id)
 {
-	ReqOrderInsert *pCopy = (ReqOrderInsert*)req.clone();
+	std::shared_ptr<ReqOrderInsert> pCopy
+		= std::shared_ptr<ReqOrderInsert>((ReqOrderInsert*)req.clone());
 	pCopy->inputOrderField.FrontID = m_parameter.frontID;
 	pCopy->inputOrderField.SessionID = id;
 	uplink(*pCopy, id);
@@ -236,31 +238,36 @@ void FtdRouter::OnPackage(const ReqOrderInsert& req, const SessionID& id)
 
 void FtdRouter::OnPackage(const ReqOrderAction& req, const SessionID& id)
 {
-	ReqOrderAction *pCopy = (ReqOrderAction*)req.clone();
+	std::shared_ptr<ReqOrderAction> pCopy = 
+		std::shared_ptr<ReqOrderAction>((ReqOrderAction*)req.clone());
 	uplink(*pCopy, id);
 }
 
 void FtdRouter::OnPackage(const ReqQryFund& req, const SessionID& id)
 {
-	ReqQryFund *pCopy = (ReqQryFund*)req.clone();
+	std::shared_ptr<ReqQryFund> pCopy = 
+		std::shared_ptr<ReqQryFund>((ReqQryFund*)req.clone());
 	uplink(*pCopy, id);
 }
 
 void FtdRouter::OnPackage(const ReqQryPosition& req, const SessionID& id)
 {
-	ReqQryPosition *pCopy = (ReqQryPosition*)req.clone();
+	std::shared_ptr<ReqQryPosition> pCopy 
+		= std::shared_ptr<ReqQryPosition>((ReqQryPosition*)req.clone());
 	uplink(*pCopy, id);
 }
 
 void FtdRouter::OnPackage(const ReqQryOrder& req, const SessionID& id)
 {
-	ReqQryOrder *pCopy = (ReqQryOrder*)req.clone();
+	std::shared_ptr<ReqQryOrder> pCopy 
+		= std::shared_ptr<ReqQryOrder>((ReqQryOrder*)req.clone());
 	uplink(*pCopy, id);
 }
 
 void FtdRouter::OnPackage(const ReqQryTrade& req, const SessionID& id)
 {
-	ReqQryTrade *pCopy = (ReqQryTrade*)req.clone();
+	std::shared_ptr<ReqQryTrade> pCopy = 
+		std::shared_ptr<ReqQryTrade>((ReqQryTrade*)req.clone());
 	uplink(*pCopy, id);
 }
 
