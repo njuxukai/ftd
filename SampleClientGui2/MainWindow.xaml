@@ -48,7 +48,7 @@
                 <DataGridTextColumn Header="交易方向" Binding="{Binding Direction}" Width="*"/>
                 <DataGridTextColumn Header="成交数量" Binding="{Binding VolumeTrade}" Width="*"/>
                 <DataGridTextColumn Header="成交价格" Binding="{Binding PriceTrade}" Width="*"/>
-                <DataGridTextColumn Header="委托系统编号" Binding="{Binding ORDER_STATUS}" Width="*"/>
+                <DataGridTextColumn Header="委托系统编号" Binding="{Binding OrderSysID}" Width="*"/>
                 <DataGridTextColumn Header="系统编号" Binding="{Binding TradeSysID}" Width="*"/>
                 <DataGridTextColumn Header="交易所编号" Binding="{Binding TradeExchangeID}" Width="*"/>
             </DataGrid.Columns>

@@ -200,8 +200,11 @@ namespace SampleClientGui2
                 SetTradeButtonsOff();
             }
         }
-        private void OnUserLogin(object sender, EventArgs e)
+        private void OnUserLogin(object sender, Xcp.RspUserLoginEventArgs e)
         {
+            FrontID = e.RspUserLoginField.FrontID;
+            SessionID = e.RspUserLoginField.SessionID;
+            NextOrderRef = e.RspUserLoginField.MaxOrderRef;
             if (!Dispatcher.CheckAccess())
             {
                 Dispatcher.BeginInvoke(new EvenBusDelegate(SetTradeButtonsOn));
@@ -374,9 +377,10 @@ namespace SampleClientGui2
         public int UserID { get; set; }
         public int InvestorID { get; set; }
         public string Password { get; set; }
-
         public int NextRequestID { get; set; }
-
+        public int FrontID { get; set; }
+        public int SessionID { get; set; }
+        public int NextOrderRef { get; set; }
         public string FrontAddress { get; set; }
 
         public string FrontAddress2 { get; set; }

@@ -48,6 +48,15 @@ namespace SampleClientGui2
             field_ = field;
         }
 
+        public string InstrumentCode { get { return field_.InstrumentCode; } }
+        public Xcp.Enums.Direction Direction { get { return (Xcp.Enums.Direction)field_.Direction; } }
+        public int VolumeTrade { get { return field_.VolumeTrade; } }
+        public double PriceTrade { get { return field_.PriceTrade; } }
+        public int OrderSysID { get { return field_.OrderSysID; } }
+        public int TradeSysID { get { return field_.TradeSysID; } }
+        public int TradeExchangeID { get { return field_.TradeExchangeID; } }
+
+
         Xcp.TradeField field_;
     }
 }

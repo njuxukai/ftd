@@ -16,5 +16,20 @@ void processQryTrade(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapp
 	pRsp->m_sequenceNO = pReq->m_sequenceNO;
 
 	ReqQryTrade *pReqQryTrade = (ReqQryTrade*)pReq.get();
+	pRsp->requestSourceField.RequestID = pReqQryTrade->qryTradeField.RequestID;
+
+	for (int i = 0; i < 10; i++)
+	{
+		CFtdcTradeField trade = { 0 };
+		sprintf(trade.InstrumentCode, "%d", 600000 + i);
+		trade.Direction = FTDC_D_BUY;
+		trade.VolumeTrade = 100;
+		trade.PriceTrade = 1.2;
+		trade.OrderSysID = i * 10 + 1;
+		trade.TradeSysID = (i+1) * 100;
+		trade.TradeExchangeID = i * 100 + 99;
+		pRsp->tradeFields.push_back(trade);
+	}
+
 	pWrapper->uplink(rspHeaders, pRsp);
 }

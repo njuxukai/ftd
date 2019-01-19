@@ -124,13 +124,19 @@ namespace SampleClientGui2
             {
                 line = String.Format("登录失败[{0}][{1}]", e.ErrorField.Value.ErrorCode,
                     e.ErrorField.Value.ErrorText);
+                RaiseUILogAddNewLine(line);
             }
             else
             {
-                line = String.Format("登录成功,心跳间隔设置为{0}秒", e.RspUserLoginField.HeartbeatInterval);
-                RaiseUserLogin();
+                line = String.Format("登录成功,FrontID={0},SessionID={1},MaxOrderRef={2},HeartBeat={3}",
+                    e.RspUserLoginField.FrontID,
+                    e.RspUserLoginField.SessionID,
+                    e.RspUserLoginField.MaxOrderRef,
+                    e.RspUserLoginField.HeartbeatInterval);
+                RaiseUILogAddNewLine(line);
+                RaiseUserLogin(e);
             }
-            RaiseUILogAddNewLine(line);
+            
         }
 
         private void OnRspUserLogout(object sender, Xcp.RspUserLogoutEventArgs e)
@@ -291,9 +297,9 @@ namespace SampleClientGui2
             Volatile.Read(ref onUILogAddNewLine)?.Invoke(this, args);
         }
 
-        private void RaiseUserLogin()
+        private void RaiseUserLogin(Xcp.RspUserLoginEventArgs e)
         {
-            Volatile.Read(ref onUserLogin)?.Invoke(this, EventArgs.Empty);
+            Volatile.Read(ref onUserLogin)?.Invoke(this, e);
         }
 
         private void RaiseUserLogout()
@@ -342,7 +348,7 @@ namespace SampleClientGui2
         private int receiveTradeRequestID = 0;
 
         #region 
-        public event EventHandler<EventArgs> onUserLogin;
+        public event EventHandler<Xcp.RspUserLoginEventArgs> onUserLogin;
         public event EventHandler<EventArgs> onUserLogout;
         public event EventHandler<UILogEventArgs> onUILogAddNewLine;
         public event EventHandler<FundUpdateEventArgs> onFundUpdate;
