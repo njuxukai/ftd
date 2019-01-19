@@ -71,7 +71,10 @@ namespace SampleClientGui2
                 qry.UserID = UserID;
                 qry.InvestorID = InvestorID;
                 qry.RequestID = NextRequestID;
-                trader.ReqQryOrder(qry, NextRequestID++); 
+                int returnValue = trader.ReqQryOrder(qry, NextRequestID);
+                DoShowLog(String.Format("ReqQryOrder.[ReqID={0}][Rtn={1}]",
+                    NextRequestID, returnValue));
+                NextRequestID++;
             }
         }
 
@@ -84,7 +87,10 @@ namespace SampleClientGui2
                 qry.UserID = UserID;
                 qry.InvestorID = InvestorID;
                 qry.RequestID = NextRequestID;
-                trader.ReqQryPosition(qry, NextRequestID++);
+                int returnValue = trader.ReqQryPosition(qry, NextRequestID);
+                DoShowLog(String.Format("ReqQryPosition.[ReqID={0}][Rtn={1}]", 
+                    NextRequestID, returnValue));
+                NextRequestID++;
             }
         }
 
@@ -113,7 +119,9 @@ namespace SampleClientGui2
                 qry.UserID = UserID;
                 qry.InvestorID = InvestorID;
                 qry.RequestID = NextRequestID;
-                trader.ReqQryTrade(qry, NextRequestID++);
+                int returnValue = trader.ReqQryTrade(qry, NextRequestID);
+                DoShowLog(String.Format("ReqQryTrade.[ReqID={0}][Rtn={1}]", NextRequestID, returnValue));
+                NextRequestID++;
             }
         }
 
@@ -122,7 +130,41 @@ namespace SampleClientGui2
 
         }
 
-        #region log 
+        #region Trade Operation
+        private void CreateTrader()
+        {
+            if (trader != null)
+                eventBus.Disconnect(trader);
+            trader = new Trader();
+            eventBus.Connect(trader);
+            trader.onFrontConnected += OnFrontConnected;
+            trader.RegisterFront(FrontAddress);
+            trader.RegisterFront(FrontAddress2);
+            trader.SubscribePrivateTopic(THOST_TE_RESUME_TYPE.THOST_TERT_RESTART);
+            trader.SubscribePublicTopic(THOST_TE_RESUME_TYPE.THOST_TERT_RESTART);
+        }
+
+        public void ConnetTrader()
+        {
+
+            trader.Init();
+        }
+
+        public void DisconnectTrader()
+        {
+            if (trader != null)
+                trader.Release();
+            trader = null;
+        }
+        #endregion
+
+        #region eventBus callback
+
+        public delegate void EvenBusDelegate();
+        public delegate void ShowFundDelegate(FundField fund);
+        public delegate void ShowPositionsDelegate(List<PositionField> positions, int requestID);
+        public delegate void ShowOrdersDelegate(List<OrderField> orders, int requestID);
+        public delegate void ShowTradesDelegate(List<TradeField> trades,int requestID);
         private delegate void ShowLogDelegate(String content);
         public void OnLog(object sender, UILogEventArgs e)
         {
@@ -135,6 +177,153 @@ namespace SampleClientGui2
                 DoShowLog(e.Line);
             }
         }
+
+        private void OnFrontConnected(object sender, EventArgs e)
+        {
+            NextRequestID = 1;
+            ReqUserLoginField field = new ReqUserLoginField();
+            field.BrokerID = BrokerID;
+            field.UserID = UserID;
+            field.Password = Password;
+            if (trader != null)
+                trader.ReqUserLogin(field, NextRequestID);
+        }
+
+        private void OnUserLogout(object sender, EventArgs e)
+        {
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.BeginInvoke(new EvenBusDelegate(SetTradeButtonsOff));
+            }
+            else
+            {
+                SetTradeButtonsOff();
+            }
+        }
+        private void OnUserLogin(object sender, EventArgs e)
+        {
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.BeginInvoke(new EvenBusDelegate(SetTradeButtonsOn));
+            }
+            else
+            {
+                SetTradeButtonsOn();
+            }
+        }
+
+        private void OnFundUpdate(object sender, FundUpdateEventArgs e)
+        {
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.BeginInvoke(new ShowFundDelegate(DoShowFund), new object[] { e.Fund });
+            }
+            else
+            {
+                DoShowFund(e.Fund);
+            }
+        }
+        public void OnPositionUpdate(object sender, PositionUpdateEventArgs e)
+        {
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.BeginInvoke(new ShowPositionsDelegate(DoShowPositions), 
+                    new object[] { e.Positions, e.RequestID });
+            }
+            else
+            {
+                DoShowPositions(e.Positions, e.RequestID);
+            }
+        }
+
+        public void OnOrderUpdate(object sender, OrderUpdateEventArgs e)
+        {
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.BeginInvoke(new ShowOrdersDelegate(DoShowOrders),
+                    new object[] { e.Orders, e.RequestID });
+            }
+            else
+            {
+                DoShowOrders(e.Orders, e.RequestID);
+            }
+        }
+
+        public void OnTradeUpdate(object sender, TradeUpdateEventArgs e)
+        {
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.BeginInvoke(new ShowTradesDelegate(DoShowTrades),
+                    new object[] { e.Trades, e.RequestID });
+            }
+            else
+            {
+                DoShowTrades(e.Trades, e.RequestID);
+            }
+        }
+
+        private void SetTradeButtonsOn()
+        {
+            button_qryFund.IsEnabled = true;
+            button_qryPosition.IsEnabled = true;
+            button_qryOrder.IsEnabled = true;
+            button_qryTrade.IsEnabled = true;
+            button_reqOrderInsert.IsEnabled = true;
+        }
+
+        private void SetTradeButtonsOff()
+        {
+            button_qryFund.IsEnabled = false;
+            button_qryPosition.IsEnabled = false;
+            button_qryOrder.IsEnabled = false;
+            button_qryTrade.IsEnabled = false;
+            button_reqOrderInsert.IsEnabled = false;
+        }
+
+        private void DoShowFund(FundField fund)
+        {
+            labelAvailable.Content = fund.AmountAvailable.ToString("N2");
+            labelDrawable.Content = fund.AmountDrawable.ToString("N2");
+            labelFrozen.Content = fund.AmountFrozen.ToString("N2");
+            labelPre.Content = fund.AmountPre.ToString("N2");
+        }
+
+        public void DoShowPositions(List<PositionField> positions, int requestID)
+        {
+            List<Position> showPositions = new List<Position>();
+            foreach (PositionField f in positions)
+            {
+                showPositions.Add(new Position(f));
+            }
+            positionDataGrid.DataContext = showPositions;
+            DoShowLog(String.Format("OnRspQryPositon.[ReqID={0}][Count={1}]", 
+                requestID, positions.Count));
+        }
+
+        public void DoShowOrders(List<OrderField> orders, int requestID)
+        {
+            List<Order> showOrders = new List<Order>();
+            foreach (OrderField f in orders)
+            {
+                showOrders.Add(new Order(f));
+            }
+            orderDataGrid.DataContext = showOrders;
+            DoShowLog(String.Format("OnRspQryOrder.[ReqID={0}][Count={1}]",
+                requestID, orders.Count));
+        }
+
+        public void DoShowTrades(List<TradeField> trades, int requestID)
+        {
+            List<Trade> showTrades = new List<Trade>();
+            foreach (TradeField f in trades)
+            {
+                showTrades.Add(new Trade(f));
+            }
+            tradeDataGrid.DataContext = showTrades;
+            DoShowLog(String.Format("OnRspQryTrade.[ReqID={0}][Count={1}]",
+                requestID, trades.Count));
+        }
+
 
         private void DoShowLog(String content)
         {
@@ -170,116 +359,15 @@ namespace SampleClientGui2
                 return atBottom;
             }
         }
-        #endregion
 
-        #region order callback
-        private void CreateTrader()
-        {
-            if (trader != null)
-                eventBus.Disconnect(trader);
-            trader = new Trader();
-            eventBus.Connect(trader);
-            trader.onFrontConnected += OnFrontConnected;
-            trader.RegisterFront(FrontAddress);
-            trader.RegisterFront(FrontAddress2);
-            trader.SubscribePrivateTopic(THOST_TE_RESUME_TYPE.THOST_TERT_RESTART);
-            trader.SubscribePublicTopic(THOST_TE_RESUME_TYPE.THOST_TERT_RESTART);
-        }
-
-        private void OnFrontConnected(object sender, EventArgs e)
-        {
-            NextRequestID = 1;
-            ReqUserLoginField field = new ReqUserLoginField();
-            field.BrokerID = BrokerID;
-            field.UserID = UserID;
-            field.Password = Password;
-            if (trader != null)
-                trader.ReqUserLogin(field, NextRequestID);
-        }
-
-        
-
-        private void SetTradeButtonsOn()
-        {
-            button_qryFund.IsEnabled = true;
-            button_qryPosition.IsEnabled = true;
-            button_qryOrder.IsEnabled = true;
-            button_qryTrade.IsEnabled = true;
-            button_reqOrderInsert.IsEnabled = true;
-        }
-
-        private void SetTradeButtonsOff()
-        {
-            button_qryFund.IsEnabled = false;
-            button_qryPosition.IsEnabled = false;
-            button_qryOrder.IsEnabled = false;
-            button_qryTrade.IsEnabled = false;
-            button_reqOrderInsert.IsEnabled = false;
-        }
-
-        public delegate void EvenBusDelegate();
-        private void OnUserLogout(object sender, EventArgs e)
-        {
-            if (!Dispatcher.CheckAccess())
-            {
-                Dispatcher.BeginInvoke(new EvenBusDelegate(SetTradeButtonsOff));
-            }
-            else
-            {
-                SetTradeButtonsOff();
-            }
-        }
-
-        
-        private void OnUserLogin(object sender, EventArgs e)
-        {
-            if (!Dispatcher.CheckAccess())
-            {
-                Dispatcher.BeginInvoke(new EvenBusDelegate(SetTradeButtonsOn));
-            }
-            else
-            {
-                SetTradeButtonsOn();
-            }
-        }
-
-        private void DoShowFund(FundField fund)
-        {
-            labelAvailable.Content = fund.AmountAvailable.ToString("N2");
-            labelDrawable.Content = fund.AmountDrawable.ToString("N2");
-            labelFrozen.Content = fund.AmountFrozen.ToString("N2");
-            labelPre.Content = fund.AmountPre.ToString("N2");
-        }
-
-        public delegate void ShowFundDelegate(FundField fund);
-        private void OnFundUpdate(object sender, FundUpdateEventArgs e)
-        {
-            if (!Dispatcher.CheckAccess())
-            {
-                Dispatcher.BeginInvoke(new ShowFundDelegate(DoShowFund), new object[] { e.Fund });
-            }
-            else
-            {
-                DoShowFund(e.Fund);
-            }
-        }
 
 
         #endregion
 
         #region data
 
-        
-        public void ConnetTrader()
-        {
-            
-            trader.Init();
-        }
 
-        public void DisconnectTrader()
-        {
-            trader = null;
-        }
+        
 
         
         public int BrokerID { get; set; }
@@ -315,8 +403,11 @@ namespace SampleClientGui2
             eventBus.onUserLogin += OnUserLogin;
             eventBus.onUserLogout += OnUserLogout;
             eventBus.onFundUpdate += OnFundUpdate;
-
+            eventBus.onPositionUpdate += OnPositionUpdate;
+            eventBus.onOrderUpdate += OnOrderUpdate;
+            eventBus.onTradeUpdate += OnTradeUpdate;
             SetTradeButtonsOff();
         }
+
     }
 }

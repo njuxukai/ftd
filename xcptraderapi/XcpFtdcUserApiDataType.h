@@ -63,10 +63,10 @@ typedef char TXcpFtdcDateTimeType[20 + 1];
 ///TXcpFtdcDirectionType  
 ////////////////////////////////////////////////////////////////////////////////
 ///买
-#define XCP_FTDC_D_0 '0'
+#define XCP_FTDC_D_BUY 'b'
 
 ///卖
-#define XCP_FTDC_D_1 '1'
+#define XCP_FTDC_D_SELL 's'
 
 typedef char TXcpFtdcDirectionType;
 
@@ -88,17 +88,6 @@ typedef int TXcpFtdcErrorCodeType;
 #define XCP_FTDC_ETFCCST_EnableSub '2'
 
 typedef char TXcpFtdcETFCompositionCashSubsituteTypeType;
-
-////////////////////////////////////////////////////////////////////////////////
-///TXcpFtdcExchangeCodeType  
-////////////////////////////////////////////////////////////////////////////////
-///上海证券交易所
-#define XCP_FTDC_EC_SH "XSHG"
-
-///深圳证券交易所
-#define XCP_FTDC_EC_SZ "XSHE"
-
-typedef char TXcpFtdcExchangeCodeType[10 + 1];
 
 ////////////////////////////////////////////////////////////////////////////////
 ///TXcpFtdcExchangeTypeType  
@@ -244,23 +233,23 @@ typedef char TXcpFtdcMatchSessionType;
 ////////////////////////////////////////////////////////////////////////////////
 ///TXcpFtdcOrderStatusType  
 ////////////////////////////////////////////////////////////////////////////////
+///系统已创建
+#define XCP_FTDC_OS_CREATED '0'
+
+///交易所已创建
+#define XCP_FTDC_OS_QUEUEED '1'
+
 ///全部成交
-#define XCP_FTDC_OS_0 '0'
+#define XCP_FTDC_OS_ALL_TRADED '2'
 
 ///部分成交还在队列中
-#define XCP_FTDC_OS_1 '1'
+#define XCP_FTDC_OS_PART_TRADED '3'
 
 ///部分成交不在队列中
-#define XCP_FTDC_OS_2 '2'
-
-///未成交还在队列中
-#define XCP_FTDC_OS_3 '3'
+#define XCP_FTDC_OS_PART_CANCELLED '4'
 
 ///未成交不在队列中
-#define XCP_FTDC_OS_4 '4'
-
-///撤单
-#define XCP_FTDC_OS_5 '5'
+#define XCP_FTDC_OS_ALL_CANCELLED '5'
 
 typedef char TXcpFtdcOrderStatusType;
 

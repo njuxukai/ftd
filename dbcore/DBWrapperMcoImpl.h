@@ -54,9 +54,7 @@ private:
 	void initDB();
 	void initThreads();
 
-#ifdef _DEBUG
 	void populateDB();
-#endif
 
 private:
 	mco_device_t       dev[N_DEVICES];

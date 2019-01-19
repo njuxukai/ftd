@@ -63,11 +63,11 @@ public:
 			field.InvestorID = m_parameter.loginField.UserID;
 			//session_info
 			strcpy(field.InstrumentCode , "600000");
-			strcpy(field.ExchangeCode, XCP_FTDC_EC_SH);
+			field.ExchangeType = XCP_FTDC_ET_SH;
 			field.VolumeTotalOrginal = 1000;
 			field.PriceType = XCP_FTDC_OPT_HS_Limit;
 			field.LimitPrice = 10;
-			field.Direction = XCP_FTDC_D_0;
+			field.Direction = XCP_FTDC_D_BUY;
 			//order_ref request_id
 			field.OrderRef = m_sessionContext.max_order_ref++;
 			field.RequestID = ++m_sessionContext.next_req_id;

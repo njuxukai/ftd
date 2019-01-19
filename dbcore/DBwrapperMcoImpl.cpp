@@ -23,11 +23,10 @@ DBWrapperMcoImpl::DBWrapperMcoImpl(): m_done(false), m_joiner(new JoinThreads(m_
 {
 	initDB();
 	
-#ifdef _DEBUG
 	std::cout << "[DEBUG]Populate DB started.\n";
 	populateDB();
 	std::cout << "[DEBUG]Populate DB finished.\n";
-#endif
+
 
 	initThreads();
 }
@@ -100,7 +99,6 @@ void DBWrapperMcoImpl::initDB()
 	}
 }
 
-#ifdef _DEBUG
 
 void DBWrapperMcoImpl::populateDB()
 {
@@ -115,7 +113,6 @@ void DBWrapperMcoImpl::populateDB()
 	populate2_db(db);
 }
 
-#endif
 
 void DBWrapperMcoImpl::initThreads()
 {

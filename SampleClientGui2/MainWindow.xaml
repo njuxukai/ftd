@@ -19,38 +19,38 @@
             <RowDefinition Height="2*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <DataGrid x:Name="positionDataGrid" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding}" AutoGenerateColumns="false" CanUserAddRows="False" SelectionChanged="positionDataGrid_SelectionChanged" >
+        <DataGrid x:Name="positionDataGrid" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding}" IsReadOnly="True" AutoGenerateColumns="false" CanUserAddRows="False" SelectionChanged="positionDataGrid_SelectionChanged" >
             <DataGrid.Columns>
-                <DataGridTextColumn Header="代码" Binding="{Binding SECU_CODE}" Width="*"/>
-                <DataGridTextColumn Header="名称" Binding="{Binding ORDER_TYPE}" Width="*"/>
-                <DataGridTextColumn Header="库存数量" Binding="{Binding ORDER_QTY}" Width="*"/>
-                <DataGridTextColumn Header="可卖数量" Binding="{Binding ORDER_PRICE}" Width="*"/>
-                <DataGridTextColumn Header="冻结数量" Binding="{Binding KNOCK_QTY}" Width="*"/>
-                <DataGridTextColumn Header="开盘数量" Binding="{Binding KNOCK_PRICE}" Width="*"/>
+                <DataGridTextColumn Header="代码" Binding="{Binding InstrumentCode}" Width="*"/>
+                <DataGridTextColumn Header="名称" Binding="{Binding InstrumentName}" Width="*"/>
+                <DataGridTextColumn Header="库存数量" Binding="{Binding Volume}" Width="*"/>
+                <DataGridTextColumn Header="可卖数量" Binding="{Binding VolumeAvailable}" Width="*"/>
+                <DataGridTextColumn Header="冻结数量" Binding="{Binding VolumeFrozen}" Width="*"/>
+                <DataGridTextColumn Header="开盘数量" Binding="{Binding VolumePre}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
-        <DataGrid x:Name="orderDataGrid" Grid.Row="2" Grid.Column="0" ItemsSource="{Binding}" AutoGenerateColumns="false" CanUserAddRows="False" >
+        <DataGrid x:Name="orderDataGrid" Grid.Row="2" Grid.Column="0" ItemsSource="{Binding}" IsReadOnly="True" AutoGenerateColumns="false" CanUserAddRows="False" >
             <DataGrid.Columns>
-                <DataGridTextColumn Header="代码" Binding="{Binding SECU_CODE}" Width="*"/>
-                <DataGridTextColumn Header="交易方向" Binding="{Binding ORDER_TYPE}" Width="*"/>
-                <DataGridTextColumn Header="委托数量" Binding="{Binding ORDER_QTY}" Width="*"/>
-                <DataGridTextColumn Header="委托价格" Binding="{Binding ORDER_PRICE}" Width="*"/>
-                <DataGridTextColumn Header="成交数量" Binding="{Binding KNOCK_QTY}" Width="*"/>
-                <DataGridTextColumn Header="成交价格" Binding="{Binding KNOCK_PRICE}" Width="*"/>
-                <DataGridTextColumn Header="委托状态" Binding="{Binding ORDER_STATUS}" Width="*"/>
-                <DataGridTextColumn Header="系统编号" Binding="{Binding ORDER_STATUS}" Width="*"/>
-                <DataGridTextColumn Header="交易所编号" Binding="{Binding ORDER_STATUS}" Width="*"/>
+                <DataGridTextColumn Header="代码" Binding="{Binding InstrumentCode}" Width="*"/>
+                <DataGridTextColumn Header="交易方向" Binding="{Binding Direction}" Width="*"/>
+                <DataGridTextColumn Header="委托数量" Binding="{Binding VolumeTotalOriginal}" Width="*"/>
+                <DataGridTextColumn Header="委托价格" Binding="{Binding LimitPrice}" Width="*"/>
+                <DataGridTextColumn Header="成交数量" Binding="{Binding VolumeTraded}" Width="*"/>
+                <DataGridTextColumn Header="成交金额" Binding="{Binding AmountTraded}" Width="*"/>
+                <DataGridTextColumn Header="委托状态" Binding="{Binding OrderStatus}" Width="*"/>
+                <DataGridTextColumn Header="系统编号" Binding="{Binding OrderSysID}" Width="*"/>
+                <DataGridTextColumn Header="交易所编号" Binding="{Binding OrderExchangeID}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
-        <DataGrid x:Name="tradeDataGrid" Grid.Row="3" Grid.Column="0" ItemsSource="{Binding}" AutoGenerateColumns="false" CanUserAddRows="False" >
+        <DataGrid x:Name="tradeDataGrid" Grid.Row="3" Grid.Column="0" ItemsSource="{Binding}" IsReadOnly="True" AutoGenerateColumns="false" CanUserAddRows="False" >
             <DataGrid.Columns>
-                <DataGridTextColumn Header="代码" Binding="{Binding SECU_CODE}" Width="*"/>
-                <DataGridTextColumn Header="交易方向" Binding="{Binding ORDER_TYPE}" Width="*"/>
-                <DataGridTextColumn Header="成交数量" Binding="{Binding KNOCK_QTY}" Width="*"/>
-                <DataGridTextColumn Header="成交价格" Binding="{Binding KNOCK_PRICE}" Width="*"/>
+                <DataGridTextColumn Header="代码" Binding="{Binding InstrumentCode}" Width="*"/>
+                <DataGridTextColumn Header="交易方向" Binding="{Binding Direction}" Width="*"/>
+                <DataGridTextColumn Header="成交数量" Binding="{Binding VolumeTrade}" Width="*"/>
+                <DataGridTextColumn Header="成交价格" Binding="{Binding PriceTrade}" Width="*"/>
                 <DataGridTextColumn Header="委托系统编号" Binding="{Binding ORDER_STATUS}" Width="*"/>
-                <DataGridTextColumn Header="系统编号" Binding="{Binding ORDER_STATUS}" Width="*"/>
-                <DataGridTextColumn Header="交易所编号" Binding="{Binding ORDER_STATUS}" Width="*"/>
+                <DataGridTextColumn Header="系统编号" Binding="{Binding TradeSysID}" Width="*"/>
+                <DataGridTextColumn Header="交易所编号" Binding="{Binding TradeExchangeID}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
 

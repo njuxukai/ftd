@@ -21,7 +21,7 @@ void populate_db_users(mco_db_h db)
 	mco_trans_h t = 0;
 	MCO_RET rc = MCO_S_OK;
 	int  j;
-	for (j = 0; j < 100 && MCO_S_OK == rc; j++)
+	for (j = 90; j < 100 && MCO_S_OK == rc; j++)
 	{
 		User user;
 		rc = mco_trans_start(db, MCO_READ_WRITE, MCO_TRANS_FOREGROUND, &t);
@@ -37,7 +37,7 @@ void populate_db_users(mco_db_h db)
 			rc = mco_trans_commit(t);
 			if (MCO_S_OK == rc)
 			{
-				printf("[%d]Insert Success\n", j);
+				printf("User[%d]Insert Success\n", j);
 			}
 			else
 			{
@@ -68,7 +68,7 @@ void populate_db_fund(mco_db_h db)
 			fund.amount_drawable = 10000000;
 			fund.amount_available = 10000000;
 			fund.amount_frozen = 0;
-			//printf("[%d]To Insert[%d]\n", j, (uint4)user.user_id);
+			printf("Fund[%d]To Insert[%d]\n", j, (uint4)fund.investor_id);
 			rc = mco_trans_commit(t);
 			if (MCO_S_OK == rc)
 			{

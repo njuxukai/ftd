@@ -33,35 +33,44 @@ namespace SampleClientGui2
 
     public class PositionUpdateEventArgs : EventArgs
     {
-        public PositionUpdateEventArgs(List<Xcp.PositionField> positions)
+        public PositionUpdateEventArgs(List<Xcp.PositionField> positions, int requestID)
         {
             m_positions = positions;
+            m_requestID = requestID;
         }
 
-        public List<Xcp.PositionField> Fund { get { return m_positions; } }
+        public List<Xcp.PositionField> Positions { get { return m_positions; } }
+        public int RequestID { get { return m_requestID; } }
         List<Xcp.PositionField> m_positions;
+        int m_requestID;
     }
 
     public class OrderUpdateEventArgs : EventArgs
     {
-        public OrderUpdateEventArgs(List<Xcp.OrderField> orders)
+        public OrderUpdateEventArgs(List<Xcp.OrderField> orders, int requestID)
         {
             m_orders = orders;
+            m_requestID = requestID;
         }
 
-        public List<Xcp.OrderField> Fund { get { return m_orders; } }
+        public List<Xcp.OrderField> Orders { get { return m_orders; } }
+        public int RequestID { get { return m_requestID; } }
         List<Xcp.OrderField> m_orders;
+        int m_requestID;
     }
 
     public class TradeUpdateEventArgs : EventArgs
     {
-        public TradeUpdateEventArgs(List<Xcp.TradeField> trades)
+        public TradeUpdateEventArgs(List<Xcp.TradeField> trades, int requestID)
         {
             m_trades = trades;
+            m_requestID = requestID;
         }
 
-        public List<Xcp.TradeField> Fund { get { return m_trades; } }
+        public List<Xcp.TradeField> Trades { get { return m_trades; } }
+        public int RequestID { get { return m_requestID; } }
         List<Xcp.TradeField> m_trades;
+        int m_requestID;
     }
 
     public class TraderEventBus
@@ -84,7 +93,9 @@ namespace SampleClientGui2
         public void Disconnect(Xcp.Trader trader)
         {
             trader.onFrontConnected -= OnFrontConnected;
+            trader.onFrontDisconnected -= OnFrontDisconnected;
             trader.onRspUserLogin -= OnRspUserLogin;
+            trader.onHeartBeat -= OnHeartBeat;
             trader.onRspQryFund -= OnRspQryFund;
             trader.onRspQryPosition -= OnRspQryPosition;
             trader.onRspQryTrade -= OnRspQryTrade;
@@ -133,12 +144,12 @@ namespace SampleClientGui2
             if (e.ErrorField.HasValue && e.ErrorField.Value.ErrorCode != 0)
             {
                 RaiseUILogAddNewLine(String.Format("OnRspQryFund Error[{0}][{1}].", e.ErrorField.Value.ErrorCode, e.ErrorField.Value.ErrorText));
+                return;
             }
-            else
-            {
-                string line = String.Format("OnRspQryFund[ReqID={0}] Succeed.", e.RequestID);
-                RaiseUILogAddNewLine(line);
-            }
+
+            string line = String.Format("OnRspQryFund.[ReqID={0}] Succeed.", e.RequestID);
+            RaiseUILogAddNewLine(line);
+
             if (e.FundField.HasValue && 
                 e.FundField.Value.CurrencyType == (char)Xcp.Enums.CurrencyType.RMB)
             {
@@ -149,10 +160,17 @@ namespace SampleClientGui2
 
         private void OnRspQryPosition(object sender, Xcp.RspQryPositionEventArgs eventArgs)
         {
-            RaiseUILogAddNewLine("OnRspQryPosition");
+            if (eventArgs.ErrorField.HasValue && eventArgs.ErrorField.Value.ErrorCode != 0)
+            {
+                RaiseUILogAddNewLine(String.Format("OnRspQryFund Error.[{0}][{1}].", 
+                    eventArgs.ErrorField.Value.ErrorCode, eventArgs.ErrorField.Value.ErrorText));
+                return;
+            }
+
             if (eventArgs.RequestID != receivePositionRequestID)
             {
                 receivePositionBuffer.Clear();
+                receivePositionRequestID = eventArgs.RequestID;
             }
             if (eventArgs.PositionField.HasValue)
                 receivePositionBuffer.Add(eventArgs.PositionField.Value);
@@ -169,10 +187,16 @@ namespace SampleClientGui2
 
         private void OnRspQryTrade(object sender, Xcp.RspQryTradeEventArgs eventArgs)
         {
-            RaiseUILogAddNewLine("OnRspQryTrade");
+            if (eventArgs.ErrorField.HasValue && eventArgs.ErrorField.Value.ErrorCode != 0)
+            {
+                RaiseUILogAddNewLine(String.Format("OnRspQryTrade Error.[{0}][{1}].",
+                    eventArgs.ErrorField.Value.ErrorCode, eventArgs.ErrorField.Value.ErrorText));
+                return;
+            }
             if (eventArgs.RequestID != receiveTradeRequestID)
             {
                 receiveTradeBuffer.Clear();
+                receiveTradeRequestID = eventArgs.RequestID;
             }
             if (eventArgs.TradeField.HasValue)
                 receiveTradeBuffer.Add(eventArgs.TradeField.Value);
@@ -189,10 +213,16 @@ namespace SampleClientGui2
 
         private void OnRspQryOrder(object sender, Xcp.RspQryOrderEventArgs eventArgs)
         {
-            RaiseUILogAddNewLine("OnRspQryOrder");
+            if (eventArgs.ErrorField.HasValue && eventArgs.ErrorField.Value.ErrorCode != 0)
+            {
+                RaiseUILogAddNewLine(String.Format("OnRspQryOrder Error.[{0}][{1}].",
+                    eventArgs.ErrorField.Value.ErrorCode, eventArgs.ErrorField.Value.ErrorText));
+                return;
+            }
             if (eventArgs.RequestID != receiveOrderRequestID)
             {
                 receiveOrderBuffer.Clear();
+                receiveOrderRequestID = eventArgs.RequestID;
             }
             if (eventArgs.OrderField.HasValue)
             {
@@ -241,7 +271,7 @@ namespace SampleClientGui2
             if (isAll)
             {
                 order.InstrumentCode = report.InstrumentCode;
-                order.ExchangeCode = report.ExchangeCode;
+                order.ExchangeType = report.ExchangeType;
                 order.FrontID = report.FrontID;
                 order.SessionID = report.SessionID;
                 order.OrderRef = report.OrderRef;
@@ -279,19 +309,20 @@ namespace SampleClientGui2
 
         private void RaisePositionUpdate()
         {
-            PositionUpdateEventArgs args = new PositionUpdateEventArgs(currentPositions);
+            PositionUpdateEventArgs args = new PositionUpdateEventArgs(currentPositions, receivePositionRequestID);
             Volatile.Read(ref onPositionUpdate)?.Invoke(this, args);
         }
 
         private void RaiseOrderUpdate()
         {
-            OrderUpdateEventArgs eventArgs = new OrderUpdateEventArgs(currentOrderDict.Values.ToList());
+            OrderUpdateEventArgs eventArgs = new OrderUpdateEventArgs(currentOrderDict.Values.ToList(),
+                receiveOrderRequestID);
             Volatile.Read(ref onOrderUpdate)?.Invoke(this, eventArgs);
         }
 
         private void RaiseTradeUpdate()
         {
-            TradeUpdateEventArgs args = new TradeUpdateEventArgs(currentTrades);
+            TradeUpdateEventArgs args = new TradeUpdateEventArgs(currentTrades, receiveTradeRequestID);
             Volatile.Read(ref onTradeUpdate)?.Invoke(this, args);
         }
         #endregion

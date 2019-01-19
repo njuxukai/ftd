@@ -78,3 +78,9 @@ ipch/*
 /SampleClientGui/obj/Debug
 /XcpApiCSharp/ApiEnum.cs
 /SampleClientGui2/obj/Debug
+/dbcore/temp_21836_11
+/SampleClientGui2/bin/Release
+/SampleClientGui2/obj/Release
+/TestMarshal/obj/Release
+/XcpApiCSharp/obj/Release
+*.rar
