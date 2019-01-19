@@ -83,4 +83,3 @@ ipch/*
 *.rar
 /SampleClientGui/bin/Release
 /SampleClientGui/obj/Release
-/SampleClientGui/Properties
