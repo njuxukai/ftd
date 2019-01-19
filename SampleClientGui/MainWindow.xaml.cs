@@ -26,17 +26,18 @@ namespace SampleClientGui2
         public MainWindow()
         {
             InitializeComponent();
-
-           
-
-            //trader = new Trader();
-            //trader.Init();
         }
 
 
-        private void RegisterCallback()
+        private void RegisterWrapperEvent()
         {
-            eventBus.onUILogAddNewLine += OnLog;
+            Wrapper.onUILogAddNewLine += OnLog;
+            Wrapper.onUserLogin += OnUserLogin;
+            Wrapper.onUserLogout += OnUserLogout;
+            Wrapper.onFundUpdate += OnFundUpdate;
+            Wrapper.onPositionUpdate += OnPositionUpdate;
+            Wrapper.onOrderUpdate += OnOrderUpdate;
+            Wrapper.onTradeUpdate += OnTradeUpdate;
         }
 
         private void dataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -51,78 +52,32 @@ namespace SampleClientGui2
 
         private void button_login_Click(object sender, RoutedEventArgs e)
         {
-            CreateTrader();
-
-            ConnetTrader();
+            Wrapper.Connect();
         }
 
         private void button_reqOrderInsert_Click(object sender, RoutedEventArgs e)
         {
-            if (trader != null)
-            { }
+            
         }
 
         private void button_qryOrder_Click(object sender, RoutedEventArgs e)
         {
-            if (trader != null)
-            {
-                Xcp.QryOrderField qry = new QryOrderField();
-                qry.BrokerID = BrokerID;
-                qry.UserID = UserID;
-                qry.InvestorID = InvestorID;
-                qry.RequestID = NextRequestID;
-                int returnValue = trader.ReqQryOrder(qry, NextRequestID);
-                DoShowLog(String.Format("ReqQryOrder.[ReqID={0}][Rtn={1}]",
-                    NextRequestID, returnValue));
-                NextRequestID++;
-            }
+            Wrapper.ReqQryOrder();
         }
 
         private void button_qryPosition_Click(object sender, RoutedEventArgs e)
         {
-            if (trader != null)
-            {
-                Xcp.QryPositionField qry = new QryPositionField();
-                qry.BrokerID = BrokerID;
-                qry.UserID = UserID;
-                qry.InvestorID = InvestorID;
-                qry.RequestID = NextRequestID;
-                int returnValue = trader.ReqQryPosition(qry, NextRequestID);
-                DoShowLog(String.Format("ReqQryPosition.[ReqID={0}][Rtn={1}]", 
-                    NextRequestID, returnValue));
-                NextRequestID++;
-            }
+            Wrapper.ReqQryPosition();
         }
 
         private void button_qryFund_Click(object sender, RoutedEventArgs e)
         {
-            if (trader != null)
-            {
-                Xcp.QryFundField qry = new QryFundField();
-                qry.BrokerID = BrokerID;
-                qry.UserID = UserID;
-                qry.InvestorID = InvestorID;
-                qry.RequestID = NextRequestID;
-                qry.CurrencyType = (char)Xcp.Enums.CurrencyType.RMB;
-                int returnValue = trader.ReqQryFund(qry, NextRequestID);
-                DoShowLog(String.Format("ReqQryFund.[ReqID={0}][Rtn={1}]", NextRequestID, returnValue));
-                NextRequestID++;
-            }
+            Wrapper.ReqQryFund();
         }
 
         private void button_qryTrade_Click(object sender, RoutedEventArgs e)
         {
-            if (trader != null)
-            {
-                Xcp.QryTradeField qry = new QryTradeField();
-                qry.BrokerID = BrokerID;
-                qry.UserID = UserID;
-                qry.InvestorID = InvestorID;
-                qry.RequestID = NextRequestID;
-                int returnValue = trader.ReqQryTrade(qry, NextRequestID);
-                DoShowLog(String.Format("ReqQryTrade.[ReqID={0}][Rtn={1}]", NextRequestID, returnValue));
-                NextRequestID++;
-            }
+            Wrapper.ReqQryTrade();
         }
 
         private void positionDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -130,33 +85,7 @@ namespace SampleClientGui2
 
         }
 
-        #region Trade Operation
-        private void CreateTrader()
-        {
-            if (trader != null)
-                eventBus.Disconnect(trader);
-            trader = new Trader();
-            eventBus.Connect(trader);
-            trader.onFrontConnected += OnFrontConnected;
-            trader.RegisterFront(FrontAddress);
-            trader.RegisterFront(FrontAddress2);
-            trader.SubscribePrivateTopic(THOST_TE_RESUME_TYPE.THOST_TERT_RESTART);
-            trader.SubscribePublicTopic(THOST_TE_RESUME_TYPE.THOST_TERT_RESTART);
-        }
 
-        public void ConnetTrader()
-        {
-
-            trader.Init();
-        }
-
-        public void DisconnectTrader()
-        {
-            if (trader != null)
-                trader.Release();
-            trader = null;
-        }
-        #endregion
 
         #region eventBus callback
 
@@ -178,16 +107,7 @@ namespace SampleClientGui2
             }
         }
 
-        private void OnFrontConnected(object sender, EventArgs e)
-        {
-            NextRequestID = 1;
-            ReqUserLoginField field = new ReqUserLoginField();
-            field.BrokerID = BrokerID;
-            field.UserID = UserID;
-            field.Password = Password;
-            if (trader != null)
-                trader.ReqUserLogin(field, NextRequestID);
-        }
+
 
         private void OnUserLogout(object sender, EventArgs e)
         {
@@ -202,9 +122,9 @@ namespace SampleClientGui2
         }
         private void OnUserLogin(object sender, Xcp.RspUserLoginEventArgs e)
         {
-            FrontID = e.RspUserLoginField.FrontID;
-            SessionID = e.RspUserLoginField.SessionID;
-            NextOrderRef = e.RspUserLoginField.MaxOrderRef;
+            Wrapper.FrontID = e.RspUserLoginField.FrontID;
+            Wrapper.SessionID = e.RspUserLoginField.SessionID;
+            Wrapper.NextOrderRef = e.RspUserLoginField.MaxOrderRef;
             if (!Dispatcher.CheckAccess())
             {
                 Dispatcher.BeginInvoke(new EvenBusDelegate(SetTradeButtonsOn));
@@ -365,52 +285,22 @@ namespace SampleClientGui2
 
 
 
-        #endregion
-
-        #region data
 
 
         
 
-        
-        public int BrokerID { get; set; }
-        public int UserID { get; set; }
-        public int InvestorID { get; set; }
-        public string Password { get; set; }
-        public int NextRequestID { get; set; }
-        public int FrontID { get; set; }
-        public int SessionID { get; set; }
-        public int NextOrderRef { get; set; }
-        public string FrontAddress { get; set; }
 
-        public string FrontAddress2 { get; set; }
-
-        public TraderEventBus EventBus { get { return eventBus; } }
-
-        private TraderEventBus eventBus = new TraderEventBus();
-        private Trader trader;
+        public TradeWrapper Wrapper { get { return wrapper; } }
+        private TradeWrapper wrapper = new TradeWrapper();
 
 
         #endregion
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            var section = ConfigurationManager.GetSection("USER_INFO") as NameValueCollection;
-            BrokerID = int.Parse(section["BrokerID"]);
-            UserID = int.Parse(section["UserID"]);
-            Password = section["Password"];
-            FrontAddress = section["FrontAddress"];
-            FrontAddress2 = section["FrontAddress2"];
-            InvestorID = UserID;
-
-            eventBus.onUILogAddNewLine += OnLog;
-            eventBus.onUserLogin += OnUserLogin;
-            eventBus.onUserLogout += OnUserLogout;
-            eventBus.onFundUpdate += OnFundUpdate;
-            eventBus.onPositionUpdate += OnPositionUpdate;
-            eventBus.onOrderUpdate += OnOrderUpdate;
-            eventBus.onTradeUpdate += OnTradeUpdate;
             SetTradeButtonsOff();
+            Wrapper.InitParameter();
+            RegisterWrapperEvent();
         }
 
     }

@@ -59,7 +59,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XcpApiCSharp", "XcpApiCShar
 		{48310061-76FF-4C1C-B89A-39BE8E03D97A} = {48310061-76FF-4C1C-B89A-39BE8E03D97A}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleClientGui2", "SampleClientGui2\SampleClientGui2.csproj", "{A960DBDD-1F21-4F5F-8A9F-EA5743527DF6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleClientGui", "SampleClientGui\SampleClientGui.csproj", "{A960DBDD-1F21-4F5F-8A9F-EA5743527DF6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

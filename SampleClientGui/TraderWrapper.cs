@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Xcp;
 
 namespace SampleClientGui2
 {
@@ -73,12 +76,24 @@ namespace SampleClientGui2
         int m_requestID;
     }
 
-    public class TraderEventBus
+    public class TradeWrapper
     {
-        public TraderEventBus()
+        public TradeWrapper()
         {
         }
-        public void Connect(Xcp.Trader trader)
+
+        public void InitParameter()
+        {
+            var section = ConfigurationManager.GetSection("USER_INFO") as NameValueCollection;
+
+            BrokerID = int.Parse(section["BrokerID"]);
+            UserID = int.Parse(section["UserID"]);
+            Password = section["Password"];
+            FrontAddress = section["FrontAddress"];
+            FrontAddress2 = section["FrontAddress2"];
+            InvestorID = UserID;
+        }
+        private void ConnectTraderEvent(Xcp.Trader trader)
         {
             trader.onFrontConnected += OnFrontConnected;
             trader.onFrontDisconnected += OnFrontDisconnected;
@@ -90,7 +105,7 @@ namespace SampleClientGui2
             trader.onRspQryOrder += OnRspQryOrder;
         }
 
-        public void Disconnect(Xcp.Trader trader)
+        private void DisconnectTraderEvent(Xcp.Trader trader)
         {
             trader.onFrontConnected -= OnFrontConnected;
             trader.onFrontDisconnected -= OnFrontDisconnected;
@@ -102,10 +117,20 @@ namespace SampleClientGui2
             trader.onRspQryOrder -= OnRspQryOrder;
         }
         #region callback for trader
-        private void OnFrontConnected(object sender, EventArgs eventArgs)
+
+        private void OnFrontConnected(object sender, EventArgs e)
         {
             RaiseUILogAddNewLine("前置会话连接成功");
+            NextRequestID = 1;
+            ReqUserLoginField field = new ReqUserLoginField();
+            field.BrokerID = BrokerID;
+            field.UserID = UserID;
+            field.Password = Password;
+            if (m_trader != null)
+                m_trader.ReqUserLogin(field, NextRequestID);
+            NextRequestID++;
         }
+
 
         private void OnFrontDisconnected(object sender, Xcp.FrontDisconnectedEventArgs e)
         {
@@ -356,6 +381,115 @@ namespace SampleClientGui2
         public event EventHandler<OrderUpdateEventArgs> onOrderUpdate;
         public event EventHandler<TradeUpdateEventArgs> onTradeUpdate;
         #endregion
+
+        public void Connect()
+        {
+            if (m_trader != null)
+            {
+                DisconnectTraderEvent(m_trader);
+                m_trader.Release();
+            }                
+            m_trader = new Trader();
+            ConnectTraderEvent(m_trader);
+
+            m_trader.RegisterFront(FrontAddress);
+            m_trader.RegisterFront(FrontAddress2);
+            m_trader.SubscribePrivateTopic(THOST_TE_RESUME_TYPE.THOST_TERT_RESTART);
+            m_trader.SubscribePublicTopic(THOST_TE_RESUME_TYPE.THOST_TERT_RESTART);
+            m_trader.Init();
+        }
+
+        public void Release()
+        {
+            if (m_trader != null)
+            {
+                m_trader.Release();
+            }
+        }
+
+        public int BrokerID { get; set; }
+        public int UserID { get; set; }
+        public int InvestorID { get; set; }
+        public string Password { get; set; }
+        public string FrontAddress { get; set; }
+        public string FrontAddress2 { get; set; }
+        public Int32 NextRequestID { get; set; }
+        public Int32 NextOrderRef { get; set; }
+        public Int32 FrontID { get; set; }
+        public Int32 SessionID { get; set; }
+
+        private Xcp.Trader m_trader;
+
+        public void ReqQryFund()
+        {
+            if (m_trader != null)
+            {
+                Xcp.QryFundField qry = new QryFundField();
+                qry.BrokerID = BrokerID;
+                qry.UserID = UserID;
+                qry.InvestorID = InvestorID;
+                qry.RequestID = NextRequestID;
+                qry.CurrencyType = (char)Xcp.Enums.CurrencyType.RMB;
+                int returnValue = m_trader.ReqQryFund(qry, NextRequestID);
+                RaiseUILogAddNewLine(String.Format("ReqQryFund.[ReqID={0}][Rtn={1}]",
+                    NextRequestID, returnValue));
+                NextRequestID++;
+            }
+        }
+
+        public void ReqQryPosition()
+        {
+            if (m_trader != null)
+            {
+                Xcp.QryPositionField qry = new QryPositionField();
+                qry.BrokerID = BrokerID;
+                qry.UserID = UserID;
+                qry.InvestorID = InvestorID;
+                qry.RequestID = NextRequestID;
+                int returnValue = m_trader.ReqQryPosition(qry, NextRequestID);
+                RaiseUILogAddNewLine(String.Format("ReqQryPosition.[ReqID={0}][Rtn={1}]",
+                    NextRequestID, returnValue));
+                NextRequestID++;
+            }
+        }
+
+
+        public void ReqQryOrder()
+        {
+            if (m_trader != null)
+            {
+                Xcp.QryOrderField qry = new QryOrderField();
+                qry.BrokerID = BrokerID;
+                qry.UserID = UserID;
+                qry.InvestorID = InvestorID;
+                qry.RequestID = NextRequestID;
+                int returnValue = m_trader.ReqQryOrder(qry, NextRequestID);
+                RaiseUILogAddNewLine(String.Format("ReqQryOrder.[ReqID={0}][Rtn={1}]",
+                    NextRequestID, returnValue));
+                NextRequestID++;
+            }
+        }
+
+        public void ReqQryTrade()
+        {
+            if (m_trader != null)
+            {
+                Xcp.QryTradeField qry = new QryTradeField();
+                qry.BrokerID = BrokerID;
+                qry.UserID = UserID;
+                qry.InvestorID = InvestorID;
+                qry.RequestID = NextRequestID;
+                int returnValue = m_trader.ReqQryTrade(qry, NextRequestID);
+                RaiseUILogAddNewLine(String.Format("ReqQryTrade.[ReqID={0}][Rtn={1}]",
+                    NextRequestID, returnValue));
+                NextRequestID++;
+            }
+        }
+
+        
+
+        
+
 
 
     }
