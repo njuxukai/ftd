@@ -211,6 +211,7 @@ del /F EXCLUDE</Command>
     <ClCompile Include="process_qry_order.cpp" />
     <ClCompile Include="process_qry_position.cpp" />
     <ClCompile Include="process_qry_private_initial_data.cpp" />
+    <ClCompile Include="process_qry_security_account.cpp" />
     <ClCompile Include="process_qry_trade.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="process_user_login.cpp" />

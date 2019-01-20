@@ -95,6 +95,9 @@ public:
 	///报单成交回报推送响应
 	virtual void OnRtnOrderExecutionReport(CXcpFtdcExecutionReportField* pExecutionReport) {}
 
+	///证券账号查询请求响应
+	virtual void OnRspQrySecurityAccount(CXcpFtdcSecurityAccountField* pField, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast) {}
+
 };
 
 class TRADER_API_EXPORT CXcpFtdcTraderApi
@@ -196,6 +199,8 @@ public:
 	///查询客户新股申购额度请求
 	virtual int ReqQryPurchaseQuota(CXcpFtdcQryPurchaseQuotaField *pQryPurchaseQuota, int nRequestID) = 0;
 
+	///查询客户证券账号请求
+	virtual int ReqQrySecurityAccount(CXcpFtdcQrySecurityAccountField* pQrySecurityField, int nRequestID) = 0;
 protected:
 	~CXcpFtdcTraderApi() {}
 };
@@ -225,6 +230,7 @@ typedef void(__cdecl *FuncPtrOnRspQryETFComposition) (CXcpFtdcETFCompositionFiel
 typedef void(__cdecl *FuncPtrOnRspQryPurchasableNewIssueSecurity) (CXcpFtdcNewIssueSecurityField* pPurchasableNewIssueSecurity, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
 typedef void(__cdecl *FuncPtrOnRspQryPurchaseQuota) (CXcpFtdcPurchaseQuotaField* pPurchaseQuota, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
 typedef void(__cdecl *FuncPtrOnRtnOrderExecutionReport) (CXcpFtdcExecutionReportField* pExecutionReport);
+typedef void(__cdecl *FuncPtrOnRspQrySecurityAccount) (CXcpFtdcSecurityAccountField *pSecurityAccount, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
 
 #ifdef __cplusplus
 extern "C"
@@ -259,6 +265,7 @@ extern "C"
 	TRADER_API_EXPORT int req_qry_structured_fund(TraderApi trader, CXcpFtdcQryStructuredFundField *pQryStructuredFund, int nRequestID);
 	TRADER_API_EXPORT int req_qry_purchasable_new_issue_security(TraderApi trader, CXcpFtdcQryNewIssueSecurityField *pQryPurchasableNewSecurity, int nRequestID);
 	TRADER_API_EXPORT int req_qry_purchase_quota(TraderApi trader, CXcpFtdcQryPurchaseQuotaField *pQryPurchaseQuota, int nRequestID);
+	TRADER_API_EXPORT int req_qry_security_account(TraderApi trader, CXcpFtdcQrySecurityAccountField *pQrySecurityAccount, int nRequestID);
 
 	//配置函数 应在connect_trader前调用
 	TRADER_API_EXPORT void register_front(TraderApi trader, const char* front_address);
@@ -289,7 +296,7 @@ extern "C"
 	TRADER_API_EXPORT void registerFP_OnRspQryPurchasableNewIssueSecurity(TraderApi* trader, FuncPtrOnRspQryPurchasableNewIssueSecurity fp);
 	TRADER_API_EXPORT void registerFP_OnRspQryPurchaseQuota(TraderApi* trader, FuncPtrOnRspQryPurchaseQuota  fp);
 	TRADER_API_EXPORT void registerFP_OnRtnOrderExecutionReport(TraderApi* trader, FuncPtrOnRtnOrderExecutionReport fp);
-
+	TRADER_API_EXPORT void registerFP_OnRspQrySecurityAccount(TraderApi* trader, FuncPtrOnRspQrySecurityAccount fp);
 	
 
 #ifdef __cplusplus

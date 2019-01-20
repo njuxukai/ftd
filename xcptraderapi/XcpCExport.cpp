@@ -127,6 +127,11 @@ int req_qry_purchase_quota(TraderApi trader, CXcpFtdcQryPurchaseQuotaField *pQry
 	return ((CXcpTrader*)trader)->ReqQryPurchaseQuota(pQryPurchaseQuota, nRequestID);
 }
 
+int req_qry_security_account(TraderApi trader, CXcpFtdcQrySecurityAccountField *pQrySecurityAccount, int nRequestID)
+{
+	return ((CXcpTrader*)trader)->ReqQrySecurityAccount(pQrySecurityAccount, nRequestID);
+}
+
 
 void register_front(TraderApi trader, const char* front_address) 
 {
@@ -263,5 +268,10 @@ void registerFP_OnRspQryPurchaseQuota(TraderApi* trader, FuncPtrOnRspQryPurchase
 void registerFP_OnRtnOrderExecutionReport(TraderApi* trader, FuncPtrOnRtnOrderExecutionReport fp) 
 {
 	((CXcpTrader*)trader)->registerFP_OnRtnOrderExecutionReport(fp);
+}
+
+void registerFP_OnRspQrySecurityAccount(TraderApi* trader, FuncPtrOnRspQrySecurityAccount fp)
+{
+	((CXcpTrader*)trader)->registerFP_OnRspQrySecurityAccount(fp);
 }
 

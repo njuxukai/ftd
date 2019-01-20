@@ -107,6 +107,9 @@ namespace Xcp
             CallingConvention = CallingConvention.Cdecl)]
         public static extern int ReqQryPurchaseQuota(IntPtr phandler, ref QryPurchaseQuotaField field, int reqID);
 
+        [DllImport("xcptraderapi.dll", CharSet = CharSet.Auto, EntryPoint = "req_qry_security_account",
+            CallingConvention = CallingConvention.Cdecl)]
+        public static extern int ReqQrySecurityAccount(IntPtr phandler, ref QrySecurityAccountField field, int reqID);
 
         [DllImport("xcptraderapi.dll", CharSet = CharSet.Auto, EntryPoint = "register_front",
             CallingConvention = CallingConvention.Cdecl)]
@@ -239,6 +242,11 @@ namespace Xcp
             CallingConvention = CallingConvention.Cdecl)]
         public static extern int RegisterOnRtnOrderExecutionReportCallback(IntPtr phandler,
             OnRtnOrderExecutionReportDelegate callback);
+
+        [DllImport("xcptraderapi.dll", CharSet = CharSet.Auto, EntryPoint = "registerFP_OnRspQrySecurityAccount",
+            CallingConvention = CallingConvention.Cdecl)]
+        public static extern int RegisterOnRspQrySecurityAccountCallback(IntPtr phandler,
+            OnRspQrySecurityAccountDelegate callback);
 
 
     }

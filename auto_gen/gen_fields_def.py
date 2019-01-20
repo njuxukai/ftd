@@ -37,7 +37,7 @@ def generate_field_struct(version, field_info, target_path, items, types):
     try:
         for item_dict in field_info.item_dicts:
             property_type_var_pair_list.extend(get_universal_field_item_define_lines(item_dict, items, types, ''))
-    except e as Exception:
+    except Exception as e:
         pass
 
     item_var_pair_list_string = add_whitespaces('\n'.join(property_type_var_pair_list),4)

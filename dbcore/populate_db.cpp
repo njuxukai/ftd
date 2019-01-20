@@ -83,7 +83,8 @@ void populate_db_fund(mco_db_h db)
 }
 
 void populate_db_position(mco_db_h db)
-{}
+{
+}
 
 void populate_db_order(mco_db_h db)
 {}

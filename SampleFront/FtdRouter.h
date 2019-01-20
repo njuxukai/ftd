@@ -76,6 +76,8 @@ public:
 
 	virtual void OnPackage(const ReqQryTrade& package, const SessionID& id);
 
+	virtual void OnPackage(const ReqQrySecurityAccount& package, const SessionID& id);
+
 	virtual void OnPackage(RspUserLogin& package, const SessionID& id);
 
 	///void processReq(PackageSPtr pReq, mco_db_h db, SessionID sessionID);

@@ -24,6 +24,7 @@ void processQryPosition(const PlainHeaders& headers, FTD::PackageSPtr, DBWrapper
 void processQryOrder(const PlainHeaders& headers, FTD::PackageSPtr, DBWrapper* pWrapper, mco_db_h db);
 void processQryTrade(const PlainHeaders& headers, FTD::PackageSPtr, DBWrapper* pWrapper, mco_db_h db);
 void processQryPrivateInitialData(const PlainHeaders& headers, FTD::PackageSPtr, DBWrapper* pWrapper, mco_db_h db);
+void processQrySecurityAccount(const PlainHeaders& headers, FTD::PackageSPtr, DBWrapper* pWrapper, mco_db_h db);
 
 void populate_db(mco_db_h db);
 

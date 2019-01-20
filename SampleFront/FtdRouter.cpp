@@ -271,7 +271,12 @@ void FtdRouter::OnPackage(const ReqQryTrade& req, const SessionID& id)
 	uplink(*pCopy, id);
 }
 
-
+void FtdRouter::OnPackage(const ReqQrySecurityAccount& req, const SessionID& id)
+{
+	std::shared_ptr<ReqQrySecurityAccount> pCopy =
+		std::shared_ptr<ReqQrySecurityAccount>((ReqQrySecurityAccount*)req.clone());
+	uplink(*pCopy, id);
+}
 /******************************************************************************
 ***即将发送到session上的Package，这里应只接受管理消息RspUseLogin
 ***  注: 应用消息直接转发至各session(rsp按sessionid;private,boardcast按series_id)

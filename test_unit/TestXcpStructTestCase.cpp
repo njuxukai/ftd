@@ -22,7 +22,6 @@ SUITE(AutoGen)
             CHECK(sizeof(CXcpFtdcReqUserLoginField) >= 0);
             CHECK(sizeof(CXcpFtdcDissenminationstartField) >= 0);
             CHECK(sizeof(CXcpFtdcRspUserLoginField) >= 0);
-            CHECK(sizeof(CXcpFtdcSecurityAccountField) >= 0);
             CHECK(sizeof(CXcpFtdcReqUserLogoutField) >= 0);
             CHECK(sizeof(CXcpFtdcRspUserLogoutField) >= 0);
             CHECK(sizeof(CXcpFtdcForceExitField) >= 0);
@@ -57,13 +56,14 @@ SUITE(AutoGen)
             CHECK(sizeof(CXcpFtdcExecutionReportField) >= 0);
             CHECK(sizeof(CXcpFtdcQryInitialDataField) >= 0);
             CHECK(sizeof(CXcpFtdcDialogSpecField) >= 0);
+            CHECK(sizeof(CXcpFtdcQrySecurityAccountField) >= 0);
+            CHECK(sizeof(CXcpFtdcSecurityAccountField) >= 0);
 
             CHECK(sizeof(CXcpFtdcErrorField) == sizeof(CFtdcErrorField));
             CHECK(sizeof(CXcpFtdcRequestSourceField) == sizeof(CFtdcRequestSourceField));
             CHECK(sizeof(CXcpFtdcReqUserLoginField) == sizeof(CFtdcReqUserLoginField));
             CHECK(sizeof(CXcpFtdcDissenminationstartField) == sizeof(CFtdcDissenminationstartField));
             CHECK(sizeof(CXcpFtdcRspUserLoginField) == sizeof(CFtdcRspUserLoginField));
-            CHECK(sizeof(CXcpFtdcSecurityAccountField) == sizeof(CFtdcSecurityAccountField));
             CHECK(sizeof(CXcpFtdcReqUserLogoutField) == sizeof(CFtdcReqUserLogoutField));
             CHECK(sizeof(CXcpFtdcRspUserLogoutField) == sizeof(CFtdcRspUserLogoutField));
             CHECK(sizeof(CXcpFtdcForceExitField) == sizeof(CFtdcForceExitField));
@@ -98,6 +98,8 @@ SUITE(AutoGen)
             CHECK(sizeof(CXcpFtdcExecutionReportField) == sizeof(CFtdcExecutionReportField));
             CHECK(sizeof(CXcpFtdcQryInitialDataField) == sizeof(CFtdcQryInitialDataField));
             CHECK(sizeof(CXcpFtdcDialogSpecField) == sizeof(CFtdcDialogSpecField));
+            CHECK(sizeof(CXcpFtdcQrySecurityAccountField) == sizeof(CFtdcQrySecurityAccountField));
+            CHECK(sizeof(CXcpFtdcSecurityAccountField) == sizeof(CFtdcSecurityAccountField));
 		//CHECK(sizeof(CXcpFtdcOrderField) == sizeof(OrderField));
 	}
 }

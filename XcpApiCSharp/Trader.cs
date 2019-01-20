@@ -86,6 +86,7 @@ namespace Xcp
             onRspQryPurchasableNewIssueSecurityDelegate = RaiseRspQryPurchasableNewIssueSecurity;
             onRspQryPurchaseQuotaDelegate = RaiseRspQryPurchaseQuota;
             onRtnOrderExecutionReportDelegate = RaiseRtnOrderExecutionReport;
+            onRspQrySecurityAccountDelegate = RaiseRspQrySecurityAccount;
         }
         private void RegisterEventHandlers()
         {
@@ -115,6 +116,7 @@ namespace Xcp
                 TraderDllWrapper.RegisterOnRspQryPurchasableNewIssueSecurityCallback(m_handler, onRspQryPurchasableNewIssueSecurityDelegate);
                 TraderDllWrapper.RegisterOnRspQryPurchaseQuotaCallback(m_handler, onRspQryPurchaseQuotaDelegate);
                 TraderDllWrapper.RegisterOnRtnOrderExecutionReportCallback(m_handler, onRtnOrderExecutionReportDelegate);
+                TraderDllWrapper.RegisterOnRspQrySecurityAccountCallback(m_handler, onRspQrySecurityAccountDelegate);
             }
         }
 
@@ -224,6 +226,11 @@ namespace Xcp
             return TraderDllWrapper.ReqQryPurchaseQuota(m_handler, ref field, reqID);
         }
 
+        public int ReqQrySecurityAccount(QrySecurityAccountField field, int reqID)
+        {
+            return TraderDllWrapper.ReqQrySecurityAccount(m_handler, ref field, reqID);
+        }
+
         public void RegisterFront(String frontAddress)
         {
             TraderDllWrapper.RegisterFront(m_handler, frontAddress);
@@ -265,6 +272,7 @@ namespace Xcp
         public event EventHandler<RspQryPurchasableNewIssueSecurityEventArgs> onRspQryPurchasableNewIssueSecurity;
         public event EventHandler<RspQryPurchaseQuotaEventArgs> onRspQryPurchaseQuota;
         public event EventHandler<RtnOrderExecutionEventArgs> onRtnOrderExecution;
+        public event EventHandler<RspQrySecurityAccountEventArgs> onRspQrySecurityAccount;
         #endregion
 
         #region callback 回调函数触发事件 FrontConnected时应自动登录
@@ -617,6 +625,22 @@ namespace Xcp
             var eventArgs = new RtnOrderExecutionEventArgs(data);
             Volatile.Read(ref onRtnOrderExecution)?.Invoke(this, eventArgs);
         }
+
+        private void RaiseRspQrySecurityAccount(IntPtr pRsp, IntPtr pError, int nRequestID, bool isLast)
+        {
+            SecurityAccountField? rsp = null;
+            ErrorField? error = null;
+            if (pRsp != IntPtr.Zero)
+            {
+                rsp = Marshal.PtrToStructure<SecurityAccountField>(pRsp);
+            }
+            if (pError != IntPtr.Zero)
+            {
+                error = Marshal.PtrToStructure<ErrorField>(pError);
+            }
+            var eventArgs = new RspQrySecurityAccountEventArgs(rsp, error, nRequestID, isLast);
+            Volatile.Read(ref onRspQrySecurityAccount)?.Invoke(this, eventArgs);
+        }
         #endregion
 
         #region  delegate save
@@ -644,6 +668,7 @@ namespace Xcp
         OnRspQryPurchasableNewIssueSecurityDelegate onRspQryPurchasableNewIssueSecurityDelegate;
         OnRspQryPurchaseQuotaDelegate onRspQryPurchaseQuotaDelegate;
         OnRtnOrderExecutionReportDelegate onRtnOrderExecutionReportDelegate;
+        OnRspQrySecurityAccountDelegate onRspQrySecurityAccountDelegate;
         #endregion
         private IntPtr m_handler;
     }

@@ -435,6 +435,16 @@ int CXcpFtdcTraderApiImpl::ReqQryPurchaseQuota(CXcpFtdcQryPurchaseQuotaField *pQ
 	return send(package);
 }
 
+///查询客户证券账号请求
+int CXcpFtdcTraderApiImpl::ReqQrySecurityAccount(CXcpFtdcQrySecurityAccountField* pQrySecurityField, int nRequestID)
+{
+	FTD::ReqQrySecurityAccount package;
+	package.clear();
+	memcpy(&package.qrySecurityAccountField, pQrySecurityField, sizeof(CXcpFtdcQrySecurityAccountField));
+	return send(package);
+}
+
+
 void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspUserLogin& package, const FTD::SessionID& id)
 {
 	if (package.pErrorField && package.pErrorField->ErrorCode != 0)
@@ -910,6 +920,31 @@ void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspQryPurchaseQuota& package, c
 	}
 }
 
+void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspQrySecurityAccount& package, const FTD::SessionID& id)
+{
+	if (!m_pSpi)
+		return;
+	CXcpFtdcSecurityAccountField contentField = { 0 };
+	CXcpFtdcErrorField errorField = { 0 };
+	if (package.pErrorField.get())
+		memcpy(&errorField, package.pErrorField.get(), sizeof(CXcpFtdcErrorField));
+	if (package.securityAccountFields.size() == 0)
+	{
+		m_pSpi->OnRspQrySecurityAccount(0, &errorField, package.requestSourceField.RequestID, true);
+		return;
+	}
+	int dataLen = package.securityAccountFields.size();
+	bool isLast = false;
+	for (int i = 0; i < dataLen; i++)
+	{
+		if (i == dataLen - 1)
+			isLast = true;
+		memcpy(&contentField, &package.securityAccountFields[i], sizeof(CXcpFtdcSecurityAccountField));
+		m_pSpi->OnRspQrySecurityAccount(&contentField, &errorField, package.requestSourceField.RequestID, isLast);
+	}
+
+}
+
 ///与本地缓存的增量数据进行合并后再调用spi
 void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspQryPrivateInitialData& package, const FTD::SessionID& id) 
 {
@@ -935,6 +970,8 @@ void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspQryPrivateInitialData& packa
 	m_BufferExecutionReport.clear();
 	m_privateDataSynced = true;
 }
+
+
 
 ///增量数据，如果没有完成同步则需要缓存在本地
 void CXcpFtdcTraderApiImpl::OnPackage(const FTD::IncExecutionReports& package, const FTD::SessionID& id) 

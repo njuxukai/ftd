@@ -40,7 +40,7 @@ public:
 	int ReqQryStructuredFund(CXcpFtdcQryStructuredFundField *pQryStructuredFund, int nRequestID) ;
 	int ReqQryPurchasableNewIssueSecurity(CXcpFtdcQryNewIssueSecurityField *pQryPurchasableNewSecurity, int nRequestID) ;
 	int ReqQryPurchaseQuota(CXcpFtdcQryPurchaseQuotaField *pQryPurchaseQuota, int nRequestID) ;
-
+	int ReqQrySecurityAccount(CXcpFtdcQrySecurityAccountField *pQrySecurityAccount, int nRequestID);
 	//spi
 	virtual void OnFrontConnected();
 	virtual void OnFrontDisconnected(int nReason);
@@ -66,6 +66,7 @@ public:
 	virtual void OnRspQryPurchasableNewIssueSecurity(CXcpFtdcNewIssueSecurityField* pPurchasableNewIssueSecurity, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
 	virtual void OnRspQryPurchaseQuota(CXcpFtdcPurchaseQuotaField* pPurchaseQuota, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
 	virtual void OnRtnOrderExecutionReport(CXcpFtdcExecutionReportField* pExecutionReport);
+	virtual void OnRspQrySecurityAccount(CXcpFtdcSecurityAccountField* pSecurityAccount, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
 
 	//register callback function pointers;
 	void registerFP_OnFrontConnected(FuncPtrOnFrontConnected fp);
@@ -92,6 +93,7 @@ public:
 	void registerFP_OnRspQryPurchasableNewIssueSecurity(FuncPtrOnRspQryPurchasableNewIssueSecurity fp);
 	void registerFP_OnRspQryPurchaseQuota(FuncPtrOnRspQryPurchaseQuota  fp);
 	void registerFP_OnRtnOrderExecutionReport(FuncPtrOnRtnOrderExecutionReport fp);
+	void registerFP_OnRspQrySecurityAccount(FuncPtrOnRspQrySecurityAccount fp);
 private:
 	CXcpFtdcTraderApi* m_pApi;
 	//std::string m_flowPath;
@@ -125,6 +127,7 @@ private:
 	bool m_onRspQryPurchasableNewIssueSecurityRegistered;
 	bool m_onRspQryPurchaseQuotaRegistered;
 	bool m_onRtnOrderExecutionReportRegistered;
+	bool m_onRspQrySecurityAccountRegistered;
 
 	FuncPtrOnFrontConnected   m_fpOnFrontConnected;
 	FuncPtrOnFrontDisconnected m_fpOnFrontDisconnected;
@@ -150,5 +153,6 @@ private:
 	FuncPtrOnRspQryPurchasableNewIssueSecurity m_fpOnRspQryPurchasableNewIssueSecurity;
 	FuncPtrOnRspQryPurchaseQuota m_fpOnRspQryPurchaseQuota;
 	FuncPtrOnRtnOrderExecutionReport m_fpOnRtnOrderExecutionReport;
+	FuncPtrOnRspQrySecurityAccount m_fpOnRspQrySecurityAccount;
 };
 #endif

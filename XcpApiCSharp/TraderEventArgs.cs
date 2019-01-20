@@ -480,6 +480,27 @@ namespace Xcp
 
     }
 
-    
+    public class RspQrySecurityAccountEventArgs : EventArgs
+    {
+        public RspQrySecurityAccountEventArgs(SecurityAccountField? securityAccountField,
+                                     ErrorField? errorField,
+                                     int requestID,
+                                     bool isLast)
+        {
+            m_securityAccountField = securityAccountField;
+            m_errorField = errorField;
+            m_requestID = requestID;
+            m_isLast = isLast;
+        }
+        public SecurityAccountField? SecurityAccountField { get { return m_securityAccountField; } }
+        public ErrorField? ErrorField { get { return m_errorField; } }
+        public int RequestID { get { return m_requestID; } }
+        public bool IsLast { get { return m_isLast; } }
+
+        private readonly SecurityAccountField? m_securityAccountField;
+        private readonly ErrorField? m_errorField;
+        private readonly int m_requestID;
+        private readonly bool m_isLast;
+    }
 
 }

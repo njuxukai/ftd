@@ -29,6 +29,7 @@ CXcpTrader::CXcpTrader(const char* psw)
 	m_onRspQryPurchasableNewIssueSecurityRegistered = false;
 	m_onRspQryPurchaseQuotaRegistered = false;
 	m_onRtnOrderExecutionReportRegistered = false;
+	m_onRspQrySecurityAccountRegistered = false;
 }
 
 //TODO
@@ -241,6 +242,13 @@ int CXcpTrader::ReqQryPurchaseQuota(CXcpFtdcQryPurchaseQuotaField *pQryPurchaseQ
 		return C_API_ERROR_NULL_TRADER_API;
 }
 
+int CXcpTrader::ReqQrySecurityAccount(CXcpFtdcQrySecurityAccountField *pQrySecurityAccount, int nRequestID)
+{
+	if (m_pApi)
+		return m_pApi->ReqQrySecurityAccount(pQrySecurityAccount, nRequestID);
+	else
+		return C_API_ERROR_NULL_TRADER_API;
+}
 
 
 void CXcpTrader::OnFrontConnected() 
@@ -418,6 +426,14 @@ void CXcpTrader::OnRtnOrderExecutionReport(CXcpFtdcExecutionReportField* pExecut
 	}
 }
 
+void CXcpTrader::OnRspQrySecurityAccount(CXcpFtdcSecurityAccountField* pSecurityAccount, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast)
+{
+	if (m_onRspQrySecurityAccountRegistered)
+	{
+		m_fpOnRspQrySecurityAccount(pSecurityAccount, pRspInfo, nRequestID, isLast);
+	}
+}
+
 //register callback function pointers{}
 void CXcpTrader::registerFP_OnFrontConnected(FuncPtrOnFrontConnected fp)
 {
@@ -561,4 +577,10 @@ void CXcpTrader::registerFP_OnRtnOrderExecutionReport(FuncPtrOnRtnOrderExecution
 {
 	m_fpOnRtnOrderExecutionReport = fp;
 	m_onRtnOrderExecutionReportRegistered = true;
+}
+
+void CXcpTrader::registerFP_OnRspQrySecurityAccount(FuncPtrOnRspQrySecurityAccount fp)
+{
+	m_fpOnRspQrySecurityAccount = fp;
+	m_onRspQrySecurityAccountRegistered = true;
 }

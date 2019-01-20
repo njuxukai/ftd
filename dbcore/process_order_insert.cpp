@@ -66,12 +66,12 @@ void processOrderInsert(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWr
 void InsertToOrderInsert(const ReqOrderInsert* pReq, mco_trans_h t, RspOrderInsert* pRsp)
 {
 	MCO_RET rc;
-	OrderInsert orderInsert;
+	InputOrder orderInsert;
 	orderInsert.create(t);
 	orderInsert.front_id = pReq->inputOrderField.FrontID;
 	orderInsert.session_id = pReq->inputOrderField.SessionID;
 	orderInsert.order_ref = pReq->inputOrderField.OrderRef;
-	rc = OrderInsert_SessionIdx_find(t, pReq->inputOrderField.FrontID, pReq->inputOrderField.SessionID,
+	rc = InputOrder_SessionIdx_find(t, pReq->inputOrderField.FrontID, pReq->inputOrderField.SessionID,
 		pReq->inputOrderField.OrderRef, &orderInsert);
 	if (rc != MCO_S_NOTFOUND)
 	{

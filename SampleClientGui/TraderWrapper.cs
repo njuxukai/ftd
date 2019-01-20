@@ -103,6 +103,7 @@ namespace SampleClientGui
             trader.onRspQryPosition += OnRspQryPosition;
             trader.onRspQryTrade += OnRspQryTrade;
             trader.onRspQryOrder += OnRspQryOrder;
+            trader.onRspQrySecurityAccount += OnRspQrySecurityAccount;
         }
 
         private void DisconnectTraderEvent(Xcp.Trader trader)
@@ -115,6 +116,7 @@ namespace SampleClientGui
             trader.onRspQryPosition -= OnRspQryPosition;
             trader.onRspQryTrade -= OnRspQryTrade;
             trader.onRspQryOrder -= OnRspQryOrder;
+            trader.onRspQrySecurityAccount -= OnRspQrySecurityAccount;
         }
         #region callback for trader
 
@@ -159,6 +161,17 @@ namespace SampleClientGui
                     e.RspUserLoginField.MaxOrderRef,
                     e.RspUserLoginField.HeartbeatInterval);
                 RaiseUILogAddNewLine(line);
+
+                QrySecurityAccountField field = new QrySecurityAccountField
+                {
+                    BrokerID = BrokerID,
+                    InvestorID = InvestorID,
+                    UserID = UserID,
+                    RequestID = NextRequestID
+                };
+
+                m_trader.ReqQrySecurityAccount(field, NextRequestID);
+                NextRequestID++;
                 RaiseUserLogin(e);
             }
             
@@ -168,6 +181,34 @@ namespace SampleClientGui
         {
             RaiseUserLogout();
             RaiseUILogAddNewLine("用户已登出");
+        }
+
+        private void OnRspQrySecurityAccount(object sender, Xcp.RspQrySecurityAccountEventArgs e)
+        {
+            if (e.ErrorField.HasValue && e.ErrorField.Value.ErrorCode != 0)
+            {
+                RaiseUILogAddNewLine(String.Format("OnRspQryFund Error[{0}][{1}].", e.ErrorField.Value.ErrorCode, e.ErrorField.Value.ErrorText));
+                return;
+            }
+            if (e.SecurityAccountField.HasValue)
+            {
+                if (securityAccounts.ContainsKey(e.SecurityAccountField.Value.ExchangeType))
+                {
+                    securityAccounts[e.SecurityAccountField.Value.ExchangeType] =
+                        e.SecurityAccountField.Value.SecurityAccount;
+                }
+                else
+                {
+                    securityAccounts.Add(e.SecurityAccountField.Value.ExchangeType,
+                        e.SecurityAccountField.Value.SecurityAccount);
+                }
+            }
+            
+            if (e.IsLast)
+            {
+                RaiseUILogAddNewLine(String.Format("OnRspQrySecurityAccount.[ReqID={0}]",
+                    e.RequestID));
+            }
         }
 
         private void OnRspQryFund(object sender, Xcp.RspQryFundEventArgs e)
@@ -418,6 +459,7 @@ namespace SampleClientGui
         public Int32 FrontID { get; set; }
         public Int32 SessionID { get; set; }
 
+        private Dictionary<char, String> securityAccounts = new Dictionary<char, string>();
         private Xcp.Trader m_trader;
 
         public void ReqQryFund()

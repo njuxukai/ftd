@@ -211,6 +211,16 @@
 			<field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
+
+    <packageDefine name="ReqQrySecurityAccount" tid="TID_QrySecurityAccount" model="dialog" comment="查询投资者股东账号请求">
+      <field name="QrySecurityAccountField" maxOccur="1" minOccur="1" comment="客户初始信息查询域"/>
+    </packageDefine>
+
+    <packageDefine name="RspQrySecurityAccount" tid="TID_QrySecurityAccount" model="dialog" comment="查询投资者股东账号应答">
+      <field name="SecurityAccountField" maxOccur="任意" minOccur="0" comment="报单执行报告域"/>
+      <field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求源信息"/>
+      <field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
+    </packageDefine>
 		
 		<packageDefine name="IncExecutionReports" tid="TID_IncExecutionReports" model="private" comment="增量报单执行报告">
 			<field name="ExecutionReportField" maxOccur="任意" minOccur="0" comment="报单执行报告域"/>
@@ -239,13 +249,13 @@
 		<tidDefine name="TID_QryHisFundTransfer" value="0x2007"/>
 		<tidDefine name="TID_QryHisTrade" value="0x2008"/>
 		<tidDefine name="TID_QryInstrument" value="0x2009"/>
-        <tidDefine name="TID_QryStructuredFund" value="0x200A"/>		
+    <tidDefine name="TID_QryStructuredFund" value="0x200A"/>		
 		<tidDefine name="TID_QryETF" value="0x200B"/>		
 		<tidDefine name="TID_QryETFComposition" value="0x200C"/>
 		<tidDefine name="TID_QryPurchasableNewIssueSecurity" value="0x200D"/>
 		<tidDefine name="TID_QryPurchaseQuota" value="0x200E"/>
-				
-		<tidDefine name="TID_IncExecutionReports" value="0x3001"/>
+    <tidDefine name="TID_QrySecurityAccount" value="0x200F"/>
+    <tidDefine name="TID_IncExecutionReports" value="0x3001"/>
 	</tids>
 	
 		<fields>
@@ -299,11 +309,7 @@
 			<item name="RandomString" comment="随机串"/>
 		</fieldDefine>
 		
-		<fieldDefine name="SecurityAccountField" fid="FID_SecurityAccountField" fidValue="0x0006" comment="股东账号域">	
-			<item name="InvestorID" comment="资金账号"/>
-			<item name="ExchangeType" comment="交易所编码"/>
-			<item name="SecurityAccount" comment="证券账号"/>
-		</fieldDefine>
+
 		
 		<fieldDefine name="ReqUserLogoutField" fid="FID_ReqUserLogoutField" fidValue="0x0007" comment="交易员退出登录请求域">
 			<item name="RequestID" comment="请求编号"/>
@@ -698,7 +704,21 @@
 			<item name="FrontID" comment="前置编号"/>
 			<item name="SessionID" comment="会话编号"/>
 		</fieldDefine>
-		
+
+      <fieldDefine name="QrySecurityAccountField" fid="FID_QrySecurityAccountField" fidValue="0x0029" comment="股东账号查询请求域">
+        <item name="RequestID" comment="请求编码"/>
+        <item name="BrokerID" comment="经纪公司代码"/>
+        <item name="UserID" comment="用户代码"/>
+        <item name="InvestorID" comment="投资者代码"/>
+      </fieldDefine>
+
+      <fieldDefine name="SecurityAccountField" fid="FID_SecurityAccountField" fidValue="0x002A" comment="股东账号域">
+        <item name="BrokerID" comment="经纪公司代码"/>
+        <item name="InvestorID" comment="投资者代码"/>
+        <item name="ExchangeType" comment="市场代码"/>
+        <item name="SecurityAccount" comment="证券代码"/>
+      </fieldDefine>
+      
 	</fields>
 		
 		

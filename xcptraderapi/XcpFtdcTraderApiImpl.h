@@ -145,7 +145,8 @@ public:
 	///查询客户新股申购额度请求
 	virtual int ReqQryPurchaseQuota(CXcpFtdcQryPurchaseQuotaField *pQryPurchaseQuota, int nRequestID) ;
     
-
+	///查询客户证券账号请求
+	virtual int ReqQrySecurityAccount(CXcpFtdcQrySecurityAccountField* pQrySecurityField, int nRequestID);
 
 	////////////////////////////////////////////////////////////////////////////
 	///FTD::Application FTD -->ApiImpl
@@ -206,7 +207,7 @@ public:
 	virtual void OnPackage(const FTD::RspQryPurchaseQuota& package, const FTD::SessionID& id);
 	virtual void OnPackage(const FTD::RspQryPrivateInitialData& package, const FTD::SessionID& id);
 	virtual void OnPackage(const FTD::IncExecutionReports& package, const FTD::SessionID& id);
-
+	virtual void OnPackage(const FTD::RspQrySecurityAccount& package, const FTD::SessionID& id);
 	///
 private:
 	int send(FTD::Package& package, bool checkLogged=true);

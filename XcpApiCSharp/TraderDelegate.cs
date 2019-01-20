@@ -98,6 +98,8 @@ namespace Xcp
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void OnRtnOrderExecutionReportDelegate (IntPtr pExecutionReport);
 
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void OnRspQrySecurityAccountDelegate(IntPtr pSecurityAccount,
+        IntPtr rspInfo, int nRequestID, bool isLast);
 
-    
 }

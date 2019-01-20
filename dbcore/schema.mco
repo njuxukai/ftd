@@ -21,7 +21,7 @@ persistent class User
 	unique tree<user_id> UserIdIdx;
 };
 
-persistent class OrderInsert
+persistent class InputOrder
 {
 	uint2 owner_type;
 	int4 user_id;
@@ -51,7 +51,7 @@ persistent class Order
 	int4 user_id;
 	int4 investor_id;
 	char<10> secu_account;
-	string security_code;
+	string instrument_code;
 	uint1 exchange_type;
 	uint1 bs_flag;
 	int4 business_code;
@@ -108,7 +108,7 @@ persistent class Trade
 	int4 user_id;
 	int4 investor_id;
 	char<10> secu_account;
-	string security_code;
+	string instrument_code;
 	uint1 exchange_type;
 	uint1 bs_flag;
 	int4 business_code;
