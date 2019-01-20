@@ -7,7 +7,7 @@
         xmlns:xcp="clr-namespace:Xcp.Enums;assembly=XcpApiCSharp"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="XCP测试客户端" Height="900" Width="1200" Loaded="Window_Loaded">
+        Title="测试客户端" Height="900" Width="1200" Loaded="Window_Loaded">
     <Grid Margin="10,23,0,0.5">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="4*"/>
