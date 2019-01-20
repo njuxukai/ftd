@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Configuration;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Xcp;
+using Xcp.Enums;
 
 namespace SampleClientGui
 {
@@ -57,6 +59,21 @@ namespace SampleClientGui
 
         private void button_reqOrderInsert_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                InputOrderField order = new InputOrderField();
+                order.InstrumentCode = textBoxInstrumentCode.Text;
+                order.ExchangeType = (char)((ExchangeType)comboBoxExchangeType.SelectedItem);
+                order.Direction = (char)((Direction)comboBoxDirection.SelectedItem);
+                order.PriceType = (char)((OrderPriceType)comboBoxPriceType.SelectedItem);
+                order.LimitPrice = double.Parse(textBoxPrice.Text);
+                order.VolumeTotalOrginal = int.Parse(textBoxVolume.Text);
+                Wrapper.ReqOrderInsert(order);
+            }
+            catch (Exception ex)
+            {
+                DoShowLog(ex.ToString());
+            }
             
         }
 
@@ -87,7 +104,7 @@ namespace SampleClientGui
 
 
 
-        #region eventBus callback
+        #region TradeWrapper callback
 
         public delegate void EvenBusDelegate();
         public delegate void ShowFundDelegate(FundField fund);
@@ -301,12 +318,30 @@ namespace SampleClientGui
             SetTradeButtonsOff();
             Wrapper.InitParameter();
             RegisterWrapperEvent();
+            ConfigureCustomUI();
+
+
         }
 
+        private void ConfigureCustomUI()
+        {
+            DataObject.AddPastingHandler(textBoxPrice, OnPaste);
+            DataObject.AddPastingHandler(textBoxVolume, OnPaste);
+            //comboBoxDirection.ItemsSource = Enum.GetValues(typeof(Xcp.Enums.Direction)).Cast<Xcp.Enums.Direction>();
+            //comboBoxPriceType.ItemsSource = Enum.GetValues(typeof(Xcp.Enums.OrderPriceType)).Cast<Xcp.Enums.Direction>();
+            //comboBoxExchangeType.ItemsSource = Enum.GetValues(typeof(Xcp.Enums.ExchangeType)).Cast<Xcp.Enums.ExchangeType>();
+            comboBoxExchangeType.SelectedItem = Xcp.Enums.ExchangeType.SH;
+            comboBoxDirection.SelectedItem = Xcp.Enums.Direction.BUY;
+            comboBoxPriceType.SelectedItem = Xcp.Enums.OrderPriceType.HS_Limit;
+        }
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             Order order = (Order)orderDataGrid.SelectedItem;
             InputOrderActionField action = new InputOrderActionField();
+            action.FrontID = order.FrontID;
+            action.SessionID = order.SessionID;
+            action.OrderRef = order.OrderRef;
+            action.OrderSysID = order.OrderSysID;
             Wrapper.ReqOrderAction(action);
         }
 
@@ -350,6 +385,33 @@ namespace SampleClientGui
                 return parent;
             else
                 return FindVisualParent<T>(parentObject);
+        }
+
+        private void NumericTextboxPreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !IsTextAllowed(e.Text);
+        }
+
+        private static readonly Regex _regex = new Regex("[^0-9.-]+"); //regex that matches disallowed text
+        private static bool IsTextAllowed(string text)
+        {
+            return !_regex.IsMatch(text);
+        }
+
+        private void OnPaste(object sender, DataObjectPastingEventArgs e)
+        {
+            if (e.DataObject.GetDataPresent(typeof(String)))
+            {
+                String text = (String)e.DataObject.GetData(typeof(String));
+                if (!IsTextAllowed(text))
+                {
+                    e.CancelCommand();
+                }
+            }
+            else
+            {
+                e.CancelCommand();
+            }
         }
     }
 }

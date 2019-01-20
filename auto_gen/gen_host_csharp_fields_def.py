@@ -159,7 +159,7 @@ def _generate_single_enum(t):
         quoter = "'"
         converter = '(byte)'
     for d in t.enum_value_dicts:
-        lines.append('/// %s' % d['comment'])
+        lines.append('[Description("%s")]' % d['comment'])
         item_name = raw_name +'_' + d['name']
         if 'enname' in d and len(d['enname']) > 0:
             item_name = d['enname']

@@ -20,6 +20,7 @@ void processOrderInsert(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWr
 	pRsp->m_sequenceNO = pReq->m_sequenceNO;
 	pRsp->m_sequenceSeries = pReq->m_sequenceSeries;
 	pRsp->pErrorField = CFtdcErrorFieldPtr(new CFtdcErrorField());
+	ReqOrderInsert* pReqOrderInsert = (ReqOrderInsert*)pReq.get();
 	try 
 	{
 		//²åÈëÎ¯ÍĞ±í

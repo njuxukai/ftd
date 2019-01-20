@@ -36,7 +36,9 @@ namespace SampleClientGui
         public Xcp.Enums.OrderStatus OrderStatus { get {return (Xcp.Enums.OrderStatus)field_.OrderStatus; } }
         public int OrderSysID { get { return field_.OrderSysID; } }
         public int OrderExchangeID { get { return field_.OrderExchangeID; } }
-
+        public int FrontID { get { return field_.FrontID; } }
+        public int SessionID { get { return field_.SessionID; } }
+        public int OrderRef { get { return field_.OrderRef; } }
 
         Xcp.OrderField field_;
     }

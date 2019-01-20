@@ -4,6 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SampleClientGui"
+        xmlns:xcp="clr-namespace:Xcp.Enums;assembly=XcpApiCSharp"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="XCP测试客户端" Height="900" Width="1200" Loaded="Window_Loaded">
     <Grid Margin="10,23,0,0.5">
@@ -69,25 +71,39 @@
                  Grid.RowSpan="3"/>
 
 
-        <Button x:Name="button_login" Content="登录" Grid.Column="1" HorizontalAlignment="Left" Margin="30,10,0,0" VerticalAlignment="Top" Width="75" Click="button_login_Click"/>
-        
-        <Button x:Name="button_reqOrderInsert" Content="委托" Grid.Column="1" HorizontalAlignment="Left" Margin="30,40,0,0" VerticalAlignment="Top" Width="75" Click="button_reqOrderInsert_Click"/>
-        
-        <Button x:Name="button_qryFund" Content="查资金" Grid.Column="1" HorizontalAlignment="Left" Margin="30,70,0,0" VerticalAlignment="Top" Width="75" Click="button_qryFund_Click"/>
-        <Button x:Name="button_qryPosition" Content="查仓位" Grid.Column="1" HorizontalAlignment="Left" Margin="120,70,0,0" VerticalAlignment="Top" Width="75" Click="button_qryPosition_Click"/>
-        <Button x:Name="button_qryOrder" Content="查委托" Grid.Column="1" HorizontalAlignment="Left" Margin="210,70,0,0" VerticalAlignment="Top" Width="75" Click="button_qryOrder_Click"/>
-        <Button x:Name="button_qryTrade" Content="查成交" Grid.Column="1" HorizontalAlignment="Left" Margin="300,70,0,0" VerticalAlignment="Top" Width="75" Click="button_qryTrade_Click"/>
+        <Button x:Name="button_login" Content="登录" Grid.Column="1" HorizontalAlignment="Left" Margin="144,0,0,0" VerticalAlignment="Top" Width="75" Click="button_login_Click"/>
 
-        <Label x:Name="lableAvailableTag" Content="可用余额" HorizontalAlignment="Left" Margin="29,33,0,0" VerticalAlignment="Top" Height="30" Width="60"/>
-        <Label x:Name="labelDrawableTag" Content="可取余额" HorizontalAlignment="Left" Margin="139,33,0,0" VerticalAlignment="Top" Height="30" Width="60"/>
-        <Label x:Name="labelFrozenTag" Content="冻结金额" HorizontalAlignment="Left" Margin="249,33,0,0" VerticalAlignment="Top" Height="30" Width="60"/>
-        <Label x:Name="labelPreTag" Content="日初金额" HorizontalAlignment="Left" Margin="359,33,0,0" VerticalAlignment="Top" Height="30" Width="60"/>
+        <Button x:Name="button_reqOrderInsert" Content="委托" HorizontalAlignment="Left" Margin="647,92,0,0" VerticalAlignment="Top" Width="75" Click="button_reqOrderInsert_Click" Grid.ColumnSpan="2"/>
 
-        <Label x:Name="labelAvailable" Content="0.00" HorizontalAlignment="Left" Margin="29,53,0,0" VerticalAlignment="Top" Height="30" Width="110"/>
-        <Label x:Name="labelDrawable" Content="0.00" HorizontalAlignment="Left" Margin="139,53,0,0" VerticalAlignment="Top" Height="30" Width="110"/>
-        <Label x:Name="labelFrozen" Content="0.00" HorizontalAlignment="Left" Margin="249,53,0,0" VerticalAlignment="Top" Height="30" Width="110"/>
-        <Label x:Name="labelPre" Content="0.00" HorizontalAlignment="Left" Margin="359,53,0,0" VerticalAlignment="Top" Height="30" Width="110"/>
+        <Button x:Name="button_qryFund" Content="查资金" Grid.Column="1" HorizontalAlignment="Left" Margin="144,32,0,0" VerticalAlignment="Top" Width="75" Click="button_qryFund_Click"/>
+        <Button x:Name="button_qryPosition" Content="查仓位" Grid.Column="1" HorizontalAlignment="Left" Margin="234,32,0,0" VerticalAlignment="Top" Width="75" Click="button_qryPosition_Click"/>
+        <Button x:Name="button_qryOrder" Content="查委托" Grid.Column="1" HorizontalAlignment="Left" Margin="324,32,0,0" VerticalAlignment="Top" Width="75" Click="button_qryOrder_Click"/>
+        <Button x:Name="button_qryTrade" Content="查成交" Grid.Column="1" HorizontalAlignment="Left" Margin="414,32,0,0" VerticalAlignment="Top" Width="75" Click="button_qryTrade_Click"/>
 
+        <Label x:Name="lableAvailableTag" Content="可用余额" HorizontalAlignment="Left" Margin="1,12,0,0" VerticalAlignment="Top" Height="30" Width="60"/>
+        <Label x:Name="labelDrawableTag" Content="可取余额" HorizontalAlignment="Left" Margin="111,12,0,0" VerticalAlignment="Top" Height="30" Width="60"/>
+        <Label x:Name="labelFrozenTag" Content="冻结金额" HorizontalAlignment="Left" Margin="221,12,0,0" VerticalAlignment="Top" Height="30" Width="60"/>
+        <Label x:Name="labelPreTag" Content="日初金额" HorizontalAlignment="Left" Margin="331,12,0,0" VerticalAlignment="Top" Height="30" Width="60"/>
+
+        <Label x:Name="labelAvailable" Content="0.00" HorizontalAlignment="Left" Margin="1,32,0,0" VerticalAlignment="Top" Height="30" Width="110"/>
+        <Label x:Name="labelDrawable" Content="0.00" HorizontalAlignment="Left" Margin="111,32,0,0" VerticalAlignment="Top" Height="30" Width="110"/>
+        <Label x:Name="labelFrozen" Content="0.00" HorizontalAlignment="Left" Margin="221,32,0,0" VerticalAlignment="Top" Height="30" Width="110"/>
+        <Label x:Name="labelPre" Content="0.00" HorizontalAlignment="Left" Margin="331,32,0,0" VerticalAlignment="Top" Height="30" Width="110"/>
+
+        <Label x:Name="labeInstrumentCodeTag" Content="代码" HorizontalAlignment="Left" Margin="465,0,0,0" VerticalAlignment="Top" Height="20" Width="30" Padding="0" />
+        <Label x:Name="labelExchangeTypeTag" Content="市场" HorizontalAlignment="Left" Margin="465,30,0,0" VerticalAlignment="Top" Height="20" Width="30" Padding="0"/>
+        <Label x:Name="labelDirectionTag" Content="方向" HorizontalAlignment="Left" Margin="465,60,0,0" VerticalAlignment="Top" Height="20" Width="30" Padding="0"/>
+        <Label x:Name="labelPriceTypeTag" Content="价类" HorizontalAlignment="Left" Margin="607,10,0,0" VerticalAlignment="Top" Height="20" Width="30" Padding="0"/>
+        <Label x:Name="labelPriceTag" Content="价格" HorizontalAlignment="Left" Margin="607,40,0,0" VerticalAlignment="Top" Height="20" Width="30" Padding="0"/>
+        <Label x:Name="labelVolumeTag" Content="数量" HorizontalAlignment="Left" Margin="607,70,0,0" VerticalAlignment="Top" Height="20" Width="30" Padding="0"/>
+
+        <TextBox x:Name="textBoxInstrumentCode" HorizontalAlignment="Left" Height="23" Margin="500,0,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="80"/>
+        <ComboBox x:Name="comboBoxExchangeType" Margin="500,30,95,0" VerticalAlignment="Top" ItemsSource="{Binding Source={local:EnumBindingSource {x:Type xcp:ExchangeType}}}"/>
+        <ComboBox x:Name="comboBoxDirection" HorizontalAlignment="Left" Margin="500,60,0,0" VerticalAlignment="Top" Width="80" ItemsSource="{Binding Source={local:EnumBindingSource {x:Type xcp:Direction}}}"/>
+
+        <ComboBox x:Name="comboBoxPriceType" HorizontalAlignment="Left" Margin="642,0,0,0" VerticalAlignment="Top" Width="80" Grid.ColumnSpan="2" ItemsSource="{Binding Source={local:EnumBindingSource {x:Type xcp:OrderPriceType}}}"/>
+        <TextBox x:Name="textBoxPrice" HorizontalAlignment="Left" Height="23" Margin="642,30,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="80" Grid.ColumnSpan="2" PreviewTextInput="NumericTextboxPreviewTextInput"/>
+        <TextBox x:Name="textBoxVolume" HorizontalAlignment="Left" Height="23" Margin="642,60,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="80" Grid.ColumnSpan="2" PreviewTextInput="NumericTextboxPreviewTextInput"/>
 
 
 
