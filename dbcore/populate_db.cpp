@@ -6,10 +6,13 @@ void populate_db_fund(mco_db_h db);
 void populate_db_position(mco_db_h db);
 void populate_db_order(mco_db_h db);
 void populate_db_trade(mco_db_h db);
+void populate_db_secu_account(mco_db_h db);
+
 
 void populate2_db(mco_db_h db)
 {
 	populate_db_users(db);
+	populate_db_secu_account(db);
 	populate_db_fund(db);
 	populate_db_position(db);
 	populate_db_order(db);
@@ -47,6 +50,26 @@ void populate_db_users(mco_db_h db)
 	}
 }
 
+void populate_db_secu_account(mco_db_h db)
+{
+	mco_trans_h t = 0;
+	MCO_RET rc = MCO_S_OK;
+	SecurityAccount account;
+	SecurityAccount account2;
+	rc = mco_trans_start(db, MCO_READ_WRITE, MCO_TRANS_FOREGROUND, &t);
+	account.create(t);
+	account2.create(t);
+	account.broker_id = 8080;
+	account.investor_id = 99;
+	account.exchange_type = FTDC_ET_SH;
+	account.security_account = "A000000001";
+
+	account2.broker_id = 8080;
+	account2.investor_id = 99;
+	account2.exchange_type = FTDC_ET_SZ;
+	account2.security_account = "2000000008";
+	rc = mco_trans_commit(t);
+}
 
 void populate_db_fund(mco_db_h db)
 {

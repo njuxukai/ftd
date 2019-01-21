@@ -1,5 +1,7 @@
 #include "ftdc_all.h"
 
+using namespace genericdb;
+
 void processQrySecurityAccount(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapper* pWrapper, mco_db_h db)
 {
 #ifdef _DEBUG
@@ -21,20 +23,43 @@ void processQrySecurityAccount(const PlainHeaders& headers, FTD::PackageSPtr pRe
 	pRsp->requestSourceField.RequestID =
 		pReqQrySecurityAccount->qrySecurityAccountField.RequestID;
 
+	mco_trans_h t = 0;
+	MCO_RET rc = MCO_S_OK;
 
-		CFtdcSecurityAccountField shAccount = { 0 };
-		shAccount.BrokerID = pReqQrySecurityAccount->qrySecurityAccountField.BrokerID;
-		shAccount.InvestorID = pReqQrySecurityAccount->qrySecurityAccountField.InvestorID;
-		shAccount.ExchangeType = FTDC_ET_SH;
-		strcpy(shAccount.SecurityAccount, "A000000001");
-		pRsp->securityAccountFields.push_back(shAccount);
+	rc = mco_trans_start(db, MCO_READ_WRITE, MCO_TRANS_FOREGROUND, &t);
+	if (MCO_S_OK != rc)
+	{
+		pRsp->pErrorField->ErrorCode = FTD_ERROR_CODE_TRANSACTION_ERROR;
+		strcpy(pRsp->pErrorField->ErrorText, FTD_ERROR_TEXT_TRANSACTION_ERROR);
+		pWrapper->uplink(rspHeaders, pRsp);
+		return;
+	}
+	int searchInvestorID = pReqQrySecurityAccount->qrySecurityAccountField.InvestorID;
+	mco_cursor_t csr;
+	rc = SecurityAccount::InvestorIdx::cursor(t, &csr);
+	if (MCO_S_OK == rc)
+	{
+		for (rc = SecurityAccount::InvestorIdx::search(t, &csr, MCO_EQ, searchInvestorID);
+		     rc == MCO_S_OK; 
+			rc = mco_cursor_next(t, &csr)) 
+		{
+			SecurityAccount account;
+			account.from_cursor(t, &csr);
+			if (account.investor_id != searchInvestorID)
+			{
+				break;
+			}
+			CFtdcSecurityAccountField accountField = { 0 };
+			accountField.InvestorID = account.investor_id;
+			accountField.ExchangeType = account.exchange_type;
+			accountField.BrokerID = account.broker_id;
+			strcpy(accountField.SecurityAccount, ((std::string)account.security_account).data());
+			pRsp->securityAccountFields.push_back(accountField);
+		}
+		rc = MCO_S_CURSOR_END == rc ? MCO_S_OK : rc;
+	}
+	mco_trans_rollback(t);
 
-		CFtdcSecurityAccountField szAccount = { 0 };
-		szAccount.BrokerID = pReqQrySecurityAccount->qrySecurityAccountField.BrokerID;
-		szAccount.InvestorID = pReqQrySecurityAccount->qrySecurityAccountField.InvestorID;
-		strcpy(szAccount.SecurityAccount, "0000000008");
-		szAccount.ExchangeType = FTDC_ET_SZ;
-		pRsp->securityAccountFields.push_back(szAccount);
 
 
 	pWrapper->uplink(rspHeaders, pRsp);

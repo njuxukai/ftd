@@ -24,6 +24,7 @@ void processQryFund(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrappe
 	pRsp->pErrorField = CFtdcErrorFieldPtr(new CFtdcErrorField());
 	memset(pRsp->pErrorField.get(), 0, sizeof(CFtdcErrorField));
 	pRsp->requestSourceField.RequestID = pReqQryFund->qryFundField.RequestID;
+
 	mco_trans_h t = 0;
 	MCO_RET rc = MCO_S_OK;
 	

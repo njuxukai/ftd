@@ -21,6 +21,15 @@ persistent class User
 	unique tree<user_id> UserIdIdx;
 };
 
+persistent class SecurityAccount
+{
+	int4 broker_id;
+	unsigned<4> investor_id;
+	uint1 exchange_type;
+	char<10> security_account;
+	tree<investor_id> InvestorIdx;
+};
+
 persistent class InputOrder
 {
 	uint2 owner_type;
@@ -71,10 +80,6 @@ persistent class Order
 	tree<order_exchange_sno, exchange_type, branch_id> ExchangeIdx;
 	unique tree<order_sys_sno> SysIdx;
 	tree<investor_id> InvestorIdx;
-
-	//event<new> OrderNewEvent;
-	//event<volume_traded update> OrderTradedVolumeUpdateEvent;
-	//event<status update> OrderStatusUpdateEvent;
 };
 
 persistent class OrderAction
@@ -124,8 +129,10 @@ persistent class Trade
 	AmountType amount_traded;
 	int4 trade_sys_sno;
 	char<10> trade_exchange_sno;
+
     unique tree<trade_exchange_sno> ExchangeIdx;
-	tree<order_sys_sno> OrderSysIdx;
+	//tree<order_sys_sno> OrderSysIdx;
+	tree <investor_id> InvestorIdx;
 };
 
 persistent class Fund
@@ -153,4 +160,5 @@ persistent class Position
 	VolumeType volume;
 	VolumeType volume_frozen;
 	unique tree<investor_id, secu_account, exchange_type, security_code> PositionIdx;
+	tree<investor_id> InvestorIdx;
 };

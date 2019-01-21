@@ -100,7 +100,7 @@ void CXcpFtdcTraderApiImpl::Release()
 	
 	if (m_pInitiator)
 	{
-		m_pInitiator->stop();
+		m_pInitiator->stop(true);
 		delete m_pInitiator;
 		m_pInitiator = 0 ;
 	}

@@ -555,6 +555,8 @@ namespace SampleClientGui
                 order.OrderRef = NextOrderRef;
                 order.FrontID = FrontID;
                 order.SessionID = SessionID;
+                if(securityAccounts.ContainsKey(order.ExchangeType))
+                    order.SecurityAccount = securityAccounts[order.ExchangeType];
                 int returnValue = m_trader.ReqOrderInsert(order, NextRequestID);
                 RaiseUILogAddNewLine(String.Format("ReqOrderOrder.[ReqID={0}][Rtn={1}]",
                     NextRequestID, returnValue));
