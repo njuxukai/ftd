@@ -26,7 +26,7 @@ def generate_host_cs_struct_file(fields, items, types, project_code, target_path
     d = {}
     d['project_code_upper'] = project_code.upper()
     d['stuct_define_entrys'] = '\n'.join(lines)
-    save_cpp_file(template.format_map(d),  '%s/%s' %(target_path, struct_file_name))
+    save_cpp_file(template.format_map(d),  '%s/%s' %(target_path, struct_file_name), 'utf-8')
 
 def generate_host_cs_enum_file(types, project_code, target_path):
     struct_file_name = 'ApiEnum.cs'
@@ -43,7 +43,7 @@ def generate_host_cs_enum_file(types, project_code, target_path):
         lines.append('')
     d = {}
     d['enum_define_entrys'] = '\n'.join(lines)
-    save_cpp_file(template.format_map(d),  '%s/%s' %(target_path, struct_file_name))
+    save_cpp_file(template.format_map(d),  '%s/%s' %(target_path, struct_file_name), 'utf-8')
 
 
 def _generate_field_struct_def_lines(field, items, types, template, project_code):

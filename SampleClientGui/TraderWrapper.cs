@@ -308,6 +308,7 @@ namespace SampleClientGui
                     string key = string.Format("{0}:{1}:{2}", order.FrontID, order.SessionID, order.OrderRef);
                     currentOrderDict.Add(key, order);
                 }
+                receiveOrderBuffer.Clear();
                 RaiseOrderUpdate();
             }
         }
