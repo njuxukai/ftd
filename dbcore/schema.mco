@@ -5,9 +5,10 @@
 #define uint2  unsigned<2>
 #define uint4  unsigned<4>
 #define uint8 unsigned<8>
-#define PriceType decimal< 10, 3>
-#define AmountType decimal< 14, 2>
-#define VolumeType unsigned<8>
+#define PriceType  double
+#define AmountType double
+#define VolumeType unsigned<4>
+#define SysSnoType unsigned<4>
 
 
 declare database genericdb;
@@ -59,21 +60,22 @@ persistent class Order
 	int4 order_ref;
 	int4 user_id;
 	int4 investor_id;
-	char<10> secu_account;
+	char<10> security_account;
 	string instrument_code;
 	uint1 exchange_type;
-	uint1 bs_flag;
+	uint1 direction;
 	int4 business_code;
 	uint1 price_type;
 	PriceType price;
-	VolumeType volume;
+	VolumeType volume_total_original;
 	int4 branch_id;
 	int4 pbu_id;
-	char<10> order_sys_sno;
+	SysSnoType order_sys_sno;
 	char<10> order_exchange_sno;
 	uint1 status;
 	VolumeType volume_traded;
 	AmountType amount_traded;
+	VolumeType volume_total;
 	VolumeType volume_cancelled;
 
 	tree<front_id, session_id, order_ref> SessionIdx;
@@ -151,14 +153,14 @@ persistent class Fund
 persistent class Position
 {
 	int4 investor_id;
-	char<10> secu_account;
+	char<10> security_account;
 	uint1 exchange_type;
-	string security_code;
-	string security_name;
+	string instrument_code;
+	string instrument_name;
 	VolumeType volume_pre;
 	VolumeType volume_available;
 	VolumeType volume;
 	VolumeType volume_frozen;
-	unique tree<investor_id, secu_account, exchange_type, security_code> PositionIdx;
+	unique tree<investor_id, security_account, exchange_type, instrument_code> PositionIdx;
 	tree<investor_id> InvestorIdx;
 };

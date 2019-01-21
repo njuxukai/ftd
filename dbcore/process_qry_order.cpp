@@ -1,5 +1,7 @@
 #include "ftdc_all.h"
 
+using namespace genericdb;
+
 void processQryOrder(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapper* pWrapper, mco_db_h db)
 {
 #ifdef _DEBUG
@@ -19,23 +21,51 @@ void processQryOrder(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapp
 	ReqQryOrder *pReqQryOrder = (ReqQryOrder*)pReq.get();
 	pRsp->requestSourceField.RequestID = pReqQryOrder->qryOrderField.RequestID;
 
-	for (int i = 0; i < 10; i++)
+	mco_trans_h t = 0;
+	MCO_RET rc = MCO_S_OK;
+
+	rc = mco_trans_start(db, MCO_READ_ONLY, MCO_TRANS_FOREGROUND, &t);
+	if (MCO_S_OK != rc)
 	{
-		CFtdcOrderField order = { 0 };
-		sprintf(order.InstrumentCode, "%d", 600000 + i);
-		order.Direction = FTDC_D_BUY;
-		order.OrderStatus = FTDC_OS_PART_TRADED;
-		//order.OrderStatus = FTDC_OS_0
-		order.AmountTraded = 900;
-		order.VolumeTraded = 100;
-		order.VolumeTotalOrginal = 200;
-		order.LimitPrice = 9;
-		order.OrderExchangeID = i * 10 + 9;
-		order.OrderSysID = 100 + i;
-		order.FrontID = 1;
-		order.SessionID = 1;
-		order.OrderRef = i + 1;
-		pRsp->orderFields.push_back(order);
+		pRsp->pErrorField->ErrorCode = FTD_ERROR_CODE_TRANSACTION_ERROR;
+		strcpy(pRsp->pErrorField->ErrorText, FTD_ERROR_TEXT_TRANSACTION_ERROR);
+		pWrapper->uplink(rspHeaders, pRsp);
+		return;
+	}
+
+	int searchInvestorID = pReqQryOrder->qryOrderField.InvestorID;
+
+	mco_cursor_t csr;
+	rc = Order::InvestorIdx::cursor(t, &csr);
+	if (MCO_S_OK == rc)
+	{
+		for (rc = Order::InvestorIdx::search(t, &csr, MCO_EQ, searchInvestorID);
+			rc == MCO_S_OK;
+			rc = mco_cursor_next(t, &csr))
+		{
+			Order order;
+			order.from_cursor(t, &csr);
+			if (order.investor_id != searchInvestorID)
+				break;
+			CFtdcOrderField orderField = { 0 };
+			orderField.InvestorID = order.investor_id;
+			orderField.FrontID = order.front_id;
+			orderField.SessionID = order.session_id;
+			orderField.OrderRef = order.order_ref;
+			orderField.OrderSysID = order.order_sys_sno;
+			strcpy(orderField.InstrumentCode, ((std::string)order.instrument_code).data());
+			orderField.Direction = order.direction;
+			orderField.PriceType = order.price_type;
+			orderField.LimitPrice = order.price;
+			orderField.OrderStatus = order.status;
+			orderField.VolumeTotalOrginal = order.volume_total_original;
+			orderField.VolumeTotal = order.volume_total;
+			orderField.VolumeTraded = order.volume_traded;
+			orderField.AmountTraded = order.amount_traded;
+
+			pRsp->orderFields.push_back(orderField);
+			
+		}
 	}
 	pWrapper->uplink(rspHeaders, pRsp);
 }

@@ -26,7 +26,7 @@ void processQrySecurityAccount(const PlainHeaders& headers, FTD::PackageSPtr pRe
 	mco_trans_h t = 0;
 	MCO_RET rc = MCO_S_OK;
 
-	rc = mco_trans_start(db, MCO_READ_WRITE, MCO_TRANS_FOREGROUND, &t);
+	rc = mco_trans_start(db, MCO_READ_ONLY, MCO_TRANS_FOREGROUND, &t);
 	if (MCO_S_OK != rc)
 	{
 		pRsp->pErrorField->ErrorCode = FTD_ERROR_CODE_TRANSACTION_ERROR;
