@@ -27,7 +27,7 @@ void processQryTrade(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapp
 		trade.PriceTrade = 1.2;
 		trade.OrderSysID = i * 10 + 1;
 		trade.TradeSysID = (i+1) * 100;
-		trade.TradeExchangeID = i * 100 + 99;
+		sprintf(trade.TradeExchangeID, "%d" , i * 100 + 99);
 		pRsp->tradeFields.push_back(trade);
 	}
 

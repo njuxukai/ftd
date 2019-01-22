@@ -471,8 +471,8 @@
 			<item name="AmountTraded" comment="成交金额"/>
 			<item name="VolumeTotal" comment="剩余数量"/>
 			<item name="OrderStatus" comment="报单状态"/>
-			<item name="OrderSysID" comment="报单在柜台系统编号"/>
-			<item name="OrderCldID" comment="报单编号"/>
+			<item name="OrderSysID" comment="报单在柜台系统序号"/>
+			<item name="ClOrdID" comment="报单编号"/>
 			<item name="OrderExchangeID" comment="报单交易所返回编号"/>
 			<item name="TradingDay" comment="交易日"/>
 			<item name="InsertDate" comment="报单日期"/>
@@ -743,6 +743,7 @@
 		<itemDefine name="ClientUUID" type="FTDStringType&lt;40&gt;" comment="本地请求唯一编号"/>
 		<itemDefine name="CancelFlag" type="FTDTradeCancelFlag" comment="成交&#47;撤单标记"/>
 		<itemDefine name="CurrencyType" type="FTDCurrencyType" comment="币种编码"/>
+		<itemDefine name="ClOrdID" type="FTDClOrdID" comment="委托报盘编号"/>
 		
 		<itemDefine name="Direction" type="FTDDirection" comment="报单价格方向"/>
 		
@@ -792,9 +793,8 @@
 		
 		<itemDefine name="OneTimePassword" type="FTDPassword" comment="动态密码"/>
 		<itemDefine name="OrderRef" type="FTDIntType" comment="报单引用"/>
-		<itemDefine name="OrderExchangeID" type="FTDIntType" comment="报单交易所编码"/>
+		<itemDefine name="OrderExchangeID" type="FTDOrderExchangeID" comment="报单交易所编号"/>
 		<itemDefine name="OrderSysID" type="FTDSysID" comment="报单系统编码"/>
-		<itemDefine name="OrderCldID" type="FTDCldID" comment="报单系统委托报盘序列代码"/>
 		<itemDefine name="OrderStatus" type="FTDOrderStatus" comment="报单状态"/>
 		
 		<itemDefine name="Password" type="FTDPassword" comment="密码"/>
@@ -825,7 +825,7 @@
 		<itemDefine name="TradeDate" type="FTDDate" comment="成交日期"/>
 		<itemDefine name="TradeTime" type="FTDTime" comment="成交时间"/>
 		<itemDefine name="TradeSysID" type="FTDIntType" comment="成交回报在柜台编号"/>
-		<itemDefine name="TradeExchangeID" type="FTDIntType" comment="成交在交易所编号"/>
+		<itemDefine name="TradeExchangeID" type="FTDTradeExchangeID" comment="成交在交易所编号"/>
 		<itemDefine name="TotalAmount" type="FTDValue" comment="最小申赎单位净值总金额"/>
 		<itemDefine name="TestTimestamp" type="FTDTimeStamp2" comment="时间戳"/>
 		
@@ -977,7 +977,10 @@
 			<enumValue name="1" comment="绝对量"/>
 		</typeDefine>
 		<typeDefine name="FTDSysID" baseType="FTDIntType" comment="系统唯一编号，用在报单委托成交等" length="4" precision="0"/>
-		<typeDefine name="FTDCldID" baseType="FTDStringType&lt;8&gt;" comment="系统报单编号" length="10" precision="0"/>
+		<typeDefine name="FTDCldID" baseType="FTDStringType&lt;10&gt;" comment="系统报单编号" length="10" precision="0"/>
 		<typeDefine name="FTDSecurityAccount" baseType="FTDStringType&lt;10&gt;" comment="沪深交易所证券账户" length="10" precision="0"/>
+		<typeDefine name="FTDClOrdID" baseType="FTDStringType&lt;10&gt;" comment="系统报单编号" length="10" precision="0"/>
+		<typeDefine name="FTDOrderExchangeID" baseType="FTDStringType&lt;16&gt;" comment="沪深交易所委托编号" length="16" precision="0"/>
+		<typeDefine name="FTDTradeExchangeID" baseType="FTDStringType&lt;16&gt;" comment="沪深交易所成交编号" length="16" precision="0"/>
 	</types>
 </ftd>

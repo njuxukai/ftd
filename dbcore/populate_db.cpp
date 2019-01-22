@@ -199,13 +199,10 @@ void populate_db_trade(mco_db_h db)
 	{
 		trade.create(t);
 		trade.investor_id = MOCK_INVESTOR_ID;
-		trade.security_account = MOCK_SH_SECU_ACCOUNT;
 		trade.instrument_code = "600000";
 		trade.exchange_type = FTDC_ET_SH;
-		trade.direction = FTDC_D_BUY;
 		trade.price_type = FTDC_OPT_HS_Limit;
 		trade.price = 17.60;
-		trade.volume_total_original = 1000;
 		trade.volume_traded = 500;
 		trade.amount_traded = 9000.90;
 		trade.status = FTDC_OS_PART_TRADED;

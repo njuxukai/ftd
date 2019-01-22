@@ -35,7 +35,7 @@ namespace SampleClientGui
         public double AmountTraded { get { return field_.AmountTraded; } }
         public Xcp.Enums.OrderStatus OrderStatus { get {return (Xcp.Enums.OrderStatus)field_.OrderStatus; } }
         public int OrderSysID { get { return field_.OrderSysID; } }
-        public int OrderExchangeID { get { return field_.OrderExchangeID; } }
+        public string OrderExchangeID { get { return field_.OrderExchangeID; } }
         public int FrontID { get { return field_.FrontID; } }
         public int SessionID { get { return field_.SessionID; } }
         public int OrderRef { get { return field_.OrderRef; } }
@@ -56,7 +56,7 @@ namespace SampleClientGui
         public double PriceTrade { get { return field_.PriceTrade; } }
         public int OrderSysID { get { return field_.OrderSysID; } }
         public int TradeSysID { get { return field_.TradeSysID; } }
-        public int TradeExchangeID { get { return field_.TradeExchangeID; } }
+        public string TradeExchangeID { get { return field_.TradeExchangeID; } }
 
 
         Xcp.TradeField field_;
