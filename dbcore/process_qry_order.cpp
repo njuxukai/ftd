@@ -52,7 +52,7 @@ void processQryOrder(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapp
 			orderField.FrontID = order.front_id;
 			orderField.SessionID = order.session_id;
 			orderField.OrderRef = order.order_ref;
-			orderField.OrderSysID = order.order_sys_sno;
+			orderField.OrderSysID = order.order_sys_id;
 			strcpy(orderField.InstrumentCode, ((std::string)order.instrument_code).data());
 			orderField.Direction = order.direction;
 			orderField.PriceType = order.price_type;

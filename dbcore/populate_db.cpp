@@ -189,25 +189,5 @@ void populate_db_order(mco_db_h db)
 
 void populate_db_trade(mco_db_h db)
 {
-	mco_trans_h t = 0;
-	MCO_RET rc = MCO_S_OK;
-	int  j;
 
-	Trade trade;
-	rc = mco_trans_start(db, MCO_READ_WRITE, MCO_TRANS_FOREGROUND, &t);
-	if (MCO_S_OK == rc)
-	{
-		trade.create(t);
-		trade.investor_id = MOCK_INVESTOR_ID;
-		trade.instrument_code = "600000";
-		trade.exchange_type = FTDC_ET_SH;
-		trade.price_type = FTDC_OPT_HS_Limit;
-		trade.price = 17.60;
-		trade.volume_traded = 500;
-		trade.amount_traded = 9000.90;
-		trade.status = FTDC_OS_PART_TRADED;
-
-		rc = mco_trans_commit(t);
-		//order.order_sys_sno = 1;
-	}
 }

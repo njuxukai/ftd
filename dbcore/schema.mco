@@ -9,6 +9,10 @@
 #define AmountType double
 #define VolumeType unsigned<4>
 #define SysSnoType unsigned<4>
+#define OrderExchangeIDType char<16>
+#define TradeExchangeIDType char<16>
+#define ClOrdIDType         char<10>
+#define SeqNumType     int<8>
 
 
 declare database genericdb;
@@ -54,7 +58,6 @@ persistent class InputOrder
 
 persistent class Order
 {
-	uint2 owner_type;
 	int4 front_id;
 	int4 session_id;
 	int4 order_ref;
@@ -70,23 +73,24 @@ persistent class Order
 	VolumeType volume_total_original;
 	int4 branch_id;
 	int4 pbu_id;
-	SysSnoType order_sys_sno;
-	char<10> order_exchange_sno;
+	SysSnoType order_sys_id;
+	ClOrdIDType client_order_id;
+	OrderExchangeIDType order_exchange_id;
 	uint1 status;
 	VolumeType volume_traded;
 	AmountType amount_traded;
 	VolumeType volume_total;
 	VolumeType volume_cancelled;
 
-	tree<front_id, session_id, order_ref> SessionIdx;
-	tree<order_exchange_sno, exchange_type, branch_id> ExchangeIdx;
-	unique tree<order_sys_sno> SysIdx;
+	unique tree<front_id, session_id, order_ref> SessionIdx;
+	unique tree<exchange_type, pbu_id, order_exchange_id> ExchangeIdx;
+	unique tree<order_sys_id> SysIdx;
+	unique tree<client_order_id> clOrdIDIdx;
 	tree<investor_id> InvestorIdx;
 };
 
 persistent class OrderAction
 {
-	uint2 owner_type;
 	int4 user_id;
 	int4 investor_id;
 	int4 front_id;
@@ -110,31 +114,82 @@ persistent class OrderAction
 
 };
 
-persistent class Trade
+/*
+* 上海： ordwith2， cjhb
+* 深圳： execution report  
+插入后，
+1 对主键、委托源信息进行补充，除必须的简单字典转义对报告的不同交易所不同字段有效性不做调整，
+尽量保持原貌（如上海只有成交量 成交价格， 深圳有委托剩余量等，都不去做修改，该流水信息能够体现交
+易所接口原生数据）
+2 更新Order状态
+3 结合Order信息和当前Report,产生一笔UserExecutionReport流水 
+注意： 用户的Trade也是从这里读取
+*/
+persistent class InnerExecutionReport
 {
-	int4 user_id;
+	
 	int4 investor_id;
-	char<10> secu_account;
-	string instrument_code;
 	uint1 exchange_type;
-	uint1 bs_flag;
-	int4 business_code;
-	uint1 price_type;
-	PriceType price;
-	VolumeType volume;
-	int4 branch_id;
-	int4 pbu_id;
-	char<10> order_sys_sno;
-	char<10> order_exchange_sno;
-	uint1 status;
-	VolumeType volume_traded;
-	AmountType amount_traded;
-	int4 trade_sys_sno;
-	char<10> trade_exchange_sno;
+	char<10> security_account;
+	string instrument_code;
+	uint1 exec_type;
+	TradeExchangeIDType trade_exchange_id;    //沪New/Rejct, Cancelled 0
+	
 
-    unique tree<trade_exchange_sno> ExchangeIdx;
-	//tree<order_sys_sno> OrderSysIdx;
+	ClOrdIDType client_order_id;              //沪深 New/Reject, 深Cancelled， 沪深 Trade
+	OrderExchangeIDType order_exchange_id;    //沪深 New/Reject, 沪Cancelled，   深 Trade
+	ClOrdIDType  action_client_order_id;      //沪深 Cancelled 
+	OrderExchangeIDType action_exchange_id;   //沪深 Cancelled
+	
+	SysSnoType ier_sys_id;       //插入时分配
+	SysSnoType order_sys_id;     //插入时关联
+
+	uint1 bs_flag;
+	PriceType price;             //源信息
+	VolumeType volume;           //源信息
+	int4 branch_id;
+	int4 pbu_id;             
+		
+	uint1 status;                //沪深 New/Rejected,Cancelled ; 深 Trade
+	VolumeType volume_last;      //沪深 Trade
+	PriceType price_last;        //沪深 Trade
+	VolumeType volume_cum;       //深 New/Reject,Cancelled,Trade：已成交量
+	VolumeType volume_leaves;    //深 New/Reject,Cancelled,Trade：剩余量
+	VolumeType volume_cancelled; //沪 New/Reject
+
+    unique tree<exchange_type, pbu_id, order_sys_id, exec_type, trade_exchange_id> ExchangeIdx;
+	unique tree<ier_sys_id> SysIdIdx;
+	tree <order_sys_id> OrderSysIdIdx;
 	tree <investor_id> InvestorIdx;
+};
+
+persistent class UserExecutionReport
+{
+	int4 investor_id;
+	uint1 exchange_type;
+	char<10> security_account;
+	string instrument_code;
+	uint1 exec_type;
+	int4 front_id;
+	int4 session_id;
+	int4 order_ref;
+	SysSnoType order_sys_id;     //插入时关联
+	SysSnoType uer_sys_id;       //插入时分配
+	SysSnoType ier_sys_id;       //如果ExecType=Create;ier_sys_id = 0
+
+	uint1 bs_flag;
+	PriceType price;             //源信息
+	VolumeType volume;           //源信息
+	int4 branch_id;
+	int4 pbu_id;             
+		
+	uint1 status;                //
+	VolumeType volume_last;      //如果ExecType != Trade;volume_last = 0
+	PriceType price_last;        //如果ExecType != Trade;price_last = 0
+	AmountType amount_cum;       //累计成交金额  sum(数量*价格)
+	VolumeType volume_cum;       //已成交量
+	VolumeType volume_leaves;    //终结状态  为0
+	VolumeType volume_cancelled; //非终结状态 为0
 };
 
 persistent class Fund
