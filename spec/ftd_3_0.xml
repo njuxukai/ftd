@@ -498,12 +498,9 @@
 			<item name="InvestorID" comment="投资者代码"/>
 			<item name="InstrumentCode" comment="证券代码"/>
 			<item name="ExchangeType" comment="交易所代码"/>
-			<item name="UserID" comment="用户代码"/>
 			<item name="Direction" comment="报单价格方向"/>
 			<item name="PriceType" comment="报单价格条件"/>
 			<item name="LimitPrice" comment="限制价格"/>
-			<item name="VolumeTotalOrginal" comment="报单数量"/>
-			<item name="CancelFlag" comment="成交&#47;撤单标记"/>
 			<item name="VolumeTrade" comment="成交数量"/>
 			<item name="PriceTrade" comment="成交价格"/>
 			<item name="TradeDate" comment="成交日期"/>
@@ -511,8 +508,6 @@
 			<item name="OrderSysID" comment="委托在柜台编号"/>
 			<item name="TradeSysID" comment="成交回报在柜台编号"/>
 			<item name="TradeExchangeID" comment="成交在交易所编号"/>
-			<item name="BranchID" comment="营业部编号"/>
-			<item name="InvestUnitID" comment="席位编号"/>
 		</fieldDefine>
 		
 		<fieldDefine name="QryFundTransferField" fid="FID_QryFundTransferField" fidValue="0x0016" comment="资金划转查询请求域">
@@ -982,5 +977,12 @@
 		<typeDefine name="FTDClOrdID" baseType="FTDStringType&lt;10&gt;" comment="系统报单编号" length="10" precision="0"/>
 		<typeDefine name="FTDOrderExchangeID" baseType="FTDStringType&lt;16&gt;" comment="沪深交易所委托编号" length="16" precision="0"/>
 		<typeDefine name="FTDTradeExchangeID" baseType="FTDStringType&lt;16&gt;" comment="沪深交易所成交编号" length="16" precision="0"/>
+		<typeDefine name="FTDExecType" baseType="FTDCharType" length="1" precision="0">
+			<enumValue name="1" comment="柜台创建" enname="Create"/>
+			<enumValue name="2" comment="交易所创建" enname="New"/>
+			<enumValue name="3" comment="交易所拒绝" enname="Rejected"/>
+			<enumValue name="4" comment="交易所撤单回报" enname="Cancelled"/>
+			<enumValue name="5" comment="交易所成交回报" enname="Trade"/>
+		</typeDefine>
 	</types>
 </ftd>

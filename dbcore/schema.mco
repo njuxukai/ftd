@@ -17,6 +17,15 @@
 
 declare database genericdb;
 
+persistent class SysConfig
+{
+	int4 config_id;
+	int4 broker_id;
+	char<8> system_date;
+	char<8> trade_date;
+
+	unique tree<config_id> Idx;
+};
 
 persistent class User
 {
@@ -32,7 +41,25 @@ persistent class SecurityAccount
 	unsigned<4> investor_id;
 	uint1 exchange_type;
 	char<10> security_account;
+	int4 pbu_id;
 	tree<investor_id> InvestorIdx;
+};
+
+persistent class Branch
+{
+	int4 branch_id;
+	int4 sh_branch_id;
+	int4 sz_branch_id;
+
+	unique tree<branch_id> Idx;
+};
+
+persistent class NextSNO
+{
+	int4 topic_id;
+	int4 next_sno;
+
+	unique tree<topic_id> Idx;
 };
 
 persistent class InputOrder
@@ -72,14 +99,15 @@ persistent class Order
 	PriceType price;
 	VolumeType volume_total_original;
 	int4 branch_id;
+	int4 exchange_branch_id;
 	int4 pbu_id;
 	SysSnoType order_sys_id;
 	ClOrdIDType client_order_id;
 	OrderExchangeIDType order_exchange_id;
 	uint1 status;
-	VolumeType volume_traded;
-	AmountType amount_traded;
-	VolumeType volume_total;
+	VolumeType volume_cum;
+	AmountType amount_cum;
+	VolumeType volume_leaves;
 	VolumeType volume_cancelled;
 
 	unique tree<front_id, session_id, order_ref> SessionIdx;
@@ -105,11 +133,11 @@ persistent class OrderAction
 	uint1 bs_flag;
 	VolumeType volume;
 	PriceType price;
-	char<10> action_sys_sno;
-	char<10> action_exchange_sno;
+	SysSnoType action_sys_id;
+	ClOrdIDType client_action_id;
+	OrderExchangeIDType action_exchange_id;
 
-	unique tree<action_sys_sno> SysIdx;
-	tree<action_sys_sno, exchange_type, branch_id> ExchangeIdx;
+	unique tree<action_sys_id> SysIdx;
 	tree<investor_id> InvestorIdx;
 
 };
@@ -133,7 +161,7 @@ persistent class InnerExecutionReport
 	char<10> security_account;
 	string instrument_code;
 	uint1 exec_type;
-	TradeExchangeIDType trade_exchange_id;    //沪New/Rejct, Cancelled 0
+	TradeExchangeIDType report_exchange_id;    //沪New/Rejct, Cancelled :0
 	
 
 	ClOrdIDType client_order_id;              //沪深 New/Reject, 深Cancelled， 沪深 Trade
@@ -145,9 +173,11 @@ persistent class InnerExecutionReport
 	SysSnoType order_sys_id;     //插入时关联
 
 	uint1 bs_flag;
+	uint1 price_type;
 	PriceType price;             //源信息
 	VolumeType volume;           //源信息
-	int4 branch_id;
+	int4 branch_id;              //源信息
+	int4 exchange_branch_id;
 	int4 pbu_id;             
 		
 	uint1 status;                //沪深 New/Rejected,Cancelled ; 深 Trade
@@ -157,7 +187,7 @@ persistent class InnerExecutionReport
 	VolumeType volume_leaves;    //深 New/Reject,Cancelled,Trade：剩余量
 	VolumeType volume_cancelled; //沪 New/Reject
 
-    unique tree<exchange_type, pbu_id, order_sys_id, exec_type, trade_exchange_id> ExchangeIdx;
+    unique tree<exchange_type, pbu_id, order_sys_id, exec_type, report_exchange_id> ExchangeIdx;
 	unique tree<ier_sys_id> SysIdIdx;
 	tree <order_sys_id> OrderSysIdIdx;
 	tree <investor_id> InvestorIdx;
@@ -178,8 +208,9 @@ persistent class UserExecutionReport
 	SysSnoType ier_sys_id;       //如果ExecType=Create;ier_sys_id = 0
 
 	uint1 bs_flag;
-	PriceType price;             //源信息
-	VolumeType volume;           //源信息
+	uint1 price_type;            //委托价格类型，源信息
+	PriceType price;             //委托价格，源信息
+	VolumeType volume;           //委托数量，源信息
 	int4 branch_id;
 	int4 pbu_id;             
 		
@@ -188,8 +219,10 @@ persistent class UserExecutionReport
 	PriceType price_last;        //如果ExecType != Trade;price_last = 0
 	AmountType amount_cum;       //累计成交金额  sum(数量*价格)
 	VolumeType volume_cum;       //已成交量
-	VolumeType volume_leaves;    //终结状态  为0
-	VolumeType volume_cancelled; //非终结状态 为0
+
+	unique tree<uer_sys_id> SysIdIdx;
+	unique tree<order_sys_id, exec_type, ier_sys_id> InnerReportIdx;
+	tree<investor_id, uer_sys_id> InvestorIdx;
 };
 
 persistent class Fund
@@ -218,4 +251,12 @@ persistent class Position
 	VolumeType volume_frozen;
 	unique tree<investor_id, security_account, exchange_type, instrument_code> PositionIdx;
 	tree<investor_id> InvestorIdx;
+};
+
+persistent class TestER
+{
+    int4 investor_id;
+	int4 sno;
+	
+	unique tree<investor_id, sno> InvIdx;
 };

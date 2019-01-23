@@ -54,14 +54,16 @@ void processQryOrder(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapp
 			orderField.OrderRef = order.order_ref;
 			orderField.OrderSysID = order.order_sys_id;
 			strcpy(orderField.InstrumentCode, ((std::string)order.instrument_code).data());
+			strcpy(orderField.OrderExchangeID, ((std::string) order.order_exchange_id).data());
+			strcpy(orderField.ClOrdID, ((std::string)order.client_order_id).data());
 			orderField.Direction = order.direction;
 			orderField.PriceType = order.price_type;
 			orderField.LimitPrice = order.price;
 			orderField.OrderStatus = order.status;
 			orderField.VolumeTotalOrginal = order.volume_total_original;
-			orderField.VolumeTotal = order.volume_total;
-			orderField.VolumeTraded = order.volume_traded;
-			orderField.AmountTraded = order.amount_traded;
+			orderField.VolumeTotal = order.volume_leaves;
+			orderField.VolumeTraded = order.volume_cum;
+			orderField.AmountTraded = order.amount_cum;
 
 			pRsp->orderFields.push_back(orderField);
 			

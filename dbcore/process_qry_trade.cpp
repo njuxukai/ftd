@@ -1,4 +1,5 @@
 #include "ftdc_all.h"
+using namespace genericdb;
 
 void processQryTrade(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapper* pWrapper, mco_db_h db)
 {
@@ -18,18 +19,48 @@ void processQryTrade(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapp
 	ReqQryTrade *pReqQryTrade = (ReqQryTrade*)pReq.get();
 	pRsp->requestSourceField.RequestID = pReqQryTrade->qryTradeField.RequestID;
 
-	for (int i = 0; i < 10; i++)
+	mco_trans_h t = 0;
+	MCO_RET rc = MCO_S_OK;
+
+	rc = mco_trans_start(db, MCO_READ_ONLY, MCO_TRANS_FOREGROUND, &t);
+	if (MCO_S_OK != rc)
 	{
-		CFtdcTradeField trade = { 0 };
-		sprintf(trade.InstrumentCode, "%d", 600000 + i);
-		trade.Direction = FTDC_D_BUY;
-		trade.VolumeTrade = 100;
-		trade.PriceTrade = 1.2;
-		trade.OrderSysID = i * 10 + 1;
-		trade.TradeSysID = (i+1) * 100;
-		sprintf(trade.TradeExchangeID, "%d" , i * 100 + 99);
-		pRsp->tradeFields.push_back(trade);
+		pRsp->pErrorField->ErrorCode = FTD_ERROR_CODE_TRANSACTION_ERROR;
+		strcpy(pRsp->pErrorField->ErrorText, FTD_ERROR_TEXT_TRANSACTION_ERROR);
+		pWrapper->uplink(rspHeaders, pRsp);
+		return;
 	}
 
+	int searchInvestorID = pReqQryTrade->qryTradeField.InvestorID;
+
+	mco_cursor_t csr;
+	rc = InnerExecutionReport::InvestorIdx::cursor(t, &csr);
+	if (MCO_S_OK == rc)
+	{
+		for (rc = InnerExecutionReport::InvestorIdx::search(t, &csr, MCO_EQ, searchInvestorID);
+		rc == MCO_S_OK;
+			rc = mco_cursor_next(t, &csr))
+		{
+			InnerExecutionReport report;
+			report.from_cursor(t, &csr);
+			if (report.investor_id != searchInvestorID)
+				break;
+			
+			CFtdcTradeField tradeField = { 0 };
+			tradeField.InvestorID = report.investor_id;
+			strcpy(tradeField.InstrumentCode, ((std::string)report.instrument_code).data());
+			tradeField.ExchangeType = report.exchange_type;
+			tradeField.PriceType = report.price_type;
+			tradeField.LimitPrice = report.price;
+			tradeField.Direction = report.bs_flag;
+			tradeField.OrderSysID = report.order_sys_id;
+			tradeField.TradeSysID = report.ier_sys_id;
+			strcpy(tradeField.TradeExchangeID, ((std::string)report.report_exchange_id).data());
+			tradeField.VolumeTrade = report.volume_last;
+			tradeField.PriceTrade = report.price_last;
+			pRsp->tradeFields.push_back(tradeField);
+
+		}
+	}
 	pWrapper->uplink(rspHeaders, pRsp);
 }

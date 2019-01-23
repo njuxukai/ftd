@@ -426,6 +426,26 @@ typedef char TXcpFtdcOrderExchangeIDType[16 + 1];
 ////////////////////////////////////////////////////////////////////////////////
 typedef char TXcpFtdcTradeExchangeIDType[16 + 1];
 
+////////////////////////////////////////////////////////////////////////////////
+///TXcpFtdcExecTypeType  
+////////////////////////////////////////////////////////////////////////////////
+///柜台创建
+#define XCP_FTDC_ET_Create '1'
+
+///交易所创建
+#define XCP_FTDC_ET_New '2'
+
+///交易所拒绝
+#define XCP_FTDC_ET_Rejected '3'
+
+///交易所撤单回报
+#define XCP_FTDC_ET_Cancelled '4'
+
+///交易所成交回报
+#define XCP_FTDC_ET_Trade '5'
+
+typedef char TXcpFtdcExecTypeType;
+
 
 
 #endif

@@ -41,7 +41,7 @@
                 <DataGridTextColumn Header="成交金额" Binding="{Binding AmountTraded}" Width="*"/>
                 <DataGridTextColumn Header="委托状态" Binding="{Binding OrderStatus}" Width="*"/>
                 <DataGridTextColumn Header="系统编号" Binding="{Binding OrderSysID}" Width="*"/>
-                <DataGridTextColumn Header="交易所编号" Binding="{Binding OrderExchangeID}" Width="*"/>
+                <DataGridTextColumn Header="交易所编号" Binding="{Binding OrderExchangeID}" Width="2*"/>
             </DataGrid.Columns>
             <DataGrid.ContextMenu>
                 <ContextMenu>

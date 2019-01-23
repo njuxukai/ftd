@@ -155,11 +155,12 @@ namespace SampleClientGui
             }
             else
             {
-                line = String.Format("登录成功,FrontID={0},SessionID={1},MaxOrderRef={2},HeartBeat={3}",
+                line = String.Format("登录成功,FrontID={0},SessionID={1},MaxOrderRef={2},HeartBeat={3},TradingDay={4}",
                     e.RspUserLoginField.FrontID,
                     e.RspUserLoginField.SessionID,
                     e.RspUserLoginField.MaxOrderRef,
-                    e.RspUserLoginField.HeartbeatInterval);
+                    e.RspUserLoginField.HeartbeatInterval,
+                    e.RspUserLoginField.TradingDay);
                 RaiseUILogAddNewLine(line);
 
                 QrySecurityAccountField field = new QrySecurityAccountField

@@ -63,7 +63,32 @@ void processUserLoginTransaction(const ReqUserLogin* pReq, mco_trans_h t, RspUse
 	{
 		throw(MCO::AuthorizationDenied("密码错误"));
 	}
-
+	//查max order ref
+	int maxOrderRef = 1;
+	int targetFrontID = pReq->reqUserLoginField.FrontID;
+	int targetSessionID = pReq->reqUserLoginField.SessionID;
+	mco_cursor_t csr;
+	rc = InputOrder::SessionIdx::cursor(t, &csr);
+	InputOrder::SessionIdx::search(t, &csr, MCO_GT, targetFrontID, targetSessionID, 0);
+	for (; rc == MCO_S_OK; rc = mco_cursor_next(t, &csr))
+	{
+		InputOrder inputOrder;
+		inputOrder.from_cursor(t, &csr);
+		if (inputOrder.front_id != targetFrontID ||
+			inputOrder.session_id != targetSessionID)
+			break;
+		if (inputOrder.order_ref >= maxOrderRef)
+			maxOrderRef = inputOrder.order_ref + 1;
+	}
+	pRsp->rspUserLoginField.MaxOrderRef = maxOrderRef;
+	//查交易日期
+	SysConfig config;
+	rc = SysConfig::Idx::find(t, 0, config);
+	if (MCO_S_OK != rc)
+	{
+		throw(MCO::IndexFindError("交易日期不存在"));
+	}
+	strcpy(pRsp->rspUserLoginField.TradingDay, ((std::string)config.trade_date).data());
 	pRsp->pErrorField->ErrorCode = 0;
 	strcpy(pRsp->pErrorField->ErrorText, "登录成功");
 }

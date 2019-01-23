@@ -146,11 +146,8 @@ xcopy  ..\import\lib\win32\debug\SimpleAmqpClient.2.*   /Y/I  ..\export\$(Config
     </Link>
     <PreBuildEvent>
       <Command>xcopy  sample_core.cfg   /Y/I  ..\export\$(Configuration)\$(ProjectName)\
-
 xcopy  ..\export\$(Configuration)\dbcore.*   /Y/I  ..\export\$(Configuration)\$(ProjectName)\
-
 xcopy  ..\export\$(Configuration)\mqclient.dll   /Y/I  ..\export\$(Configuration)\$(ProjectName)\
-
 xcopy  ..\import\lib\win32\$(Configuration)\SimpleAmqpClient.2.*   /Y/I  ..\export\$(Configuration)\$(ProjectName)\</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
