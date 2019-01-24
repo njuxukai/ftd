@@ -16,7 +16,7 @@ const int nRecords = 1000000;
 /* Define transaction block size to reduce time for inserts */
 const int nInsertsPerTransaction = 10000;
 
-const int nThreadCount = 1;
+const int nThreadCount = 8;
 
 
 DBWrapperMcoImpl::DBWrapperMcoImpl(): m_done(false), m_joiner(new JoinThreads(m_threads))

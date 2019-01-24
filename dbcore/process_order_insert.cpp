@@ -93,7 +93,6 @@ void insertToOrderInsert(const ReqOrderInsert* pReq, mco_trans_h t, RspOrderInse
 	order.session_id = pReq->inputOrderField.SessionID;
 	order.order_ref = pReq->inputOrderField.OrderRef;
 	order.investor_id = pReq->inputOrderField.InvestorID;
-	mco_trans_commit(t);
 }
 
 
