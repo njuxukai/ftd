@@ -48,7 +48,7 @@ void processOrderInsert(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWr
 	catch (MCO::Exception& e)
 	{
 		pRsp->pErrorField->ErrorCode = e.errorCode;
-		strcpy(pRsp->pErrorField->ErrorText, e.errorText.data());
+		strcpy(pRsp->pErrorField->ErrorText, e.what());
 	}
 	catch (McoException& e)
 	{

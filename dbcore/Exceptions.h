@@ -30,7 +30,7 @@ namespace MCO
 	{
 		IndexFindError(const std::string& what="") 
 			:Exception(MCO_ERROR_CODE_INDEX_FIND_ERROR,
-				"Could not find index",
+				"Index find error or unique index exists",
 				what)
 		{}
 	};
