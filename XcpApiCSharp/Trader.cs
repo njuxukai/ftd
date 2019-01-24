@@ -68,8 +68,8 @@ namespace Xcp
             onRspUserLoginDelegate = RaiseRspUserLogin;
 
             onRspUserLogoutDelegate = RaiseRspUserLogout;
-            onRspInputOrderDelegate = RaiseRspInputOrder;
-            onRspInputOrderActionDelegate = RaiseRspInputOrderAction;
+            onRspOrderInsertDelegate = RaiseRspOrderInsert;
+            onRspOrderActionDelegate = RaiseRspOrderAction;
             onRspInputFundTransferDelegate = RaiseRspInputFundTransfer;
             onRspQryFundDelegate = RaiseRspQryFund;
             onRspQryPositionDelegate = RaiseRspQryPosition;
@@ -98,8 +98,8 @@ namespace Xcp
                 TraderDllWrapper.RegisterOnHeartBeatCallback(m_handler, onHeartBeatDelegate);
                 TraderDllWrapper.RegisterOnRspUserLoginCallback(m_handler, onRspUserLoginDelegate);
                 TraderDllWrapper.RegisterOnRspUserLogoutCallback(m_handler, onRspUserLogoutDelegate);
-                TraderDllWrapper.RegisterOnRspInputOrderCallback(m_handler, onRspInputOrderDelegate);
-                TraderDllWrapper.RegisterOnRspInputOrderActionCallback(m_handler, onRspInputOrderActionDelegate);
+                TraderDllWrapper.RegisterOnRspInputOrderCallback(m_handler, onRspOrderInsertDelegate);
+                TraderDllWrapper.RegisterOnRspInputOrderActionCallback(m_handler, onRspOrderActionDelegate);
                 TraderDllWrapper.RegisterOnRspInputFundTransferCallback(m_handler, onRspInputFundTransferDelegate);
                 TraderDllWrapper.RegisterOnRspQryFundCallback(m_handler, onRspQryFundDelegate);
                 TraderDllWrapper.RegisterOnRspQryPositionCallback(m_handler, onRspQryPositionDelegate);
@@ -254,8 +254,8 @@ namespace Xcp
         public event EventHandler<EventArgs> onHeartBeat;
         public event EventHandler<RspUserLoginEventArgs> onRspUserLogin;
         public event EventHandler<RspUserLogoutEventArgs> onRspUserLogout;
-        public event EventHandler<RspInputOrderEventArgs> onRspInputOrder;
-        public event EventHandler<RspInputOrderActionEventArgs> onRspInputOrderAction;
+        public event EventHandler<RspOrderInsertEventArgs> onRspOrderInsert;
+        public event EventHandler<RspOrderActionEventArgs> onRspOrderAction;
         public event EventHandler<RspInputFundTransferEventArgs> onRspInputFundTransfer;
         public event EventHandler<RspQryFundEventArgs> onRspQryFund;
         public event EventHandler<RspQryPositionEventArgs> onRspQryPosition;
@@ -341,7 +341,7 @@ namespace Xcp
 
         }
 
-        private void RaiseRspInputOrder(IntPtr pRsp, IntPtr pError, int nRequestID, bool isLast)
+        private void RaiseRspOrderInsert(IntPtr pRsp, IntPtr pError, int nRequestID, bool isLast)
         {
             InputOrderField? rsp = null;
             ErrorField? error = null;
@@ -353,11 +353,11 @@ namespace Xcp
             {
                 error = Marshal.PtrToStructure<ErrorField>(pError);
             }
-            RspInputOrderEventArgs eventArgs = new RspInputOrderEventArgs(rsp, error, nRequestID, isLast);
-            Volatile.Read(ref onRspInputOrder)?.Invoke(this, eventArgs);
+            RspOrderInsertEventArgs eventArgs = new RspOrderInsertEventArgs(rsp, error, nRequestID, isLast);
+            Volatile.Read(ref onRspOrderInsert)?.Invoke(this, eventArgs);
         }
 
-        private void RaiseRspInputOrderAction(IntPtr pRsp, IntPtr pError, int nRequestID, bool isLast)
+        private void RaiseRspOrderAction(IntPtr pRsp, IntPtr pError, int nRequestID, bool isLast)
         {
             InputOrderActionField? rsp = null;
             ErrorField? error = null;
@@ -369,8 +369,8 @@ namespace Xcp
             {
                 error = Marshal.PtrToStructure<ErrorField>(pError);
             }
-            RspInputOrderActionEventArgs eventArgs = new RspInputOrderActionEventArgs(rsp, error, nRequestID, isLast);
-            Volatile.Read(ref onRspInputOrderAction)?.Invoke(this, eventArgs);
+            RspOrderActionEventArgs eventArgs = new RspOrderActionEventArgs(rsp, error, nRequestID, isLast);
+            Volatile.Read(ref onRspOrderAction)?.Invoke(this, eventArgs);
         }
 
         private void RaiseRspInputFundTransfer(IntPtr pRsp, IntPtr pError, int nRequestID, bool isLast)
@@ -650,8 +650,8 @@ namespace Xcp
         OnHeartBeatDelegate onHeartBeatDelegate;
         OnRspUserLoginDelegate onRspUserLoginDelegate;
         OnRspUserLogoutDelegate onRspUserLogoutDelegate;
-        OnRspInputOrderDelegate onRspInputOrderDelegate;
-        OnRspInputOrderActionDelegate onRspInputOrderActionDelegate;
+        OnRspOrderInsertDelegate onRspOrderInsertDelegate;
+        OnRspOrderActionDelegate onRspOrderActionDelegate;
         OnRspInputFundTransferDelegate onRspInputFundTransferDelegate;
         OnRspQryFundDelegate onRspQryFundDelegate;
         OnRspQryPositionDelegate onRspQryPositionDelegate;

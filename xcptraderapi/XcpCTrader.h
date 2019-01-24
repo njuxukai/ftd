@@ -48,8 +48,8 @@ public:
 	virtual void OnHeartBeat();
 	virtual void OnRspUserLogin(CXcpFtdcRspUserLoginField* pRspUserLogin, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
 	virtual void OnRspUserLogout(CXcpFtdcRspUserLogoutField* pRspUserLogout, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
-	virtual void OnRspInputOrder(CXcpFtdcInputOrderField* pInputOrder, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
-	virtual void OnRspInputOrderAction(CXcpFtdcInputOrderActionField* pInputOrderAction, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
+	virtual void OnRspOrderInsert(CXcpFtdcInputOrderField* pInputOrder, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
+	virtual void OnRspOrderAction(CXcpFtdcInputOrderActionField* pInputOrderAction, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
 	virtual void OnRspInputFundTransfer(CXcpFtdcInputFundTransferField* pInputFundTransfer, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
 	virtual void OnRspQryFund(CXcpFtdcFundField* pFund, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
 	virtual void OnRspQryPosition(CXcpFtdcPositionField* pPosition, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
@@ -75,8 +75,8 @@ public:
 	void registerFP_OnHeartBeat(FuncPtrOnHeartBeat fp);
 	void registerFP_OnRspUserLogin(FuncPtrOnRspUserLogin fp);
 	void registerFP_OnRspUserLogout(FuncPtrOnRspUserLogout fp);
-	void registerFP_OnRspInputOrder(FuncPtrOnRspInputOrder fp);
-	void registerFP_OnRspInputOrderAction(FuncPtrOnRspInputOrderAction fp);
+	void registerFP_OnRspInputOrder(FuncPtrOnRspOrderInsert fp);
+	void registerFP_OnRspInputOrderAction(FuncPtrOnRspOrderAction fp);
 	void registerFP_OnRspInputFundTransfer(FuncPtrOnRspInputFundTransfer fp);
 	void registerFP_OnRspQryFund(FuncPtrOnRspQryFund fp);
 	void registerFP_OnRspQryPosition(FuncPtrOnRspQryPosition fp);
@@ -109,8 +109,8 @@ private:
 	bool m_onHeartBeatRegistered;
 	bool m_onRspUserLoginRegistered;
 	bool m_onRspUserLogoutRegistered;
-	bool m_onRspInputOrderRegistered;
-	bool m_onRspInputOrderActionRegistered;
+	bool m_onRspOrderInsertRegistered;
+	bool m_onRspOrderActionRegistered;
 	bool m_onRspInputFundTransferRegistered;
 	bool m_onRspQryFundRegistered;
 	bool m_onRspQryPositionRegistered;
@@ -135,8 +135,8 @@ private:
 	FuncPtrOnHeartBeat m_fpOnHeartBeat;
 	FuncPtrOnRspUserLogin  m_fpOnRspUserLogin;
 	FuncPtrOnRspUserLogout  m_fpOnRspUserLogout;
-	FuncPtrOnRspInputOrder  m_fpOnRspInputOrder;
-	FuncPtrOnRspInputOrderAction  m_fpOnRspInputOrderAction;
+	FuncPtrOnRspOrderInsert  m_fpOnRspOrderInsert;
+	FuncPtrOnRspOrderAction  m_fpOnRspOrderAction;
 	FuncPtrOnRspInputFundTransfer m_fpOnRspInputFundTransfer;
 	FuncPtrOnRspQryFund  m_fpOnRspQryFund;
 	FuncPtrOnRspQryPosition m_fpOnRspQryPosition;

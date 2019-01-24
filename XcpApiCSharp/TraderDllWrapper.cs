@@ -153,15 +153,15 @@ namespace Xcp
         public static extern int RegisterOnRspUserLogoutCallback(IntPtr phandler,
             OnRspUserLogoutDelegate callback);
 
-        [DllImport("xcptraderapi.dll", CharSet = CharSet.Auto, EntryPoint = "registerFP_OnRspInputOrder",
+        [DllImport("xcptraderapi.dll", CharSet = CharSet.Auto, EntryPoint = "registerFP_OnRspOrderInsert",
             CallingConvention = CallingConvention.Cdecl)]
         public static extern int RegisterOnRspInputOrderCallback(IntPtr phandler,
-            OnRspInputOrderDelegate callback);
+            OnRspOrderInsertDelegate callback);
 
-        [DllImport("xcptraderapi.dll", CharSet = CharSet.Auto, EntryPoint = "registerFP_OnRspInputOrderAction",
+        [DllImport("xcptraderapi.dll", CharSet = CharSet.Auto, EntryPoint = "registerFP_OnRspOrderAction",
             CallingConvention = CallingConvention.Cdecl)]
         public static extern int RegisterOnRspInputOrderActionCallback(IntPtr phandler,
-            OnRspInputOrderActionDelegate callback);
+            OnRspOrderActionDelegate callback);
 
         [DllImport("xcptraderapi.dll", CharSet = CharSet.Auto, EntryPoint = "registerFP_OnRspInputFundTransfer",
             CallingConvention = CallingConvention.Cdecl)]

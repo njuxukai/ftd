@@ -104,6 +104,8 @@ namespace SampleClientGui
             trader.onRspQryTrade += OnRspQryTrade;
             trader.onRspQryOrder += OnRspQryOrder;
             trader.onRspQrySecurityAccount += OnRspQrySecurityAccount;
+            trader.onRspOrderInsert += OnRspOrderInsert;
+            
         }
 
         private void DisconnectTraderEvent(Xcp.Trader trader)
@@ -117,6 +119,7 @@ namespace SampleClientGui
             trader.onRspQryTrade -= OnRspQryTrade;
             trader.onRspQryOrder -= OnRspQryOrder;
             trader.onRspQrySecurityAccount -= OnRspQrySecurityAccount;
+            trader.onRspOrderInsert -= OnRspOrderInsert;
         }
         #region callback for trader
 
@@ -210,6 +213,29 @@ namespace SampleClientGui
                 RaiseUILogAddNewLine(String.Format("OnRspQrySecurityAccount.[ReqID={0}]",
                     e.RequestID));
             }
+        }
+
+        private void OnRspOrderInsert(object sender, Xcp.RspOrderInsertEventArgs e)
+        {
+            if (e.ErrorField.HasValue && e.ErrorField.Value.ErrorCode != 0)
+            {
+                RaiseUILogAddNewLine(
+                    String.Format(
+                    "OnRspOrderInsert[ReqId={0}] Error.[{1}][{2}]",
+                    e.RequestID,
+                    e.ErrorField.Value.ErrorCode, e.ErrorField.Value.ErrorText));
+            }
+            else
+            {
+                RaiseUILogAddNewLine(
+                    String.Format(
+                    "OnRspOrderInsert[ReqId={0}] Succeed.",
+                    e.RequestID));
+            }
+        }
+
+        private void OnRspOrderAction(object sender, Xcp.RspOrderActionEventArgs e)
+        {
         }
 
         private void OnRspQryFund(object sender, Xcp.RspQryFundEventArgs e)
@@ -553,15 +579,17 @@ namespace SampleClientGui
                 order.UserID = UserID;
                 order.InvestorID = InvestorID;
                 order.RequestID = NextRequestID;
-                order.OrderRef = NextOrderRef;
+                //order.OrderRef = NextOrderRef;
+                order.OrderRef = 1;
                 order.FrontID = FrontID;
                 order.SessionID = SessionID;
                 if(securityAccounts.ContainsKey(order.ExchangeType))
                     order.SecurityAccount = securityAccounts[order.ExchangeType];
                 int returnValue = m_trader.ReqOrderInsert(order, NextRequestID);
-                RaiseUILogAddNewLine(String.Format("ReqOrderOrder.[ReqID={0}][Rtn={1}]",
+                RaiseUILogAddNewLine(String.Format("ReqOrderInsert.[ReqID={0}][Rtn={1}]",
                     NextRequestID, returnValue));
                 NextRequestID++;
+                NextOrderRef++;
             }
         }
 

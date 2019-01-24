@@ -74,9 +74,9 @@ namespace Xcp
         private readonly bool m_isLast;
     }
 
-    public class RspInputOrderEventArgs : EventArgs
+    public class RspOrderInsertEventArgs : EventArgs
     {
-        public RspInputOrderEventArgs(InputOrderField? inputOrderField,
+        public RspOrderInsertEventArgs(InputOrderField? inputOrderField,
                                      ErrorField? errorField,
                                      int requestID,
                                      bool isLast)
@@ -97,9 +97,9 @@ namespace Xcp
         private readonly bool m_isLast;
     }
 
-    public class RspInputOrderActionEventArgs : EventArgs
+    public class RspOrderActionEventArgs : EventArgs
     {
-        public RspInputOrderActionEventArgs(InputOrderActionField? inputOrderField,
+        public RspOrderActionEventArgs(InputOrderActionField? inputOrderField,
                                      ErrorField? errorField,
                                      int requestID,
                                      bool isLast)

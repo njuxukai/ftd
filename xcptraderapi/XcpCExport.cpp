@@ -180,12 +180,12 @@ void registerFP_OnRspUserLogout(TraderApi* trader, FuncPtrOnRspUserLogout fp)
 	((CXcpTrader*)trader)->registerFP_OnRspUserLogout(fp);
 }
 
-void registerFP_OnRspInputOrder(TraderApi* trader, FuncPtrOnRspInputOrder fp) 
+void registerFP_OnRspOrderInsert(TraderApi* trader, FuncPtrOnRspOrderInsert fp) 
 {
 	((CXcpTrader*)trader)->registerFP_OnRspInputOrder(fp);
 }
 
-void registerFP_OnRspInputOrderAction(TraderApi* trader, FuncPtrOnRspInputOrderAction fp) 
+void registerFP_OnRspOrderAction(TraderApi* trader, FuncPtrOnRspOrderAction fp) 
 {
 	((CXcpTrader*)trader)->registerFP_OnRspInputOrderAction(fp);
 }

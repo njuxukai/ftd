@@ -22,7 +22,7 @@ void populate_db_secu_account(mco_db_h db);
 
 void populate2_db(mco_db_h db)
 {
-	//populate_test(db);
+	populate_test(db);
 	populate_db_sysconfig(db);
 	populate_db_users(db);
 	populate_db_secu_account(db);
@@ -291,7 +291,8 @@ void populate_test(mco_db_h db)
 		test3.sno = 3;
 		test4.investor_id = 100;
 		test4.sno = 1;
-		mco_trans_commit(t);
+		rc = mco_trans_commit(t);
+		//std::cout << "Populate Test RC= " << rc << std::endl;
 	}
 }
 

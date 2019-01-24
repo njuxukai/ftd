@@ -42,10 +42,10 @@ public:
 	virtual void OnRspUserLogout(CXcpFtdcRspUserLogoutField* pRspUserLogout, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast) {}
 
 	///报单委托请求响应
-	virtual void OnRspInputOrder(CXcpFtdcInputOrderField* pInputOrder, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast) {}
+	virtual void OnRspOrderInsert(CXcpFtdcInputOrderField* pInputOrder, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast) {}
 
 	///报单撤单请求响应
-	virtual void OnRspInputOrderAction(CXcpFtdcInputOrderActionField* pInputOrderAction, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast) {}
+	virtual void OnRspOrderAction(CXcpFtdcInputOrderActionField* pInputOrderAction, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast) {}
 
 	///资金划转请求响应
 	virtual void OnRspInputFundTransfer(CXcpFtdcInputFundTransferField* pInputFundTransfer, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast) {}
@@ -212,8 +212,8 @@ typedef void(__cdecl *FuncPtrOnHeartBeatWarning) (int nTimeLapse);
 typedef void(__cdecl *FuncPtrOnHeartBeat) ();
 typedef void(__cdecl *FuncPtrOnRspUserLogin) (CXcpFtdcRspUserLoginField* pRspUserLogin, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
 typedef void(__cdecl *FuncPtrOnRspUserLogout) (CXcpFtdcRspUserLogoutField* pRspUserLogout, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
-typedef void(__cdecl *FuncPtrOnRspInputOrder) (CXcpFtdcInputOrderField* pInputOrder, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
-typedef void(__cdecl *FuncPtrOnRspInputOrderAction) (CXcpFtdcInputOrderActionField* pInputOrderAction, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
+typedef void(__cdecl *FuncPtrOnRspOrderInsert) (CXcpFtdcInputOrderField* pInputOrder, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
+typedef void(__cdecl *FuncPtrOnRspOrderAction) (CXcpFtdcInputOrderActionField* pInputOrderAction, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
 typedef void(__cdecl *FuncPtrOnRspInputFundTransfer) (CXcpFtdcInputFundTransferField* pInputFundTransfer, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
 typedef void(__cdecl *FuncPtrOnRspQryFund) (CXcpFtdcFundField* pFund, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
 typedef void(__cdecl *FuncPtrOnRspQryPosition) (CXcpFtdcPositionField* pPosition, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
@@ -278,8 +278,8 @@ extern "C"
 	TRADER_API_EXPORT void registerFP_OnHeartBeat(TraderApi* trader, FuncPtrOnHeartBeat fp);
 	TRADER_API_EXPORT void registerFP_OnRspUserLogin(TraderApi* trader, FuncPtrOnRspUserLogin fp);
 	TRADER_API_EXPORT void registerFP_OnRspUserLogout(TraderApi* trader, FuncPtrOnRspUserLogout fp);
-	TRADER_API_EXPORT void registerFP_OnRspInputOrder(TraderApi* trader, FuncPtrOnRspInputOrder fp);
-	TRADER_API_EXPORT void registerFP_OnRspInputOrderAction(TraderApi* trader, FuncPtrOnRspInputOrderAction fp);
+	TRADER_API_EXPORT void registerFP_OnRspOrderInsert(TraderApi* trader, FuncPtrOnRspOrderInsert fp);
+	TRADER_API_EXPORT void registerFP_OnRspOrderAction(TraderApi* trader, FuncPtrOnRspOrderAction fp);
 	TRADER_API_EXPORT void registerFP_OnRspInputFundTransfer(TraderApi* trader, FuncPtrOnRspInputFundTransfer fp);
 	TRADER_API_EXPORT void registerFP_OnRspQryFund(TraderApi* trader, FuncPtrOnRspQryFund fp);
 	TRADER_API_EXPORT void registerFP_OnRspQryPosition(TraderApi* trader, FuncPtrOnRspQryPosition fp);

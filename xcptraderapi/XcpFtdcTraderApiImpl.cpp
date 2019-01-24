@@ -555,7 +555,7 @@ void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspOrderInsert& package, const 
 	memcpy(&contentField, &package.inputOrderField, sizeof(CXcpFtdcInputOrderField));
 	if (package.pErrorField.get())
 		memcpy(&errorField, package.pErrorField.get(), sizeof(CXcpFtdcErrorField));
-	m_pSpi->OnRspInputOrder(&contentField, &errorField, package.inputOrderField.RequestID, true);
+	m_pSpi->OnRspOrderInsert(&contentField, &errorField, package.inputOrderField.RequestID, true);
 }
 
 void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspOrderAction& package, const FTD::SessionID& id)
@@ -567,7 +567,7 @@ void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspOrderAction& package, const 
 	memcpy(&contentField, &package.inputOrderActionField, sizeof(CXcpFtdcInputOrderActionField));
 	if (package.pErrorField.get())
 		memcpy(&errorField, package.pErrorField.get(), sizeof(CXcpFtdcErrorField));
-	m_pSpi->OnRspInputOrderAction(&contentField, &errorField, package.inputOrderActionField.RequestID, true);
+	m_pSpi->OnRspOrderAction(&contentField, &errorField, package.inputOrderActionField.RequestID, true);
 }
 
 void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspFundTransfer& package, const FTD::SessionID& id) 

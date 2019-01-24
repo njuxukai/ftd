@@ -11,8 +11,8 @@ CXcpTrader::CXcpTrader(const char* psw)
 	m_onHeartBeatWarningRegistered = false;
 	m_onRspUserLoginRegistered = false;
 	m_onRspUserLogoutRegistered = false;
-	m_onRspInputOrderRegistered = false;
-	m_onRspInputOrderActionRegistered = false;
+	m_onRspOrderInsertRegistered = false;
+	m_onRspOrderActionRegistered = false;
 	m_onRspInputFundTransferRegistered = false;
 	m_onRspQryFundRegistered = false;
 	m_onRspQryPositionRegistered = false;
@@ -286,16 +286,16 @@ void CXcpTrader::OnRspUserLogout(CXcpFtdcRspUserLogoutField* pRspUserLogout, CXc
 		m_fpOnRspUserLogout(pRspUserLogout, pRspInfo, nRequestID, isLast);
 }
 
-void CXcpTrader::OnRspInputOrder(CXcpFtdcInputOrderField* pInputOrder, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast)
+void CXcpTrader::OnRspOrderInsert(CXcpFtdcInputOrderField* pInputOrder, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast)
 {
-	if (m_onRspInputOrderRegistered)
-		m_fpOnRspInputOrder(pInputOrder, pRspInfo, nRequestID, isLast);
+	if (m_onRspOrderInsertRegistered)
+		m_fpOnRspOrderInsert(pInputOrder, pRspInfo, nRequestID, isLast);
 }
 
-void CXcpTrader::OnRspInputOrderAction(CXcpFtdcInputOrderActionField* pInputOrderAction, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast)
+void CXcpTrader::OnRspOrderAction(CXcpFtdcInputOrderActionField* pInputOrderAction, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast)
 {
-	if (m_onRspInputOrderActionRegistered)
-		m_fpOnRspInputOrderAction(pInputOrderAction, pRspInfo, nRequestID, isLast);
+	if (m_onRspOrderActionRegistered)
+		m_fpOnRspOrderAction(pInputOrderAction, pRspInfo, nRequestID, isLast);
 }
 
 void CXcpTrader::OnRspInputFundTransfer(CXcpFtdcInputFundTransferField* pInputFundTransfer, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast)
@@ -471,16 +471,16 @@ void CXcpTrader::registerFP_OnRspUserLogout(FuncPtrOnRspUserLogout fp)
 	m_onRspUserLogoutRegistered = true;
 }
 
-void CXcpTrader::registerFP_OnRspInputOrder(FuncPtrOnRspInputOrder fp)
+void CXcpTrader::registerFP_OnRspInputOrder(FuncPtrOnRspOrderInsert fp)
 {
-	m_fpOnRspInputOrder = fp;
-	m_onRspInputOrderRegistered = true;
+	m_fpOnRspOrderInsert = fp;
+	m_onRspOrderInsertRegistered = true;
 }
 
-void CXcpTrader::registerFP_OnRspInputOrderAction(FuncPtrOnRspInputOrderAction fp)
+void CXcpTrader::registerFP_OnRspInputOrderAction(FuncPtrOnRspOrderAction fp)
 {
-	m_fpOnRspInputOrderAction = fp;
-	m_onRspInputOrderActionRegistered = true;
+	m_fpOnRspOrderAction = fp;
+	m_onRspOrderActionRegistered = true;
 }
 
 void CXcpTrader::registerFP_OnRspInputFundTransfer(FuncPtrOnRspInputFundTransfer fp)

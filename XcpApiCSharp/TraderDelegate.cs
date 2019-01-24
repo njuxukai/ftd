@@ -28,11 +28,11 @@ namespace Xcp
         IntPtr rspInfo, int nRequestID, [MarshalAs(UnmanagedType.U1)]bool isLast);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void OnRspInputOrderDelegate ( IntPtr  inputOrder, 
+    public delegate void OnRspOrderInsertDelegate ( IntPtr  inputOrder, 
         IntPtr  rspInfo, int nRequestID, [MarshalAs(UnmanagedType.U1)]bool isLast);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void OnRspInputOrderActionDelegate ( IntPtr  inputOrderAction, 
+    public delegate void OnRspOrderActionDelegate ( IntPtr  inputOrderAction, 
         IntPtr  rspInfo, int nRequestID, [MarshalAs(UnmanagedType.U1)]bool isLast);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
