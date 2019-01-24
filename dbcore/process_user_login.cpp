@@ -24,27 +24,30 @@ void processUserLogin(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrap
 	pRsp->pErrorField = CFtdcErrorFieldPtr(new CFtdcErrorField());
 	memset(pRsp->pErrorField.get(), 0, sizeof(CFtdcErrorField));
 	pRsp->rspUserLoginField.HeartbeatInterval = 10;
-	mco_trans_h t = 0;
-	MCO_RET rc = MCO_S_OK;
-	rc = mco_trans_start(db, MCO_READ_WRITE, MCO_TRANS_FOREGROUND, &t);
-	if (MCO_S_OK != rc)
-	{
-		pRsp->pErrorField->ErrorCode = FTD_ERROR_CODE_TRANSACTION_ERROR;
-		strcpy(pRsp->pErrorField->ErrorText, FTD_ERROR_TEXT_TRANSACTION_ERROR);
-		pWrapper->uplink(rspHeaders, pRsp);
-		return;
-	}
 	try
 	{
-		processUserLoginTransaction(pReqUserLogin, t, pRsp.get());
-		mco_trans_commit(t);
+		McoTrans t(db, MCO_READ_WRITE, MCO_TRANS_FOREGROUND);
+		try
+		{
+			processUserLoginTransaction(pReqUserLogin, t, pRsp.get());
+		}
+		catch (...)
+		{
+			t.rollback();
+			throw;
+		}
 	}
 	catch (MCO::Exception& e)
 	{
-		mco_trans_rollback(t);
 		pRsp->pErrorField->ErrorCode = e.errorCode;
-		strcpy(pRsp->pErrorField->ErrorText, e.what());
+		strcpy(pRsp->pErrorField->ErrorText, e.errorText.data());
 	}
+	catch (McoException& e)
+	{
+		pRsp->pErrorField->ErrorCode = e.get_rc();
+		strncpy(pRsp->pErrorField->ErrorText, e.what(), sizeof(CFtdcErrorField::ErrorText));
+	}
+
 	pWrapper->uplink(rspHeaders, pRsp);
 }
 
@@ -67,7 +70,7 @@ void processUserLoginTransaction(const ReqUserLogin* pReq, mco_trans_h t, RspUse
 	int targetSessionID = pReq->reqUserLoginField.SessionID;
 	mco_cursor_t csr;
 	rc = InputOrder::SessionIdx::cursor(t, &csr);
-	InputOrder::SessionIdx::search(t, &csr, MCO_GT, targetFrontID, targetSessionID, 0);
+	rc = InputOrder::SessionIdx::search(t, &csr, MCO_GT, targetFrontID, targetSessionID, 0);
 	for (; rc == MCO_S_OK; rc = mco_cursor_next(t, &csr))
 	{
 		InputOrder inputOrder;

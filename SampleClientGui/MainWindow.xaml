@@ -33,6 +33,9 @@
         </DataGrid>
         <DataGrid x:Name="orderDataGrid" Grid.Row="2" Grid.Column="0" ItemsSource="{Binding}" IsReadOnly="True" AutoGenerateColumns="false" CanUserAddRows="False" MouseDown="orderDataGrid_MouseDown" >
             <DataGrid.Columns>
+                <DataGridTextColumn Header="FrontID" Binding="{Binding FrontID}" Width="*"/>
+                <DataGridTextColumn Header="SessionID" Binding="{Binding SessionID}" Width="*"/>
+                <DataGridTextColumn Header="OrderRef" Binding="{Binding OrderRef}" Width="*"/>
                 <DataGridTextColumn Header="代码" Binding="{Binding InstrumentCode}" Width="*"/>
                 <DataGridTextColumn Header="交易方向" Binding="{Binding Direction}" Width="*"/>
                 <DataGridTextColumn Header="委托数量" Binding="{Binding VolumeTotalOriginal}" Width="*"/>

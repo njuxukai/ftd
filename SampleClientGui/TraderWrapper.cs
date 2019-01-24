@@ -105,6 +105,7 @@ namespace SampleClientGui
             trader.onRspQryOrder += OnRspQryOrder;
             trader.onRspQrySecurityAccount += OnRspQrySecurityAccount;
             trader.onRspOrderInsert += OnRspOrderInsert;
+            trader.onRspOrderAction += OnRspOrderAction;
             
         }
 
@@ -120,6 +121,7 @@ namespace SampleClientGui
             trader.onRspQryOrder -= OnRspQryOrder;
             trader.onRspQrySecurityAccount -= OnRspQrySecurityAccount;
             trader.onRspOrderInsert -= OnRspOrderInsert;
+            trader.onRspOrderAction -= OnRspOrderAction;
         }
         #region callback for trader
 
@@ -236,6 +238,21 @@ namespace SampleClientGui
 
         private void OnRspOrderAction(object sender, Xcp.RspOrderActionEventArgs e)
         {
+            if (e.ErrorField.HasValue && e.ErrorField.Value.ErrorCode != 0)
+            {
+                RaiseUILogAddNewLine(
+                    String.Format(
+                    "OnRspOrderAction[ReqId={0}] Error.[{1}][{2}]",
+                    e.RequestID,
+                    e.ErrorField.Value.ErrorCode, e.ErrorField.Value.ErrorText));
+            }
+            else
+            {
+                RaiseUILogAddNewLine(
+                    String.Format(
+                    "OnRspOrderAction[ReqId={0}] Succeed.",
+                    e.RequestID));
+            }
         }
 
         private void OnRspQryFund(object sender, Xcp.RspQryFundEventArgs e)
@@ -579,7 +596,7 @@ namespace SampleClientGui
                 order.UserID = UserID;
                 order.InvestorID = InvestorID;
                 order.RequestID = NextRequestID;
-                //order.OrderRef = NextOrderRef;
+                order.OrderRef = NextOrderRef;
                 order.OrderRef = 1;
                 order.FrontID = FrontID;
                 order.SessionID = SessionID;

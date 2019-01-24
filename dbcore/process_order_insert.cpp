@@ -30,41 +30,20 @@ void processOrderInsert(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWr
 	try 
 	{
 		//插入委托表
-		try
 		{
 			McoTrans t(db, MCO_READ_WRITE, MCO_TRANS_FOREGROUND);
 			try
 			{
 				insertToOrderInsert((const ReqOrderInsert*)pReq.get(), (mco_trans_h)t, pRsp.get());
 			}
-			catch (MCO::Exception& e)
+			catch (std::exception& e)
 			{
 				t.rollback();
 				throw;
 			}
-			catch (McoException e)
-			{
-				pRsp->pErrorField->ErrorCode = -1;
-				strncpy(pRsp->pErrorField->ErrorText, e.what(), sizeof(CFtdcErrorField::ErrorText));
-			}
+
 		}
-		catch (std::exception& e)
-		{
-			throw;
-		}
-		//判断业务权限,校验价格数量合法性后委托报送
-		{
-			McoTrans t(db, MCO_READ_WRITE, MCO_TRANS_FOREGROUND);
-			try
-			{
-				verifyInputOrderAndDeliverToExchange((const ReqOrderInsert*)pReq.get(), (mco_trans_h)t, pRsp.get());
-			}
-			catch (MCO::Exception& e)
-			{
-				t.rollback();
-				throw;
-			}
-		}
+
 	}
 	catch (MCO::Exception& e)
 	{
@@ -73,7 +52,7 @@ void processOrderInsert(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWr
 	}
 	catch (McoException& e)
 	{
-		pRsp->pErrorField->ErrorCode = -1;
+		pRsp->pErrorField->ErrorCode = e.get_rc();
 		strncpy(pRsp->pErrorField->ErrorText, e.what(), sizeof(CFtdcErrorField::ErrorText));
 	}
 	//上行到消息队列
@@ -93,10 +72,28 @@ void insertToOrderInsert(const ReqOrderInsert* pReq, mco_trans_h t, RspOrderInse
 		throw(MCO::IndexFindError("委托主键已存在"));
 	}
 	*/
+
+	/*
 	orderInsert.create(t);
 	orderInsert.front_id = pReq->inputOrderField.FrontID;
 	orderInsert.session_id = pReq->inputOrderField.SessionID;
 	orderInsert.order_ref = pReq->inputOrderField.OrderRef;
+	*/
+	Order order;
+	rc = Order_SessionIdx_find(t, pReq->inputOrderField.FrontID,
+		pReq->inputOrderField.SessionID,
+		pReq->inputOrderField.OrderRef,
+		&order);
+	if (rc == MCO_S_OK)
+	{
+		throw(MCO::IndexFindError("存在相同主键的Order"));
+	}
+	order.create(t);
+	order.front_id = pReq->inputOrderField.FrontID;
+	order.session_id = pReq->inputOrderField.SessionID;
+	order.order_ref = pReq->inputOrderField.OrderRef;
+	order.investor_id = pReq->inputOrderField.InvestorID;
+	mco_trans_commit(t);
 }
 
 

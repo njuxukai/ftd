@@ -17,7 +17,7 @@
 
 declare database genericdb;
 
-persistent class SysConfig
+class SysConfig
 {
 	int4 config_id;
 	int4 broker_id;
@@ -27,7 +27,7 @@ persistent class SysConfig
 	unique tree<config_id> Idx;
 };
 
-persistent class User
+class User
 {
 	int4 broker_id;
 	unsigned<4> user_id;
@@ -35,7 +35,7 @@ persistent class User
 	unique tree<user_id> UserIdIdx;
 };
 
-persistent class SecurityAccount
+class SecurityAccount
 {
 	int4 broker_id;
 	unsigned<4> investor_id;
@@ -45,7 +45,7 @@ persistent class SecurityAccount
 	tree<investor_id> InvestorIdx;
 };
 
-persistent class Branch
+class Branch
 {
 	int4 branch_id;
 	int4 sh_branch_id;
@@ -54,7 +54,7 @@ persistent class Branch
 	unique tree<branch_id> Idx;
 };
 
-persistent class NextSNO
+class NextSNO
 {
 	int4 topic_id;
 	int4 next_sno;
@@ -62,7 +62,7 @@ persistent class NextSNO
 	unique tree<topic_id> Idx;
 };
 
-persistent class InputOrder
+class InputOrder
 {
 	uint2 owner_type;
 	int4 user_id;
@@ -83,7 +83,7 @@ persistent class InputOrder
 	tree<investor_id> InvestorIdx;
 };
 
-persistent class Order
+class Order
 {
 	int4 front_id;
 	int4 session_id;
@@ -111,13 +111,13 @@ persistent class Order
 	VolumeType volume_cancelled;
 
 	unique tree<front_id, session_id, order_ref> SessionIdx;
-	unique tree<exchange_type, pbu_id, order_exchange_id> ExchangeIdx;
-	unique tree<order_sys_id> SysIdx;
-	unique tree<client_order_id> clOrdIDIdx;
+	//unique tree<exchange_type, pbu_id, order_exchange_id> ExchangeIdx;
+	//unique tree<order_sys_id> SysIdx;
+	//unique tree<client_order_id> clOrdIDIdx;
 	tree<investor_id> InvestorIdx;
 };
 
-persistent class OrderAction
+class OrderAction
 {
 	int4 user_id;
 	int4 investor_id;
@@ -153,7 +153,7 @@ persistent class OrderAction
 3 结合Order信息和当前Report,产生一笔UserExecutionReport流水 
 注意： 用户的Trade也是从这里读取
 */
-persistent class InnerExecutionReport
+class InnerExecutionReport
 {
 	
 	int4 investor_id;
@@ -193,7 +193,7 @@ persistent class InnerExecutionReport
 	tree <investor_id> InvestorIdx;
 };
 
-persistent class UserExecutionReport
+class UserExecutionReport
 {
 	int4 investor_id;
 	uint1 exchange_type;
@@ -225,7 +225,7 @@ persistent class UserExecutionReport
 	tree<investor_id, uer_sys_id> InvestorIdx;
 };
 
-persistent class Fund
+class Fund
 {
 	int4 investor_id;
 	int4 branch_id;
@@ -238,7 +238,7 @@ persistent class Fund
 	unique tree<investor_id, currency_type> FundIdx;
 };
 
-persistent class Position
+class Position
 {
 	int4 investor_id;
 	char<10> security_account;
@@ -253,7 +253,7 @@ persistent class Position
 	tree<investor_id> InvestorIdx;
 };
 
-persistent class TestER
+class TestER
 {
     int4 investor_id;
 	int4 sno;

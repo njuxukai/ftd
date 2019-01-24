@@ -48,8 +48,6 @@ void processQryPrivateInitialData(const PlainHeaders& headers, FTD::PackageSPtr 
 			if (report.investor_id != 99)
 				break;
 
-			std::cout << "InvestorID=" << report.investor_id
-				<< "SNo=" << report.sno << std::endl;
 
 		}
 	}
