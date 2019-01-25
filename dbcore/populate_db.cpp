@@ -12,24 +12,29 @@ using namespace genericdb;
 
 void populate_test(mco_db_h db);
 void populate_db_sysconfig(mco_db_h db);
+void populate_db_branch(mco_db_h db);
 void populate_db_users(mco_db_h db);
+void populate_db_investors(mco_db_h db);
+void populate_db_secu_account(mco_db_h db);
 void populate_db_fund(mco_db_h db);
 void populate_db_position(mco_db_h db);
 void populate_db_order(mco_db_h db);
 void populate_db_inner_execution_report(mco_db_h db);
-void populate_db_secu_account(mco_db_h db);
+
 
 
 void populate2_db(mco_db_h db)
 {
 	populate_test(db);
 	populate_db_sysconfig(db);
+	populate_db_branch(db);
 	populate_db_users(db);
+	populate_db_investors(db);
 	populate_db_secu_account(db);
 	populate_db_fund(db);
 	populate_db_position(db);
-	populate_db_order(db);
-	populate_db_inner_execution_report(db);
+
+	//populate_db_inner_execution_report(db);
 }
 
 void populate_db_users(mco_db_h db)
@@ -63,6 +68,35 @@ void populate_db_users(mco_db_h db)
 	}
 }
 
+void populate_db_investors(mco_db_h db)
+{
+	mco_trans_h t = 0;
+	MCO_RET rc = MCO_S_OK;
+	int  j;
+	for (j = 90; j < 100 && MCO_S_OK == rc; j++)
+	{
+		Investor investor;
+		rc = mco_trans_start(db, MCO_READ_WRITE, MCO_TRANS_FOREGROUND, &t);
+		if (MCO_S_OK == rc)
+		{
+			//mco_disk_transaction_policy(db, MCO_COMMIT_BUFFERED);
+			//MCO_COMMIT_NO_SYNC
+			investor.create(t);
+			investor.investor_id = j;
+			investor.branch_id = MOCK_BRANCH_ID;
+			rc = mco_trans_commit(t);
+			if (MCO_S_OK == rc)
+			{
+				printf("Investor[%d]Insert Success\n", j);
+			}
+			else
+			{
+				//printf("[%d]Insert failure\n", j );
+			}
+		}
+	}
+}
+
 void populate_db_secu_account(mco_db_h db)
 {
 	mco_trans_h t = 0;
@@ -72,6 +106,7 @@ void populate_db_secu_account(mco_db_h db)
 	rc = mco_trans_start(db, MCO_READ_WRITE, MCO_TRANS_FOREGROUND, &t);
 	account.create(t);
 	account2.create(t);
+
 	account.broker_id = 8080;
 	account.investor_id = 99;
 	account.exchange_type = FTDC_ET_SH;
@@ -314,6 +349,24 @@ void populate_db_sysconfig(mco_db_h db)
 		config.broker_id = 8080;
 		config.trade_date = "20190123";
 		config.system_date = "20190123";
+		mco_trans_commit(t);
+	}
+}
+
+void populate_db_branch(mco_db_h db)
+{
+	mco_trans_h t = 0;
+	MCO_RET rc = MCO_S_OK;
+	int  j;
+
+	Branch branch;
+	rc = mco_trans_start(db, MCO_READ_WRITE, MCO_TRANS_FOREGROUND, &t);
+	if (MCO_S_OK == rc)
+	{
+		branch.create(t);
+		branch.sz_branch_id = MOCK_SZ_BRANCH_ID;
+		branch.sh_branch_id = MOCK_SH_BRANCH_ID;
+		branch.branch_id = MOCK_BRANCH_ID;
 		mco_trans_commit(t);
 	}
 }

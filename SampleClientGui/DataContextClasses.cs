@@ -31,8 +31,8 @@ namespace SampleClientGui
         public Xcp.Enums.Direction Direction { get { return (Xcp.Enums.Direction)field_.Direction; } }
         public int VolumeTotalOriginal { get { return field_.VolumeTotalOrginal; } }
         public double LimitPrice { get { return field_.LimitPrice; } }
-        public double VolumeTraded { get { return field_.VolumeTraded; } }
-        public double AmountTraded { get { return field_.AmountTraded; } }
+        public double VolumeTraded { get { return field_.VolumeCum; } }
+        public double AmountTraded { get { return field_.AmountCum; } }
         public Xcp.Enums.OrderStatus OrderStatus { get {return (Xcp.Enums.OrderStatus)field_.OrderStatus; } }
         public int OrderSysID { get { return field_.OrderSysID; } }
         public string OrderExchangeID { get { return field_.OrderExchangeID; } }
@@ -52,8 +52,8 @@ namespace SampleClientGui
 
         public string InstrumentCode { get { return field_.InstrumentCode; } }
         public Xcp.Enums.Direction Direction { get { return (Xcp.Enums.Direction)field_.Direction; } }
-        public int VolumeTrade { get { return field_.VolumeTrade; } }
-        public double PriceTrade { get { return field_.PriceTrade; } }
+        public int VolumeTrade { get { return field_.VolumeLast; } }
+        public double PriceTrade { get { return field_.PriceLast; } }
         public int OrderSysID { get { return field_.OrderSysID; } }
         public int TradeSysID { get { return field_.TradeSysID; } }
         public string TradeExchangeID { get { return field_.TradeExchangeID; } }

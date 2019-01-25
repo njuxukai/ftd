@@ -5,11 +5,12 @@
 #include <stdexcept>
 #include <ftd/Errors.h>
 
-#define MCO_ERROR_CODE_TRANSACTION_ERROR 0x0100
-#define MCO_ERROR_CODE_INDEX_FIND_ERROR 0x0101
-#define MCO_ERROR_CODE_USER_ID_NOT_EXIST 0x0102
-#define MCO_ERROR_CODE_PASSWORD_ERROR 0x0103
-#define MCO_ERROR_CODE_AUTHORIZATION_DENIED 0x0104
+#define MCO_ERROR_CODE_TRANSACTION_ERROR 100
+#define MCO_ERROR_CODE_INDEX_FIND_ERROR 101
+#define MCO_ERROR_CODE_USER_ID_NOT_EXIST 102
+#define MCO_ERROR_CODE_PASSWORD_ERROR 103
+#define MCO_ERROR_CODE_AUTHORIZATION_DENIED 104
+#define MCO_ERROR_CODE_GENERATE_SNO  105
 namespace dbcore 
 {
 	/// Base MCO exception type.
@@ -26,22 +27,33 @@ namespace dbcore
 		std::string detail;
 	};
 
+	struct SNoGenerateError : public Exception
+	{
+		SNoGenerateError(const std::string& detail="") 
+			: Exception(MCO_ERROR_CODE_GENERATE_SNO,
+				"ÐòÁÐºÅÉú³ÉÊ§°Ü",
+				detail)
+		{
+
+		}
+	};
+
 	struct IndexFindError : public Exception
 	{
-		IndexFindError(const std::string& what="") 
+		IndexFindError(const std::string& detail="") 
 			:Exception(MCO_ERROR_CODE_INDEX_FIND_ERROR,
-				"Index find error or unique index exists",
-				what)
+				"Ë÷Òý´íÎó",
+				detail)
 		{}
 	};
 
 
 	struct AuthorizationDenied : public Exception
 	{
-		AuthorizationDenied(const std::string& what = "")
+		AuthorizationDenied(const std::string& detail = "")
 			:Exception(MCO_ERROR_CODE_INDEX_FIND_ERROR,
 				"Authorization denied",
-				what)
+				detail)
 		{}
 	};
 }

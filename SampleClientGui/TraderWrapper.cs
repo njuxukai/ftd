@@ -379,8 +379,8 @@ namespace SampleClientGui
         static void updateOrder(ref Xcp.ExecutionReportField report, ref Xcp.OrderField order, bool isAll)
         {
             //必须更新的部分
-            order.VolumeTraded = report.VolumeTraded;
-            order.AmountTraded = report.AmountTraded;
+            order.VolumeCum = report.VolumeCum;
+            order.AmountCum = report.AmountCum;
             order.OrderStatus = report.OrderStatus;
             order.OrderSysID = report.OrderSysID;
             order.OrderExchangeID = report.OrderExchangeID;
@@ -597,7 +597,7 @@ namespace SampleClientGui
                 order.InvestorID = InvestorID;
                 order.RequestID = NextRequestID;
                 order.OrderRef = NextOrderRef;
-                order.OrderRef = 1;
+                //order.OrderRef = 1;
                 order.FrontID = FrontID;
                 order.SessionID = SessionID;
                 if(securityAccounts.ContainsKey(order.ExchangeType))

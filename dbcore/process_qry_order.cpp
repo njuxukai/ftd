@@ -81,9 +81,9 @@ void processQryOrderTransaction(ReqQryOrder* pReq, mco_trans_h t, RspQryOrder* p
 			orderField.LimitPrice = order.price;
 			orderField.OrderStatus = order.status;
 			orderField.VolumeTotalOrginal = order.volume_total_original;
-			orderField.VolumeTotal = order.volume_leaves;
-			orderField.VolumeTraded = order.volume_cum;
-			orderField.AmountTraded = order.amount_cum;
+			orderField.VolumeLeaves = order.volume_leaves;
+			orderField.VolumeCum = order.volume_cum;
+			orderField.AmountCum = order.amount_cum;
 
 			pRsp->orderFields.push_back(orderField);
 		}

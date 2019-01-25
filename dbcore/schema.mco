@@ -32,7 +32,16 @@ class User
 	int4 broker_id;
 	unsigned<4> user_id;
 	char<8> password;
+
 	unique tree<user_id> UserIdIdx;
+};
+
+class Investor
+{
+	int4 investor_id;
+	int4 branch_id;
+
+	unique tree<investor_id> Idx;
 };
 
 class SecurityAccount
@@ -42,6 +51,8 @@ class SecurityAccount
 	uint1 exchange_type;
 	char<10> security_account;
 	int4 pbu_id;
+
+	unique tree<investor_id, exchange_type, security_account> Idx;
 	tree<investor_id> InvestorIdx;
 };
 
@@ -70,7 +81,7 @@ class InputOrder
 	int4 front_id;
 	int4 session_id;
 	int4 order_ref;
-	char<10> secu_account;
+	char<10> security_account;
 	string instrument_code;
 	uint1 exchange_type;
 	uint1 direction;
@@ -110,10 +121,10 @@ class Order
 	VolumeType volume_leaves;
 	VolumeType volume_cancelled;
 
-	unique tree<front_id, session_id, order_ref> SessionIdx;
-	//unique tree<exchange_type, pbu_id, order_exchange_id> ExchangeIdx;
-	//unique tree<order_sys_id> SysIdx;
-	//unique tree<client_order_id> clOrdIDIdx;
+	unique tree<front_id, session_id, order_ref> SessionIdx;	
+	unique tree<order_sys_id> SysIdx;
+	unique tree<client_order_id> clOrdIDIdx;
+	tree<exchange_type, pbu_id, order_exchange_id> ExchangeIdx;
 	tree<investor_id> InvestorIdx;
 };
 

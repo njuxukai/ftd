@@ -78,8 +78,8 @@ void processQryTradeTransaction(ReqQryTrade* pReq, mco_trans_h t, RspQryTrade* p
 			tradeField.OrderSysID = report.order_sys_id;
 			tradeField.TradeSysID = report.ier_sys_id;
 			strcpy(tradeField.TradeExchangeID, ((std::string)report.report_exchange_id).data());
-			tradeField.VolumeTrade = report.volume_last;
-			tradeField.PriceTrade = report.price_last;
+			tradeField.VolumeLast = report.volume_last;
+			tradeField.PriceLast = report.price_last;
 			pRsp->tradeFields.push_back(tradeField);
 
 		}
