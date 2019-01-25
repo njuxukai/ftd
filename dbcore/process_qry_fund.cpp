@@ -25,27 +25,28 @@ void processQryFund(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrappe
 	memset(pRsp->pErrorField.get(), 0, sizeof(CFtdcErrorField));
 	pRsp->requestSourceField.RequestID = pReqQryFund->qryFundField.RequestID;
 
-	mco_trans_h t = 0;
-	MCO_RET rc = MCO_S_OK;
-	
-	rc = mco_trans_start(db, MCO_READ_WRITE, MCO_TRANS_FOREGROUND, &t);
-	if (MCO_S_OK != rc)
-	{
-		pRsp->pErrorField->ErrorCode = FTD_ERROR_CODE_TRANSACTION_ERROR;
-		strcpy(pRsp->pErrorField->ErrorText, FTD_ERROR_TEXT_TRANSACTION_ERROR);
-		pWrapper->uplink(rspHeaders, pRsp);
-		return;
-	}
 	try
 	{
-		processQryFundTransaction(pReqQryFund, t, pRsp.get());
-		mco_trans_commit(t);
+		McoTrans t(db, MCO_READ_ONLY, MCO_TRANS_FOREGROUND);
+		try
+		{
+			processQryFundTransaction(pReqQryFund, t, pRsp.get());
+		}
+		catch (...)
+		{
+			t.rollback();
+			throw;
+		}
 	}
-	catch (MCO::Exception& e)
+	catch (dbcore::Exception& e)
 	{
-		mco_trans_rollback(t);
 		pRsp->pErrorField->ErrorCode = e.errorCode;
 		strcpy(pRsp->pErrorField->ErrorText, e.what());
+	}
+	catch (McoException& e)
+	{
+		pRsp->pErrorField->ErrorCode = e.get_rc();
+		strncpy(pRsp->pErrorField->ErrorText, e.what(), sizeof(CFtdcErrorField::ErrorText));
 	}
 
 	pWrapper->uplink(rspHeaders, pRsp);
@@ -59,7 +60,7 @@ void processQryFundTransaction(const ReqQryFund* pReq, mco_trans_h t, RspQryFund
 		pReq->qryFundField.CurrencyType, &fund);
 	if (MCO_S_OK != rc)
 	{
-		throw(MCO::IndexFindError("资金账号或币种不存在"));
+		throw(dbcore::IndexFindError("资金账号或币种不存在"));
 
 	}
 	CFtdcFundField ftdcFund = { 0 };

@@ -10,7 +10,7 @@
 #define MCO_ERROR_CODE_USER_ID_NOT_EXIST 0x0102
 #define MCO_ERROR_CODE_PASSWORD_ERROR 0x0103
 #define MCO_ERROR_CODE_AUTHORIZATION_DENIED 0x0104
-namespace MCO 
+namespace dbcore 
 {
 	/// Base MCO exception type.
 	struct Exception : public std::logic_error

@@ -20,6 +20,7 @@ void processQryPrivateInitialData(const PlainHeaders& headers, FTD::PackageSPtr 
 	pRsp->m_sequenceSeries = pReq->m_sequenceSeries;
 	pRsp->m_sequenceNO = pReq->m_sequenceNO;
 
+	/*
 	mco_trans_h t = 0;
 	MCO_RET rc = MCO_S_OK;
 
@@ -51,7 +52,7 @@ void processQryPrivateInitialData(const PlainHeaders& headers, FTD::PackageSPtr 
 
 		}
 	}
-
+	*/
 	pWrapper->uplink(rspHeaders, pRsp);
 }
 

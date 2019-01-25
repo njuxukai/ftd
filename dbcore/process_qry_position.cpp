@@ -1,6 +1,9 @@
 #include "ftdc_all.h"
+#include "Exceptions.h"
 
 using namespace genericdb;
+
+void processQryPositionTransaction(ReqQryPosition* pReq, mco_trans_h t, RspQryPosition* pRsp);
 
 void processQryPosition(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapper* pWrapper, mco_db_h db)
 {
@@ -23,27 +26,44 @@ void processQryPosition(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWr
 	pRsp->requestSourceField.RequestID = 
 		pReqQryPosition->qryPositionField.RequestID;
 
-	mco_trans_h t = 0;
-	MCO_RET rc = MCO_S_OK;
-
-	rc = mco_trans_start(db, MCO_READ_ONLY, MCO_TRANS_FOREGROUND, &t);
-	if (MCO_S_OK != rc)
+	try
 	{
-		pRsp->pErrorField->ErrorCode = FTD_ERROR_CODE_TRANSACTION_ERROR;
-		strcpy(pRsp->pErrorField->ErrorText, FTD_ERROR_TEXT_TRANSACTION_ERROR);
-		pWrapper->uplink(rspHeaders, pRsp);
-		return;
+		McoTrans t(db, MCO_READ_ONLY, MCO_TRANS_FOREGROUND);
+		try
+		{
+			processQryPositionTransaction(pReqQryPosition, t, pRsp.get());
+		}
+		catch (...)
+		{
+			t.rollback();
+			throw;
+		}
 	}
+	catch (dbcore::Exception& e)
+	{
+		pRsp->pErrorField->ErrorCode = e.errorCode;
+		strcpy(pRsp->pErrorField->ErrorText, e.what());
+	}
+	catch (McoException& e)
+	{
+		pRsp->pErrorField->ErrorCode = e.get_rc();
+		strncpy(pRsp->pErrorField->ErrorText, e.what(), sizeof(CFtdcErrorField::ErrorText));
+	}
+	
+	pWrapper->uplink(rspHeaders, pRsp);
+}
 
-	int searchInvestorID = pReqQryPosition->qryPositionField.InvestorID;
+void processQryPositionTransaction(ReqQryPosition* pReq, mco_trans_h t, RspQryPosition* pRsp)
+{
+	int searchInvestorID = pReq->qryPositionField.InvestorID;
 
 	mco_cursor_t csr;
-	rc = Position::InvestorIdx::cursor(t, &csr);
+	MCO_RET rc = Position::InvestorIdx::cursor(t, &csr);
 	if (MCO_S_OK == rc)
 	{
 		for (rc = Position::InvestorIdx::search(t, &csr, MCO_EQ, searchInvestorID);
-			 rc == MCO_S_OK;
-			 rc = mco_cursor_next(t, &csr))
+		rc == MCO_S_OK;
+			rc = mco_cursor_next(t, &csr))
 		{
 			Position position;
 			position.from_cursor(t, &csr);
@@ -62,5 +82,4 @@ void processQryPosition(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWr
 			pRsp->positionFields.push_back(positionField);
 		}
 	}
-	pWrapper->uplink(rspHeaders, pRsp);
 }

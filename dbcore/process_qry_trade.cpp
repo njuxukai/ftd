@@ -1,5 +1,9 @@
 #include "ftdc_all.h"
+#include "Exceptions.h"
+
 using namespace genericdb;
+
+void processQryTradeTransaction(ReqQryTrade* pReq, mco_trans_h t, RspQryTrade* pRsp);
 
 void processQryTrade(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapper* pWrapper, mco_db_h db)
 {
@@ -19,22 +23,40 @@ void processQryTrade(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapp
 	ReqQryTrade *pReqQryTrade = (ReqQryTrade*)pReq.get();
 	pRsp->requestSourceField.RequestID = pReqQryTrade->qryTradeField.RequestID;
 
-	mco_trans_h t = 0;
-	MCO_RET rc = MCO_S_OK;
-
-	rc = mco_trans_start(db, MCO_READ_ONLY, MCO_TRANS_FOREGROUND, &t);
-	if (MCO_S_OK != rc)
+	try
 	{
-		pRsp->pErrorField->ErrorCode = FTD_ERROR_CODE_TRANSACTION_ERROR;
-		strcpy(pRsp->pErrorField->ErrorText, FTD_ERROR_TEXT_TRANSACTION_ERROR);
-		pWrapper->uplink(rspHeaders, pRsp);
-		return;
+		McoTrans t(db, MCO_READ_ONLY, MCO_TRANS_FOREGROUND);
+		try
+		{
+			processQryTradeTransaction(pReqQryTrade, t, pRsp.get());
+		}
+		catch (...)
+		{
+			t.rollback();
+			throw;
+		}
 	}
+	catch (dbcore::Exception& e)
+	{
+		pRsp->pErrorField->ErrorCode = e.errorCode;
+		strcpy(pRsp->pErrorField->ErrorText, e.what());
+	}
+	catch (McoException& e)
+	{
+		pRsp->pErrorField->ErrorCode = e.get_rc();
+		strncpy(pRsp->pErrorField->ErrorText, e.what(), sizeof(CFtdcErrorField::ErrorText));
+	}
+	
+	pWrapper->uplink(rspHeaders, pRsp);
+}
 
-	int searchInvestorID = pReqQryTrade->qryTradeField.InvestorID;
+
+void processQryTradeTransaction(ReqQryTrade* pReq, mco_trans_h t, RspQryTrade* pRsp)
+{
+	int searchInvestorID = pReq->qryTradeField.InvestorID;
 
 	mco_cursor_t csr;
-	rc = InnerExecutionReport::InvestorIdx::cursor(t, &csr);
+	MCO_RET rc = InnerExecutionReport::InvestorIdx::cursor(t, &csr);
 	if (MCO_S_OK == rc)
 	{
 		for (rc = InnerExecutionReport::InvestorIdx::search(t, &csr, MCO_EQ, searchInvestorID);
@@ -45,7 +67,7 @@ void processQryTrade(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapp
 			report.from_cursor(t, &csr);
 			if (report.investor_id != searchInvestorID)
 				break;
-			
+
 			CFtdcTradeField tradeField = { 0 };
 			tradeField.InvestorID = report.investor_id;
 			strcpy(tradeField.InstrumentCode, ((std::string)report.instrument_code).data());
@@ -62,5 +84,4 @@ void processQryTrade(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapp
 
 		}
 	}
-	pWrapper->uplink(rspHeaders, pRsp);
 }

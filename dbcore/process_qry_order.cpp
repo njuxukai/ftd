@@ -1,6 +1,10 @@
 #include "ftdc_all.h"
+#include "Exceptions.h"
+#include "genericdb.hpp"
 
 using namespace genericdb;
+
+void processQryOrderTransaction(ReqQryOrder* pReq, mco_trans_h t, RspQryOrder* pRsp);
 
 void processQryOrder(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapper* pWrapper, mco_db_h db)
 {
@@ -21,26 +25,42 @@ void processQryOrder(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapp
 	ReqQryOrder *pReqQryOrder = (ReqQryOrder*)pReq.get();
 	pRsp->requestSourceField.RequestID = pReqQryOrder->qryOrderField.RequestID;
 
-	mco_trans_h t = 0;
-	MCO_RET rc = MCO_S_OK;
-
-	rc = mco_trans_start(db, MCO_READ_ONLY, MCO_TRANS_FOREGROUND, &t);
-	if (MCO_S_OK != rc)
+	try
 	{
-		pRsp->pErrorField->ErrorCode = FTD_ERROR_CODE_TRANSACTION_ERROR;
-		strcpy(pRsp->pErrorField->ErrorText, FTD_ERROR_TEXT_TRANSACTION_ERROR);
-		pWrapper->uplink(rspHeaders, pRsp);
-		return;
+		McoTrans t(db, MCO_READ_ONLY, MCO_TRANS_FOREGROUND);
+		try
+		{
+			processQryOrderTransaction(pReqQryOrder, t, pRsp.get());
+		}
+		catch (...)
+		{
+			t.rollback();
+			throw;
+		}
+	}
+	catch (dbcore::Exception& e)
+	{
+		pRsp->pErrorField->ErrorCode = e.errorCode;
+		strcpy(pRsp->pErrorField->ErrorText, e.what());
+	}
+	catch (McoException& e)
+	{
+		pRsp->pErrorField->ErrorCode = e.get_rc();
+		strncpy(pRsp->pErrorField->ErrorText, e.what(), sizeof(CFtdcErrorField::ErrorText));
 	}
 
-	int searchInvestorID = pReqQryOrder->qryOrderField.InvestorID;
+	pWrapper->uplink(rspHeaders, pRsp);
+}
 
+void processQryOrderTransaction(ReqQryOrder* pReq, mco_trans_h t, RspQryOrder* pRsp)
+{
+	int searchInvestorID = pReq->qryOrderField.InvestorID;
 	mco_cursor_t csr;
-	rc = Order::InvestorIdx::cursor(t, &csr);
+	MCO_RET rc = Order::InvestorIdx::cursor(t, &csr);
 	if (MCO_S_OK == rc)
 	{
 		for (rc = Order::InvestorIdx::search(t, &csr, MCO_EQ, searchInvestorID);
-			rc == MCO_S_OK;
+		rc == MCO_S_OK;
 			rc = mco_cursor_next(t, &csr))
 		{
 			Order order;
@@ -66,8 +86,6 @@ void processQryOrder(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapp
 			orderField.AmountTraded = order.amount_cum;
 
 			pRsp->orderFields.push_back(orderField);
-			
 		}
 	}
-	pWrapper->uplink(rspHeaders, pRsp);
 }

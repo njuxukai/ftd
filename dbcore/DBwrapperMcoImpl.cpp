@@ -21,7 +21,7 @@ const int nThreadCount = 8;
 
 DBWrapperMcoImpl::DBWrapperMcoImpl(): m_done(false), m_joiner(new JoinThreads(m_threads))
 {
-	initDB();
+	initDB2();
 	
 	std::cout << "[DEBUG]Populate DB started.\n";
 	populateDB();
@@ -38,66 +38,28 @@ DBWrapperMcoImpl::~DBWrapperMcoImpl()
 	{
 		delete m_joiner;
 		m_joiner = 0;
+
 	}
+	sample_close_database(db_name, &m_dbmem);
 	mco_runtime_stop();
-	free(dev[0].dev.conv.ptr);
-	free(dev[1].dev.conv.ptr);
 	sample_os_shutdown();
 }
- 
-void DBWrapperMcoImpl::initDB()
+
+void DBWrapperMcoImpl::initDB2()
 {
-	MCO_RET            rc;
+	MCO_RET         rc;
+	
 
 	sample_os_initialize(DEFAULT);
 
-	sample_header(sample_descr);
-
-	/* Set fatal error handler and start eXtremeDB runtime */
-	mco_error_set_handler(&sample_errhandler);
-	mco_runtime_start();
-
-	/* Configure first memory device as a plain conventional memory region */
-	dev[0].type = MCO_MEMORY_CONV;
-	dev[0].assignment = MCO_MEMORY_ASSIGN_DATABASE;
-	dev[0].size = DATABASE_SIZE;
-	dev[0].dev.conv.ptr = (void*)malloc(DATABASE_SIZE);
-
-	/* Configure conventional memory region for cache */
-	dev[1].type = MCO_MEMORY_CONV;
-	dev[1].assignment = MCO_MEMORY_ASSIGN_CACHE;
-	dev[1].size = CACHE_SIZE;
-	dev[1].dev.conv.ptr = (void*)malloc(CACHE_SIZE);
-
-	/* Configure FILE memory device for main database storage */
-	dev[2].type = MCO_MEMORY_FILE;
-	dev[2].assignment = MCO_MEMORY_ASSIGN_PERSISTENT;
-	sprintf(dev[2].dev.file.name, FILE_PREFIX "%s.dbs", db_name);
-	dev[2].dev.file.flags = MCO_FILE_OPEN_DEFAULT;
-
-	/* Configure FILE memory device for transaction log */
-	dev[3].type = MCO_MEMORY_FILE;
-	dev[3].assignment = MCO_MEMORY_ASSIGN_LOG;
-	sprintf(dev[3].dev.file.name, FILE_PREFIX "%s.log", db_name);
-	dev[3].dev.file.flags = MCO_FILE_OPEN_DEFAULT;
-
-	/* Initialize and customize the database parameters */
-	mco_db_params_init(&db_params);                  /* Initialize the params with default values */
-	db_params.mem_page_size = MEMORY_PAGE_SIZE;    /* Set page size for in-memory part */
-	db_params.disk_page_size = PSTORAGE_PAGE_SIZE;  /* Set page size for persistent storage */
-	db_params.db_max_connections = 10;                   /* Set total number of connections to the database */
-	db_params.db_log_type = UNDO_LOG;            /* Set log type */
-#ifdef EXTREMEDB_LICENSE_KEY
-	db_params.license_key = EXTREMEDB_LICENSE_KEY;
-#endif
-
-	/* Open a database on the configured devices with given params */
-	rc = mco_db_open_dev(db_name, genericdb_get_dictionary(), dev, N_DEVICES, &db_params);
-	if (MCO_S_OK == rc)
-	{
-		std::cout << "Open ExtremeDB Succeed\n";
-	}
+	rc = mco_runtime_start();
+	sample_rc_check("\tmco_runtime_start", rc);
+	sample_header("ExtremeDB opens.\n");
+	rc = sample_open_database(db_name, genericdb_get_dictionary(), DATABASE_SIZE, CACHE_SIZE,
+		MEMORY_PAGE_SIZE, PSTORAGE_PAGE_SIZE, 10, &m_dbmem);
+	sample_rc_check("\tOpen database", rc);
 }
+
 
 
 void DBWrapperMcoImpl::populateDB()

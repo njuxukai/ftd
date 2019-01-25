@@ -26,6 +26,9 @@ void processOrderInsert(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWr
 	pRsp->m_sequenceSeries = pReq->m_sequenceSeries;
 	pRsp->pErrorField = CFtdcErrorFieldPtr(new CFtdcErrorField());
 	ReqOrderInsert* pReqOrderInsert = (ReqOrderInsert*)pReq.get();
+	std::cout << pReqOrderInsert->inputOrderField.FrontID
+		<< ":" << pReqOrderInsert->inputOrderField.SessionID
+		<< ":" << pReqOrderInsert->inputOrderField.OrderRef << std::endl;
 	memcpy(&pRsp->inputOrderField, &pReqOrderInsert->inputOrderField, sizeof(CFtdcInputOrderField));
 	try 
 	{
@@ -34,9 +37,9 @@ void processOrderInsert(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWr
 			McoTrans t(db, MCO_READ_WRITE, MCO_TRANS_FOREGROUND);
 			try
 			{
-				insertToOrderInsert((const ReqOrderInsert*)pReq.get(), (mco_trans_h)t, pRsp.get());
+				insertToOrderInsert((const ReqOrderInsert*)pReq.get(), t, pRsp.get());
 			}
-			catch (std::exception& e)
+			catch (...)
 			{
 				t.rollback();
 				throw;
@@ -45,7 +48,7 @@ void processOrderInsert(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWr
 		}
 
 	}
-	catch (MCO::Exception& e)
+	catch (dbcore::Exception& e)
 	{
 		pRsp->pErrorField->ErrorCode = e.errorCode;
 		strcpy(pRsp->pErrorField->ErrorText, e.what());
@@ -86,7 +89,7 @@ void insertToOrderInsert(const ReqOrderInsert* pReq, mco_trans_h t, RspOrderInse
 		&order);
 	if (rc == MCO_S_OK)
 	{
-		throw(MCO::IndexFindError("存在相同主键的Order"));
+		throw(dbcore::IndexFindError("存在相同主键的Order"));
 	}
 	order.create(t);
 	order.front_id = pReq->inputOrderField.FrontID;

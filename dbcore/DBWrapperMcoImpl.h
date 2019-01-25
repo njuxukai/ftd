@@ -51,14 +51,14 @@ private:
 	ThreadsafeQueue<DBTask> m_packageQueue;
 	JoinThreads* m_joiner;
 	std::vector<std::thread> m_threads;
-	void initDB();
+	void initDB2();
 	void initThreads();
 
 	void populateDB();
 
 private:
-	mco_device_t       dev[N_DEVICES];
-	mco_db_params_t    db_params;
+	sample_memory_t m_dbmem;
+
 private:
 	void worker();
 

@@ -103,7 +103,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>ws2_32.lib;mcouwrt_debug.lib;mconet_debug.lib;mcosalsmp_debug.lib;mcosalmem_debug.lib;mcotrace_debug.lib;mcocryptstub_debug.lib;mcolib_debug.lib;mcovtdsk_debug.lib;mcofw32_debug.lib;mcomconv_debug.lib;mcotmursiw_debug.lib;mcosw32_debug.lib;mcosallatches_debug.lib;mcosalatomic_debug.lib;mcosaldload_debug.lib;mcosaltimer_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;mcouwrt_debug.lib;mconet_debug.lib;mcosalsmp_debug.lib;mcosalmem_debug.lib;mcotrace_debug.lib;mcocryptstub_debug.lib;mcolib_debug.lib;mcovtdsk_debug.lib;mcofw32_debug.lib;mcomw32_debug.lib;mcotmursiw_debug.lib;mcosw32_debug.lib;mcosallatches_debug.lib;mcosalatomic_debug.lib;mcosaldload_debug.lib;mcosaltimer_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(McobjectDir)\target\bin\;</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
@@ -154,7 +154,7 @@ del /F EXCLUDE</Command>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(McobjectDir)\target\bin\;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>ws2_32.lib;mcouwrt.lib;mconet.lib;mcosalsmp.lib;mcosalmem.lib;mcotrace.lib;mcocryptstub.lib;mcolib.lib;mcovtdsk.lib;mcofw32.lib;mcomconv.lib;mcotmursiw.lib;mcosw32.lib;mcosallatches.lib;mcosalatomic.lib;mcosaldload.lib;mcosaltimer.lib;</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;mcouwrt.lib;mconet.lib;mcosalsmp.lib;mcosalmem.lib;mcotrace.lib;mcocryptstub.lib;mcolib.lib;mcovtdsk.lib;mcofw32.lib;mcomw32.lib;mcotmursiw.lib;mcosw32.lib;mcosallatches.lib;mcosalatomic.lib;mcosaldload.lib;mcosaltimer.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

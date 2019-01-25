@@ -26,18 +26,20 @@ void processUserLogin(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrap
 	pRsp->rspUserLoginField.HeartbeatInterval = 10;
 	try
 	{
-		McoTrans t(db, MCO_READ_WRITE, MCO_TRANS_FOREGROUND);
-		try
 		{
-			processUserLoginTransaction(pReqUserLogin, t, pRsp.get());
-		}
-		catch (...)
-		{
-			t.rollback();
-			throw;
+			McoTrans t(db, MCO_READ_WRITE, MCO_TRANS_FOREGROUND);
+			try
+			{
+				processUserLoginTransaction(pReqUserLogin, t, pRsp.get());
+			}
+			catch (...)
+			{
+				t.rollback();
+				throw;
+			}
 		}
 	}
-	catch (MCO::Exception& e)
+	catch (dbcore::Exception& e)
 	{
 		pRsp->pErrorField->ErrorCode = e.errorCode;
 		strcpy(pRsp->pErrorField->ErrorText, e.what());
@@ -57,12 +59,12 @@ void processUserLoginTransaction(const ReqUserLogin* pReq, mco_trans_h t, RspUse
 	MCO_RET rc = User_UserIdIdx_find(t, pReq->reqUserLoginField.UserID, &user);
 	if (MCO_S_OK != rc)
 	{
-		throw(MCO::IndexFindError("用户不存在"));
+		throw(dbcore::IndexFindError("用户不存在"));
 
 	}
 	if (strcmp(((std::string)user.password).c_str(), pReq->reqUserLoginField.Password) != 0)
 	{
-		throw(MCO::AuthorizationDenied("密码错误"));
+		throw(dbcore::AuthorizationDenied("密码错误"));
 	}
 	//查max order ref
 	int maxOrderRef = 1;
@@ -87,7 +89,7 @@ void processUserLoginTransaction(const ReqUserLogin* pReq, mco_trans_h t, RspUse
 	rc = SysConfig::Idx::find(t, 0, config);
 	if (MCO_S_OK != rc)
 	{
-		throw(MCO::IndexFindError("交易日期不存在"));
+		throw(dbcore::IndexFindError("交易日期不存在"));
 	}
 	strcpy(pRsp->rspUserLoginField.TradingDay, ((std::string)config.trade_date).data());
 	pRsp->pErrorField->ErrorCode = 0;
