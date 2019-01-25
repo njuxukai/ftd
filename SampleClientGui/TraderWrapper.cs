@@ -106,6 +106,7 @@ namespace SampleClientGui
             trader.onRspQrySecurityAccount += OnRspQrySecurityAccount;
             trader.onRspOrderInsert += OnRspOrderInsert;
             trader.onRspOrderAction += OnRspOrderAction;
+            trader.onRtnOrderExecution += OnRtnExecutionReport;
             
         }
 
@@ -122,6 +123,7 @@ namespace SampleClientGui
             trader.onRspQrySecurityAccount -= OnRspQrySecurityAccount;
             trader.onRspOrderInsert -= OnRspOrderInsert;
             trader.onRspOrderAction -= OnRspOrderAction;
+            trader.onRtnOrderExecution -= OnRtnExecutionReport;
         }
         #region callback for trader
 
@@ -357,20 +359,21 @@ namespace SampleClientGui
             }
         }
 
-        private void onRtnExecutionReport(object sender, Xcp.RtnOrderExecutionEventArgs eventArgs)
+        private void OnRtnExecutionReport(object sender, Xcp.RtnOrderExecutionEventArgs eventArgs)
         {
+            RaiseUILogAddNewLine(string.Format("ReportSysID={0}", eventArgs.ExecutionReportField.ReportSysID));
             Xcp.ExecutionReportField report = eventArgs.ExecutionReportField;
-            Xcp.OrderField order;
+            Xcp.OrderField order = new OrderField();
             string key = String.Format("{0}:{1}:{2}", report.FrontID, report.SessionID, report.OrderRef);
             if (!currentOrderDict.ContainsKey(key))
             {
                 order = new Xcp.OrderField();
-                updateOrder(ref report, ref order, false);
+                updateOrder(ref report, ref order, true);
             }
             else
             {
                 order = currentOrderDict[key];
-                updateOrder(ref report, ref order, true);
+                updateOrder(ref report, ref order, false);
             }
             currentOrderDict[key] = order;
             RaiseOrderUpdate();

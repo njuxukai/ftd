@@ -7,7 +7,7 @@ using namespace genericdb;
 
 
 void insertToInputOrder(ReqOrderInsert* pReq, mco_trans_h t, RspOrderInsert* pRsp);
-void verifyInputAndCreateOrder(ReqOrderInsert* pReq, mco_trans_h t, RspOrderInsert* pRsp, bool& needPrivatePush, IncExecutionReports* privateReports);
+void verifyInputAndCreateOrder(ReqOrderInsert* pReq, mco_trans_h t, RspOrderInsert* pRsp, bool& needPrivatePush, IncExecutionReport* privateReports);
 
 void processOrderInsert(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapper* pWrapper, mco_db_h db)
 {
@@ -31,8 +31,8 @@ void processOrderInsert(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWr
 	ReqOrderInsert* pReqOrderInsert = (ReqOrderInsert*)pReq.get();
 	memcpy(&pRsp->inputOrderField, &pReqOrderInsert->inputOrderField, sizeof(CFtdcInputOrderField));
 
-	std::shared_ptr<IncExecutionReports>  pIncExecutionReports =
-		std::shared_ptr<IncExecutionReports>(new IncExecutionReports());
+	std::shared_ptr<IncExecutionReport>  pIncExecutionReport =
+		std::shared_ptr<IncExecutionReport>(new IncExecutionReport());
 	try 
 	{
 		//插入客户委托表
@@ -59,7 +59,7 @@ void processOrderInsert(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWr
 					t, 
 					pRsp.get(),
 					needPrivatePush,
-					pIncExecutionReports.get()
+					pIncExecutionReport.get()
 					);
 			}
 			catch (...)
@@ -89,9 +89,14 @@ void processOrderInsert(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWr
 	//strncpy(rspHeaders.source_queue, headers.target_queue,
 	//	sizeof(rspHeaders.source_queue));
 	//推送
-	PlainHeaders privateHeaders = { 0 };
-	privateHeaders.admin_flag = QMSG_FLAG_APP;
-	privateHeaders.msg_type = QMSG_TYPE_PRIVATE;
+	if (needPrivatePush)
+	{
+		PlainHeaders privateHeaders = { 0 };
+		privateHeaders.admin_flag = QMSG_FLAG_APP;
+		privateHeaders.msg_type = QMSG_TYPE_PRIVATE;
+		privateHeaders.sequence_series = pIncExecutionReport->executionReportField.SequenceSeries;
+		pWrapper->uplink(privateHeaders, pIncExecutionReport);
+	}
 }
 
 
@@ -124,7 +129,7 @@ void verifyInputAndCreateOrder(ReqOrderInsert* pReq,
 	mco_trans_h t, 
 	RspOrderInsert* pRsp,
 	bool& needPrivatePush, 
-	IncExecutionReports* privateReports)
+	IncExecutionReport* privateReport)
 {
 	//验证权限，数量，价格，时间等
 	//TODO
@@ -170,8 +175,8 @@ void verifyInputAndCreateOrder(ReqOrderInsert* pReq,
 		pReq->inputOrderField.ExchangeBranchID = branch.sz_branch_id;
 	///3 增加系统主键
 		pReq->inputOrderField.OrderSysID = get_next_sno(SEQ_ORDER_TAG, t);
-	//strcpy(pReq->inputOrderField.ClOrdID, 
-	//	generate_client_order_id(pReq->inputOrderField.OrderSysID).data());
+	strcpy(pReq->inputOrderField.ClOrdID, 
+		generate_client_order_id(pReq->inputOrderField.OrderSysID).data());
 
 
 	order.create(t);
@@ -192,6 +197,7 @@ void verifyInputAndCreateOrder(ReqOrderInsert* pReq,
 	order.pbu_id = pReq->inputOrderField.PbuID;
 	order.branch_id = pReq->inputOrderField.BranchID;
 	order.exchange_branch_id = pReq->inputOrderField.ExchangeBranchID;
+	
 
 	UserExecutionReport userReport;
 	userReport.create(t);
@@ -201,6 +207,7 @@ void verifyInputAndCreateOrder(ReqOrderInsert* pReq,
 	userReport.session_id = pReq->inputOrderField.SessionID;
 	userReport.order_ref = pReq->inputOrderField.OrderRef;
 	userReport.order_sys_id = pReq->inputOrderField.OrderSysID;
+	userReport.ier_sys_id = 0;
 	userReport.investor_id = pReq->inputOrderField.InvestorID;
 	userReport.security_account = pReq->inputOrderField.SecurityAccount;
 	userReport.exchange_type = pReq->inputOrderField.ExchangeType;
@@ -215,7 +222,7 @@ void verifyInputAndCreateOrder(ReqOrderInsert* pReq,
 	userReport.branch_id = pReq->inputOrderField.BranchID;
 	
 	needPrivatePush = true;
-	CFtdcExecutionReportField reportField = { 0 };
+	CFtdcExecutionReportField& reportField = privateReport->executionReportField;
 	reportField.FrontID = userReport.front_id;
 	reportField.SessionID = userReport.session_id;
 	reportField.OrderRef = userReport.order_ref;
@@ -229,11 +236,9 @@ void verifyInputAndCreateOrder(ReqOrderInsert* pReq,
 	reportField.PriceType = userReport.price_type;
 	reportField.LimitPrice = userReport.price;
 	reportField.VolumeTotalOrginal = userReport.volume;
+	reportField.OrderStatus = userReport.status;
 	reportField.VolumeCum = userReport.volume_cum;
 	reportField.AmountCum = userReport.amount_cum;
-	//reportField.VolumeTotal
-	// ReqReportInputOrder
-	// OrderExecutionReport
+	reportField.ReportSysID = userReport.uer_sys_id;
 
-	//private report send out
 }

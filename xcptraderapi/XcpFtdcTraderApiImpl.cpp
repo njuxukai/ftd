@@ -974,26 +974,21 @@ void CXcpFtdcTraderApiImpl::OnPackage(const FTD::RspQryPrivateInitialData& packa
 
 
 ///增量数据，如果没有完成同步则需要缓存在本地
-void CXcpFtdcTraderApiImpl::OnPackage(const FTD::IncExecutionReports& package, const FTD::SessionID& id) 
+void CXcpFtdcTraderApiImpl::OnPackage(const FTD::IncExecutionReport& package, const FTD::SessionID& id) 
 {
 	if (!m_pSpi)
 		return;
-	int dataLen = package.executionReportFields.size();
-	if (dataLen == 0)
-		return;
 	CXcpFtdcExecutionReportField contentfield = { 0 };	
-	for (int i = 0; i < dataLen; i++)
+	memcpy(&contentfield, &package.executionReportField, sizeof(contentfield));
+	if (m_privateDataSynced)
 	{
-		memcpy(&contentfield, &package.executionReportFields[i], sizeof(CXcpFtdcExecutionReportField));
-		if (m_privateDataSynced)
-		{
-			m_pSpi->OnRtnOrderExecutionReport(&contentfield);
-			m_pPrivateConn->writeSequenceSno(contentfield.SequenceNo);
-		} 
-		else
-		{
-			m_BufferExecutionReport[contentfield.SequenceNo] = contentfield;
-		}
+		m_pSpi->OnRtnOrderExecutionReport(&contentfield);
+		m_pPrivateConn->writeSequenceSno(contentfield.SequenceNo);
+	} 
+	else
+	{
+		m_BufferExecutionReport[contentfield.SequenceNo] = contentfield;
 	}
+
 }
 

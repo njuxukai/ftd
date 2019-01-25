@@ -620,8 +620,7 @@ namespace Xcp
         {
             if (pOrderExecution == IntPtr.Zero)
                 return;
-            ExecutionReportField data = new ExecutionReportField();
-            Marshal.PtrToStructure(pOrderExecution, data);  
+            ExecutionReportField data = Marshal.PtrToStructure<ExecutionReportField>(pOrderExecution);  
             var eventArgs = new RtnOrderExecutionEventArgs(data);
             Volatile.Read(ref onRtnOrderExecution)?.Invoke(this, eventArgs);
         }

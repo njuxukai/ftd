@@ -206,7 +206,7 @@ public:
 	virtual void OnPackage(const FTD::RspQryPurchasableNewIssueSecurity& package, const FTD::SessionID& id);
 	virtual void OnPackage(const FTD::RspQryPurchaseQuota& package, const FTD::SessionID& id);
 	virtual void OnPackage(const FTD::RspQryPrivateInitialData& package, const FTD::SessionID& id);
-	virtual void OnPackage(const FTD::IncExecutionReports& package, const FTD::SessionID& id);
+	virtual void OnPackage(const FTD::IncExecutionReport& package, const FTD::SessionID& id);
 	virtual void OnPackage(const FTD::RspQrySecurityAccount& package, const FTD::SessionID& id);
 	///
 private:

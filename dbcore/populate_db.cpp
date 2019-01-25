@@ -159,7 +159,6 @@ void populate_db_position(mco_db_h db)
 {
 	mco_trans_h t = 0;
 	MCO_RET rc = MCO_S_OK;
-	int  j;
 
 	Position position;
 	Position position2;
@@ -205,7 +204,6 @@ void populate_db_order(mco_db_h db)
 {
 	mco_trans_h t = 0;
 	MCO_RET rc = MCO_S_OK;
-	int  j;
 
 	Order order;
 	Order order2;
@@ -270,10 +268,6 @@ void populate_db_inner_execution_report(mco_db_h db)
 {
 	mco_trans_h t = 0;
 	MCO_RET rc = MCO_S_OK;
-	int  j;
-
-	Order order;
-	Order order2;
 	rc = mco_trans_start(db, MCO_READ_WRITE, MCO_TRANS_FOREGROUND, &t);
 	if (MCO_S_OK == rc)
 	{
@@ -303,10 +297,8 @@ void populate_test(mco_db_h db)
 {
 	mco_trans_h t = 0;
 	MCO_RET rc = MCO_S_OK;
-	int  j;
 
-	Order order;
-	Order order2;
+
 	rc = mco_trans_start(db, MCO_READ_WRITE, MCO_TRANS_FOREGROUND, &t);
 	if (MCO_S_OK == rc)
 	{
@@ -336,10 +328,7 @@ void populate_db_sysconfig(mco_db_h db)
 {
 	mco_trans_h t = 0;
 	MCO_RET rc = MCO_S_OK;
-	int  j;
 
-	Order order;
-	Order order2;
 	rc = mco_trans_start(db, MCO_READ_WRITE, MCO_TRANS_FOREGROUND, &t);
 	if (MCO_S_OK == rc)
 	{
@@ -357,7 +346,7 @@ void populate_db_branch(mco_db_h db)
 {
 	mco_trans_h t = 0;
 	MCO_RET rc = MCO_S_OK;
-	int  j;
+
 
 	Branch branch;
 	rc = mco_trans_start(db, MCO_READ_WRITE, MCO_TRANS_FOREGROUND, &t);

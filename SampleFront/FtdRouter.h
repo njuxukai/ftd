@@ -100,20 +100,21 @@ public:
 		}
 	}
 
+	/*
 	void publishExecutionReport(const CFtdcExecutionReportField& field)
 	{
 		if (m_subMap.find(field.SequenceSeries) != m_subMap.end())
 		{
-			IncExecutionReports package;
+			IncExecutionReport package;
 			package.m_sequenceSeries = field.SequenceSeries;
 			package.m_sequenceNO = field.SequenceNo;
-			package.executionReportFields.push_back(field);
+			memcpy(&package.executionReportField, &field, sizeof(field));
 			for (auto it = m_subMap[field.SequenceSeries].begin(); it != m_subMap[field.SequenceSeries].end(); it++)
 			{
 				Session::sendToTarget(package, *it);
 			}
 		}
-	}
+	}*/
 
 private:
 	FtdRouterParameter m_parameter;
