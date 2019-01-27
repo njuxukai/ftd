@@ -51,6 +51,7 @@ class SecurityAccount
 	uint1 exchange_type;
 	char<10> security_account;
 	int4 pbu_id;
+	char<30> rpt_queue;
 
 	unique tree<investor_id, exchange_type, security_account> Idx;
 	tree<investor_id> InvestorIdx;

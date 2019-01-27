@@ -1,6 +1,8 @@
 #include "db_util.h"
 #include "Exceptions.h"
 #include <boost/lexical_cast.hpp>
+#include <boost/format.hpp>
+#include <ftd/DerivativeType.h>
 
 using namespace genericdb;
 
@@ -73,3 +75,4 @@ std::string generate_sz_pbu_id_string(int sz_pub_id)
 	buffer[6] = 0;
 	return std::string(buffer);
 }
+

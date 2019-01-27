@@ -5,7 +5,7 @@ using namespace genericdb;
 #define MOCK_SH_SECU_ACCOUNT "A000000001"
 #define MOCK_SZ_SECU_ACCOUNT "2000000008"
 #define MOCK_SH_PBU_ID   28888
-#define MOCK_SZ_PBU_ID   1999
+#define MOCK_SZ_PBU_ID   199999
 #define MOCK_BRANCH_ID 1672
 #define MOCK_SH_BRANCH_ID 11672
 #define MOCK_SZ_BRANCH_ID 1672
@@ -112,12 +112,14 @@ void populate_db_secu_account(mco_db_h db)
 	account.exchange_type = FTDC_ET_SH;
 	account.security_account = MOCK_SH_SECU_ACCOUNT;
 	account.pbu_id = MOCK_SH_PBU_ID;
+	account.rpt_queue = "req_rpt_sh28888";
 
 	account2.broker_id = 8080;
 	account2.investor_id = 99;
 	account2.exchange_type = FTDC_ET_SZ;
 	account2.security_account = MOCK_SZ_SECU_ACCOUNT;
 	account.pbu_id = MOCK_SZ_PBU_ID;
+	account.rpt_queue = "req_rpt_sz199999";
 	rc = mco_trans_commit(t);
 }
 

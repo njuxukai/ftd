@@ -53,6 +53,7 @@ SUITE(AutoGen)
             CHECK(sizeof(CXcpFtdcNewIssueSecurityField) >= 0);
             CHECK(sizeof(CXcpFtdcQryPurchaseQuotaField) >= 0);
             CHECK(sizeof(CXcpFtdcPurchaseQuotaField) >= 0);
+            CHECK(sizeof(CXcpFtdcInnerExecutionReportField) >= 0);
             CHECK(sizeof(CXcpFtdcExecutionReportField) >= 0);
             CHECK(sizeof(CXcpFtdcQryInitialDataField) >= 0);
             CHECK(sizeof(CXcpFtdcDialogSpecField) >= 0);
@@ -95,6 +96,7 @@ SUITE(AutoGen)
             CHECK(sizeof(CXcpFtdcNewIssueSecurityField) == sizeof(CFtdcNewIssueSecurityField));
             CHECK(sizeof(CXcpFtdcQryPurchaseQuotaField) == sizeof(CFtdcQryPurchaseQuotaField));
             CHECK(sizeof(CXcpFtdcPurchaseQuotaField) == sizeof(CFtdcPurchaseQuotaField));
+            CHECK(sizeof(CXcpFtdcInnerExecutionReportField) == sizeof(CFtdcInnerExecutionReportField));
             CHECK(sizeof(CXcpFtdcExecutionReportField) == sizeof(CFtdcExecutionReportField));
             CHECK(sizeof(CXcpFtdcQryInitialDataField) == sizeof(CFtdcQryInitialDataField));
             CHECK(sizeof(CXcpFtdcDialogSpecField) == sizeof(CFtdcDialogSpecField));

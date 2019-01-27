@@ -397,6 +397,7 @@ namespace SampleClientGui
                 order.OrderRef = report.OrderRef;
                 order.Direction = report.Direction;
                 order.VolumeTotalOrginal = report.VolumeTotalOrginal;
+                order.LimitPrice = report.LimitPrice;
                 order.InvestorID = report.InvestorID;
             }
         }

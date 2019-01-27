@@ -7,7 +7,10 @@ using namespace genericdb;
 
 
 void insertToInputOrder(ReqOrderInsert* pReq, mco_trans_h t, RspOrderInsert* pRsp);
-void verifyInputAndCreateOrder(ReqOrderInsert* pReq, mco_trans_h t, RspOrderInsert* pRsp, bool& needPrivatePush, IncExecutionReport* privateReports);
+void verifyInputAndCreateOrder(ReqOrderInsert* pReq, mco_trans_h t, 
+	RspOrderInsert* pRsp, 
+	bool& needReport, 
+	bool& needPrivatePush, IncExecutionReport* privateReports);
 
 void processOrderInsert(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapper* pWrapper, mco_db_h db)
 {
@@ -58,12 +61,15 @@ void processOrderInsert(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWr
 					(ReqOrderInsert*)pReq.get(), 
 					t, 
 					pRsp.get(),
+					needReport,
 					needPrivatePush,
 					pIncExecutionReport.get()
 					);
 			}
 			catch (...)
 			{
+				needReport = false;
+				needPrivatePush = false;
 				t.rollback();
 				throw;
 			}
@@ -83,11 +89,16 @@ void processOrderInsert(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWr
 	pWrapper->uplink(rspHeaders, pRsp);
 
 	//报盘
-	PlainHeaders rptHeaders = { 0 };
-	rptHeaders.admin_flag = QMSG_FLAG_APP;
-	rptHeaders.msg_type = QMSG_TYPE_REQ;
-	//strncpy(rspHeaders.source_queue, headers.target_queue,
-	//	sizeof(rspHeaders.source_queue));
+	if (needReport)
+	{
+		PlainHeaders rptHeaders = { 0 };
+		rptHeaders.admin_flag = QMSG_FLAG_APP;
+		rptHeaders.msg_type = QMSG_TYPE_REQ;
+		strcpy(rptHeaders.source_queue, pReqOrderInsert->inputOrderField.RptQueue);
+		std::shared_ptr<ReqRptOrderInsert> pReqRptOrderInsert = std::make_shared<ReqRptOrderInsert>();
+		memcpy(&pReqRptOrderInsert->inputOrderField, &pReqOrderInsert->inputOrderField, sizeof(CFtdcInputOrderField));
+		pWrapper->uplink(rptHeaders, pReqRptOrderInsert);
+	}
 	//推送
 	if (needPrivatePush)
 	{
@@ -128,6 +139,7 @@ void insertToInputOrder(ReqOrderInsert* pReq, mco_trans_h t, RspOrderInsert* pRs
 void verifyInputAndCreateOrder(ReqOrderInsert* pReq, 
 	mco_trans_h t, 
 	RspOrderInsert* pRsp,
+	bool& needReport,
 	bool& needPrivatePush, 
 	IncExecutionReport* privateReport)
 {
@@ -158,6 +170,8 @@ void verifyInputAndCreateOrder(ReqOrderInsert* pReq,
 		throw(dbcore::IndexFindError("找不到相应的股东账号"));
 	}
 	pReq->inputOrderField.PbuID = securityAccount.pbu_id;
+	strcpy(pReq->inputOrderField.RptQueue, 
+		((std::string)securityAccount.rpt_queue).data());
 	///2 补充营业部编码信息
 	Investor investor;
 	rc = Investor::Idx::find(t, pReq->inputOrderField.InvestorID, investor);
@@ -221,7 +235,9 @@ void verifyInputAndCreateOrder(ReqOrderInsert* pReq,
 	userReport.pbu_id = pReq->inputOrderField.PbuID;
 	userReport.branch_id = pReq->inputOrderField.BranchID;
 	
+	needReport = true;
 	needPrivatePush = true;
+	
 	CFtdcExecutionReportField& reportField = privateReport->executionReportField;
 	reportField.FrontID = userReport.front_id;
 	reportField.SessionID = userReport.session_id;
