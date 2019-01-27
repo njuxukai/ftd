@@ -118,6 +118,8 @@ public:
 	
 	virtual ~SendClient() {}
 	virtual void submitTask(const DeliveryPack& sendTask) = 0;
+	virtual void registerDirectQueue(const std::string& queueName) = 0;
+	virtual void registerFanoutExchange(const std::string& exchangeName) = 0;
 	virtual void start() = 0;
 	virtual void stop() = 0;
 protected:

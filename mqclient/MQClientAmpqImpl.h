@@ -9,6 +9,8 @@ MQ Client(using rabbitmq with simpleAmqpClient)
 #include <SimpleAmqpClient/SimpleAmqpClient.h>
 #include <common/usual_macro.h>
 
+#include <set>
+
 #define MSG_TYPE "msg_type"
 #define ADMIN_FLAG "admin_flag"
 #define MULTI_FLAG "multi_flag"
@@ -33,7 +35,7 @@ public:
 	void stop();
 private:
 	void declareAndBasicConsumeDirectQueue(const std::string& queue);
-	void decalreExchangeAndQueueThenConsumeQueue(const std::string& exchange);
+	void declareExchangeAndQueueThenConsumeQueue(const std::string& exchange);
 	bool connect();
 	bool disconnect();
 	void run();
@@ -61,9 +63,13 @@ public:
 	SendClientAmpqImpl(const QueueParameter& par);
 	~SendClientAmpqImpl();
 	void submitTask(const DeliveryPack& sendTask);
+	void registerDirectQueue(const std::string& queueName);
+	void registerFanoutExchange(const std::string& exchangeName);
 	void start();
 	void stop();
 private:
+	void declareDirectQueue(const std::string& queue);
+	void declareExchange(const std::string& exchange);
 	bool connect();
 	bool disconnect();
 	void run();
@@ -80,6 +86,8 @@ private:
 	std::string m_password;
 	std::thread m_workThread;
 	AmqpClient::Channel::ptr_t m_channel;
+	std::set<std::string> m_directQueues;
+	std::set<std::string> m_fanoutExchanges;
 	ThreadsafeQueue<DeliveryPack> m_taskQueue;
 private:
 	

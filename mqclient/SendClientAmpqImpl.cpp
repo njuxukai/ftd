@@ -63,6 +63,14 @@ bool SendClientAmpqImpl::connect()
 	try
 	{
 		m_channel = AmqpClient::Channel::Create(m_host, m_port, m_user, m_password);
+		for (auto it = m_directQueues.begin(); it != m_directQueues.end(); it++)
+		{
+			declareDirectQueue(*it);
+		}
+		for (auto it = m_fanoutExchanges.begin(); it != m_fanoutExchanges.end(); it++)
+		{
+			declareExchange(*it);
+		}
 	}
 	catch (std::exception& e)
 	{
@@ -101,4 +109,28 @@ void SendClientAmpqImpl::formatTable(const PlainHeaders& headers, Table& table)
 	table[TARGET_QUEUE] = headers.target_queue;
 	table[SOURCE_SESSION] = (boost::int32_t)headers.source_session;
 	table[SEQUENCE_SERIES] = (boost::int32_t)headers.sequence_series;
+}
+
+void SendClientAmpqImpl::registerDirectQueue(const std::string& queueName)
+{
+	m_directQueues.insert(queueName);
+}
+
+void SendClientAmpqImpl::registerFanoutExchange(const std::string& exchangeName)
+{
+	m_fanoutExchanges.insert(exchangeName);
+}
+
+void SendClientAmpqImpl::declareDirectQueue(const std::string& queue)
+{
+	if (!m_channel.get())
+		return;
+	m_channel->DeclareQueue(queue, false, false, false, false);
+}
+
+void SendClientAmpqImpl::declareExchange(const std::string& exchange)
+{
+	if (!m_channel.get())
+		return;
+	m_channel->DeclareExchange(exchange, Channel::EXCHANGE_TYPE_FANOUT);
 }

@@ -40,9 +40,9 @@ void CoreServer::dbUplinkCallback(PlainHeaders& headers, FTD::PackageSPtr pPacka
 	//报盘请求，需要补充报盘Rsp的期望队列 headers.target_queue
 	if (headers.msg_type == QMSG_TYPE_REQ)
 	{
-		if (m_rpcQueuePairs.find(headers.source_queue) != m_rpcQueuePairs.end())
+		if (m_rptQueuePairs.find(headers.source_queue) != m_rptQueuePairs.end())
 		{
-			strncpy(headers.target_queue, m_rpcQueuePairs[headers.source_queue].data(), 
+			strncpy(headers.target_queue, m_rptQueuePairs[headers.source_queue].data(), 
 				sizeof(headers.target_queue));
 		}
 		else
@@ -133,7 +133,7 @@ void CoreServer::queueReceiveCallback(const PlainHeaders& headers, const std::st
 void CoreServer::init()
 {
 	m_queueBuffers.clear();
-	for (auto it = m_listenQueues.begin(); it != m_listenQueues.end(); it++)
+	for (auto it = m_readQueues.begin(); it != m_readQueues.end(); it++)
 	{
 		m_queueBuffers[*it] = std::make_shared<FTD::PackageBuffer>();
 	}
@@ -141,10 +141,16 @@ void CoreServer::init()
 	m_pSender = SendClient::CreateClient(m_queueParameter);
 	m_pReceiver = ReceiveClient::CreateClient(m_queueParameter);
 	m_pDB = std::shared_ptr<DBWrapper>(DBWrapper::CreateWrapper());
-	for (auto it = m_listenQueues.begin(); it != m_listenQueues.end(); it++)
+	for (auto it = m_readQueues.begin(); it != m_readQueues.end(); it++)
 	{
 		m_pReceiver->registerDirectQueue(*it);
 	}
+	for (auto it = m_writeQueues.begin(); it != m_writeQueues.end(); it++)
+	{
+		m_pSender->registerDirectQueue(*it);
+	}
+	m_pSender->registerFanoutExchange(m_privateExchange);
+	m_pReceiver->registerFanoutExchange(m_boardcastExchange);
 	m_pDB->registerUplinkCallback(std::bind(&CoreServer::dbUplinkCallback, this, 
 		std::placeholders::_1, std::placeholders::_2));
 	m_pReceiver->registerCallback(std::bind(&CoreServer::queueReceiveCallback, this,
@@ -172,24 +178,38 @@ bool CoreServer::parseCfgFile(const std::string& fname)
 		m_queueParameter.user = queueDict.getString("User");
 		m_queueParameter.password = queueDict.getString("Password");
 
-		m_rpcQueuePairs.clear();
-		m_listenQueues.clear();
-		section = settings.get("LISTEN_QUEUES");
-		if (section.size() != 1)
-			return false;
-		Dictionary listenQueueDict = section[0];
-		for (auto it = listenQueueDict.begin(); it != listenQueueDict.end(); it++)
-		{
-			m_listenQueues.insert(it->second);
-		}
-		section = settings.get("RPC_QUEUE_PAIR");
+		m_rptQueuePairs.clear();
+		m_readQueues.clear();
+		
+		section = settings.get("FRONT_QUEUE_PAIR");
 		for (auto it = section.begin(); it != section.end(); it++)
 		{
 			Dictionary pairDict = *it;
 			std::string reqQueue = pairDict.getString("ReqQueue");
 			std::string rspQueue = pairDict.getString("RspQueue");
-			m_listenQueues.insert(rspQueue);
-			m_rpcQueuePairs[reqQueue] = rspQueue;
+			m_writeQueues.insert(rspQueue);
+			m_readQueues.insert(reqQueue);
+		}
+
+		section = settings.get("RPT_BACK_QUEUE_PAIR");
+		for (auto it = section.begin(); it != section.end(); it++)
+		{
+			Dictionary pairDict = *it;
+			std::string reqQueue = pairDict.getString("ReqQueue");
+			std::string rspQueue = pairDict.getString("RspQueue");
+			m_writeQueues.insert(rspQueue);
+			m_readQueues.insert(reqQueue);
+		}
+
+		section = settings.get("RPT_QUEUE_PAIR");
+		for (auto it = section.begin(); it != section.end(); it++)
+		{
+			Dictionary pairDict = *it;
+			std::string reqQueue = pairDict.getString("ReqQueue");
+			std::string rspQueue = pairDict.getString("RspQueue");
+			m_writeQueues.insert(reqQueue);
+			m_readQueues.insert(rspQueue);
+			m_rptQueuePairs[reqQueue] = rspQueue;
 		}
 
 		section = settings.get("FANOUT_EXCHANGES");

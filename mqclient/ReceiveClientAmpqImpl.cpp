@@ -98,7 +98,7 @@ bool ReceiveClientAmpqImpl::connect()
 		}
 		for (unsigned int i = 0; i < m_fanoutExchanges.size(); i++)
 		{
-			this->decalreExchangeAndQueueThenConsumeQueue(m_fanoutExchanges[i]);
+			this->declareExchangeAndQueueThenConsumeQueue(m_fanoutExchanges[i]);
 		}
 	}
 	catch (std::exception& e)
@@ -125,7 +125,7 @@ void ReceiveClientAmpqImpl::declareAndBasicConsumeDirectQueue(const std::string&
 	m_channel->BasicConsume(queue);
 }
 
-void ReceiveClientAmpqImpl::decalreExchangeAndQueueThenConsumeQueue(const std::string& exchange)
+void ReceiveClientAmpqImpl::declareExchangeAndQueueThenConsumeQueue(const std::string& exchange)
 {
 	if (!m_channel.get())
 		return;
