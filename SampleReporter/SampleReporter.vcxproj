@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{6F781E95-7879-4761-9F18-36D9EA0B5C8B}</ProjectGuid>
+    <ProjectGuid>{DB05A59A-FE74-4EF8-97DD-434FDB278C30}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>SampleCore</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
@@ -172,12 +172,12 @@ xcopy  ..\import\lib\win32\$(Configuration)\SimpleAmqpClient.2.*   /Y/I  ..\expo
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CoreServer.h" />
+    <ClInclude Include="Reporter.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CoreServer.cpp" />
+    <ClCompile Include="Reporter.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

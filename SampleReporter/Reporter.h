@@ -5,11 +5,12 @@
 #include <dbcore/DBWrapper.h>
 #include <set>
 #include <ftd/FTD30/Packages.h>
-class CoreServer
+
+class Reporter
 {
 public:
-	CoreServer(const std::string& cfgFname);
-	~CoreServer();
+	Reporter(const std::string& cfgFname);
+	~Reporter();
 	void start();
 	void stop();
 
@@ -28,9 +29,6 @@ private:
 	std::set<std::string> m_writeQueues;
 	std::set<std::string> m_readQueues;
 	std::map<std::string, std::string> m_rptQueuePairs;
-	std::string m_boardcastExchange;
-	std::string m_privateExchange;
-	bool m_ftdcMulitFlag;
 
 	SendClient::Sptr m_pSender;
 	ReceiveClient::Sptr m_pReceiver;

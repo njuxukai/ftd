@@ -1,8 +1,8 @@
 #include "stdafx.h"
-#include "CoreServer.h"
+#include "Reporter.h"
 #include <fstream>
 #include <ftd/settings.h>
-CoreServer::CoreServer(const std::string& cfgName)
+Reporter::Reporter(const std::string& cfgName)
 {
 	m_parseResult = parseCfgFile(cfgName);
 	if (m_parseResult)
@@ -11,12 +11,12 @@ CoreServer::CoreServer(const std::string& cfgName)
 	}
 }
 
-CoreServer::~CoreServer()
+Reporter::~Reporter()
 {
 	stop();
 }
 
-void CoreServer::start()
+void Reporter::start()
 {
 	if (m_parseResult)
 	{
@@ -25,7 +25,7 @@ void CoreServer::start()
 	}
 }
 
-void CoreServer::stop()
+void Reporter::stop()
 {
 	if (m_parseResult)
 	{
@@ -35,7 +35,7 @@ void CoreServer::stop()
 }
 
 //被pDB的线程池调用，需要线程安全
-void CoreServer::dbUplinkCallback(PlainHeaders& headers, FTD::PackageSPtr pPackage)
+void Reporter::dbUplinkCallback(PlainHeaders& headers, FTD::PackageSPtr pPackage)
 {
 	//报盘请求，需要补充报盘Rsp的期望队列 headers.target_queue
 	if (headers.msg_type == QMSG_TYPE_REQ)
@@ -100,14 +100,14 @@ void CoreServer::dbUplinkCallback(PlainHeaders& headers, FTD::PackageSPtr pPacka
 }
 
 //简单的链接到DBWrapper
-void CoreServer::submitTaskToDB(const PlainHeaders& headers, FTD::PackageSPtr pPack)
+void Reporter::submitTaskToDB(const PlainHeaders& headers, FTD::PackageSPtr pPack)
 {
 	if(m_pDB)
 		m_pDB->submit(headers, pPack);
 }
 
 //被m_pReceiver调用
-void CoreServer::queueReceiveCallback(const PlainHeaders& headers, const std::string& body)
+void Reporter::queueReceiveCallback(const PlainHeaders& headers, const std::string& body)
 {
 	if (m_queueBuffers.find(headers.source_queue) == m_queueBuffers.end())
 		return;
@@ -130,7 +130,7 @@ void CoreServer::queueReceiveCallback(const PlainHeaders& headers, const std::st
 	}	
 }
 
-void CoreServer::init()
+void Reporter::init()
 {
 	m_queueBuffers.clear();
 	for (auto it = m_readQueues.begin(); it != m_readQueues.end(); it++)
@@ -151,13 +151,13 @@ void CoreServer::init()
 	}
 	m_pSender->registerFanoutExchange(m_privateExchange);
 	m_pReceiver->registerFanoutExchange(m_boardcastExchange);
-	m_pDB->registerUplinkCallback(std::bind(&CoreServer::dbUplinkCallback, this, 
+	m_pDB->registerUplinkCallback(std::bind(&Reporter::dbUplinkCallback, this, 
 		std::placeholders::_1, std::placeholders::_2));
-	m_pReceiver->registerCallback(std::bind(&CoreServer::queueReceiveCallback, this,
+	m_pReceiver->registerCallback(std::bind(&Reporter::queueReceiveCallback, this,
 		std::placeholders::_1, std::placeholders::_2));
 }
 
-bool CoreServer::parseCfgFile(const std::string& fname)
+bool Reporter::parseCfgFile(const std::string& fname)
 {
 	using namespace FTD;
 	bool parseResult = true;
