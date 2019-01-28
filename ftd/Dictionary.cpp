@@ -24,7 +24,7 @@
 #endif
 
 #include "Dictionary.h"
-#include "FixConvertors.h"
+#include "FtdConvertors.h"
 #include <algorithm>
 
 namespace FTD

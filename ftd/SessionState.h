@@ -26,7 +26,7 @@
 #pragma warning( disable : 4503 4355 4786 4290 )
 #endif
 
-#include "FixTypes.h"
+#include "FtdTypes.h"
 #include "PackageStore.h"
 #include "Log.h"
 #include "Mutex.h"

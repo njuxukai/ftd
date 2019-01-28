@@ -28,7 +28,7 @@
 
 #include "Package.h"
 #include "SessionID.h"
-#include "FixTypes.h"
+#include "FtdTypes.h"
 #include "Exceptions.h"
 #include <map>
 #include <vector>

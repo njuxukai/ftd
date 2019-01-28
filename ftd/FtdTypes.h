@@ -19,8 +19,8 @@
 **
 ****************************************************************************/
 
-#ifndef FIX_FIELDTYPES_H
-#define FIX_FIELDTYPES_H
+#ifndef FTD_FIELDTYPES_H
+#define FTD_FIELDTYPES_H
 
 #ifdef _MSC_VER
 #pragma warning( disable : 4503 4355 4786 4290 )

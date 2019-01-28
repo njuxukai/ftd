@@ -26,7 +26,7 @@
 #pragma warning( disable: 4146 )
 #endif
 
-#include "FixTypes.h"
+#include "FtdTypes.h"
 #include "Exceptions.h"
 #include "Utility.h"
 //#include "config-all.h"

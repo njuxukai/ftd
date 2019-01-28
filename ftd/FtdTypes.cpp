@@ -23,7 +23,7 @@
 #include "config.h"
 #endif
 
-#include "FixTypes.h"
+#include "FtdTypes.h"
 
 #ifdef HAVE_FTIME
 # include <sys/timeb.h>

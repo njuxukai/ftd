@@ -24,7 +24,7 @@
 #endif
 
 #include <math.h>
-#include "FixConvertors.h"
+#include "FtdConvertors.h"
 #include <math.h>
 
 namespace FTD

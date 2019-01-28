@@ -143,8 +143,8 @@ del /F EXCLUDE
   <ItemGroup>
     <ClCompile Include="Acceptor.cpp" />
     <ClCompile Include="Dictionary.cpp" />
-    <ClCompile Include="FixConvertors.cpp" />
-    <ClCompile Include="FixTypes.cpp" />
+    <ClCompile Include="FtdConvertors.cpp" />
+    <ClCompile Include="FtdTypes.cpp" />
     <ClCompile Include="FtdMessageUtil.cpp" />
     <ClCompile Include="Initiator.cpp" />
     <ClCompile Include="Log.cpp" />
@@ -178,8 +178,8 @@ del /F EXCLUDE
     <ClInclude Include="Dictionary.h" />
     <ClInclude Include="Errors.h" />
     <ClInclude Include="Exceptions.h" />
-    <ClInclude Include="FixConvertors.h" />
-    <ClInclude Include="FixTypes.h" />
+    <ClInclude Include="FtdConvertors.h" />
+    <ClInclude Include="FtdTypes.h" />
     <ClInclude Include="ftd.h" />
     <ClInclude Include="FTD30\Packages.h" />
     <ClInclude Include="FtdMessageUtil.h" />

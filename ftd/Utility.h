@@ -19,8 +19,8 @@
 **
 ****************************************************************************/
 
-#ifndef FIX_UTILITY_H
-#define FIX_UTILITY_H
+#ifndef FTD_UTILITY_H
+#define FTD_UTILITY_H
 
 #ifdef _MSC_VER
 #pragma warning( disable : 4503 4355 4786 4290 )

@@ -72,12 +72,6 @@
     <ClInclude Include="Mutex.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="FixConvertors.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="FixTypes.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Application.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -126,6 +120,12 @@
     <ClInclude Include="Errors.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="FtdConvertors.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="FtdTypes.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -167,12 +167,6 @@
     <ClCompile Include="Dictionary.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="FixConvertors.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="FixTypes.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="SocketConnector.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -189,6 +183,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="PackageStore.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="FtdConvertors.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="FtdTypes.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
