@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ftd", "ftd\ftd.vcxproj", "{D3B28290-1A56-4B7E-816E-9811C6E77693}"
 EndProject
@@ -62,6 +62,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleClientGui", "SampleClientGui\SampleClientGui.csproj", "{A960DBDD-1F21-4F5F-8A9F-EA5743527DF6}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SampleReporter", "SampleReporter\SampleReporter.vcxproj", "{DB05A59A-FE74-4EF8-97DD-434FDB278C30}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "reporter", "reporter\reporter.vcxproj", "{62615C79-FC89-4E56-8E7B-CE15A7022392}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -219,6 +221,16 @@ Global
 		{DB05A59A-FE74-4EF8-97DD-434FDB278C30}.Release|x64.Build.0 = Release|x64
 		{DB05A59A-FE74-4EF8-97DD-434FDB278C30}.Release|x86.ActiveCfg = Release|Win32
 		{DB05A59A-FE74-4EF8-97DD-434FDB278C30}.Release|x86.Build.0 = Release|Win32
+		{62615C79-FC89-4E56-8E7B-CE15A7022392}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{62615C79-FC89-4E56-8E7B-CE15A7022392}.Debug|x64.ActiveCfg = Debug|x64
+		{62615C79-FC89-4E56-8E7B-CE15A7022392}.Debug|x64.Build.0 = Debug|x64
+		{62615C79-FC89-4E56-8E7B-CE15A7022392}.Debug|x86.ActiveCfg = Debug|Win32
+		{62615C79-FC89-4E56-8E7B-CE15A7022392}.Debug|x86.Build.0 = Debug|Win32
+		{62615C79-FC89-4E56-8E7B-CE15A7022392}.Release|Any CPU.ActiveCfg = Release|Win32
+		{62615C79-FC89-4E56-8E7B-CE15A7022392}.Release|x64.ActiveCfg = Release|x64
+		{62615C79-FC89-4E56-8E7B-CE15A7022392}.Release|x64.Build.0 = Release|x64
+		{62615C79-FC89-4E56-8E7B-CE15A7022392}.Release|x86.ActiveCfg = Release|Win32
+		{62615C79-FC89-4E56-8E7B-CE15A7022392}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -233,5 +245,6 @@ Global
 		{3025E94C-F349-43A3-B592-0E7DFAE7EDEC} = {EF8885A6-26B6-4028-89D0-9B6129081F90}
 		{A5C1982E-6BA4-4B44-A0E9-96CC50A26CFC} = {46E2ED4A-0FDA-403F-AD5F-116574478FDD}
 		{A960DBDD-1F21-4F5F-8A9F-EA5743527DF6} = {EF8885A6-26B6-4028-89D0-9B6129081F90}
+		{DB05A59A-FE74-4EF8-97DD-434FDB278C30} = {EF8885A6-26B6-4028-89D0-9B6129081F90}
 	EndGlobalSection
 EndGlobal

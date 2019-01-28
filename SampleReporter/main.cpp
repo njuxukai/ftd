@@ -2,20 +2,20 @@
 //
 
 #include "stdafx.h"
-#include "CoreServer.h"
+#include "ReportServer.h"
 
 int main(int argc, char** argv)
 {
 	std::string file = "";
 	if (argc < 2)
 	{
-		file = "sample_core.cfg";
+		file = "sample_reporter.cfg";
 	}
 	else
 	{
 		file = argv[1];
 	}
-	CoreServer server(file);
+	ReportServer server(file);
 	server.start();
 
 	while (1 == 1)

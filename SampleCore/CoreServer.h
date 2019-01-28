@@ -27,7 +27,9 @@ private:
 	QueueParameter m_queueParameter;
 	std::set<std::string> m_writeQueues;
 	std::set<std::string> m_readQueues;
+	std::map<std::string, std::string> m_frontQueuePairs;
 	std::map<std::string, std::string> m_rptQueuePairs;
+	std::map<std::string, std::string> m_rptBackQueuePairs;
 	std::string m_boardcastExchange;
 	std::string m_privateExchange;
 	bool m_ftdcMulitFlag;

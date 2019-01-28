@@ -179,7 +179,10 @@ bool CoreServer::parseCfgFile(const std::string& fname)
 		m_queueParameter.password = queueDict.getString("Password");
 
 		m_rptQueuePairs.clear();
+		m_rptBackQueuePairs.clear();
+		m_frontQueuePairs.clear();
 		m_readQueues.clear();
+		m_writeQueues.clear();
 		
 		section = settings.get("FRONT_QUEUE_PAIR");
 		for (auto it = section.begin(); it != section.end(); it++)
@@ -187,8 +190,9 @@ bool CoreServer::parseCfgFile(const std::string& fname)
 			Dictionary pairDict = *it;
 			std::string reqQueue = pairDict.getString("ReqQueue");
 			std::string rspQueue = pairDict.getString("RspQueue");
-			m_writeQueues.insert(rspQueue);
 			m_readQueues.insert(reqQueue);
+			m_writeQueues.insert(rspQueue);
+			m_frontQueuePairs[reqQueue] = rspQueue;
 		}
 
 		section = settings.get("RPT_BACK_QUEUE_PAIR");
@@ -197,8 +201,10 @@ bool CoreServer::parseCfgFile(const std::string& fname)
 			Dictionary pairDict = *it;
 			std::string reqQueue = pairDict.getString("ReqQueue");
 			std::string rspQueue = pairDict.getString("RspQueue");
-			m_writeQueues.insert(rspQueue);
 			m_readQueues.insert(reqQueue);
+			m_writeQueues.insert(rspQueue);
+			m_rptBackQueuePairs[reqQueue] = rspQueue;
+			
 		}
 
 		section = settings.get("RPT_QUEUE_PAIR");

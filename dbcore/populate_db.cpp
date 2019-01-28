@@ -118,8 +118,8 @@ void populate_db_secu_account(mco_db_h db)
 	account2.investor_id = 99;
 	account2.exchange_type = FTDC_ET_SZ;
 	account2.security_account = MOCK_SZ_SECU_ACCOUNT;
-	account.pbu_id = MOCK_SZ_PBU_ID;
-	account.rpt_queue = "req_rpt_sz199999";
+	account2.pbu_id = MOCK_SZ_PBU_ID;
+	account2.rpt_queue = "req_rpt_sz199999";
 	rc = mco_trans_commit(t);
 }
 
