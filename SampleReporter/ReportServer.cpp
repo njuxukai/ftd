@@ -22,8 +22,10 @@ void ReportServer::start()
 {
 	if (m_parseResult)
 	{
+		m_pReporter->start();
 		m_pSender->start();
 		m_pReceiver->start();
+		
 	}
 }
 
@@ -33,6 +35,7 @@ void ReportServer::stop()
 	{
 		m_pSender->stop();
 		m_pReceiver->stop();
+		m_pReporter->stop();
 	}
 }
 
