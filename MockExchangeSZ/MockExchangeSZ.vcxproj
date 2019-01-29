@@ -66,8 +66,8 @@
       </PrecompiledHeader>
       <PrecompiledHeaderOutputFile>.\Debug/executor_cpp.pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
-      <ObjectFileName>.\Debug/</ObjectFileName>
-      <ProgramDataBaseFileName>.\Debug/</ProgramDataBaseFileName>
+      <ObjectFileName>$(SolutionDir)\build\$(ProjectName)\$(Configuration)\</ObjectFileName>
+      <ProgramDataBaseFileName>$(SolutionDir)\export\$(Configuration)\$(ProjectName)\</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
@@ -87,6 +87,11 @@
       <ProgramDatabaseFile>.\Debug/executor_cpp_debug.pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
     </Link>
+    <PreBuildEvent>
+      <Command>xcopy  mock_exchange_sz.cfg   /Y/I  ..\export\$(Configuration)\$(ProjectName)\
+
+xcopy  step\*.* /Y/I  ..\export\$(Configuration)\$(ProjectName)\step\ /s /e</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Midl>
