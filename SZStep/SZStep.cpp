@@ -5,7 +5,7 @@ namespace SZStep
 {
 namespace ToFix 
 {
-	void formatReqRptOrderInsert(const FTD::CFtdcInputOrderField& inputOrder, FIX::Message& msg)
+	void formatInputOrderField(const FTD::CFtdcInputOrderField& inputOrder, FIX::Message& msg)
 	{
 		//ApplID
 		msg.setField(FIX::ApplID(SZStep::ApplID::XH));
@@ -106,7 +106,7 @@ namespace ToFix
 
 namespace FromFix
 {
-	bool convertReqRptOrderInsert(const FIX::Message& msg, FTD::CFtdcInputOrderField& order)
+	bool convertInputOrderField(const FIX::Message& msg, FTD::CFtdcInputOrderField& order)
 	{
 		bool convertResult = false;
 		try 

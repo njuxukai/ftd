@@ -16,13 +16,13 @@ namespace SZStep
 
 	namespace ToFix
 	{
-		void formatReqRptOrderInsert(const FTD::CFtdcInputOrderField& inputOrder, FIX::Message& msg);
+		void formatInputOrderField(const FTD::CFtdcInputOrderField& inputOrder, FIX::Message& msg);
 		void formatInnerExecutionReport(const FTD::CFtdcInnerExecutionReportField& report, FIX::Message& msg);
 	};
 
 	namespace FromFix
 	{
-		bool convertReqRptOrderInsert(const FIX::Message& msg, FTD::CFtdcInputOrderField& req);
+		bool convertInputOrderField(const FIX::Message& msg, FTD::CFtdcInputOrderField& req);
 	};
 	
 };

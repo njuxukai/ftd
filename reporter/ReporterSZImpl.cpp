@@ -38,7 +38,7 @@ void ReporterSZSTEPImpl::doSubmit(FTD::PackageSPtr pPackage)
 	if (pPackage->m_transactionId == TID_RptOrderInsert && pPackage->isRequest())
 	{
 		FIX50SP2::Message newOrder(FIX::MsgType("D"));
-		SZStep::ToFix::formatReqRptOrderInsert(((FTD::ReqRptOrderInsert*)pPackage.get())->inputOrderField, newOrder);
+		SZStep::ToFix::formatInputOrderField(((FTD::ReqRptOrderInsert*)pPackage.get())->inputOrderField, newOrder);
 		FIX::Session::sendToTarget(newOrder, m_loggedSessionID);
 	}
 	
