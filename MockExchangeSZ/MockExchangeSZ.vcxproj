@@ -58,8 +58,8 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)\import\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)\export\include;$(SolutionDir)\SZStep\;$(SolutionDir)\import\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>
@@ -84,7 +84,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(SolutionDir)\export\debug\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>.\Debug/executor_cpp_debug.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>$(OutDir)$(TargetName).pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
     </Link>
     <PreBuildEvent>
@@ -129,10 +129,12 @@ xcopy  step\*.* /Y/I  ..\export\$(Configuration)\$(ProjectName)\step\ /s /e</Com
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\SZStep\SZStep.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="executor.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\SZStep\SZStep.h" />
     <ClInclude Include="Application.h" />
   </ItemGroup>
   <ItemGroup>
@@ -140,6 +142,10 @@ xcopy  step\*.* /Y/I  ..\export\$(Configuration)\$(ProjectName)\step\ /s /e</Com
       <Project>{d5d558ea-bbac-4862-a946-d3881bace3b7}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="mock_exchange_sz.cfg" />
+    <None Include="step\executor.cfg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
