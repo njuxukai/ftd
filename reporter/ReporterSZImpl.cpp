@@ -1,0 +1,144 @@
+#include "ReporterSZImpl.h"
+#include <iostream> 
+#include "ftd/Settings.h"
+#include "quickfix/FileStore.h"
+#include "quickfix/FileLog.h"
+#include "quickfix/SocketInitiator.h"
+#include "SzStep.h"
+#include "quickfix/fix50sp2/NewOrderSingle.h"
+
+ReporterSZSTEPImpl::ReporterSZSTEPImpl(const std::string& cfgFname)
+	: ReporterWrapper()
+{
+	//TODO
+	m_reporterCfgFname = cfgFname;
+	m_pInitiator = 0;
+
+	m_stepLogged = false;
+}
+
+
+ReporterSZSTEPImpl::~ReporterSZSTEPImpl()
+{
+
+}
+
+void ReporterSZSTEPImpl::submit(FTD::PackageSPtr pPackage)
+{
+	std::cout << pPackage->m_transactionId << std::endl;
+	if (!m_stepLogged)
+		return;
+	doSubmit(pPackage);
+}
+
+void ReporterSZSTEPImpl::doSubmit(FTD::PackageSPtr pPackage)
+{
+	FIX50SP2::Message newOrder(FIX::MsgType("D"));
+	if (pPackage->m_transactionId == TID_OrderInsert && pPackage->isRequest())
+	{
+		formatFixMessage((FTD::ReqOrderInsert&)(*pPackage), newOrder);
+	}
+	FIX::Session::sendToTarget(newOrder, m_loggedSessionID);
+}
+
+void ReporterSZSTEPImpl::registerUplinkCallback(const ReporterUplinkCallback& function)
+{}
+
+
+void ReporterSZSTEPImpl::uplink(FTD::PackageSPtr pPackage)
+{}
+
+
+void ReporterSZSTEPImpl::start()
+{
+	bool parseResult = parseCfgFname();
+	if (parseResult)
+	{
+		FIX::SessionSettings settings(m_stepCfgFname);
+		//FIX::MemoryStoreFactory storeFactory;
+		FIX::FileStoreFactory storeFactory(settings);
+		//FIX::FileLogFactory logFactory(settings);
+		FIX::ScreenLogFactory logFactory(settings);
+		m_pInitiator = new FIX::SocketInitiator(*this, storeFactory, settings, logFactory);
+		m_pInitiator->start();
+	}
+	
+}
+
+
+void ReporterSZSTEPImpl::stop()
+{
+	if (m_pInitiator)
+	{
+		m_pInitiator->stop();
+		delete m_pInitiator;
+		m_pInitiator = 0;
+	}
+}
+
+void ReporterSZSTEPImpl::onCreate(const FIX::SessionID&)
+{}
+
+void ReporterSZSTEPImpl::onLogon(const FIX::SessionID& sessionID)
+{
+	m_loggedSessionID = sessionID;
+	m_stepLogged = true;
+}
+
+void ReporterSZSTEPImpl::onLogout(const FIX::SessionID& sessionID)
+{
+	m_stepLogged = false;
+}
+
+void ReporterSZSTEPImpl::toAdmin(FIX::Message& message, const FIX::SessionID& sessionID)
+{
+	FIX::MsgType msgType;
+	message.getHeader().getField(msgType);
+	if (msgType.getString() == "A")
+	{
+		message.setField(FIX::DefaultCstmApplVerID("STEP2.0_1.11"));
+	}
+}
+
+void ReporterSZSTEPImpl::toApp(FIX::Message&, const FIX::SessionID&)
+throw(FIX::DoNotSend)
+{}
+
+void ReporterSZSTEPImpl::fromAdmin(const FIX::Message&, const FIX::SessionID&)
+throw(FIX::FieldNotFound, FIX::IncorrectDataFormat, FIX::IncorrectTagValue, FIX::RejectLogon)
+{}
+
+void ReporterSZSTEPImpl::fromApp(const FIX::Message& message, const FIX::SessionID& sessionID)
+throw(FIX::FieldNotFound, FIX::IncorrectDataFormat, FIX::IncorrectTagValue, FIX::UnsupportedMessageType)
+{}
+
+
+bool ReporterSZSTEPImpl::parseCfgFname()
+{
+	using namespace FTD;
+	bool parseResult = true;
+	try
+	{
+		std::ifstream stream(m_reporterCfgFname);
+		FTD::Settings settings(false);
+		stream >> settings;
+		Settings::Sections section;
+		Dictionary dict;
+
+		section = settings.get("REPORTER");
+		if (section.size() != 1)
+			return false;
+		Dictionary queueDict = section[0];
+		m_stepCfgFname = queueDict.getString("StepCfgFile");
+	}
+	catch (...)
+	{
+		parseResult = false;
+	}
+	return parseResult;
+}
+
+void ReporterSZSTEPImpl::formatFixMessage(const FTD::ReqOrderInsert& req, FIX::Message& msg)
+{
+	msg.setField(FIX::ApplID(SZStep::MsgType::XH));
+}
