@@ -188,6 +188,7 @@ xcopy  ..\import\lib\win32\$(Configuration)\SimpleAmqpClient.2.*   /Y/I  ..\expo
   </ItemGroup>
   <ItemGroup>
     <None Include="sample_reporter.cfg" />
+    <None Include="step\client.cfg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

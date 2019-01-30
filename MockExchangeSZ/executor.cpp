@@ -26,10 +26,6 @@
 #include "quickfix/FileStore.h"
 #include "quickfix/FileLog.h"
 #include "quickfix/SocketAcceptor.h"
-#ifdef HAVE_SSL
-#include "quickfix/ThreadedSSLSocketAcceptor.h"
-#include "quickfix/SSLSocketAcceptor.h"
-#endif
 #include "quickfix/Log.h"
 #include "quickfix/SessionSettings.h"
 #include "Application.h"
@@ -50,13 +46,7 @@ int main( int argc, char** argv )
 {
 
   std::string file = "step/executor.cfg";
-#ifdef HAVE_SSL
-  std::string isSSL;
-  if (argc > 2)
-  {
-    isSSL.assign(argv[2]);
-  }
-#endif
+  
 
   FIX::Acceptor * acceptor = 0;
   try
@@ -64,19 +54,11 @@ int main( int argc, char** argv )
     FIX::SessionSettings settings( file );
 
     Application application;
-    //FIX::FileStoreFactory storeFactory( settings );
-	FIX::MemoryStoreFactory storeFactory;
+    FIX::FileStoreFactory storeFactory( settings );
+	//FIX::MemoryStoreFactory storeFactory;
     FIX::ScreenLogFactory logFactory( settings );
 
-#ifdef HAVE_SSL
-    if (isSSL.compare("SSL") == 0)
-      acceptor = new FIX::ThreadedSSLSocketAcceptor ( application, storeFactory, settings, logFactory );
-    else if (isSSL.compare("SSL-ST") == 0)
-      acceptor = new FIX::SSLSocketAcceptor ( application, storeFactory, settings, logFactory );
-    else
-#endif
     acceptor = new FIX::SocketAcceptor ( application, storeFactory, settings, logFactory );
-
     acceptor->start();
     wait();
     acceptor->stop();

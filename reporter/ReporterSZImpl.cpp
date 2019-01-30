@@ -1,12 +1,13 @@
 #include "ReporterSZImpl.h"
+
 #include <iostream> 
+#include <boost/lexical_cast.hpp>
 #include "ftd/Settings.h"
 #include "quickfix/FileStore.h"
 #include "quickfix/FileLog.h"
 #include "quickfix/SocketInitiator.h"
-#include "SzStep.h"
 #include "quickfix/fix50sp2/NewOrderSingle.h"
-
+#include "SzStep.h"
 ReporterSZSTEPImpl::ReporterSZSTEPImpl(const std::string& cfgFname)
 	: ReporterWrapper()
 {
@@ -33,12 +34,14 @@ void ReporterSZSTEPImpl::submit(FTD::PackageSPtr pPackage)
 
 void ReporterSZSTEPImpl::doSubmit(FTD::PackageSPtr pPackage)
 {
-	FIX50SP2::Message newOrder(FIX::MsgType("D"));
-	if (pPackage->m_transactionId == TID_OrderInsert && pPackage->isRequest())
+	
+	if (pPackage->m_transactionId == TID_RptOrderInsert && pPackage->isRequest())
 	{
-		formatFixMessage((FTD::ReqOrderInsert&)(*pPackage), newOrder);
+		FIX50SP2::Message newOrder(FIX::MsgType("D"));
+		SZStep::ToFix::formatReqRptOrderInsert(((FTD::ReqRptOrderInsert*)pPackage.get())->inputOrderField, newOrder);
+		FIX::Session::sendToTarget(newOrder, m_loggedSessionID);
 	}
-	FIX::Session::sendToTarget(newOrder, m_loggedSessionID);
+	
 }
 
 void ReporterSZSTEPImpl::registerUplinkCallback(const ReporterUplinkCallback& function)
@@ -96,7 +99,7 @@ void ReporterSZSTEPImpl::toAdmin(FIX::Message& message, const FIX::SessionID& se
 	message.getHeader().getField(msgType);
 	if (msgType.getString() == "A")
 	{
-		message.setField(FIX::DefaultCstmApplVerID("STEP2.0_1.11"));
+		message.setField(FIX::DefaultCstmApplVerID(m_defaultCstmApplVerID));
 	}
 }
 
@@ -128,8 +131,9 @@ bool ReporterSZSTEPImpl::parseCfgFname()
 		section = settings.get("REPORTER");
 		if (section.size() != 1)
 			return false;
-		Dictionary queueDict = section[0];
-		m_stepCfgFname = queueDict.getString("StepCfgFile");
+		Dictionary reporterDict = section[0];
+		m_stepCfgFname = reporterDict.getString("StepCfgFile");
+		m_defaultCstmApplVerID = reporterDict.getString("DefaultCstmApplVerID");
 	}
 	catch (...)
 	{
@@ -138,7 +142,6 @@ bool ReporterSZSTEPImpl::parseCfgFname()
 	return parseResult;
 }
 
-void ReporterSZSTEPImpl::formatFixMessage(const FTD::ReqOrderInsert& req, FIX::Message& msg)
-{
-	msg.setField(FIX::ApplID(SZStep::MsgType::XH));
-}
+
+
+	

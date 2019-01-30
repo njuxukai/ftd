@@ -34,6 +34,8 @@
 #include "quickfix/fix43/NewOrderSingle.h"
 #include "quickfix/fix44/NewOrderSingle.h"
 #include "quickfix/fix50/NewOrderSingle.h"
+#include <quickfix/fix50sp2/NewOrderSingle.h>
+
 
 class Application
 : public FIX::Application, public FIX::MessageCracker

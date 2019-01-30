@@ -42,8 +42,10 @@ private:
 	std::string m_stepCfgFname;
 	FIX::Initiator *m_pInitiator;
 
+	std::string m_defaultCstmApplVerID;
+
 private:
-	static void formatFixMessage(const FTD::ReqOrderInsert& req, FIX::Message& msg);
+	
 
 
 };
