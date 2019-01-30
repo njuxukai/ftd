@@ -58,10 +58,10 @@ void ReporterSZSTEPImpl::start()
 	if (parseResult)
 	{
 		FIX::SessionSettings settings(m_stepCfgFname);
-		//FIX::MemoryStoreFactory storeFactory;
-		FIX::FileStoreFactory storeFactory(settings);
-		//FIX::FileLogFactory logFactory(settings);
-		FIX::ScreenLogFactory logFactory(settings);
+		FIX::MemoryStoreFactory storeFactory;
+		//FIX::FileStoreFactory storeFactory(settings);
+		FIX::FileLogFactory logFactory(settings);
+		//::ScreenLogFactory logFactory(settings);
 		m_pInitiator = new FIX::SocketInitiator(*this, storeFactory, settings, logFactory);
 		m_pInitiator->start();
 	}

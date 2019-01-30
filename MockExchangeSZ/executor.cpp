@@ -54,8 +54,8 @@ int main( int argc, char** argv )
     FIX::SessionSettings settings( file );
 
     Application application;
-    FIX::FileStoreFactory storeFactory( settings );
-	//FIX::MemoryStoreFactory storeFactory;
+    //FIX::FileStoreFactory storeFactory( settings );
+	FIX::MemoryStoreFactory storeFactory;
     FIX::ScreenLogFactory logFactory( settings );
 
     acceptor = new FIX::SocketAcceptor ( application, storeFactory, settings, logFactory );
