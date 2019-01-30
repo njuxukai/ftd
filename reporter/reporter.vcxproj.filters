@@ -21,7 +21,7 @@
     <ClInclude Include="ReporterSZImpl.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="SzStep.h">
+    <ClInclude Include="..\SZStep\SZStep.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -32,7 +32,7 @@
     <ClCompile Include="ReporterSZImpl.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="SZStep.cpp">
+    <ClCompile Include="..\SZStep\SZStep.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -93,7 +93,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>ISLIB;LIB_API_EXPORT;_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_WINDOWS;_USRDLL;REPORTER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\import\include\;$(SolutionDir)\export\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\SZStep\;$(SolutionDir)\import\include\;$(SolutionDir)\export\include\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -166,14 +166,14 @@ xcopy *.hpp /S/Y/E/I /EXCLUDE:EXCLUDE ..\export\include\reporter\ </Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\SZStep\SZStep.h" />
     <ClInclude Include="ReporterSZImpl.h" />
     <ClInclude Include="ReporterWrapper.h" />
-    <ClInclude Include="SzStep.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\SZStep\SZStep.cpp" />
     <ClCompile Include="ReporterSZImpl.cpp" />
     <ClCompile Include="ReporterWrapper.cpp" />
-    <ClCompile Include="SZStep.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

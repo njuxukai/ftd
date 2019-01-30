@@ -102,5 +102,91 @@ namespace ToFix
 		//CashMargin
 	}
 
-};	
-};
+}
+
+namespace FromFix
+{
+	bool convertReqRptOrderInsert(const FIX::Message& msg, FTD::CFtdcInputOrderField& order)
+	{
+		bool convertResult = false;
+		try 
+		{
+			//applid
+
+			//ClOrdID
+			strcpy(order.ClOrdID, msg.getField(FIX::FIELD::ClOrdID).data());
+
+			//volume
+			order.VolumeTotalOrginal = FIX::IntConvertor::convert(msg.getField(FIX::FIELD::OrderQty));
+			//OrdType, TimeInForce MaxPriceLevels MinQty 
+			char ordTypeData = FIX::CharConvertor::convert(msg.getField(FIX::FIELD::OrdType));
+			char timeInForceData = '0';
+			int maxPriceLevelsData = 0;
+			int minQtyData = 0;
+			if (msg.isSetField(FIX::FIELD::TimeInForce))
+				timeInForceData = FIX::CharConvertor::convert(msg.getField(FIX::FIELD::TimeInForce));
+			if (msg.isSetField(FIX::FIELD::MaxPriceLevels))
+				maxPriceLevelsData = FIX::IntConvertor::convert(msg.getField(FIX::FIELD::MaxPriceLevels));
+			if (msg.isSetField(FIX::FIELD::MinQty))
+				minQtyData = FIX::IntConvertor::convert(msg.getField(FIX::FIELD::MinQty));
+			switch (ordTypeData)
+			{
+			case '2':
+				order.PriceType = FTDC_OPT_HS_Limit;
+				break;
+			case 'U':
+				order.PriceType = FTDC_OPT_S_SL1;
+				break;
+			case '1':
+				if (timeInForceData == '0' && maxPriceLevelsData == 1 && minQtyData == 0)
+					order.PriceType = FTDC_OPT_S_L1_THEN_LIMIT;
+				else if (timeInForceData == '3' && maxPriceLevelsData == 0 && minQtyData == 0)
+					order.PriceType = FTDC_OPT_S_FAK;
+				else if (timeInForceData == '3' && maxPriceLevelsData == 0 && minQtyData == order.VolumeTotalOrginal)
+					order.PriceType = FTDC_OPT_S_FOK;
+				break;
+			default:
+				break;
+			}
+			//side
+			char sideData = FIX::CharConvertor::convert(msg.getField(FIX::FIELD::Side));
+			if (sideData == FIX::Side_SELL)
+				order.Direction = FTDC_D_SELL;
+			else
+				order.Direction = FTDC_D_BUY;
+			//Groups Parties
+			int partyCount = FIX::IntConvertor::convert(msg.getField(FIX::FIELD::NoPartyIDs));
+			FIX::Group party(FIX::FIELD::NoPartyIDs, FIX::FIELD::PartyID);
+			for (int i = 1; i <= partyCount; i++)
+			{
+				msg.getGroup(i, party);
+				char sourceData = FIX::CharConvertor::convert(party.getField(FIX::FIELD::PartyIDSource));
+				std::string source = party.getField(FIX::FIELD::PartyID);
+				switch (sourceData)
+				{
+				case '5':
+					strcpy(order.SecurityAccount, source.data());
+					break;
+				case 'C':
+					order.PbuID = atoi(source.data());
+					break;
+				case 'D':
+					order.ExchangeBranchID = atoi(source.data());
+				}
+			}
+			//
+			if (msg.isSetField(FIX::FIELD::Price))
+				order.LimitPrice = FIX::DoubleConvertor::convert(msg.getField(FIX::FIELD::Price));
+			else
+				order.LimitPrice = 0;
+
+
+		}
+		catch (...)
+		{
+			convertResult = false;
+		}
+		return convertResult;
+	}
+}
+}
