@@ -92,10 +92,22 @@ namespace SZStep
 	const int STATUS_OPEN = 2;
 	const int STATUS_HALT = 3;
 	const int STATUS_CLOSE = 4;
+
+	struct ReportSynchronization
+	{
+		std::map<int, int> partitionNoReportIndexMap;
+	};
+
 	struct PlatformStateInfo
 	{
 		int platformID;
 		int platformStatus;
+	};
+
+	struct ReportFinished
+	{
+		int partitonNo;
+		int reportIndex;
 	};
 
 	struct PlatformInfo
@@ -111,6 +123,8 @@ namespace SZStep
 
 	namespace ToFix
 	{
+		void formatReportSynchronization(const ReportSynchronization& reportSync, FIX::Message& msg);
+		void formatReportFinished(const ReportFinished& reportFinished, FIX::Message& msg);
 		void formatPlatformStateInfo(const PlatformStateInfo& stateInfo, FIX::Message& msg);
 		void formatPlatformInfo(const PlatformInfo& info, FIX::Message& msg);
 
@@ -120,6 +134,8 @@ namespace SZStep
 
 	namespace FromFix
 	{
+		bool convertReportSynchronization(const FIX::Message& msg, ReportSynchronization& reportSync);
+		bool convertReportFinished(const FIX::Message& msg, ReportFinished& reportFinished);
 		bool convertPlatformStateInfo(const FIX::Message& msg, PlatformStateInfo& stateInfo);
 		bool convertPlatformInfo(const FIX::Message& msg, PlatformInfo& info);
 

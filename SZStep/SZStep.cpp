@@ -5,6 +5,26 @@ namespace SZStep
 {
 namespace ToFix 
 {
+	void formatReportSynchronization(const ReportSynchronization& reportSync, FIX::Message& msg)
+	{
+		msg.getHeader().setField(FIX::MsgType("U101"));
+		FIX::Group partition(FIX::FIELD::NoPartitions, FIX::FIELD::PartitionNo);
+		for (auto it = reportSync.partitionNoReportIndexMap.begin(); 
+		it != reportSync.partitionNoReportIndexMap.end(); it++)
+		{
+			partition.setField(FIX::PartitionNo(it->first));
+			partition.setField(FIX::ReportIndex(it->second));
+			msg.addGroup(partition);
+		}
+	}
+
+	void formatReportFinished(const ReportFinished& reportFinished, FIX::Message& msg)
+	{
+		msg.getHeader().setField(FIX::MsgType("U103"));
+		msg.setField(FIX::PlatformID(reportFinished.partitonNo));
+		msg.setField(FIX::ReportIndex(reportFinished.reportIndex));
+	}
+
 	void formatPlatformStateInfo(const PlatformStateInfo& stateInfo, FIX::Message& msg)
 	{
 		msg.getHeader().setField(FIX::MsgType("U102"));
@@ -129,6 +149,44 @@ namespace ToFix
 
 namespace FromFix
 {
+	bool convertReportSynchronization(const FIX::Message& msg, ReportSynchronization& reportSync)
+	{
+		bool convertResult = true;
+		reportSync.partitionNoReportIndexMap.clear();
+		try
+		{
+			int partitionCount = FIX::IntConvertor::convert(msg.getField(FIX::FIELD::NoPartitions));
+			FIX::Group partition(FIX::FIELD::NoPartitions, FIX::FIELD::PartitionNo);
+			for (int i = 1; i <= partitionCount; i++)
+			{
+				msg.getGroup(i, partition);
+				int partitionNo = FIX::IntConvertor::convert(partition.getField(FIX::FIELD::PartitionNo));
+				int reportIndex = FIX::IntConvertor::convert(partition.getField(FIX::FIELD::ReportIndex));
+				reportSync.partitionNoReportIndexMap[partitionNo] = reportIndex;
+			}
+		}
+		catch (...)
+		{
+			convertResult = false;
+		}
+		return convertResult;
+	}
+
+	bool convertReportFinished(const FIX::Message& msg, ReportFinished& reportFinished)
+	{
+		bool convertResult = true;
+		try
+		{
+			reportFinished.partitonNo = FIX::IntConvertor::convert(msg.getField(FIX::FIELD::PartitionNo));
+			reportFinished.reportIndex = FIX::IntConvertor::convert(msg.getField(FIX::FIELD::ReportIndex));
+		}
+		catch (...)
+		{
+			convertResult = false;
+		}
+		return convertResult;
+	}
+
 	bool convertPlatformStateInfo(const FIX::Message& msg, PlatformStateInfo& stateInfo)
 	{
 		bool convertResult = true;
@@ -148,7 +206,7 @@ namespace FromFix
 	bool convertPlatformInfo(const FIX::Message& msg, PlatformInfo& info)
 	{
 		bool convertResult = true;
-
+		info.partitionIDs.clear();
 		try
 		{
 			info.platformID = FIX::IntConvertor::convert(msg.getField(FIX::FIELD::PlatformID));

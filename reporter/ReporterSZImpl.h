@@ -2,7 +2,7 @@
 
 #include "quickfix/Application.h"
 #include "quickfix/Initiator.h"
-
+#include "SZStep.h"
 #include <atomic>
 
 class ReporterSZSTEPImpl : 
@@ -45,7 +45,13 @@ private:
 	std::string m_defaultCstmApplVerID;
 
 private:
-	
-
+	SZStep::PlatformStateInfo m_stateInfo;
+	SZStep::PlatformInfo m_info;
+private:
+	void onStepPlatformStateInfo(const FIX::Message& message);
+	void onStepPlatformInfo(const FIX::Message& message);
+	void onStepReportFinished(const FIX::Message& message);
+	void onStepExecutionReport(const FIX::Message& message);
+	void onStepCancelReject(const FIX::Message& message);
 
 };

@@ -113,7 +113,41 @@ throw(FIX::FieldNotFound, FIX::IncorrectDataFormat, FIX::IncorrectTagValue, FIX:
 
 void ReporterSZSTEPImpl::fromApp(const FIX::Message& message, const FIX::SessionID& sessionID)
 throw(FIX::FieldNotFound, FIX::IncorrectDataFormat, FIX::IncorrectTagValue, FIX::UnsupportedMessageType)
-{}
+{
+	FIX::MsgType msgType;
+	message.getHeader().getField(msgType);
+	std::string strMsgType = msgType.getString();
+	//PlatformStateInfo
+	if (strMsgType == "U102")
+	{
+		onStepPlatformStateInfo(message);
+		return;
+	}
+	//ReportFinished TODO
+	if (strMsgType == "U103")
+	{
+		onStepReportFinished(message);
+		return;
+	}
+	//PlatformInfo
+	if (strMsgType == "U104")
+	{
+		onStepPlatformInfo(message);
+		return;
+	}
+	//ExecutionReport
+	if (strMsgType == "8")
+	{
+		onStepExecutionReport(message);
+		return;
+	}
+	//CancelReject
+	if (strMsgType == "9")
+	{
+		onStepCancelReject(message);
+		return;
+	}
+}
 
 
 bool ReporterSZSTEPImpl::parseCfgFname()
@@ -142,6 +176,31 @@ bool ReporterSZSTEPImpl::parseCfgFname()
 	return parseResult;
 }
 
+void ReporterSZSTEPImpl::onStepPlatformStateInfo(const FIX::Message& message)
+{
+	bool convertResult = SZStep::FromFix::convertPlatformStateInfo(message, m_stateInfo);
+}
 
+void ReporterSZSTEPImpl::onStepPlatformInfo(const FIX::Message& message)
+{
+	bool convertResult = SZStep::FromFix::convertPlatformInfo(message, m_info);
+	if (convertResult)
+	{
+		//TODO 
+	}
+	else
+	{
+		//TODO : log fatal error
+	}
+}
+
+void ReporterSZSTEPImpl::onStepReportFinished(const FIX::Message& message)
+{}
+
+void ReporterSZSTEPImpl::onStepExecutionReport(const FIX::Message& message)
+{}
+
+void ReporterSZSTEPImpl::onStepCancelReject(const FIX::Message& message)
+{}
 
 	
