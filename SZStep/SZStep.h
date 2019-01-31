@@ -87,6 +87,11 @@ namespace FIX
 
 namespace SZStep
 {
+	const char MSG_TYPE_REPORT_SYNCHRONIZATION[] = "U101";
+	const char MSG_TYPE_PLATFORM_STATE_INFO[] = "U102";
+	const char MSG_TYPE_REPORT_FINISHED[] = "U103";
+	const char MSG_TYPE_REPORT_PLATFORM_INFO[] = "U104";
+
 	const int STATUS_PRE_OPEN = 0;
 	const int STATUS_OPEN_UPCOMING = 1;
 	const int STATUS_OPEN = 2;

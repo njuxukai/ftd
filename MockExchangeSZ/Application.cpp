@@ -75,13 +75,24 @@ throw( FIX::FieldNotFound, FIX::IncorrectDataFormat, FIX::IncorrectTagValue, FIX
 void Application::fromApp( const FIX::Message& message,
                            const FIX::SessionID& sessionID )
 throw( FIX::FieldNotFound, FIX::IncorrectDataFormat, FIX::IncorrectTagValue, FIX::UnsupportedMessageType )
-{ crack( message, sessionID ); }
+{ 
+	FIX::MsgType msgType;
+	message.getHeader().getField(msgType);
+	std::string strMsgType = msgType.getString();
+	if (strMsgType == "U101")
+	{
+		onStepReportSynchronization(message, sessionID);
+		return;
+	}
+	if (strMsgType == "D")
+	{
+		onStepNewOrderSingle(message, sessionID);
+		return;
+	}
+}
 
 
-
-
-
-void Application::onMessage(const FIX50SP2::NewOrderSingle& message,
+void Application::onStepNewOrderSingle(const FIX::Message& message,
 	const FIX::SessionID& sessionID)
 {
 	FTD::CFtdcInputOrderField order = { 0 };
@@ -90,7 +101,16 @@ void Application::onMessage(const FIX50SP2::NewOrderSingle& message,
 	{
 		
 	}
+}
 
+
+void Application::onStepReportSynchronization(const FIX::Message& message, const FIX::SessionID& sessionID)
+{
+	SZStep::ReportSynchronization reportSync;
+	bool convertResult = SZStep::FromFix::convertReportSynchronization(message, reportSync);
+	if (convertResult)
+	{
+	}
 }
 
 FIX50SP2::Message Application::generatePlatformStateInfo()

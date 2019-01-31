@@ -8,6 +8,8 @@
 #include "quickfix/SocketInitiator.h"
 #include "quickfix/fix50sp2/NewOrderSingle.h"
 #include "SzStep.h"
+
+
 ReporterSZSTEPImpl::ReporterSZSTEPImpl(const std::string& cfgFname)
 	: ReporterWrapper()
 {
@@ -120,31 +122,31 @@ throw(FIX::FieldNotFound, FIX::IncorrectDataFormat, FIX::IncorrectTagValue, FIX:
 	//PlatformStateInfo
 	if (strMsgType == "U102")
 	{
-		onStepPlatformStateInfo(message);
+		onStepPlatformStateInfo(message, sessionID);
 		return;
 	}
 	//ReportFinished TODO
 	if (strMsgType == "U103")
 	{
-		onStepReportFinished(message);
+		onStepReportFinished(message, sessionID);
 		return;
 	}
 	//PlatformInfo
 	if (strMsgType == "U104")
 	{
-		onStepPlatformInfo(message);
+		onStepPlatformInfo(message, sessionID);
 		return;
 	}
 	//ExecutionReport
 	if (strMsgType == "8")
 	{
-		onStepExecutionReport(message);
+		onStepExecutionReport(message, sessionID);
 		return;
 	}
 	//CancelReject
 	if (strMsgType == "9")
 	{
-		onStepCancelReject(message);
+		onStepCancelReject(message, sessionID);
 		return;
 	}
 }
@@ -176,17 +178,33 @@ bool ReporterSZSTEPImpl::parseCfgFname()
 	return parseResult;
 }
 
-void ReporterSZSTEPImpl::onStepPlatformStateInfo(const FIX::Message& message)
+void ReporterSZSTEPImpl::onStepPlatformStateInfo(const FIX::Message& message, const FIX::SessionID& sessionID)
 {
 	bool convertResult = SZStep::FromFix::convertPlatformStateInfo(message, m_stateInfo);
 }
 
-void ReporterSZSTEPImpl::onStepPlatformInfo(const FIX::Message& message)
+void ReporterSZSTEPImpl::onStepPlatformInfo(const FIX::Message& message, const FIX::SessionID& sessionID)
 {
+	using namespace SZStep;
 	bool convertResult = SZStep::FromFix::convertPlatformInfo(message, m_info);
 	if (convertResult)
 	{
-		//TODO 
+		SZStep::ReportSynchronization reportSync;
+		for (int i = 0; i < m_info.partitionIDs.size(); i++)
+		{
+			int parID = m_info.partitionIDs[i];
+			if (m_partitionIndexMap.find(parID) == m_partitionIndexMap.end())
+			{
+				reportSync.partitionNoReportIndexMap[parID] = 1;
+			}
+			else
+			{
+				reportSync.partitionNoReportIndexMap[parID] = m_partitionIndexMap[parID] + 1;
+			}
+		}
+		FIX50SP2::Message syncMsg(FIX::MsgType("U101"));
+		SZStep::ToFix::formatReportSynchronization(reportSync, syncMsg);
+		FIX::Session::sendToTarget(syncMsg, sessionID);
 	}
 	else
 	{
@@ -194,13 +212,13 @@ void ReporterSZSTEPImpl::onStepPlatformInfo(const FIX::Message& message)
 	}
 }
 
-void ReporterSZSTEPImpl::onStepReportFinished(const FIX::Message& message)
+void ReporterSZSTEPImpl::onStepReportFinished(const FIX::Message& message, const FIX::SessionID& sessionID)
 {}
 
-void ReporterSZSTEPImpl::onStepExecutionReport(const FIX::Message& message)
+void ReporterSZSTEPImpl::onStepExecutionReport(const FIX::Message& message, const FIX::SessionID& sessionID)
 {}
 
-void ReporterSZSTEPImpl::onStepCancelReject(const FIX::Message& message)
+void ReporterSZSTEPImpl::onStepCancelReject(const FIX::Message& message, const FIX::SessionID& sessionID)
 {}
 
 	

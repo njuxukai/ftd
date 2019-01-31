@@ -47,8 +47,6 @@ public:
   void fromApp( const FIX::Message& message, const FIX::SessionID& sessionID )
     throw( FIX::FieldNotFound, FIX::IncorrectDataFormat, FIX::IncorrectTagValue, FIX::UnsupportedMessageType );
 
-  // MessageCracker overloads
-  void onMessage(const FIX50SP2::NewOrderSingle&, const FIX::SessionID&);
 
   std::string genOrderID() {
     std::stringstream stream;
@@ -69,6 +67,10 @@ private:
 private:
 	FIX50SP2::Message generatePlatformStateInfo();
 	FIX50SP2::Message generatePlatformInfo();
+
+private:
+	void onStepNewOrderSingle(const FIX::Message& message, const FIX::SessionID& id);
+	void onStepReportSynchronization(const FIX::Message& message, const FIX::SessionID& id);
 };
 
 #endif

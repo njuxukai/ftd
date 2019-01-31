@@ -7,7 +7,7 @@ namespace ToFix
 {
 	void formatReportSynchronization(const ReportSynchronization& reportSync, FIX::Message& msg)
 	{
-		msg.getHeader().setField(FIX::MsgType("U101"));
+		msg.getHeader().setField(FIX::MsgType(MSG_TYPE_REPORT_SYNCHRONIZATION));
 		FIX::Group partition(FIX::FIELD::NoPartitions, FIX::FIELD::PartitionNo);
 		for (auto it = reportSync.partitionNoReportIndexMap.begin(); 
 		it != reportSync.partitionNoReportIndexMap.end(); it++)
@@ -20,14 +20,14 @@ namespace ToFix
 
 	void formatReportFinished(const ReportFinished& reportFinished, FIX::Message& msg)
 	{
-		msg.getHeader().setField(FIX::MsgType("U103"));
+		msg.getHeader().setField(FIX::MsgType(MSG_TYPE_REPORT_FINISHED));
 		msg.setField(FIX::PlatformID(reportFinished.partitonNo));
 		msg.setField(FIX::ReportIndex(reportFinished.reportIndex));
 	}
 
 	void formatPlatformStateInfo(const PlatformStateInfo& stateInfo, FIX::Message& msg)
 	{
-		msg.getHeader().setField(FIX::MsgType("U102"));
+		msg.getHeader().setField(FIX::MsgType(MSG_TYPE_PLATFORM_STATE_INFO));
 		FIX::PlatformID platformIDField(stateInfo.platformID);
 		FIX::PlatformStatus platformStatusField(stateInfo.platformStatus);
 		msg.setField(platformIDField);
@@ -36,7 +36,7 @@ namespace ToFix
 
 	void formatPlatformInfo(const PlatformInfo& info, FIX::Message& msg)
 	{
-		msg.getHeader().setField(FIX::MsgType("U104"));
+		msg.getHeader().setField(FIX::MsgType(MSG_TYPE_REPORT_PLATFORM_INFO));
 		FIX::PlatformID platformIDField(info.platformID);
 		msg.setField(platformIDField);
 		FIX::Group partition(FIX::FIELD::NoPartitions, FIX::FIELD::PartitionNo);

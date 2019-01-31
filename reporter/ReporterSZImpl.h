@@ -45,13 +45,14 @@ private:
 	std::string m_defaultCstmApplVerID;
 
 private:
+	std::map<int, int> m_partitionIndexMap;
 	SZStep::PlatformStateInfo m_stateInfo;
 	SZStep::PlatformInfo m_info;
 private:
-	void onStepPlatformStateInfo(const FIX::Message& message);
-	void onStepPlatformInfo(const FIX::Message& message);
-	void onStepReportFinished(const FIX::Message& message);
-	void onStepExecutionReport(const FIX::Message& message);
-	void onStepCancelReject(const FIX::Message& message);
+	void onStepPlatformStateInfo(const FIX::Message& message, const FIX::SessionID& sessionID);
+	void onStepPlatformInfo(const FIX::Message& message, const FIX::SessionID& sessionID);
+	void onStepReportFinished(const FIX::Message& message, const FIX::SessionID& sessionID);
+	void onStepExecutionReport(const FIX::Message& message, const FIX::SessionID& sessionID);
+	void onStepCancelReject(const FIX::Message& message, const FIX::SessionID& sessionID);
 
 };
