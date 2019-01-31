@@ -108,7 +108,7 @@ namespace FromFix
 {
 	bool convertInputOrderField(const FIX::Message& msg, FTD::CFtdcInputOrderField& order)
 	{
-		bool convertResult = false;
+		bool convertResult = true;
 		try 
 		{
 			//applid
@@ -129,6 +129,9 @@ namespace FromFix
 				maxPriceLevelsData = FIX::IntConvertor::convert(msg.getField(FIX::FIELD::MaxPriceLevels));
 			if (msg.isSetField(FIX::FIELD::MinQty))
 				minQtyData = FIX::IntConvertor::convert(msg.getField(FIX::FIELD::MinQty));
+			//Instrument
+			strcpy(order.InstrumentCode, msg.getField(FIX::FIELD::SecurityID).data());
+			order.ExchangeType = FTDC_ET_SZ;
 			switch (ordTypeData)
 			{
 			case '2':

@@ -308,5 +308,7 @@
     <field name='RefApplVerID' number='1130' type='STRING'/>
     <field name='RefCstmApplVerID' number='1131' type='STRING'/>
     <field name='DefaultApplVerID' number='1137' type='STRING'/>
+	<field name='DefaultApplExtID' number='1407' type='STRING'/>
+	<field name='DefaultCstmApplVerID' number='1408' type='STRING'/>
   </fields>
 </fix>
