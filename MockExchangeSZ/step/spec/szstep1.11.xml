@@ -55,201 +55,61 @@
    <field name='TradingSessionSubID' required='N' />
   </message>
   <message name='ExecutionReport' msgtype='8' msgcat='app'>
-   <component name='ApplicationSequenceControl' required='N' />
-   <field name='OrderID' required='Y' />
-   <field name='SecondaryOrderID' required='N' />
-   <field name='SecondaryClOrdID' required='N' />
-   <field name='SecondaryExecID' required='N' />
-   <field name='ClOrdID' required='N' />
-   <field name='OrigClOrdID' required='N' />
-   <field name='ClOrdLinkID' required='N' />
-   <field name='QuoteRespID' required='N' />
-   <field name='OrdStatusReqID' required='N' />
-   <field name='MassStatusReqID' required='N' />
-   <field name='HostCrossID' required='N' />
-   <field name='TotNumReports' required='N' />
-   <field name='LastRptRequested' required='N' />
-   <component name='Parties' required='N' />
-   <field name='TradeOriginationDate' required='N' />
-   <component name='ContraGrp' required='N' />
-   <field name='ListID' required='N' />
-   <field name='CrossID' required='N' />
-   <field name='OrigCrossID' required='N' />
-   <field name='CrossType' required='N' />
-   <field name='TrdMatchID' required='N' />
+   <field name='PartitionID' required='Y' />
+   <field name='ReportIndex' required='Y' />
+   <field name='ApplID' required='Y' />
+   <field name='OwnerType' required='Y' />
+   <field name='OrderRestrictions' required='N' />
    <field name='ExecID' required='Y' />
-   <field name='ExecRefID' required='N' />
+   <field name='OrderID' required='Y' />
    <field name='ExecType' required='Y' />
    <field name='OrdStatus' required='Y' />
-   <field name='WorkingIndicator' required='N' />
-   <field name='OrdRejReason' required='N' />
-   <field name='ExecRestatementReason' required='N' />
-   <field name='Account' required='N' />
-   <field name='AcctIDSource' required='N' />
-   <field name='AccountType' required='N' />
-   <field name='DayBookingInst' required='N' />
-   <field name='BookingUnit' required='N' />
-   <field name='PreallocMethod' required='N' />
-   <field name='AllocID' required='N' />
-   <component name='PreAllocGrp' required='N' />
-   <field name='SettlType' required='N' />
-   <field name='SettlDate' required='N' />
-   <field name='MatchType' required='N' />
-   <field name='OrderCategory' required='N' />
-   <field name='CashMargin' required='N' />
-   <field name='ClearingFeeIndicator' required='N' />
-   <component name='Instrument' required='Y' />
-   <component name='FinancingDetails' required='N' />
-   <component name='UndInstrmtGrp' required='N' />
-   <field name='Side' required='Y' />
-   <component name='Stipulations' required='N' />
-   <field name='QtyType' required='N' />
-   <component name='OrderQtyData' required='N' />
-   <field name='LotType' required='N' />
-   <field name='OrdType' required='N' />
-   <field name='PriceType' required='N' />
-   <field name='Price' required='N' />
-   <field name='PriceProtectionScope' required='N' />
-   <field name='StopPx' required='N' />
-   <component name='TriggeringInstruction' required='N' />
-   <component name='PegInstructions' required='N' />
-   <component name='DiscretionInstructions' required='N' />
-   <field name='PeggedPrice' required='N' />
-   <field name='PeggedRefPrice' required='N' />
-   <field name='DiscretionPrice' required='N' />
-   <field name='TargetStrategy' required='N' />
-   <component name='StrategyParametersGrp' required='N' />
-   <field name='TargetStrategyParameters' required='N' />
-   <field name='ParticipationRate' required='N' />
-   <field name='TargetStrategyPerformance' required='N' />
-   <field name='Currency' required='N' />
-   <field name='ComplianceID' required='N' />
-   <field name='SolicitedFlag' required='N' />
-   <field name='TimeInForce' required='N' />
-   <field name='EffectiveTime' required='N' />
-   <field name='ExpireDate' required='N' />
-   <field name='ExpireTime' required='N' />
-   <field name='ExecInst' required='N' />
-   <field name='AggressorIndicator' required='N' />
-   <field name='OrderCapacity' required='N' />
-   <field name='OrderRestrictions' required='N' />
-   <field name='PreTradeAnonymity' required='N' />
-   <field name='CustOrderCapacity' required='N' />
-   <field name='LastQty' required='N' />
-   <field name='CalculatedCcyLastQty' required='N' />
-   <field name='LastSwapPoints' required='N' />
-   <field name='UnderlyingLastQty' required='N' />
    <field name='LastPx' required='N' />
-   <field name='UnderlyingLastPx' required='N' />
-   <field name='LastParPx' required='N' />
-   <field name='LastSpotRate' required='N' />
-   <field name='LastForwardPoints' required='N' />
-   <field name='LastMkt' required='N' />
-   <field name='TradingSessionID' required='N' />
-   <field name='TradingSessionSubID' required='N' />
-   <field name='TimeBracket' required='N' />
-   <field name='LastCapacity' required='N' />
+   <field name='LastQty' required='N' />
    <field name='LeavesQty' required='Y' />
    <field name='CumQty' required='Y' />
-   <field name='AvgPx' required='N' />
-   <field name='DayOrderQty' required='N' />
-   <field name='DayCumQty' required='N' />
-   <field name='DayAvgPx' required='N' />
-   <field name='TotNoFills' required='N' />
-   <field name='LastFragment' required='N' />
-   <component name='FillsGrp' required='N' />
-   <field name='GTBookingInst' required='N' />
-   <field name='TradeDate' required='N' />
-   <field name='TransactTime' required='N' />
-   <field name='ReportToExch' required='N' />
-   <component name='CommissionData' required='N' />
-   <component name='SpreadOrBenchmarkCurveData' required='N' />
-   <component name='YieldData' required='N' />
-   <field name='GrossTradeAmt' required='N' />
-   <field name='NumDaysInterest' required='N' />
-   <field name='ExDate' required='N' />
-   <field name='AccruedInterestRate' required='N' />
-   <field name='AccruedInterestAmt' required='N' />
-   <field name='InterestAtMaturity' required='N' />
-   <field name='EndAccruedInterestAmt' required='N' />
-   <field name='StartCash' required='N' />
-   <field name='EndCash' required='N' />
-   <field name='TradedFlatSwitch' required='N' />
-   <field name='BasisFeatureDate' required='N' />
-   <field name='BasisFeaturePrice' required='N' />
-   <field name='Concession' required='N' />
-   <field name='TotalTakedown' required='N' />
-   <field name='NetMoney' required='N' />
-   <field name='SettlCurrAmt' required='N' />
-   <field name='SettlCurrency' required='N' />
-   <field name='SettlCurrFxRate' required='N' />
-   <field name='SettlCurrFxRateCalc' required='N' />
-   <field name='HandlInst' required='N' />
-   <field name='MinQty' required='N' />
-   <field name='MatchIncrement' required='N' />
+   <field name='OrderRejReason' required='N' />
+   <field name='RejectText' required='N' />
+   <field name='Side' required='Y' />
+   <field name='TransactTime' required='Y' />
+   <field name='ClOrdID' required='Y' />
+   <field name='OrigClOrdID' required='N' />
+   <component name='Instrument' required='Y' />
+   <component name='Parties' required='Y' />
+   <component name='OrderQtyData' required='Y' />
+   <field name='Price' required='N' />
+   <field name='StopPx' required='N' />
+   <field name='TimeInForce' required='N' />
+   <field name='OrdType' required='Y' />
    <field name='MaxPriceLevels' required='N' />
-   <component name='DisplayInstruction' required='N' />
-   <field name='MaxFloor' required='N' />
+   <field name='MinQty' required='N' />
+   <field name='CashMargin' required='N' />
    <field name='PositionEffect' required='N' />
-   <field name='MaxShow' required='N' />
-   <field name='BookingType' required='N' />
+   <field name='CoveredOrUncovered' required='N' />
+   <field name='ConfirmID' required='N' />
+   <field name='ExpirationDays' required='N' />
+   <field name='ExpirationType' required='N' />
+   <field name='LotType' required='N' />
+   <field name='MaturityDate' required='N' />
+   <component name='CompDeliverData' required='N' />
+   <field name='IMCRejectText' required='N' />
    <field name='Text' required='N' />
-   <field name='EncodedTextLen' required='N' />
-   <field name='EncodedText' required='N' />
-   <field name='SettlDate2' required='N' />
-   <field name='OrderQty2' required='N' />
-   <field name='LastForwardPoints2' required='N' />
-   <field name='MultiLegReportingType' required='N' />
-   <field name='CancellationRights' required='N' />
-   <field name='MoneyLaunderingStatus' required='N' />
-   <field name='RegistID' required='N' />
-   <field name='Designation' required='N' />
-   <field name='TransBkdTime' required='N' />
-   <field name='ExecValuationPoint' required='N' />
-   <field name='ExecPriceType' required='N' />
-   <field name='ExecPriceAdjustment' required='N' />
-   <field name='PriorityIndicator' required='N' />
-   <field name='PriceImprovement' required='N' />
-   <field name='LastLiquidityInd' required='N' />
-   <component name='ContAmtGrp' required='N' />
-   <component name='InstrmtLegExecGrp' required='N' />
-   <field name='CopyMsgIndicator' required='N' />
-   <component name='MiscFeesGrp' required='N' />
-   <field name='DividendYield' required='N' />
-   <field name='ManualOrderIndicator' required='N' />
-   <field name='CustDirectedOrder' required='N' />
-   <field name='ReceivedDeptID' required='N' />
-   <field name='CustOrderHandlingInst' required='N' />
-   <field name='OrderHandlingInstSource' required='N' />
-   <component name='TrdRegTimestamps' required='N' />
-   <field name='Volatility' required='N' />
-   <field name='TimeToExpiration' required='N' />
-   <field name='RiskFreeRate' required='N' />
-   <field name='PriceDelta' required='N' />
-   <component name='RateSource' required='N' />
   </message>
   <message name='OrderCancelReject' msgtype='9' msgcat='app'>
-   <field name='OrderID' required='Y' />
-   <field name='SecondaryOrderID' required='N' />
-   <field name='SecondaryClOrdID' required='N' />
+   <field name='PartitionNo' required='Y' />
+   <field name='ReportIndex' required='Y' />
+   <field name='ApplID' required='Y' />
+   <field name='OwnerType' required='Y' />
+   <field name='OrderID' required='N' />
    <field name='ClOrdID' required='Y' />
-   <field name='ClOrdLinkID' required='N' />
-   <field name='OrigClOrdID' required='N' />
+   <field name='TransactTime' required='Y' />
+   <field name='OrigClOrdID' required='Y' />
    <field name='OrdStatus' required='Y' />
-   <field name='WorkingIndicator' required='N' />
-   <field name='OrigOrdModTime' required='N' />
-   <field name='ListID' required='N' />
-   <field name='Account' required='N' />
-   <field name='AcctIDSource' required='N' />
-   <field name='AccountType' required='N' />
-   <field name='TradeOriginationDate' required='N' />
-   <field name='TradeDate' required='N' />
-   <field name='TransactTime' required='N' />
-   <field name='CxlRejResponseTo' required='Y' />
-   <field name='CxlRejReason' required='N' />
+   <field name='CxlRejReason' required='Y' />
+   <field name='RejectText' required='N' />
+   <component name='Instrument' required='Y' />
+   <component name='Parties' required='Y' />
    <field name='Text' required='N' />
-   <field name='EncodedTextLen' required='N' />
-   <field name='EncodedText' required='N' />
   </message>
   <message name='News' msgtype='B' msgcat='app'>
    <component name='ApplicationSequenceControl' required='N' />
@@ -297,13 +157,10 @@
    <field name='Side' required='Y' />
    <field name='OwnerType' required='Y' />
    <field name='OrderRestrictions' required='N' />
-   <field name='TransactTime' required='N' />
-   
+   <field name='TransactTime' required='N' />   
    <component name='Instrument' required='Y' /> 
    <component name='Parties' required='Y' />   
    <component name='OrderQtyData' required='Y' /> 
-
-  
    <field name='Price' required='N' />
    <field name='StopPx' required='N' />
    <field name='TimeInForce' required='N' />
@@ -342,27 +199,17 @@
    <component name='ListOrdGrp' required='Y' />
   </message>
   <message name='OrderCancelRequest' msgtype='F' msgcat='app'>
-   <field name='OrigClOrdID' required='N' />
-   <field name='OrderID' required='N' />
+   <field name='ApplID' required='Y' />
    <field name='ClOrdID' required='Y' />
-   <field name='SecondaryClOrdID' required='N' />
-   <field name='ClOrdLinkID' required='N' />
-   <field name='ListID' required='N' />
-   <field name='OrigOrdModTime' required='N' />
-   <field name='Account' required='N' />
-   <field name='AcctIDSource' required='N' />
-   <field name='AccountType' required='N' />
-   <component name='Parties' required='N' />
-   <component name='Instrument' required='Y' />
-   <component name='FinancingDetails' required='N' />
-   <component name='UndInstrmtGrp' required='N' />
+   <field name='OwnerType' required='Y' />
    <field name='Side' required='Y' />
    <field name='TransactTime' required='Y' />
+   <component name='Instrument' required='Y' />
+   <component name='Parties' required='Y' />
    <component name='OrderQtyData' required='Y' />
-   <field name='ComplianceID' required='N' />
+   <field name='OrigClOrdID' required='Y' />
+   <field name='OrderID' required='N' />
    <field name='Text' required='N' />
-   <field name='EncodedTextLen' required='N' />
-   <field name='EncodedText' required='N' />
   </message>
   <message name='OrderCancelReplaceRequest' msgtype='G' msgcat='app'>
    <field name='OrderID' required='N' />
@@ -5259,6 +5106,14 @@
     <field name='Text' required='N' />
     <field name='EncodedTextLen' required='N' />
     <field name='EncodedText' required='N' />
+   </group>
+  </component>
+  <component name='CompDeliverData'>
+   <group name='NoSecurity' required='N'>
+    <field name='UnderlyingSecurityID' required='Y' />
+    <field name='UnderlyingSecurityID' required='Y' />
+    <field name='DeliverQty' required='N' />
+    <field name='SubstCash' required='N' />
    </group>
   </component>
  </components>
