@@ -31,14 +31,42 @@
 
 #include "SZStep.h"
 
-void Application::onCreate( const FIX::SessionID& sessionID ) {}
-void Application::onLogon( const FIX::SessionID& sessionID ) {}
-void Application::onLogout( const FIX::SessionID& sessionID ) {}
+Application::Application(int platformID) : m_platformID(platformID)
+{
+	m_stateInfo.platformID = m_platformID;
+	m_stateInfo.platformStatus = SZStep::STATUS_OPEN;
+
+	m_info.platformID = m_platformID;
+	m_info.partitionIDs.clear();
+	m_info.partitionIDs.push_back(1);
+	m_info.partitionIDs.push_back(2);
+}
+
+void Application::onCreate( const FIX::SessionID& sessionID ) 
+{}
+
+void Application::onLogon( const FIX::SessionID& sessionID ) 
+{
+	FIX50SP2::Message stateInfo = generatePlatformStateInfo();
+	FIX50SP2::Message info = generatePlatformInfo();
+	FIX::Session::sendToTarget(stateInfo, sessionID);
+	FIX::Session::sendToTarget(info, sessionID);
+}
+
+void Application::onLogout( const FIX::SessionID& sessionID ) 
+{
+	
+}
+
 void Application::toAdmin( FIX::Message& message,
-                           const FIX::SessionID& sessionID ) {}
+                           const FIX::SessionID& sessionID ) 
+{}
+
 void Application::toApp( FIX::Message& message,
                          const FIX::SessionID& sessionID )
-throw( FIX::DoNotSend ) {}
+throw( FIX::DoNotSend ) 
+{}
+
 
 void Application::fromAdmin( const FIX::Message& message,
                              const FIX::SessionID& sessionID )
@@ -52,60 +80,29 @@ throw( FIX::FieldNotFound, FIX::IncorrectDataFormat, FIX::IncorrectTagValue, FIX
 
 
 
-void Application::onMessage( const FIX50::NewOrderSingle& message,
-                             const FIX::SessionID& sessionID )
-{
-  FIX::Symbol symbol;
-  FIX::Side side;
-  FIX::OrdType ordType;
-  FIX::OrderQty orderQty;
-  FIX::Price price;
-  FIX::ClOrdID clOrdID;
-  FIX::Account account;
-
-  message.get( ordType );
-
-  if ( ordType != FIX::OrdType_LIMIT )
-    throw FIX::IncorrectTagValue( ordType.getField() );
-
-  message.get( symbol );
-  message.get( side );
-  message.get( orderQty );
-  message.get( price );
-  message.get( clOrdID );
-
-  FIX50::ExecutionReport executionReport = FIX50::ExecutionReport
-      ( FIX::OrderID( genOrderID() ),
-        FIX::ExecID( genExecID() ),
-        FIX::ExecType( FIX::ExecType_TRADE ),
-        FIX::OrdStatus( FIX::OrdStatus_FILLED ),
-        side,
-        FIX::LeavesQty( 0 ),
-        FIX::CumQty( orderQty ) );
-  
-  executionReport.set( clOrdID );
-  executionReport.set( symbol );
-  executionReport.set( orderQty );
-  executionReport.set( FIX::LastQty( orderQty ) );
-  executionReport.set( FIX::LastPx( price ) );
-  executionReport.set( FIX::AvgPx( price ) );
-
-  if( message.isSet(account) )
-    executionReport.setField( message.get(account) );
-
-  try
-  {
-    FIX::Session::sendToTarget( executionReport, sessionID );
-  }
-  catch ( FIX::SessionNotFound& ) {}
-}
-
 
 void Application::onMessage(const FIX50SP2::NewOrderSingle& message,
 	const FIX::SessionID& sessionID)
 {
 	FTD::CFtdcInputOrderField order = { 0 };
 	bool convertResult = SZStep::FromFix::convertInputOrderField(message, order);
+	if (convertResult)
+	{
+		
+	}
 
+}
 
+FIX50SP2::Message Application::generatePlatformStateInfo()
+{
+	FIX50SP2::Message message(FIX::MsgType("U102"));
+	SZStep::ToFix::formatPlatformStateInfo(m_stateInfo, message);
+	return message;
+}
+
+FIX50SP2::Message Application::generatePlatformInfo()
+{
+	FIX50SP2::Message message(FIX::MsgType("U104"));
+	SZStep::ToFix::formatPlatformInfo(m_info, message);
+	return message;
 }

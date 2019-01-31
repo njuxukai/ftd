@@ -205,6 +205,10 @@
       <value enum='BN' description='EXECUTION_ACKNOWLEDGEMENT'/>
       <value enum='BO' description='CONTRARY_INTENTION_REPORT'/>
       <value enum='BP' description='SECURITY_DEFINITION_UPDATE_REPORT'/>
+	  <value enum='U101' description='ReportSynchronization' />
+	   <value enum='U102' description='PlatformStateInfo' />
+	   <value enum='U103' description='ReportFinished' />
+	   <value enum='U104' description='PlatformInfo' />
     </field>
     <field name='NewSeqNo' number='36' type='SEQNUM'/>
     <field name='PossDupFlag' number='43' type='BOOLEAN'/>

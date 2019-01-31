@@ -2986,6 +2986,32 @@
    <field name='EncodedTextLen' required='N' />
    <field name='EncodedText' required='N' />
   </message>
+  
+  <message name='ReportSynchronization' msgtype='U101' msgcat='app'>
+   <group name='NoPartitions' required='Y'>
+    <field name='PartitionNo' required='Y' />
+	<field name='ReportIndex' required='Y' />
+   </group>
+  </message>
+  
+  <message name='PlatformStateInfo' msgtype='U102' msgcat='app'>
+   <field name='PlatformID' required='Y' />
+   <field name='PlatformStatus' required='Y' />
+  </message>
+  
+  <message name='ReportFinished' msgtype='U103' msgcat='app'>
+   <field name='PartitionNo' required='Y' />
+   <field name='ReportIndex' required='Y' />
+   <field name='PlatformID' required='Y' />
+  </message>
+  
+  <message name='PlatformInfo' msgtype='U104' msgcat='app'>
+   <field name='PlatformID' required='Y' />
+   <group name='NoPartitions' required='Y'>
+    <field name='PartitionNo' required='Y' />
+   </group>
+  </message>
+  
  </messages>
  <trailer />
  <components>
@@ -5505,6 +5531,10 @@
    <value enum='x' description='SECURITYLISTREQUEST' />
    <value enum='y' description='SECURITYLIST' />
    <value enum='z' description='DERIVATIVESECURITYLISTREQUEST' />
+   <value enum='U101' description='ReportSynchronization' />
+   <value enum='U102' description='PlatformStateInfo' />
+   <value enum='U103' description='ReportFinished' />
+   <value enum='U104' description='PlatformInfo' />
   </field>
   <field number='36' name='NewSeqNo' type='SEQNUM' />
   <field number='37' name='OrderID' type='STRING' />

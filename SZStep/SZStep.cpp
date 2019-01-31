@@ -5,6 +5,29 @@ namespace SZStep
 {
 namespace ToFix 
 {
+	void formatPlatformStateInfo(const PlatformStateInfo& stateInfo, FIX::Message& msg)
+	{
+		msg.getHeader().setField(FIX::MsgType("U102"));
+		FIX::PlatformID platformIDField(stateInfo.platformID);
+		FIX::PlatformStatus platformStatusField(stateInfo.platformStatus);
+		msg.setField(platformIDField);
+		msg.setField(platformStatusField);
+	}
+
+	void formatPlatformInfo(const PlatformInfo& info, FIX::Message& msg)
+	{
+		msg.getHeader().setField(FIX::MsgType("U104"));
+		FIX::PlatformID platformIDField(info.platformID);
+		msg.setField(platformIDField);
+		FIX::Group partition(FIX::FIELD::NoPartitions, FIX::FIELD::PartitionNo);
+		for (int i = 0; i < info.partitionIDs.size(); i++)
+		{
+			FIX::PartitionNo partitionNoField(info.partitionIDs[i]);
+			partition.setField(partitionNoField);
+			msg.addGroup(partition);
+		}
+	}
+
 	void formatInputOrderField(const FTD::CFtdcInputOrderField& inputOrder, FIX::Message& msg)
 	{
 		//ApplID
@@ -106,6 +129,45 @@ namespace ToFix
 
 namespace FromFix
 {
+	bool convertPlatformStateInfo(const FIX::Message& msg, PlatformStateInfo& stateInfo)
+	{
+		bool convertResult = true;
+
+		try
+		{
+			stateInfo.platformID = FIX::IntConvertor::convert(msg.getField(FIX::FIELD::PlatformID));
+			stateInfo.platformStatus = FIX::IntConvertor::convert(msg.getField(FIX::FIELD::PlatformStatus));
+		}
+		catch (...)
+		{
+			convertResult = false;
+		}
+		return convertResult;
+	}
+
+	bool convertPlatformInfo(const FIX::Message& msg, PlatformInfo& info)
+	{
+		bool convertResult = true;
+
+		try
+		{
+			info.platformID = FIX::IntConvertor::convert(msg.getField(FIX::FIELD::PlatformID));
+
+			int partitionCount = FIX::IntConvertor::convert(msg.getField(FIX::FIELD::NoPartitions));
+			FIX::Group partition(FIX::FIELD::NoPartitions, FIX::FIELD::PartitionNo);
+			for (int i = 1; i <= partitionCount; i++)
+			{
+				msg.getGroup(i, partition);
+				info.partitionIDs.push_back(FIX::IntConvertor::convert(partition.getField(FIX::FIELD::PartitionNo)));
+			}
+		}
+		catch (...)
+		{
+			convertResult = false;
+		}
+		return convertResult;
+	}
+
 	bool convertInputOrderField(const FIX::Message& msg, FTD::CFtdcInputOrderField& order)
 	{
 		bool convertResult = true;

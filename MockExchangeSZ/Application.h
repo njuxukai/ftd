@@ -24,24 +24,16 @@
 
 #include "quickfix/Application.h"
 #include "quickfix/MessageCracker.h"
-#include "quickfix/Values.h"
-#include "quickfix/Utility.h"
-#include "quickfix/Mutex.h"
 
-#include "quickfix/fix40/NewOrderSingle.h"
-#include "quickfix/fix41/NewOrderSingle.h"
-#include "quickfix/fix42/NewOrderSingle.h"
-#include "quickfix/fix43/NewOrderSingle.h"
-#include "quickfix/fix44/NewOrderSingle.h"
-#include "quickfix/fix50/NewOrderSingle.h"
+
 #include <quickfix/fix50sp2/NewOrderSingle.h>
-
+#include "SZStep.h"
 
 class Application
 : public FIX::Application, public FIX::MessageCracker
 {
 public:
-  Application() : m_orderID(0), m_execID(0) {}
+	Application(int platformID = 1);
 
   // Application overloads
   void onCreate( const FIX::SessionID& );
@@ -56,7 +48,6 @@ public:
     throw( FIX::FieldNotFound, FIX::IncorrectDataFormat, FIX::IncorrectTagValue, FIX::UnsupportedMessageType );
 
   // MessageCracker overloads
-  void onMessage( const FIX50::NewOrderSingle&, const FIX::SessionID& );
   void onMessage(const FIX50SP2::NewOrderSingle&, const FIX::SessionID&);
 
   std::string genOrderID() {
@@ -71,6 +62,13 @@ public:
   }
 private:
   int m_orderID, m_execID;
+  int m_platformID;
+  SZStep::PlatformStateInfo m_stateInfo;
+  SZStep::PlatformInfo m_info;
+
+private:
+	FIX50SP2::Message generatePlatformStateInfo();
+	FIX50SP2::Message generatePlatformInfo();
 };
 
 #endif
