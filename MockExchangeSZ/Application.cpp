@@ -89,6 +89,11 @@ throw( FIX::FieldNotFound, FIX::IncorrectDataFormat, FIX::IncorrectTagValue, FIX
 		onStepNewOrderSingle(message, sessionID);
 		return;
 	}
+	if (strMsgType == "F")
+	{
+		onStepOrderCancelRequest(message, sessionID);
+		return;
+	}
 }
 
 
@@ -112,6 +117,17 @@ void Application::onStepReportSynchronization(const FIX::Message& message, const
 	{
 	}
 }
+
+
+void Application::onStepOrderCancelRequest(const FIX::Message& message, const FIX::SessionID& sessionID)
+{
+	SZStep::ReportSynchronization reportSync;
+	bool convertResult = SZStep::FromFix::convertReportSynchronization(message, reportSync);
+	if (convertResult)
+	{
+	}
+}
+
 
 FIX50SP2::Message Application::generatePlatformStateInfo()
 {

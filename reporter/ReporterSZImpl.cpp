@@ -149,6 +149,11 @@ throw(FIX::FieldNotFound, FIX::IncorrectDataFormat, FIX::IncorrectTagValue, FIX:
 		onStepCancelReject(message, sessionID);
 		return;
 	}
+	if (strMsgType == "j")
+	{
+		onStepBusinessReject(message, sessionID);
+		return;
+	}
 }
 
 
@@ -219,6 +224,9 @@ void ReporterSZSTEPImpl::onStepExecutionReport(const FIX::Message& message, cons
 {}
 
 void ReporterSZSTEPImpl::onStepCancelReject(const FIX::Message& message, const FIX::SessionID& sessionID)
+{}
+
+void ReporterSZSTEPImpl::onStepBusinessReject(const FIX::Message& message, const FIX::SessionID& sessionID)
 {}
 
 	

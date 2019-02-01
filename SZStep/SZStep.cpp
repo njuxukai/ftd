@@ -145,6 +145,19 @@ namespace ToFix
 		//CashMargin
 	}
 
+	void formatInputOrderActionField(const FTD::CFtdcInputOrderActionField& inputOrderAction, FIX::Message& msg)
+	{}
+
+	void formatInnerExecutionReport(const FTD::CFtdcInnerExecutionReportField& report, FIX::Message& msg)
+	{}
+
+	void formatInnerOrderCancelReject(const FTD::CFtdcInnerOrderCancelRejectField& report, FIX::Message& msg)
+	{}
+
+	void formatInnerBusinessReject(const FTD::CFtdcInnerBusinessRejectField& report, FIX::Message& msg)
+	{}
+
+
 }
 
 namespace FromFix
@@ -311,5 +324,60 @@ namespace FromFix
 		}
 		return convertResult;
 	}
+
+
+	bool convertInputOrderActionField(const FIX::Message& msg, FTD::CFtdcInputOrderActionField& req)
+	{
+		bool convertResult = true;
+		try
+		{
+		}
+		catch (...)
+		{
+			convertResult = false;
+		}
+		return convertResult;
+	}
+
+	bool convertInnerExecutionReport(const FIX::Message& msg, FTD::CFtdcInnerExecutionReportField& report)
+	{
+		bool convertResult = true;
+		try
+		{
+		}
+		catch (...)
+		{
+			convertResult = false;
+		}
+		return convertResult;
+	}
+
+	bool convertInnerOrderCancelReject(const FIX::Message& msg, FTD::CFtdcInnerOrderCancelRejectField& report)
+	{
+		bool convertResult = true;
+		try
+		{
+		}
+		catch (...)
+		{
+			convertResult = false;
+		}
+		return convertResult;
+	}
+
+	bool convertInnerBusinessReject(const FIX::Message& msg, FTD::CFtdcInnerBusinessRejectField& report)
+	{
+		bool convertResult = true;
+		try
+		{
+		}
+		catch (...)
+		{
+			convertResult = false;
+		}
+		return convertResult;
+	}
+
+
 }
 }

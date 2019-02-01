@@ -245,11 +245,29 @@
 		</packageDefine>
 		
 		<packageDefine name="ReqRptBackExecutionReport" tid="TID_RptBackExecutionReport" model="dialog" comment="报盘-委托执行回报请求">
-			<field name="InputOrderActionField" maxOccur="1" minOccur="1" comment="输入报单操作域"/>
+			<field name="InnerExecutionReportField" maxOccur="1" minOccur="1" comment="输入报单操作域"/>
 		</packageDefine>
 		
 		<packageDefine name="RspRptBackExecutionReport" tid="TID_RptBackExecutionReport" model="dialog" comment="报单-委托执行回报应答">
-			<field name="InputOrderActionField" maxOccur="1" minOccur="1" comment="报单操作域"/>
+			<field name="InnerExecutionReportField" maxOccur="1" minOccur="1" comment="报单操作域"/>
+			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
+		</packageDefine>
+		
+		<packageDefine name="ReqRptBackBusinessReject" tid="TID_RptBackBusinessReject" model="dialog" comment="报盘-业务拒绝回报请求">
+			<field name="InnerBusinessRejectField" maxOccur="1" minOccur="1" comment="业务拒绝回报域"/>
+		</packageDefine>
+		
+		<packageDefine name="RspRptBackBusinessReject" tid="TID_RptBackBusinessReject" model="dialog" comment="报单-业务拒绝回报应答">
+			<field name="InnerBusinessRejectField" maxOccur="1" minOccur="1" comment="业务拒绝回报域"/>
+			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
+		</packageDefine>
+		
+		<packageDefine name="ReqRptBackInnerOrderCancelReject" tid="TID_RptBackInnerOrderCancelReject" model="dialog" comment="报盘-撤单拒绝回报请求">
+			<field name="InnerOrderCancelRejectField" maxOccur="1" minOccur="1" comment="撤单拒绝域"/>
+		</packageDefine>
+		
+		<packageDefine name="RspRptBackInnerOrderCancelReject" tid="TID_RptBackInnerOrderCancelReject" model="dialog" comment="报单-撤单拒绝回报应答">
+			<field name="InnerOrderCancelRejectField" maxOccur="1" minOccur="1" comment="撤单拒绝域"/>
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
@@ -286,6 +304,8 @@
 		<tidDefine name="TID_RptOrderInsert" value="4001"/>
 		<tidDefine name="TID_RptOrderAction" value="4002"/>
 		<tidDefine name="TID_RptBackExecutionReport" value="4003"/>
+		<tidDefine name="TID_RptBackBusinessReject" value="4004"/>
+		<tidDefine name="TID_RptBackInnerOrderCancelReject" value="4005"/>
 	</tids>
 	
 		<fields>
@@ -783,7 +803,13 @@
         <item name="ExchangeType" comment="市场代码"/>
         <item name="SecurityAccount" comment="证券代码"/>
       </fieldDefine>
+	  
+	  <fieldDefine name="InnerBusinessRejectField" fid="FID_InnerBusinessRejectField" fidValue="0x002C" comment="业务拒绝回报域">
+	  </fieldDefine>
       
+	  <fieldDefine name="InnerOrderCancelRejectField" fid="FID_InnerOrderCancelRejectField" fidValue="0x002D" comment="撤单拒绝回报域">
+	  </fieldDefine>
+	  
 	</fields>
 		
 		

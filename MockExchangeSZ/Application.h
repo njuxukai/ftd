@@ -71,6 +71,7 @@ private:
 private:
 	void onStepNewOrderSingle(const FIX::Message& message, const FIX::SessionID& id);
 	void onStepReportSynchronization(const FIX::Message& message, const FIX::SessionID& id);
+	void onStepOrderCancelRequest(const FIX::Message& message, const FIX::SessionID& id);
 };
 
 #endif

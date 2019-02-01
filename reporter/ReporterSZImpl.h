@@ -54,5 +54,5 @@ private:
 	void onStepReportFinished(const FIX::Message& message, const FIX::SessionID& sessionID);
 	void onStepExecutionReport(const FIX::Message& message, const FIX::SessionID& sessionID);
 	void onStepCancelReject(const FIX::Message& message, const FIX::SessionID& sessionID);
-
+	void onStepBusinessReject(const FIX::Message& message, const FIX::SessionID& sessionID);
 };

@@ -59,6 +59,8 @@ SUITE(AutoGen)
             CHECK(sizeof(CXcpFtdcDialogSpecField) >= 0);
             CHECK(sizeof(CXcpFtdcQrySecurityAccountField) >= 0);
             CHECK(sizeof(CXcpFtdcSecurityAccountField) >= 0);
+            CHECK(sizeof(CXcpFtdcInnerBusinessRejectField) >= 0);
+            CHECK(sizeof(CXcpFtdcInnerOrderCancelRejectField) >= 0);
 
             CHECK(sizeof(CXcpFtdcErrorField) == sizeof(CFtdcErrorField));
             CHECK(sizeof(CXcpFtdcRequestSourceField) == sizeof(CFtdcRequestSourceField));
@@ -102,6 +104,8 @@ SUITE(AutoGen)
             CHECK(sizeof(CXcpFtdcDialogSpecField) == sizeof(CFtdcDialogSpecField));
             CHECK(sizeof(CXcpFtdcQrySecurityAccountField) == sizeof(CFtdcQrySecurityAccountField));
             CHECK(sizeof(CXcpFtdcSecurityAccountField) == sizeof(CFtdcSecurityAccountField));
+            CHECK(sizeof(CXcpFtdcInnerBusinessRejectField) == sizeof(CFtdcInnerBusinessRejectField));
+            CHECK(sizeof(CXcpFtdcInnerOrderCancelRejectField) == sizeof(CFtdcInnerOrderCancelRejectField));
 		//CHECK(sizeof(CXcpFtdcOrderField) == sizeof(OrderField));
 	}
 }
