@@ -89,8 +89,9 @@
     </Link>
     <PreBuildEvent>
       <Command>xcopy  mock_exchange_sz.cfg   /Y/I  ..\export\$(Configuration)\$(ProjectName)\
-
-xcopy  step\*.* /Y/I  ..\export\$(Configuration)\$(ProjectName)\step\ /s /e</Command>
+xcopy  step\*.* /Y/I  ..\export\$(Configuration)\$(ProjectName)\step\ /s /e
+xcopy  $(SolutionDir)\spec\FIXT11.xml /Y/I  ..\export\$(Configuration)\$(ProjectName)\step\spec\
+xcopy  $(SolutionDir)\spec\szstep1.11.xml /Y/I  ..\export\$(Configuration)\$(ProjectName)\step\spec\</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

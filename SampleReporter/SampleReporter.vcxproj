@@ -109,7 +109,9 @@ xcopy  ..\export\$(Configuration)\reporter.*   /Y/I  ..\export\$(Configuration)\
 
 xcopy  ..\export\$(Configuration)\mqclient.*   /Y/I  ..\export\$(Configuration)\$(ProjectName)\
 
-xcopy  ..\import\lib\win32\debug\SimpleAmqpClient.2.*   /Y/I  ..\export\$(Configuration)\$(ProjectName)\</Command>
+xcopy  ..\import\lib\win32\debug\SimpleAmqpClient.2.*   /Y/I  ..\export\$(Configuration)\$(ProjectName)\
+xcopy  $(SolutionDir)\spec\FIXT11.xml /Y/I  ..\export\$(Configuration)\$(ProjectName)\step\spec\
+xcopy  $(SolutionDir)\spec\szstep1.11.xml /Y/I  ..\export\$(Configuration)\$(ProjectName)\step\spec\</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
