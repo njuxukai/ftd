@@ -714,6 +714,7 @@
 		</fieldDefine>
 		
 		<fieldDefine name="InnerExecutionReportField" fid="FID_InnerExecutionReportField" fidValue="0x0026" comment="报单执行报告域">
+			<item name="InvestorID" comment="客户ID"/>
 			<item name="PartitionNO" comment="平台分区号"/>
 			<item name="ReportIndex" comment="回报记录号"/>
 			<item name="ApplID" comment="原始订单应用标识"/>
@@ -740,10 +741,7 @@
 			
 			<item name="VolumeTotalOrginal" comment="订单数量"/>
 			<item name="LimitPrice" comment="价格"/>
-			<item name="StopPrice" comment="止损价"/>
-			<item name="SequenceSeries" comment="序列类别号(同UserID)"/>
-			<item name="SequenceNo" comment="序列号"/>
-			<item name="BranchID" comment="营业部编号"/>
+			<item name="PbuID" comment="PbuID"/>
 		</fieldDefine>
 		
 		<fieldDefine name="ExecutionReportField" fid="FID_ExecutionReportField" fidValue="0x0027" comment="报单执行报告域">
