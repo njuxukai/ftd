@@ -45,15 +45,15 @@ void wait()
 int main( int argc, char** argv )
 {
 
-  std::string file = "step/executor.cfg";
+  std::string stepSpecFile = "step/executor.cfg";
   
 
   FIX::Acceptor * acceptor = 0;
   try
   {
-    FIX::SessionSettings settings( file );
+    FIX::SessionSettings settings(stepSpecFile);
 
-    Application application;
+    Application application("mock_exchange_sz.cfg");
     //FIX::FileStoreFactory storeFactory( settings );
 	FIX::MemoryStoreFactory storeFactory;
     FIX::ScreenLogFactory logFactory( settings );

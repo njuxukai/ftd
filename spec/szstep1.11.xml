@@ -818,14 +818,13 @@
   <message name='BusinessMessageReject' msgtype='j' msgcat='app'>
    <field name='RefSeqNum' required='N' />
    <field name='RefMsgType' required='Y' />
-   <field name='RefApplVerID' required='N' />
-   <field name='RefApplExtID' required='N' />
-   <field name='RefCstmApplVerID' required='N' />
+   <field name='ApplID' required='N' />
+   <field name='TransactTime' required='Y' />
+   <component name='Instrument' required='Y' />
+   <component name='Parties' required='N' />
    <field name='BusinessRejectRefID' required='N' />
    <field name='BusinessRejectReason' required='Y' />
    <field name='Text' required='N' />
-   <field name='EncodedTextLen' required='N' />
-   <field name='EncodedText' required='N' />
   </message>
   <message name='BidRequest' msgtype='k' msgcat='app'>
    <field name='BidID' required='N' />
@@ -5484,7 +5483,7 @@
    <value enum='8' description='GOOD_THROUGH_CROSSING' />
    <value enum='9' description='AT_CROSSING' />
   </field>
-  <field number='60' name='TransactTime' type='UTCTIMESTAMP' />
+  <field number='60' name='TransactTime' type='LOCALTIMESTAMP' />
   <field number='61' name='Urgency' type='CHAR'>
    <value enum='0' description='NORMAL' />
    <value enum='1' description='FLASH' />

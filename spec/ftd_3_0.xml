@@ -714,33 +714,33 @@
 		</fieldDefine>
 		
 		<fieldDefine name="InnerExecutionReportField" fid="FID_InnerExecutionReportField" fidValue="0x0026" comment="报单执行报告域">
-			<item name="BrokerID" comment="经纪公司代码"/>
-			<item name="UserID" comment="用户代码"/>
-			<item name="InvestorID" comment="投资者代码"/>
+			<item name="PartitionNO" comment="平台分区号"/>
+			<item name="ReportIndex" comment="回报记录号"/>
+			<item name="ApplID" comment="原始订单应用标识"/>
+			<item name="OwnerType" comment="订单所有者类型"/>
+			<item name="OrderRestrictions" comment="订单限定"/>
+			<item name="ReportExchangeID" comment="报告在交易所编号"/>
+			<item name="ReportExchangeSubID" comment="二级编号(深ETF申购赎回)"/>
+			<item name="OrderExchangeID" comment="报单在交易所编号"/>
+			<item name="ExecType" comment="执行类型"/>			
+			<item name="OrderStatus" comment="订单状态"/>
+			<item name="PriceLast" comment="新增成交价格"/>
+			<item name="VolumeLast" comment="新增成交数量"/>
+			<item name="VolumeLeaves" comment="剩余量"/>
+			<item name="VolumeCum" comment="累计成交数量"/>
+			<item name="OrderRejReason" comment="撤单&#47;拒绝原因代码"/>
+			<item name="OrderRejText" comment="撤单&#47;拒绝原因说明"/>
+			<item name="Direction" comment="买卖方向"/>
+			<item name="ClOrdID" comment="报单的报盘编号"/>
+			<item name="ActionClOrdID" comment="撤单的报盘编号"/>
+			<item name="OrderExchangeID" comment="委托在交易所编号"/>
+			<item name="ActionExchangeID" comment="撤单在交易所编号"/>
 			<item name="InstrumentCode" comment="证券代码"/>
 			<item name="ExchangeType" comment="交易所代码"/>
-			<item name="RequestID" comment="请求编号"/>			
-			<item name="Direction" comment="报单价格方向"/>
-			<item name="PriceType" comment="报单价格条件"/>
-			<item name="LimitPrice" comment="限制价格"/>
-			<item name="VolumeTotalOrginal" comment="报单数量"/>
-			<item name="VolumeCum" comment="成交数量"/>
-			<item name="AmountCum" comment="成交金额"/>
-			<item name="VolumeLeaves" comment="剩余数量"/>
-			<item name="OrderStatus" comment="报单状态"/>
-			<item name="OrderSysID" comment="报单在柜台系统编号"/>
-			<item name="ClOrdID" comment="报单的报盘编号"/>
-			<item name="OrderExchangeID" comment="报单在交易所编号"/>
-			<item name="ActionSysID" comment="撤单在柜台系统编号"/>
-			<item name="ActionClOrdID" comment="撤单在柜台系统编号"/>
-			<item name="ActionExchangeID" comment="撤单在交易所编号"/>
-			<item name="TradingDay" comment="交易日"/>
-			<item name="VolumeLast" comment="新增成交数量"/>
-			<item name="PriceLast" comment="新增成交价格"/>
-			<item name="AmountLast" comment="新增成交金额"/>
-			<item name="ReportDate" comment="成交日期"/>
-			<item name="ReportTime" comment="成交时间"/>
-			<item name="ReportSysID" comment="成交回报在柜台编号"/>
+			
+			<item name="VolumeTotalOrginal" comment="订单数量"/>
+			<item name="LimitPrice" comment="价格"/>
+			<item name="StopPrice" comment="止损价"/>
 			<item name="SequenceSeries" comment="序列类别号(同UserID)"/>
 			<item name="SequenceNo" comment="序列号"/>
 			<item name="BranchID" comment="营业部编号"/>
