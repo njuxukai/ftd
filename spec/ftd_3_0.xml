@@ -731,6 +731,7 @@
 			<item name="OrderRejReason" comment="撤单&#47;拒绝原因代码"/>
 			<item name="OrderRejText" comment="撤单&#47;拒绝原因说明"/>
 			<item name="Direction" comment="买卖方向"/>
+			<item name="TransactimeString" comment="订单或执行的时间戳字符串"/>
 			<item name="ClOrdID" comment="报单的报盘编号"/>
 			<item name="ActionClOrdID" comment="撤单的报盘编号"/>
 			<item name="OrderExchangeID" comment="委托在交易所编号"/>
@@ -740,6 +741,8 @@
 			
 			<item name="VolumeTotalOrginal" comment="订单数量"/>
 			<item name="LimitPrice" comment="价格"/>
+			<item name="SecurityAccount" comment="证券账户"/>
+			<item name="ExchangeBranchID" comment="交易所营业部编号"/>
 			<item name="PbuID" comment="PbuID"/>
 		</fieldDefine>
 		
@@ -927,6 +930,7 @@
 		<itemDefine name="StatusSubscribe" type="FTDBoolFlag" comment="ETF是否允许申购"/>
 		<itemDefine name="StatusRedemption" type="FTDBoolFlag" comment="ETF是否允许赎回"/>
 		<itemDefine name="SecurityAccount" type="FTDSecurityAccount" comment="证券账号"/>	
+		<itemDefine name="TransactimeString" type="FTDTimeStampString" comment="执行时间戳"/>
 		<itemDefine name="TimeStamp" type="FTDTimeStamp" comment="时间戳"/>
 		<itemDefine name="TradingDay" type="FTDDate" comment="交易日"/>
 		<itemDefine name="TradeDate" type="FTDDate" comment="成交日期"/>
@@ -934,7 +938,7 @@
 		<itemDefine name="TradeSysID" type="FTDIntType" comment="成交回报在柜台编号"/>
 		<itemDefine name="TradeExchangeID" type="FTDTradeExchangeID" comment="成交在交易所编号"/>
 		<itemDefine name="TotalAmount" type="FTDValue" comment="最小申赎单位净值总金额"/>
-		<itemDefine name="TestTimestamp" type="FTDTimeStamp2" comment="时间戳"/>
+		<itemDefine name="TestTimestamp" type="FTDTimeStamp" comment="时间戳"/>
 		
 		
 		<itemDefine name="UserID" type="FTDUserID" comment="用户代码"/>
@@ -1044,11 +1048,11 @@
 		</typeDefine>
 		<typeDefine name="FTDOrderStatus" baseType="FTDCharType" length="1" precision="0">
 			<enumValue name="0" comment="系统已创建" enname="CREATED"/>
-			<enumValue name="1" comment="交易所已创建" enname="QUEUEED"/>
+			<enumValue name="1" comment="交易所已创建" enname="NEW"/>
 			<enumValue name="2" comment="全部成交" enname="ALL_TRADED"/>
-			<enumValue name="3" comment="部分成交还在队列中" enname="PART_TRADED"/>
-			<enumValue name="4" comment="部分成交不在队列中" enname="PART_CANCELLED"/>			
-			<enumValue name="5" comment="未成交不在队列中" enname="ALL_CANCELLED"/>
+			<enumValue name="3" comment="部分成交" enname="PART_TRADED"/>
+			<enumValue name="4" comment="已撤销" enname="CANCELLED"/>			
+			<enumValue name="5" comment="撤单被拒绝" enname="REJECTED"/>
 		</typeDefine>
 		<typeDefine name="FTDOrderPriceType" baseType="FTDCharType" length="1" precision="0">
 			<enumValue name="0" comment="沪深:限价" enname="HS_Limit"/>
@@ -1075,10 +1079,8 @@
 		</typeDefine>
 		<typeDefine name="FTDTime" baseType="FTDStringType&lt;8&gt;" comment="hh24nnsscc" length="8" precision="0"/>
 		<typeDefine name="FTDTimeOut" baseType="FTDNumberType&lt;3&gt;" length="3" precision="0"/>
-		<typeDefine name="FTDTimeStamp" baseType="FTDStringType&lt;20&gt;" comment="Unix系统UTC时间" length="20" precision="0"/>
-		<typeDefine name="FTDTimeStampSecs" baseType="FTDIntType" comment="UTC时间(1970-1-1:00:00:00至今秒数)" length="4" precision="0"/>
-		<typeDefine name="FTDTimeStampNanoecs" baseType="FTDIntType" comment="UTC时间(纳秒尾数)" length="4" precision="0"/>
-		<typeDefine name="FTDTimeStamp2" baseType="FTDInt64Type" comment="Unix系统UTC时间" length="8" precision="0"/>
+		<typeDefine name="FTDTimeStampString" baseType="FTDStringType&lt;27&gt;" comment="时间戳字符串" length="20" precision="0"/>
+		<typeDefine name="FTDTimeStamp" baseType="FTDInt64Type" comment="Unix系统UTC时间" length="8" precision="0"/>
 		<typeDefine name="FTDUserID" baseType="FTDIntType" length="4" precision="0"/>
 		<typeDefine name="FTDValue" baseType="FTDFloatType&lt;14,2&gt;" length="14" precision="2"/>
 		<typeDefine name="FTDVolume" baseType="FTDIntType" length="4" precision="0"/>

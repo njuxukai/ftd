@@ -351,46 +351,132 @@ namespace FromFix
 		try
 		{
 			//PartitionNo
-
+			report.PartitionNo = FIX::IntConvertor::convert(msg.getField(FIX::FIELD::PartitionNo));
 			//ReportIndex
-
+			report.ReportIndex = FIX::IntConvertor::convert(msg.getField(FIX::FIELD::ReportIndex));
 			//ApplID
-
+			strcpy(report.ApplID, msg.getField(FIX::FIELD::ApplID).data());
 			//OwnerType
-
+			report.OwnerType = FIX::IntConvertor::convert(msg.getField(FIX::FIELD::OwnerType));
 			//OrderRestrictions
-
+			if (msg.isSetField(FIX::FIELD::OrderRestrictions))
+			{
+				strcpy(report.OrderRestrictions, msg.getField(FIX::FIELD::OrderRestrictions).data());
+			}			
 			//ExecID
-
+			strcpy(report.ReportExchangeID, msg.getField(FIX::FIELD::ExecID).data());
+			report.ReportExchangeSubID = 0;
 			//OrderID
-
+			strcpy(report.OrderExchangeID, msg.getField(FIX::FIELD::OrderID).data());
 			//ExecType
-
+			char fixExecType = FIX::CharConvertor::convert(msg.getField(FIX::FIELD::ExecID));
+			switch (fixExecType)
+			{
+			case('0') :
+				report.ExecType = FTDC_ET_New;
+				break;
+			case('4') :
+				report.ExecType = FTDC_ET_Cancelled;
+				break;
+			case('8') :
+				report.ExecType = FTDC_ET_Rejected;
+				break;
+			case('F') :
+				report.ExecType = FTDC_ET_Trade;
+				break;
+			default:
+				break;
+			}
 			//OrdStatus
-
+			char fixOrdStatus = FIX::CharConvertor::convert(msg.getField(FIX::FIELD::OrdStatus));
+			switch (fixOrdStatus)
+			{
+			case '0':
+				report.OrderStatus = FTDC_OS_NEW;
+				break;
+			case '1':
+				report.OrderStatus = FTDC_OS_PART_TRADED;
+				break;
+			case '2':
+				report.OrderStatus = FTDC_OS_ALL_TRADED;
+				break;
+			case '4':
+				report.OrderStatus = FTDC_OS_CANCELLED;
+				break;
+			case '8':
+				report.OrderStatus = FTDC_OS_REJECTED;
+				break;
+			default:
+				break;
+			}
 			//LastPx
-
+			if (msg.isSetField(FIX::FIELD::LastPx))
+			{
+				report.PriceLast = FIX::DoubleConvertor::convert(msg.getField(FIX::FIELD::LastPx));
+			}			
 			//LastQty
-
+			if (msg.isSetField(FIX::FIELD::LastQty))
+			{
+				report.VolumeLast = FIX::IntConvertor::convert(msg.getField(FIX::FIELD::LastQty));
+			}
+			
 			//LeavesQty
-
+			report.VolumeLeaves = FIX::IntConvertor::convert(msg.getField(FIX::FIELD::LeavesQty));
 			//CumQty
-
+			report.VolumeCum = FIX::IntConvertor::convert(msg.getField(FIX::FIELD::CumQty));
 			//OrdRejReasion
-
+			if (msg.isSetField(FIX::FIELD::OrdRejReason))
+			{
+				report.OrderRejReason = FIX::IntConvertor::convert(msg.getField(FIX::FIELD::OrdRejReason));
+			}
 			//RejectText
-
+			if (msg.isSetField(FIX::FIELD::RejectText))
+			{
+				strcpy(report.OrderRejText, msg.getField(FIX::FIELD::RejectText).data());
+			}
 			//Side
-
+			char fixSide = FIX::CharConvertor::convert(msg.getField(FIX::FIELD::Side));
+			if (fixSide == FIX::Side_BUY)
+				report.Direction = FTDC_D_BUY;
+			else
+				report.Direction = FTDC_D_SELL;
 			//TransactTime
-
-			//ClOrdID
-
-			//OrigClOrdID
-
+			strcpy(report.TransactimeString, msg.getField(FIX::FIELD::TransactTime).data());
+			
+			//OrigClOrdID ClOrdID
+			if (msg.isSetField(FIX::FIELD::OrigClOrdID))
+			{
+				strcpy(report.ClOrdID, msg.getField(FIX::FIELD::OrigClOrdID).data());
+				strcpy(report.ActionClOrdID, msg.getField(FIX::FIELD::ClOrdID).data());
+			}
+			else
+			{
+				strcpy(report.ClOrdID, msg.getField(FIX::FIELD::ClOrdID).data());
+			}
 			//Instrument SecurityID SecurityIDSource
-
+			strcpy(report.InstrumentCode, msg.getField(FIX::FIELD::SecurityID).data());
+			report.ExchangeType = FTDC_ET_SZ;
 			//Parties
+			//Groups Parties
+			int partyCount = FIX::IntConvertor::convert(msg.getField(FIX::FIELD::NoPartyIDs));
+			FIX::Group party(FIX::FIELD::NoPartyIDs, FIX::FIELD::PartyID);
+			for (int i = 1; i <= partyCount; i++)
+			{
+				msg.getGroup(i, party);
+				char sourceData = FIX::CharConvertor::convert(party.getField(FIX::FIELD::PartyIDSource));
+				std::string source = party.getField(FIX::FIELD::PartyID);
+				switch (sourceData)
+				{
+				case '5':
+					strcpy(report.SecurityAccount, source.data());
+					break;
+				case 'C':
+					report.PbuID = atoi(source.data());
+					break;
+				case 'D':
+					report.ExchangeBranchID = atoi(source.data());
+				}
+			}
 		}
 		catch (...)
 		{
