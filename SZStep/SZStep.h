@@ -113,6 +113,7 @@ namespace SZStep
 	{
 		int partitonNo;
 		int reportIndex;
+		int platformID;
 	};
 
 	struct PlatformInfo
@@ -135,7 +136,12 @@ namespace SZStep
 
 		void formatInputOrderField(const FTD::CFtdcInputOrderField& inputOrder, FIX::Message& msg);
 		void formatInputOrderActionField(const FTD::CFtdcInputOrderActionField& inputOrderAction, FIX::Message& msg);
+		
+		//普通的成交回报，如果是ETF申购赎回则需要增加接口
 		void formatInnerExecutionReport(const FTD::CFtdcInnerExecutionReportField& report, FIX::Message& msg);
+		//ETF申购赎回成交回报转换
+		void formatETFInnerExectionReport(const std::vector<FTD::CFtdcInnerExecutionReportField>& reports, FIX::Message& msg);
+
 		void formatInnerOrderCancelReject(const FTD::CFtdcInnerOrderCancelRejectField& report, FIX::Message& msg);
 		void formatInnerBusinessReject(const FTD::CFtdcInnerBusinessRejectField& report, FIX::Message& msg);
 	};
@@ -149,7 +155,13 @@ namespace SZStep
 
 		bool convertInputOrderField(const FIX::Message& msg, FTD::CFtdcInputOrderField& req);
 		bool convertInputOrderActionField(const FIX::Message& msg, FTD::CFtdcInputOrderActionField& req);
+
+		//普通的成交回报，如果是ETF申购赎回则需要增加接口
 		bool convertInnerExecutionReport(const FIX::Message& msg, FTD::CFtdcInnerExecutionReportField& report);
+		//ETF申购赎回成交回报转换
+		bool convertETFInnerExecutionReport(const FIX::Message& msg,
+			std::vector<FTD::CFtdcInnerExecutionReportField>& reports);
+
 		bool convertInnerOrderCancelReject(const FIX::Message& msg, FTD::CFtdcInnerOrderCancelRejectField& report);
 		bool convertInnerBusinessReject(const FIX::Message& msg, FTD::CFtdcInnerBusinessRejectField& report);
 	};

@@ -23,6 +23,8 @@ namespace ToFix
 		msg.getHeader().setField(FIX::MsgType(MSG_TYPE_REPORT_FINISHED));
 		msg.setField(FIX::PlatformID(reportFinished.partitonNo));
 		msg.setField(FIX::ReportIndex(reportFinished.reportIndex));
+		msg.setField(FIX::PlatformID
+			(reportFinished.platformID));
 	}
 
 	void formatPlatformStateInfo(const PlatformStateInfo& stateInfo, FIX::Message& msg)
@@ -149,7 +151,9 @@ namespace ToFix
 	{}
 
 	void formatInnerExecutionReport(const FTD::CFtdcInnerExecutionReportField& report, FIX::Message& msg)
-	{}
+	{
+		msg.getHeader().setField(FIX::MsgType("8"));
+	}
 
 	void formatInnerOrderCancelReject(const FTD::CFtdcInnerOrderCancelRejectField& report, FIX::Message& msg)
 	{}
@@ -192,6 +196,8 @@ namespace FromFix
 		{
 			reportFinished.partitonNo = FIX::IntConvertor::convert(msg.getField(FIX::FIELD::PartitionNo));
 			reportFinished.reportIndex = FIX::IntConvertor::convert(msg.getField(FIX::FIELD::ReportIndex));
+			reportFinished.platformID =
+				FIX::IntConvertor::convert(msg.getField(FIX::FIELD::PlatformID));
 		}
 		catch (...)
 		{
@@ -344,6 +350,47 @@ namespace FromFix
 		bool convertResult = true;
 		try
 		{
+			//PartitionNo
+
+			//ReportIndex
+
+			//ApplID
+
+			//OwnerType
+
+			//OrderRestrictions
+
+			//ExecID
+
+			//OrderID
+
+			//ExecType
+
+			//OrdStatus
+
+			//LastPx
+
+			//LastQty
+
+			//LeavesQty
+
+			//CumQty
+
+			//OrdRejReasion
+
+			//RejectText
+
+			//Side
+
+			//TransactTime
+
+			//ClOrdID
+
+			//OrigClOrdID
+
+			//Instrument SecurityID SecurityIDSource
+
+			//Parties
 		}
 		catch (...)
 		{

@@ -55,7 +55,7 @@
    <field name='TradingSessionSubID' required='N' />
   </message>
   <message name='ExecutionReport' msgtype='8' msgcat='app'>
-   <field name='PartitionID' required='Y' />
+   <field name='PartitionNo' required='Y' />
    <field name='ReportIndex' required='Y' />
    <field name='ApplID' required='Y' />
    <field name='OwnerType' required='Y' />
@@ -68,7 +68,7 @@
    <field name='LastQty' required='N' />
    <field name='LeavesQty' required='Y' />
    <field name='CumQty' required='Y' />
-   <field name='OrderRejReason' required='N' />
+   <field name='OrdRejReason' required='N' />
    <field name='RejectText' required='N' />
    <field name='Side' required='Y' />
    <field name='TransactTime' required='Y' />

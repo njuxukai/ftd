@@ -61,7 +61,7 @@ struct NewOrderProcessParameter
 
 	bool deal_as_all_trade(double r)
 	{
-		return r >= all_trade_order_begin and r <= all_trade_order_end;
+		return r >= all_trade_order_begin && r <= all_trade_order_end;
 	}
 };
 

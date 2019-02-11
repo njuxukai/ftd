@@ -715,14 +715,13 @@
 		
 		<fieldDefine name="InnerExecutionReportField" fid="FID_InnerExecutionReportField" fidValue="0x0026" comment="报单执行报告域">
 			<item name="InvestorID" comment="客户ID"/>
-			<item name="PartitionNO" comment="平台分区号"/>
+			<item name="PartitionNo" comment="平台分区号"/>
 			<item name="ReportIndex" comment="回报记录号"/>
 			<item name="ApplID" comment="原始订单应用标识"/>
 			<item name="OwnerType" comment="订单所有者类型"/>
 			<item name="OrderRestrictions" comment="订单限定"/>
 			<item name="ReportExchangeID" comment="报告在交易所编号"/>
 			<item name="ReportExchangeSubID" comment="二级编号(深ETF申购赎回)"/>
-			<item name="OrderExchangeID" comment="报单在交易所编号"/>
 			<item name="ExecType" comment="执行类型"/>			
 			<item name="OrderStatus" comment="订单状态"/>
 			<item name="PriceLast" comment="新增成交价格"/>
@@ -826,6 +825,7 @@
 		<itemDefine name="ActionSysID" type="FTDSysID" comment="撤单在柜台系统编号"/>
 	    <itemDefine name="ActionClOrdID" type="FTDClOrdID" comment="撤单在柜台系统编号"/>
 	    <itemDefine name="ActionExchangeID" type="FTDOrderExchangeID" comment="撤单在交易所编号"/>
+		<itemDefine name="ApplID" type="FTDStringType&lt;3&gt;" comment="原始订单应用标识"/>
 		
 		<itemDefine name="BrokerID" type="FTDIntType" comment="经纪公司代码"/>
 		<itemDefine name="BranchID" type="FTDIntType" comment="营业部编码"/>
@@ -853,6 +853,7 @@
 		<itemDefine name="ETFCompositionPremiumRatio" type="FTDRatio" comment="溢价比例"/>	
 		<itemDefine name="ETFCashSubsituteAmount" type="FTDValue" comment="成分股替代标识为必须现金替代时候的总金额"/>	
 		<itemDefine name="ExchangeBranchID" type="FTDIntType" comment="交易所营业部编码"/>
+		<itemDefine name="ExecType" type="FTDExecType" comment="执行类型"/>	
 		
 		<itemDefine name="FrontID" type="FTDIntType" comment="Front编号"/>
 		<itemDefine name="HeartbeatInterval" type="FTDIntType" comment="心跳间隔"/>
@@ -891,8 +892,13 @@
 		<itemDefine name="OrderExchangeID" type="FTDOrderExchangeID" comment="报单交易所编号"/>
 		<itemDefine name="OrderSysID" type="FTDSysID" comment="报单系统编码"/>
 		<itemDefine name="OrderStatus" type="FTDOrderStatus" comment="报单状态"/>
-		
+		<itemDefine name="OwnerType" type="FTDIntType" comment="订单所有者类型"/>
+		<itemDefine name="OrderRestrictions" type="FTDStringType&lt;7&gt;" comment="订单限定"/>
+		<itemDefine name="OrderRejReason" type="FTDIntType" comment="撤单&#47;拒绝原因代码"/>
+	    <itemDefine name="OrderRejText" type="FTDStringType&lt;16&gt;" comment="撤单&#47;拒绝原因说明"/>
+			
 		<itemDefine name="Password" type="FTDPassword" comment="密码"/>
+		<itemDefine name="PartitionNo" type="FTDIntType" comment="平台分区号"/>
 		<itemDefine name="ProtocolInfo" type="FTDProtocolVersion" comment="协议信息"/>
 		<itemDefine name="PriceType" type="FTDOrderPriceType" comment="报单价格条件"/>
 		<itemDefine name="PriceTrade" type="FTDPrice" comment="成交价格"/>
@@ -908,8 +914,11 @@
 		<itemDefine name="ReportDate" type="FTDDate" comment="报告日期"/>
 		<itemDefine name="ReportTime" type="FTDTime" comment="报告时间"/>
 		<itemDefine name="ReportSysID" type="FTDSysID" comment="报告在系统的编号"/>
-    <itemDefine name="RptQueue" type="FTDRptQueue" comment="报盘队列名"/>
-    
+        <itemDefine name="RptQueue" type="FTDRptQueue" comment="报盘队列名"/>
+		<itemDefine name="ReportIndex" type="FTDIntType" comment="回报记录号"/>
+		<itemDefine name="ReportExchangeID" type="FTDStringType&lt;16&gt;" comment="报告在交易所编号"/>
+		<itemDefine name="ReportExchangeSubID" type="FTDIntType" comment="二级编号(深ETF申购赎回"/>
+		
 		<itemDefine name="SessionID" type="FTDIntType" comment="会话编号"/>
 		<itemDefine name="SequenceSeries" type="FTDSequenceSeries" comment="序列类别号"/>
 		<itemDefine name="SequenceNo" type="FTDSequenceNo" comment="序列号"/>
@@ -1092,5 +1101,7 @@
 		</typeDefine>
     
     <typeDefine name="FTDRptQueue" baseType="FTDStringType&lt;30&gt;" comment="报盘队列" length="30" precision="0"/>
+	
+	
   </types>
 </ftd>
