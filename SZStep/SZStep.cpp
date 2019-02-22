@@ -153,6 +153,13 @@ namespace ToFix
 	void formatInnerExecutionReport(const FTD::CFtdcInnerExecutionReportField& report, FIX::Message& msg)
 	{
 		msg.getHeader().setField(FIX::MsgType("8"));
+		msg.setField(FIX::PartitionNo(report.PartitionNo));
+		msg.setField(FIX::ReportIndex(report.ReportIndex));
+		msg.setField(FIX::ApplID(SZStep::ApplID::XH));
+		msg.setField(FIX::OwnerType(report.OwnerType));
+		msg.setField(FIX::OrderRestrictions(report.OrderRestrictions));
+		msg.setField(FIX::ExecID(report.ReportExchangeID));
+		msg.setField(FIX::OrderID());
 	}
 
 	void formatInnerOrderCancelReject(const FTD::CFtdcInnerOrderCancelRejectField& report, FIX::Message& msg)
