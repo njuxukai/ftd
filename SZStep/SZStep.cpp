@@ -159,7 +159,8 @@ namespace ToFix
 		msg.setField(FIX::OwnerType(report.OwnerType));
 		msg.setField(FIX::OrderRestrictions(report.OrderRestrictions));
 		msg.setField(FIX::ExecID(report.ReportExchangeID));
-		msg.setField(FIX::OrderID());
+		msg.setField(FIX::OrderID(report.OrderExchangeID));
+		msg.setField();
 	}
 
 	void formatInnerOrderCancelReject(const FTD::CFtdcInnerOrderCancelRejectField& report, FIX::Message& msg)
@@ -517,7 +518,5 @@ namespace FromFix
 		}
 		return convertResult;
 	}
-
-
 }
 }
