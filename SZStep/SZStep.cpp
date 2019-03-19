@@ -150,6 +150,7 @@ namespace ToFix
 	void formatInputOrderActionField(const FTD::CFtdcInputOrderActionField& inputOrderAction, FIX::Message& msg)
 	{}
 
+	//only used by mock exchange(SZ)
 	void formatInnerExecutionReport(const FTD::CFtdcInnerExecutionReportField& report, FIX::Message& msg)
 	{
 		msg.getHeader().setField(FIX::MsgType("8"));
@@ -160,7 +161,7 @@ namespace ToFix
 		msg.setField(FIX::OrderRestrictions(report.OrderRestrictions));
 		msg.setField(FIX::ExecID(report.ReportExchangeID));
 		msg.setField(FIX::OrderID(report.OrderExchangeID));
-		msg.setField();
+		msg.setField(FIX::ExecType(report.ExecType));
 	}
 
 	void formatInnerOrderCancelReject(const FTD::CFtdcInnerOrderCancelRejectField& report, FIX::Message& msg)
