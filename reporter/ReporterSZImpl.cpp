@@ -23,7 +23,7 @@ ReporterSZSTEPImpl::ReporterSZSTEPImpl(const std::string& cfgFname)
 
 ReporterSZSTEPImpl::~ReporterSZSTEPImpl()
 {
-
+	stop();
 }
 
 void ReporterSZSTEPImpl::submit(FTD::PackageSPtr pPackage)
