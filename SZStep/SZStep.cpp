@@ -60,6 +60,7 @@ namespace ToFix
 		switch (inputOrder.PriceType)
 		{
 		case FTDC_OPT_HS_Limit:
+		case FTDC_OPT_S_LIMIT_FOK:
 			msg.setField(FIX::OrdType('2'));
 			break;
 		case FTDC_OPT_S_SL1:
@@ -68,6 +69,7 @@ namespace ToFix
 		case FTDC_OPT_S_L1_THEN_LIMIT:
 		case FTDC_OPT_S_FAK:
 		case FTDC_OPT_S_FOK:
+		case FTDC_OPT_HS_L5_THEN_LIMIT:
 			msg.setField(FIX::OrdType('1'));
 			break;
 		default:
@@ -137,9 +139,15 @@ namespace ToFix
 			msg.setField(FIX::MinQty(0));
 			break;
 		case FTDC_OPT_S_FOK:
+		case FTDC_OPT_S_LIMIT_FOK:
 			msg.setField(FIX::TimeInForce('3'));
 			msg.setField(FIX::MaxPriceLevels(0));
 			msg.setField(FIX::MinQty(inputOrder.VolumeTotalOrginal));
+			break;
+		case FTDC_OPT_HS_L5_THEN_LIMIT:
+			msg.setField(FIX::TimeInForce('3'));
+			msg.setField(FIX::MaxPriceLevels(5));
+			msg.setField(FIX::MinQty(0));
 			break;
 		default:
 			break;
@@ -161,7 +169,122 @@ namespace ToFix
 		msg.setField(FIX::OrderRestrictions(report.OrderRestrictions));
 		msg.setField(FIX::ExecID(report.ReportExchangeID));
 		msg.setField(FIX::OrderID(report.OrderExchangeID));
+		switch (report.ExecType)
+		{
+		case FTDC_ET_Trade:
+			msg.setField(FIX::ExecType('F'));
+			break;
+		case FTDC_ET_Create:
+		case FTDC_ET_New:
+			msg.setField(FIX::ExecType('0'));
+			break;
+		case FTDC_ET_Cancelled:
+			msg.setField(FIX::ExecType('8'));
+			break;
+		case FTDC_ET_Rejected:
+			msg.setField(FIX::ExecType('4'));
+			break;
+		default:
+			break;
+		}
 		msg.setField(FIX::ExecType(report.ExecType));
+		switch (report.OrderStatus)
+		{
+		case FTDC_OS_NEW:
+		case FTDC_OS_CREATED:
+			msg.setField(FIX::OrdStatus('0'));
+			break;
+		case FTDC_OS_ALL_TRADED:
+			msg.setField(FIX::OrdStatus('2'));
+			break;
+		case FTDC_OS_PART_TRADED:
+			msg.setField(FIX::OrdStatus('1'));
+			break;
+		case FTDC_OS_CANCELLED:
+			msg.setField(FIX::OrdStatus('4'));
+			break;
+		case FTDC_OS_REJECTED:
+			msg.setField(FIX::OrdStatus('8'));
+			break;
+		default:
+			break;
+		}
+
+		if (report.ExecType == FTDC_ET_Trade)
+		{
+			msg.setField(FIX::LastPx(report.PriceLast));
+			msg.setField(FIX::LastQty(report.VolumeLast));
+		}
+		msg.setField(FIX::CumQty(report.VolumeCum));
+		msg.setField(FIX::LeavesQty(report.VolumeLeaves));
+		if (report.ExecType == FTDC_ET_Cancelled || report.ExecType == FTDC_ET_Rejected)
+		{
+			msg.setField(FIX::OrdRejReason(report.OrderRejReason));
+			msg.setField(FIX::RejectText(report.OrderRejText));
+		}
+		if (report.Direction == FTDC_D_BUY)
+			msg.setField(FIX::Side('1'));
+		else
+			msg.setField(FIX::Side('2'));
+
+		auto curTimeStamp = FIX::UtcTimeStamp();
+		curTimeStamp.set(FIX::DateTime::nowLocal());
+		msg.setField(FIX::TransactTime(curTimeStamp));
+		
+		//ClOrdID
+		//OrigClOrdID
+		if (strlen(report.ActionClOrdID) > 0) 
+		{
+			msg.setField(FIX::ClOrdID(report.ActionClOrdID));
+			msg.setField(FIX::OrigClOrdID(report.ClOrdID));
+		}
+		else
+		{
+			msg.setField(FIX::ClOrdID(report.ClOrdID));
+		}
+		msg.setField(FIX::SecurityID(report.InstrumentCode));
+		msg.setField(FIX::SecurityIDSource("102"));
+
+		//Groups Parties
+		FIX::Group party(FIX::FIELD::NoPartyIDs, FIX::FIELD::PartyID);
+		party.setField(FIX::PartyID(report.SecurityAccount));
+		party.setField(FIX::PartyIDSource('5'));
+		party.setField(FIX::PartyRole(5));
+		msg.addGroup(party);
+
+		std::string strPbuID = boost::lexical_cast<std::string>(report.PbuID);
+		party.setField(FIX::PartyID(strPbuID));
+		party.setField(FIX::PartyIDSource('C'));
+		party.setField(FIX::PartyRole(1));
+		msg.addGroup(party);
+
+		std::string strExchangeBranchID = boost::lexical_cast<std::string>(report.ExchangeBranchID);
+		party.setField(FIX::PartyID(strExchangeBranchID));
+		party.setField(FIX::PartyIDSource('D'));
+		party.setField(FIX::PartyRole(4001));
+		msg.addGroup(party);
+
+		//
+		msg.setField(FIX::OrderQty(report.VolumeTotalOrginal));
+		switch (report.PriceType)
+		{
+		case FTDC_OPT_HS_Limit:
+		case FTDC_OPT_S_LIMIT_FOK:
+			msg.setField(FIX::OrdType('2'));
+			break;
+		case FTDC_OPT_S_SL1:
+			msg.setField(FIX::OrdType('U'));
+			break;
+		case FTDC_OPT_S_L1_THEN_LIMIT:
+		case FTDC_OPT_S_FAK:
+		case FTDC_OPT_S_FOK:
+		case FTDC_OPT_HS_L5_THEN_LIMIT:
+			msg.setField(FIX::OrdType('1'));
+			break;
+		default:
+			break;
+		}
+		//report.PriceType
 	}
 
 	void formatInnerOrderCancelReject(const FTD::CFtdcInnerOrderCancelRejectField& report, FIX::Message& msg)
@@ -280,25 +403,42 @@ namespace FromFix
 			//Instrument
 			strcpy(order.InstrumentCode, msg.getField(FIX::FIELD::SecurityID).data());
 			order.ExchangeType = FTDC_ET_SZ;
-			switch (ordTypeData)
+			if (timeInForceData == '0' && ordTypeData == '2' 
+				&& maxPriceLevelsData == 0 && minQtyData == 0)
 			{
-			case '2':
 				order.PriceType = FTDC_OPT_HS_Limit;
-				break;
-			case 'U':
-				order.PriceType = FTDC_OPT_S_SL1;
-				break;
-			case '1':
-				if (timeInForceData == '0' && maxPriceLevelsData == 1 && minQtyData == 0)
-					order.PriceType = FTDC_OPT_S_L1_THEN_LIMIT;
-				else if (timeInForceData == '3' && maxPriceLevelsData == 0 && minQtyData == 0)
-					order.PriceType = FTDC_OPT_S_FAK;
-				else if (timeInForceData == '3' && maxPriceLevelsData == 0 && minQtyData == order.VolumeTotalOrginal)
-					order.PriceType = FTDC_OPT_S_FOK;
-				break;
-			default:
-				break;
 			}
+			if (timeInForceData == '0' && ordTypeData == 'U'
+				&& maxPriceLevelsData == 0 && minQtyData == 0)
+			{
+				order.PriceType = FTDC_OPT_S_SL1;
+			}
+			if (timeInForceData == '0' && ordTypeData == '1'
+				&& maxPriceLevelsData == 1 && minQtyData == 0)
+			{
+				order.PriceType = FTDC_OPT_S_L1_THEN_LIMIT;
+			}
+			if (timeInForceData == '3' && ordTypeData == '1'
+				&& maxPriceLevelsData == 0 && minQtyData == 0)
+			{
+				order.PriceType = FTDC_OPT_S_FAK;
+			}
+			if (timeInForceData == '3' && ordTypeData == '2'
+				&& maxPriceLevelsData == 0 && minQtyData == order.VolumeTotalOrginal)
+			{
+				order.PriceType = FTDC_OPT_S_LIMIT_FOK;
+			}
+			if (timeInForceData == '3' && ordTypeData == '1'
+				&& maxPriceLevelsData == 0 && minQtyData == order.VolumeTotalOrginal)
+			{
+				order.PriceType = FTDC_OPT_S_FOK;
+			}
+			if (timeInForceData == '3' && ordTypeData == '1'
+				&& maxPriceLevelsData == 5 && minQtyData == 0)
+			{
+				order.PriceType = FTDC_OPT_H_L5_FAK;
+			}
+
 			//side
 			char sideData = FIX::CharConvertor::convert(msg.getField(FIX::FIELD::Side));
 			if (sideData == FIX::Side_SELL)

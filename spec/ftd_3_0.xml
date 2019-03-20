@@ -731,6 +731,7 @@
 			<item name="OrderRejReason" comment="撤单&#47;拒绝原因代码"/>
 			<item name="OrderRejText" comment="撤单&#47;拒绝原因说明"/>
 			<item name="Direction" comment="买卖方向"/>
+			<item name="PriceType" comment="报单价格条件"/>
 			<item name="TransactimeString" comment="订单或执行的时间戳字符串"/>
 			<item name="ClOrdID" comment="报单的报盘编号"/>
 			<item name="ActionClOrdID" comment="撤单的报盘编号"/>
@@ -1062,6 +1063,7 @@
 			<enumValue name="i" comment="深  :对手方最优剩余转限价"            enname= "S_L1_THEN_LIMIT"/>
 			<enumValue name="j" comment="深  :市价立即成交剩余撤销"             enname="S_FAK"/>
 			<enumValue name="k" comment="深  :市价立即成交或撤销"               enname="S_FOK"/>
+			<enumValue name="l" comment="深  :限价立即成交或撤销"               enname="S_LIMIT_FOK"/>
 		</typeDefine>
 		<typeDefine name="FTDPassword" baseType="FTDStringType&lt;40&gt;" length="40" precision="0"/>
 		<typeDefine name="FTDPercent" baseType="FTDFloatType&lt;4,2&gt;" length="4" precision="2"/>

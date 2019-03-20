@@ -277,6 +277,9 @@ typedef char TXcpFtdcOrderStatusType;
 ///深  :市价立即成交或撤销
 #define XCP_FTDC_OPT_S_FOK 'k'
 
+///深  :限价立即成交或撤销
+#define XCP_FTDC_OPT_S_LIMIT_FOK 'l'
+
 typedef char TXcpFtdcOrderPriceTypeType;
 
 ////////////////////////////////////////////////////////////////////////////////
