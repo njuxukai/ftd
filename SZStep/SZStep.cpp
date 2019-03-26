@@ -624,6 +624,9 @@ namespace FromFix
 					break;
 				case 'D':
 					report.ExchangeBranchID = atoi(source.data());
+					break;
+				default:
+					break;
 				}
 			}
 		}
