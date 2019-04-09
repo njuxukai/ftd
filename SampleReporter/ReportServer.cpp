@@ -22,6 +22,8 @@ void ReportServer::start()
 {
 	if (m_parseResult)
 	{
+		m_pReporter->registerUplinkCallback(std::bind(&ReportServer::reporterUplinkCallback, 
+			this, std::placeholders::_1));
 		m_pReporter->start();
 		m_pSender->start();
 		m_pReceiver->start();
@@ -42,7 +44,36 @@ void ReportServer::stop()
 //被报盘dll调用，需要线程安全
 void ReportServer::reporterUplinkCallback(FTD::PackageSPtr pPackage)
 {
-	
+	DeliveryPack pack;
+	memset(&pack.plain_headers, 0, sizeof(PlainHeaders));
+	//成交回报的request
+	if (pPackage->isRequest())
+	{
+		pack.plain_headers.admin_flag = QMSG_FLAG_APP;
+		pack.plain_headers.msg_type = QMSG_TYPE_REQ;
+		pack.plain_headers.multi_flag = QMSG_FLAG_SINGLE_FTDC;
+		strcpy(pack.plain_headers.source_queue, m_rptBackQueuePair.first.data());
+		strcpy(pack.plain_headers.target_queue, m_rptBackQueuePair.second.data());
+
+		pack.exchange = "";
+		pack.routing_key = pack.plain_headers.source_queue;
+		
+	}
+	//报单/撤单的response
+	if (pPackage->isResponse())
+	{
+		pack.plain_headers.admin_flag = QMSG_FLAG_APP;
+		pack.plain_headers.msg_type = QMSG_TYPE_RSP;
+		pack.plain_headers.multi_flag = QMSG_FLAG_SINGLE_FTDC;		
+		strcpy(pack.plain_headers.source_queue, m_rptQueuePair.second.data());
+		//strcpy(pack.plain_headers.target_queue, m_rptQueuePair.second.data());
+		pack.exchange = "";
+		pack.routing_key = pack.plain_headers.source_queue;
+	}
+	pPackage->formatFtdcMessages();
+	int ftdcCount = 0;
+	pPackage->toSingleConcatFtdcMessage(pack.body, ftdcCount);
+	m_pSender->submitTask(pack);
 	
 }
 
@@ -133,7 +164,8 @@ bool ReportServer::parseCfgFile(const std::string& fname)
 			std::string rspQueue = pairDict.getString("RspQueue");
 			m_writeQueues.insert(reqQueue);
 			m_readQueues.insert(rspQueue);			
-			m_rptBackQueuePairs[reqQueue] = rspQueue;
+			m_rptBackQueuePair.first = reqQueue;
+			m_rptBackQueuePair.second = rspQueue;
 		}
 
 		section = settings.get("RPT_QUEUE_PAIR");
@@ -144,7 +176,8 @@ bool ReportServer::parseCfgFile(const std::string& fname)
 			std::string rspQueue = pairDict.getString("RspQueue");
 			m_readQueues.insert(reqQueue);
 			m_writeQueues.insert(rspQueue);
-			m_rptQueuePairs[reqQueue] = rspQueue;
+			m_rptQueuePair.first = reqQueue;
+			m_rptQueuePair.second = rspQueue;
 		}		
 	}
 	catch (...)

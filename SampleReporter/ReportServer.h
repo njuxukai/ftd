@@ -28,8 +28,8 @@ private:
 	QueueParameter m_queueParameter;
 	std::set<std::string> m_writeQueues;
 	std::set<std::string> m_readQueues;
-	std::map<std::string, std::string> m_rptQueuePairs;
-	std::map<std::string, std::string> m_rptBackQueuePairs;
+	std::pair<std::string, std::string> m_rptQueuePair;
+	std::pair<std::string, std::string> m_rptBackQueuePair;
 	SendClient::Sptr m_pSender;
 	ReceiveClient::Sptr m_pReceiver;
 	std::shared_ptr<ReporterWrapper> m_pReporter;

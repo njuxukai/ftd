@@ -43,7 +43,7 @@ private:
 	FIX::Initiator *m_pInitiator;
 
 	std::string m_defaultCstmApplVerID;
-
+	ReporterUplinkCallback m_uplinkCallback;
 private:
 	std::map<int, int> m_partitionIndexMap;
 	SZStep::PlatformStateInfo m_stateInfo;

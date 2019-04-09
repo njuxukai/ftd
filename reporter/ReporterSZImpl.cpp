@@ -47,11 +47,18 @@ void ReporterSZSTEPImpl::doSubmit(FTD::PackageSPtr pPackage)
 }
 
 void ReporterSZSTEPImpl::registerUplinkCallback(const ReporterUplinkCallback& function)
-{}
+{
+	m_uplinkCallback = function;
+}
 
 
 void ReporterSZSTEPImpl::uplink(FTD::PackageSPtr pPackage)
-{}
+{
+	if (m_uplinkCallback)
+	{
+		m_uplinkCallback(pPackage);
+	}
+}
 
 
 void ReporterSZSTEPImpl::start()
@@ -63,7 +70,7 @@ void ReporterSZSTEPImpl::start()
 		FIX::MemoryStoreFactory storeFactory;
 		//FIX::FileStoreFactory storeFactory(settings);
 		FIX::FileLogFactory logFactory(settings);
-		//::ScreenLogFactory logFactory(settings);
+		//FIX::ScreenLogFactory logFactory(settings);
 		m_pInitiator = new FIX::SocketInitiator(*this, storeFactory, settings, logFactory);
 		m_pInitiator->start();
 	}
