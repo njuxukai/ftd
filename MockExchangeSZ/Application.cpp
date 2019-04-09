@@ -242,21 +242,31 @@ FIX50SP2::Message Application::generatePlatformInfo()
 	return message;
 }
 
-void Application::onStepNewOrderSingleNew(const FTD::CFtdcInputOrderField order, const FIX::SessionID& id)
+void Application::onStepNewOrderSingleNew(const FTD::CFtdcInputOrderField& order, const FIX::SessionID& id)
 {
 	FTD::CFtdcInnerExecutionReportField report = { 0 };
-
+	formatExecutionReport(order, report);
+	report.OrderStatus = FTDC_OS_NEW;
+	FIX50SP2::Message message(FIX::MsgType("8"));
+	SZStep::ToFix::formatInnerExecutionReport(report, message);
+	FIX::Session::sendToTarget(message, id);
 }
 
-void Application::onStepNewOrderSingleReject(FTD::CFtdcInputOrderField order, const FIX::SessionID& id)
+void Application::onStepNewOrderSingleReject(const FTD::CFtdcInputOrderField& order, const FIX::SessionID& id)
 {
 }
 
-void Application::onStepNewOrderSinglePartTrade(FTD::CFtdcInputOrderField order, const FIX::SessionID& id)
+void Application::onStepNewOrderSinglePartTrade(const FTD::CFtdcInputOrderField& order, const FIX::SessionID& id)
 {
 }
 
 
-void Application::onStepNewOrderSingleAllTrade(FTD::CFtdcInputOrderField order, const FIX::SessionID& id)
+void Application::onStepNewOrderSingleAllTrade(const FTD::CFtdcInputOrderField& order, const FIX::SessionID& id)
 {
+}
+
+//TODO
+void Application::formatExecutionReport(const FTD::CFtdcInputOrderField& order, FTD::CFtdcInnerExecutionReportField& report)
+{
+
 }

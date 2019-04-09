@@ -89,11 +89,13 @@ public:
     stream << ++m_orderID;
     return stream.str();
   }
+
   std::string genExecID() {
     std::stringstream stream;
     stream << ++m_execID;
     return stream.str();
   }
+
 private:
   int m_orderID, m_execID;
   int m_platformID;
@@ -106,10 +108,10 @@ private:
 
 private:
 	void onStepNewOrderSingle(const FIX::Message& message, const FIX::SessionID& id);
-	void onStepNewOrderSingleNew(const FTD::CFtdcInputOrderField order, const FIX::SessionID& id);
-	void onStepNewOrderSingleReject(FTD::CFtdcInputOrderField order, const FIX::SessionID& id);
-	void onStepNewOrderSinglePartTrade(FTD::CFtdcInputOrderField order, const FIX::SessionID& id);
-	void onStepNewOrderSingleAllTrade(FTD::CFtdcInputOrderField order, const FIX::SessionID& id);
+	void onStepNewOrderSingleNew(const FTD::CFtdcInputOrderField& order, const FIX::SessionID& id);
+	void onStepNewOrderSingleReject(const FTD::CFtdcInputOrderField& order, const FIX::SessionID& id);
+	void onStepNewOrderSinglePartTrade(const FTD::CFtdcInputOrderField& order, const FIX::SessionID& id);
+	void onStepNewOrderSingleAllTrade(const FTD::CFtdcInputOrderField& order, const FIX::SessionID& id);
 	void onStepReportSynchronization(const FIX::Message& message, const FIX::SessionID& id);
 	void onStepOrderCancelRequest(const FIX::Message& message, const FIX::SessionID& id);
 
@@ -118,6 +120,9 @@ private:
 	std::string m_cfgFname;
 	bool init();
 	NewOrderProcessParameter m_newOrderProcessParameter;
+
+private:
+	static void formatExecutionReport(const FTD::CFtdcInputOrderField& order, FTD::CFtdcInnerExecutionReportField& report);
 };
 
 #endif
