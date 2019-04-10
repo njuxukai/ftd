@@ -268,5 +268,7 @@ void Application::onStepNewOrderSingleAllTrade(const FTD::CFtdcInputOrderField& 
 //TODO
 void Application::formatExecutionReport(const FTD::CFtdcInputOrderField& order, FTD::CFtdcInnerExecutionReportField& report)
 {
-
+	report.PartitionNo = m_info.partitionIDs[0];
+	report.ReportIndex = getNextReportIndex();
+	report.OwnerType = order.Owner
 }

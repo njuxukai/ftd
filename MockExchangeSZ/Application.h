@@ -122,7 +122,10 @@ private:
 	NewOrderProcessParameter m_newOrderProcessParameter;
 
 private:
-	static void formatExecutionReport(const FTD::CFtdcInputOrderField& order, FTD::CFtdcInnerExecutionReportField& report);
+	int getNextReportIndex();
+	int getNextExecID();
+
+	void formatExecutionReport(const FTD::CFtdcInputOrderField& order, FTD::CFtdcInnerExecutionReportField& report);
 };
 
 #endif
