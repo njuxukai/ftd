@@ -270,5 +270,12 @@ void Application::formatExecutionReport(const FTD::CFtdcInputOrderField& order, 
 {
 	report.PartitionNo = m_info.partitionIDs[0];
 	report.ReportIndex = getNextReportIndex();
-	report.OwnerType = order.Owner
+	if (order.)
+	{
+		report.OwnerType = order.Owner
+	}
+	else
+	{
+	}
+	
 }
