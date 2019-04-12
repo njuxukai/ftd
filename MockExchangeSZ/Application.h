@@ -123,8 +123,8 @@ private:
 
 private:
 	int getNextReportIndex();
-	int getNextExecID();
-
+	std::string getNextExecID();
+	std::string getNextOrderID();
 	void formatExecutionReport(const FTD::CFtdcInputOrderField& order, FTD::CFtdcInnerExecutionReportField& report);
 };
 
