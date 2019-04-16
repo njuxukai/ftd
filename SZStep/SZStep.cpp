@@ -187,7 +187,7 @@ namespace ToFix
 		default:
 			break;
 		}
-		msg.setField(FIX::ExecType(report.ExecType));
+
 		switch (report.OrderStatus)
 		{
 		case FTDC_OS_NEW:

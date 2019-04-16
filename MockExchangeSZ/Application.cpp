@@ -33,6 +33,8 @@
 #include <ftd/Settings.h>
 #include "SZStep.h"
 
+#include <boost/lexical_cast.hpp>
+#include <boost/format.hpp>
 using boost::mt19937;
 using boost::uniform_01;
 
@@ -51,10 +53,10 @@ void NewOrderProcessParameter::init(double new_ratio, double reject_ratio, doubl
 	int b = 0;
 	int c = 0;
 	int d = 0;
-	a = 100 * new_ratio;
-	b = 100 * reject_ratio;
-	c = 100 * part_trade_ratio;
-	d = 100 * all_trade_ratio;
+	a = (int)(100 * new_ratio);
+	b = (int)(100 * reject_ratio);
+	c = (int)(100 * part_trade_ratio);
+	d = (int)(100 * all_trade_ratio);
 	if ((a + b + c + d) == 0)
 	{
 		reject_order_begin = 0;
@@ -118,6 +120,9 @@ bool Application::init()
 	{
 		parseResult = false;
 	}
+	m_orderID = 0;
+	m_execID = 0;
+	m_reportIndex = 0;
 	return parseResult;
 }
 
@@ -266,10 +271,12 @@ void Application::onStepNewOrderSingleAllTrade(const FTD::CFtdcInputOrderField& 
 }
 
 //TODO
-void Application::formatExecutionReport(const FTD::CFtdcInputOrderField& order, FTD::CFtdcInnerExecutionReportField& report)
+void Application::formatExecutionReport(const FTD::CFtdcInputOrderField& order, FTD::CFtdcInnerExecutionReportField& report,
+	std::string orderID)
 {
 	report.PartitionNo = m_info.partitionIDs[0];
 	report.ReportIndex = getNextReportIndex();
+	strcpy(report.OrderRestrictions, "1");
 	strcpy(report.ApplID, "010");
 	if (order.InvestorID == order.UserID)
 	{
@@ -280,5 +287,41 @@ void Application::formatExecutionReport(const FTD::CFtdcInputOrderField& order, 
 		report.OwnerType = 102;
 	}
 	strcpy(report.ReportExchangeID, getNextExecID().data());
+	
+	if (orderID == "")
+	{
+		strcpy(report.OrderExchangeID, getNextOrderID().data());
+	}
+	else
+	{
+		strcpy(report.OrderExchangeID, orderID.data());
+	}
+	report.ExecType = FTDC_ET_New;
+	report.OrderStatus = FTDC_OS_NEW;
+	report.VolumeLeaves = order.VolumeTotalOrginal;
+	report.VolumeCum = 0;
+	report.Direction = order.Direction;
+	strcpy(report.ClOrdID, order.ClOrdID);
+	strcpy(report.InstrumentCode, order.InstrumentCode);
+	report.ExchangeType = order.ExchangeType;
+	strcpy(report.SecurityAccount, order.SecurityAccount);
+	report.VolumeTotalOrginal = order.VolumeTotalOrginal;
+	report.PriceType = order.PriceType;
+}
 
+int Application::getNextReportIndex()
+{
+	return ++m_reportIndex;
+}
+
+std::string Application::getNextExecID() 
+{
+	m_execID++;
+	return (boost::format("%016d") % m_execID).str();
+}
+
+std::string Application::getNextOrderID()
+{
+	m_orderID++;
+	return (boost::format("%016d") % m_orderID).str();
 }

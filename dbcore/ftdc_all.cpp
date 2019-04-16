@@ -38,6 +38,9 @@ void ftdcAll(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapper* pWra
 	case TID_QrySecurityAccount:
 		processQrySecurityAccount(headers, pReq, pWrapper, db);
 		break;
+	case TID_RptBackExecutionReport:
+		processRptBackExectionReport(headers, pReq, pWrapper, db);
+		break;
 	default:
 		break;
 	}

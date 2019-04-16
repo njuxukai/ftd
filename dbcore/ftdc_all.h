@@ -29,6 +29,8 @@ void processQryTrade(const PlainHeaders& headers, FTD::PackageSPtr, DBWrapper* p
 void processQryPrivateInitialData(const PlainHeaders& headers, FTD::PackageSPtr, DBWrapper* pWrapper, mco_db_h db);
 void processQrySecurityAccount(const PlainHeaders& headers, FTD::PackageSPtr, DBWrapper* pWrapper, mco_db_h db);
 
+void processRptBackExectionReport(const PlainHeaders& headers, FTD::PackageSPtr, DBWrapper* pWrapper, mco_db_h db);
+
 void populate_db(mco_db_h db);
 
 void populate2_db(mco_db_h db);

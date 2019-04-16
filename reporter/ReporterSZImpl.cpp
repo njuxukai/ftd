@@ -126,6 +126,7 @@ throw(FIX::FieldNotFound, FIX::IncorrectDataFormat, FIX::IncorrectTagValue, FIX:
 	FIX::MsgType msgType;
 	message.getHeader().getField(msgType);
 	std::string strMsgType = msgType.getString();
+	std::cout << "Receive Message(" << strMsgType <<")\n";
 	//PlatformStateInfo
 	if (strMsgType == "U102")
 	{
@@ -228,7 +229,12 @@ void ReporterSZSTEPImpl::onStepReportFinished(const FIX::Message& message, const
 {}
 
 void ReporterSZSTEPImpl::onStepExecutionReport(const FIX::Message& message, const FIX::SessionID& sessionID)
-{}
+{
+	FTD::PackageSPtr package = FTD::PackageSPtr(new FTD::ReqRptBackExecutionReport());
+	SZStep::FromFix::convertInnerExecutionReport(message,
+		((FTD::ReqRptBackExecutionReport*)package.get())->innerExecutionReportField);
+	uplink(package);
+}
 
 void ReporterSZSTEPImpl::onStepCancelReject(const FIX::Message& message, const FIX::SessionID& sessionID)
 {}

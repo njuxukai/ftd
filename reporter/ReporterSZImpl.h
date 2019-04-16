@@ -52,7 +52,10 @@ private:
 	void onStepPlatformStateInfo(const FIX::Message& message, const FIX::SessionID& sessionID);
 	void onStepPlatformInfo(const FIX::Message& message, const FIX::SessionID& sessionID);
 	void onStepReportFinished(const FIX::Message& message, const FIX::SessionID& sessionID);
+	
+	//从交易所step网关收到成交回报回调函数
 	void onStepExecutionReport(const FIX::Message& message, const FIX::SessionID& sessionID);
+	
 	void onStepCancelReject(const FIX::Message& message, const FIX::SessionID& sessionID);
 	void onStepBusinessReject(const FIX::Message& message, const FIX::SessionID& sessionID);
 };

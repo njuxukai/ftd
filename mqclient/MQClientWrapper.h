@@ -37,11 +37,11 @@ struct PlainHeaders
 
 	//在req/rsp消息中标记放入队列(主机报盘时需要用，其他场景可选)
 	//在private/boardcast消息中无意义，应为空字符串
-	char source_queue[21];
+	char source_queue[25];
 
 	//在req消息中标记结果rsp的期望source队列
 	//在rsp/private/boardcast消息中无意义，应为空字符串
-	char target_queue[21];
+	char target_queue[25];
 
 	//在客户发起的req消息中标记前置会话编号
 	//在客户发起的rsp消息中标记前置会话编号

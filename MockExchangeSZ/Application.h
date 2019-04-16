@@ -97,7 +97,7 @@ public:
   }
 
 private:
-  int m_orderID, m_execID;
+  int m_orderID, m_execID, m_reportIndex;
   int m_platformID;
   SZStep::PlatformStateInfo m_stateInfo;
   SZStep::PlatformInfo m_info;
@@ -125,7 +125,8 @@ private:
 	int getNextReportIndex();
 	std::string getNextExecID();
 	std::string getNextOrderID();
-	void formatExecutionReport(const FTD::CFtdcInputOrderField& order, FTD::CFtdcInnerExecutionReportField& report);
+	void formatExecutionReport(const FTD::CFtdcInputOrderField& order, FTD::CFtdcInnerExecutionReportField& report,
+      const std::string orderID="");
 };
 
 #endif
