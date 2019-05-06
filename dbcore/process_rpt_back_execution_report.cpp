@@ -23,12 +23,24 @@ void processRptBackExectionReport(const PlainHeaders& headers, FTD::PackageSPtr 
 	{
 		//1 找到原始的委托
 		//2 根据原始委托，填充资金账号等信息后， 确认该成交回报不重复
-
 		//3 插入内部执行报告表
-
 		//4 形成客户执行报告记录，并插入客户执行报告表
-
 		//5 广播客户执行报告
+		{
+			McoTrans t(db, MCO_READ_WRITE, MCO_TRANS_FOREGROUND);
+			try
+			{
+				verifyRptBack();
+				insertInnerExecutionReport();
+				insertIncExecutionReport();
+				needPrivatePush = true;
+			}
+			catch (...)
+			{
+				t.rollback();
+				throw;
+			}
+		}
 
 	}
 	catch (dbcore::Exception& e)
@@ -37,5 +49,10 @@ void processRptBackExectionReport(const PlainHeaders& headers, FTD::PackageSPtr 
 	}
 	catch (McoException& e)
 	{
+	}
+
+	if (needPrivatePush)
+	{
+
 	}
 }
