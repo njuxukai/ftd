@@ -82,6 +82,9 @@ void verifyAndUpdateFields(mco_trans_h t, FTD::CFtdcInnerExecutionReportField& i
 	InnerExecutionReport dbInnerExecutionReport;
 	dbInnerExecutionReport.create(t);
 	dbInnerExecutionReport.ier_sys_id = get_next_sno(SEQ_INNER_EXECUTION_REPORT_TAG, t);
+	dbInnerExecutionReport.exchange_type = innerReport.ExchangeType;
+	//pbuid 是从回报中取得还是原始委托中取得
+	dbInnerExecutionReport.pbu_id = innerReport.PbuID;
 	dbInnerExecutionReport.order_sys_id = dbOrder.order_sys_id;
 	dbInnerExecutionReport.exec_type = innerReport.ExecType;
 	dbInnerExecutionReport.report_exchange_id = innerReport.ReportExchangeID;
