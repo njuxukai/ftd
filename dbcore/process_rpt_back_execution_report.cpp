@@ -78,21 +78,44 @@ void verifyAndUpdateFields(mco_trans_h t, FTD::CFtdcInnerExecutionReportField& i
 	{
 		throw(dbcore::IndexFindError("未找到相应的委托"));
 	}
-	//2 查询
+	//1.2 查询InnerExecutionReport 
 	InnerExecutionReport dbInnerExecutionReport;
+	rc = InnerExecutionReport::ExchangeIdx::find(t, innerReport.ExchangeType, innerReport.PbuID, dbOrder.order_sys_id, innerReport.ExecType, innerReport.ReportExchangeID, strlen(innerReport.ReportExchangeID), dbInnerExecutionReport);
+	if (rc == MCO_S_OK)
+	{
+		throw(dbcore::IndexFindError("内部成交回报已存在"));
+	}
+
+	//2 构建新的内部ExecutionReport
 	dbInnerExecutionReport.create(t);
+	//2.1 键 ExchangeType, PbuId 是从回报中取得还是原始委托中取得
 	dbInnerExecutionReport.ier_sys_id = get_next_sno(SEQ_INNER_EXECUTION_REPORT_TAG, t);
 	dbInnerExecutionReport.exchange_type = innerReport.ExchangeType;
-	//pbuid 是从回报中取得还是原始委托中取得
 	dbInnerExecutionReport.pbu_id = innerReport.PbuID;
-	dbInnerExecutionReport.order_sys_id = dbOrder.order_sys_id;
 	dbInnerExecutionReport.exec_type = innerReport.ExecType;
 	dbInnerExecutionReport.report_exchange_id = innerReport.ReportExchangeID;
+	dbInnerExecutionReport.order_sys_id = dbOrder.order_sys_id;
+	dbInnerExecutionReport.investor_id = dbOrder.investor_id;
+	//
+	dbInnerExecutionReport.volume_last = innerReport.VolumeLast;
+	dbInnerExecutionReport.price_last = innerReport.PriceLast;
+	dbInnerExecutionReport.volume_cum = innerReport.VolumeCum;
+	dbInnerExecutionReport.volume_leaves = innerReport.VolumeLeaves;
+	dbInnerExecutionReport.volume_cancelled = innerReport.VolumeCancelled;
+	dbInnerExecutionReport.status = innerReport.OrderStatus;
 	//2 更新order信息
-	dbOrder.volume_cum
+	dbOrder.status = innerReport.OrderStatus;
+	if (innerReport.ExecType == FTDC_ET_Trade)
+	{
+		dbOrder.volume_cum = dbOrder.volume_cum + dbInnerExecutionReport.volume_cum;
+		dbOrder.amount_cum = dbOrder.amount_cum + dbInnerExecutionReport.volume_cum * dbInnerExecutionReport.price_last;
+	}
 	//3 补全innerReport信息
 
 	//4 填充report
+	UserExecutionReport dbUserReport;
+	dbUserReport.create(t);
+
 }
 
 void updateOrder(mco_trans_h t, FTD::CFtdcOrderField& order)
