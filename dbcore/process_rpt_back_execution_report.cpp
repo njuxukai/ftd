@@ -115,6 +115,27 @@ void verifyAndUpdateFields(mco_trans_h t, FTD::CFtdcInnerExecutionReportField& i
 	//4 Ìî³äreport
 	UserExecutionReport dbUserReport;
 	dbUserReport.create(t);
+	dbUserReport.uer_sys_id = get_next_sno(SEQ_USER_EXECUTION_REPORT_TAG, t);
+	dbUserReport.ier_sys_id = dbInnerExecutionReport.ier_sys_id;
+	dbUserReport.exec_type = dbInnerExecutionReport.exec_type;
+	dbUserReport.investor_id = dbOrder.investor_id;
+	dbUserReport.order_sys_id = dbOrder.order_sys_id;
+	dbUserReport.volume_cum = dbOrder.volume_cum;
+	dbUserReport.amount_cum = dbOrder.amount_cum;
+	dbUserReport.status = dbOrder.status;
+	dbUserReport.front_id = dbOrder.front_id;
+	dbUserReport.session_id = dbOrder.session_id;
+	dbUserReport.order_ref = dbOrder.order_ref;
+	//TODO timestamp important
+	dbUserReport.security_account = (std::string)dbOrder.security_account;
+
+
+	report.ReportSysID = dbUserReport.uer_sys_id;
+	report.InvestorID = dbUserReport.investor_id;
+	report.FrontID = dbUserReport.front_id;
+	report.SessionID = dbUserReport.session_id;
+	report.OrderRef = dbUserReport.order_ref;
+
 
 }
 
