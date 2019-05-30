@@ -189,23 +189,28 @@ void Application::onStepNewOrderSingle(const FIX::Message& message,
 	if (convertResult)
 	{
 		double r = m_randomGen();
+		std::cout << "r=" << r;
 		if (m_newOrderProcessParameter.deal_as_new(r))
 		{
+			std::cout << "新委托到达[新建]" << std::endl;
 			onStepNewOrderSingleNew(order, sessionID);
 			return;
 		}
 		if (m_newOrderProcessParameter.deal_as_reject(r))
 		{
+			std::cout << "新委托到达[拒绝]" << std::endl;
 			onStepNewOrderSingleReject(order, sessionID);
 			return;
 		}
 		if (m_newOrderProcessParameter.deal_as_part_trade(r))
 		{
+			std::cout << "新委托到达[部成]" << std::endl;
 			onStepNewOrderSinglePartTrade(order, sessionID);
 			return;
 		}
 		if (m_newOrderProcessParameter.deal_as_all_trade(r))
 		{
+			std::cout << "新委托到达[全成]" << std::endl;
 			onStepNewOrderSingleAllTrade(order, sessionID);
 			return;
 		}
@@ -263,6 +268,25 @@ void Application::onStepNewOrderSingleReject(const FTD::CFtdcInputOrderField& or
 
 void Application::onStepNewOrderSinglePartTrade(const FTD::CFtdcInputOrderField& order, const FIX::SessionID& id)
 {
+	FTD::CFtdcInnerExecutionReportField report = { 0 };
+	formatExecutionReport(order, report);
+	report.OrderStatus = FTDC_OS_NEW;
+	FIX50SP2::Message message(FIX::MsgType("8"));
+	SZStep::ToFix::formatInnerExecutionReport(report, message);
+	FIX::Session::sendToTarget(message, id);
+
+	FTD::CFtdcInnerExecutionReportField report2 = { 0 };
+	formatExecutionReport(order, report2);
+	
+	report2.VolumeLast = report2.VolumeTotalOrginal / 2;
+	report2.PriceLast = report2.PriceLast;
+
+	report2.VolumeCum = report2.VolumeCum;
+
+	report.OrderStatus = FTDC_OS_PART_TRADED;
+	FIX50SP2::Message message2(FIX::MsgType("8"));
+	SZStep::ToFix::formatInnerExecutionReport(report2, message2);
+	FIX::Session::sendToTarget(message2, id);
 }
 
 

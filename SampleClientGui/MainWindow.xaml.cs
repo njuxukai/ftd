@@ -248,7 +248,7 @@ namespace SampleClientGui
                 showOrders.Add(new Order(f));
             }
             orderDataGrid.DataContext = showOrders;
-            DoShowLog(String.Format("OnRspQryOrder.[ReqID={0}][Count={1}]",
+            DoShowLog(String.Format("DoShowOrders.[ReqID={0}][Count={1}]",
                 requestID, orders.Count));
         }
 
