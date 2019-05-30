@@ -7,9 +7,6 @@ using namespace genericdb;
 
 void verifyAndUpdateFields(mco_trans_h t, FTD::CFtdcInnerExecutionReportField& innerReport, 
 	FTD::CFtdcOrderField& order, FTD::CFtdcExecutionReportField& report);
-void updateOrder(mco_trans_h t,	FTD::CFtdcOrderField& order);
-void insertInnerExecutionReport(mco_trans_h t, FTD::CFtdcInnerExecutionReportField& innerReport);
-void insertIncExecutionReport(mco_trans_h t, FTD::CFtdcExecutionReportField& report);
 
 void processRptBackExectionReport(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapper* pWrapper, mco_db_h db)
 {
@@ -36,9 +33,6 @@ void processRptBackExectionReport(const PlainHeaders& headers, FTD::PackageSPtr 
 			try
 			{
 				verifyAndUpdateFields(t, innerReport, order, pIncExecutionReport->executionReportField);
-				updateOrder(t, order);
-				insertInnerExecutionReport(t, innerReport);
-				insertIncExecutionReport(t, pIncExecutionReport->executionReportField);
 				needPrivatePush = true;
 			}
 			catch (...)
@@ -103,16 +97,30 @@ void verifyAndUpdateFields(mco_trans_h t, FTD::CFtdcInnerExecutionReportField& i
 	dbInnerExecutionReport.volume_leaves = innerReport.VolumeLeaves;
 	dbInnerExecutionReport.volume_cancelled = innerReport.VolumeCancelled;
 	dbInnerExecutionReport.status = innerReport.OrderStatus;
-	//2 更新order信息
-	dbOrder.status = innerReport.OrderStatus;
+	//2 更新order
 	if (innerReport.ExecType == FTDC_ET_Trade)
 	{
 		dbOrder.volume_cum = dbOrder.volume_cum + dbInnerExecutionReport.volume_cum;
 		dbOrder.amount_cum = dbOrder.amount_cum + dbInnerExecutionReport.volume_cum * dbInnerExecutionReport.price_last;
 	}
-	//3 补全innerReport信息
-
-	//4 填充report
+	
+	if (innerReport.ExecType == FTDC_ET_Trade && dbOrder.exchange_type == FTDC_ET_SH)
+	{
+		
+		if (dbOrder.volume_cum == dbOrder.volume_total_original)
+		{
+			dbOrder.status = FTDC_OS_ALL_TRADED;
+		}
+		else
+		{
+			dbOrder.status = FTDC_OS_PART_TRADED;
+		}
+	}
+	else
+	{
+		dbOrder.status = innerReport.OrderStatus;
+	}
+	//3 db 创造并填充userreport
 	UserExecutionReport dbUserReport;
 	dbUserReport.create(t);
 	dbUserReport.uer_sys_id = get_next_sno(SEQ_USER_EXECUTION_REPORT_TAG, t);
@@ -126,27 +134,30 @@ void verifyAndUpdateFields(mco_trans_h t, FTD::CFtdcInnerExecutionReportField& i
 	dbUserReport.front_id = dbOrder.front_id;
 	dbUserReport.session_id = dbOrder.session_id;
 	dbUserReport.order_ref = dbOrder.order_ref;
-	//TODO timestamp important
 	dbUserReport.security_account = (std::string)dbOrder.security_account;
+	dbUserReport.instrument_code = (std::string)dbOrder.instrument_code;
+	dbUserReport.bs_flag = dbOrder.direction;
+	dbUserReport.pbu_id = dbOrder.pbu_id;
+	dbUserReport.branch_id = dbOrder.branch_id;
+	//TODO timestamp important
 
-
+	// 填充report
 	report.ReportSysID = dbUserReport.uer_sys_id;
 	report.InvestorID = dbUserReport.investor_id;
 	report.FrontID = dbUserReport.front_id;
 	report.SessionID = dbUserReport.session_id;
 	report.OrderRef = dbUserReport.order_ref;
-
-
+	report.OrderSysID = dbUserReport.order_sys_id;
+	strcpy(report.InstrumentCode, ((std::string)dbUserReport.instrument_code).data());
+	report.ExchangeType = dbUserReport.exchange_type;
+	report.Direction = dbUserReport.bs_flag;
+	report.PriceType = dbUserReport.price_type;
+	report.LimitPrice = dbUserReport.price;
+	report.VolumeTotalOrginal = dbUserReport.volume;
+	report.VolumeCum = dbUserReport.volume_cum;
+	report.AmountCum = dbUserReport.amount_cum;
+	report.OrderStatus = dbUserReport.status;
+	report.SequenceSeries = dbUserReport.investor_id;
+	report.SequenceNo = dbUserReport.uer_sys_id;
 }
 
-void updateOrder(mco_trans_h t, FTD::CFtdcOrderField& order)
-{
-}
-
-void insertInnerExecutionReport(mco_trans_h t, FTD::CFtdcInnerExecutionReportField& innerReport)
-{
-}
-
-void insertIncExecutionReport(mco_trans_h t, FTD::CFtdcExecutionReportField& report)
-{
-}
