@@ -518,7 +518,7 @@ namespace FromFix
 			//OrderID
 			strcpy(report.OrderExchangeID, msg.getField(FIX::FIELD::OrderID).data());
 			//ExecType
-			char fixExecType = FIX::CharConvertor::convert(msg.getField(FIX::FIELD::ExecID));
+			char fixExecType = FIX::CharConvertor::convert(msg.getField(FIX::FIELD::ExecType));
 			switch (fixExecType)
 			{
 			case('0') :
