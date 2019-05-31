@@ -5,7 +5,7 @@
 
 using namespace genericdb;
 
-void processOrderActionTransaction(const ReqUserLogin* pReq, mco_trans_h t, RspUserLogin* pRsp);
+void verifyAndUpdateOrderStatus(mco_trans_h t, FTD::CFtdcInputOrderActionField& inputOrderAction);
 
 void processOrderAction(const PlainHeaders& headers, FTD::PackageSPtr pPackage, DBWrapper* pWrapper, mco_db_h db)
 {
@@ -39,6 +39,7 @@ void processOrderAction(const PlainHeaders& headers, FTD::PackageSPtr pPackage, 
 			McoTrans t(db, MCO_READ_WRITE, MCO_TRANS_FOREGROUND);
 			try
 			{
+				verifyAndUpdateOrderStatus(t, pReqOrderAction->inputOrderActionField);
 				needReport = true;
 			}
 			catch (...)
@@ -59,16 +60,57 @@ void processOrderAction(const PlainHeaders& headers, FTD::PackageSPtr pPackage, 
 		strncpy(pRsp->pErrorField->ErrorText, e.what(), sizeof(CFtdcErrorField::ErrorText));
 	}
 
-	mco_trans_h t = 0;
-	MCO_RET rc = MCO_S_OK;
+	// 上行到消息队列
+	pWrapper->uplink(rspHeaders, pRsp);
 
-	rc = mco_trans_start(db, MCO_READ_WRITE, MCO_TRANS_FOREGROUND, &t);
-	if (MCO_S_OK != rc)
+	//报盘
+	if (needReport)
 	{
-		pRsp->pErrorField->ErrorCode = FTD_ERROR_CODE_TRANSACTION_ERROR;
-		strcpy(pRsp->pErrorField->ErrorText, FTD_ERROR_TEXT_TRANSACTION_ERROR);
-		pWrapper->uplink(rspHeaders, pRsp);
-		return;
+		PlainHeaders rptHeaders = { 0 };
+		rptHeaders.admin_flag = QMSG_FLAG_APP;
+		rptHeaders.msg_type = QMSG_TYPE_REQ;
+		strcpy(rptHeaders.source_queue, pReqOrderAction->inputOrderActionField.RptQueue);
+		std::shared_ptr<ReqRptOrderAction> pReqRptOrderAction = std::make_shared<ReqRptOrderAction>();
+		memcpy(&pReqRptOrderAction->inputOrderActionField, &pReqOrderAction->inputOrderActionField, sizeof(CFtdcInputOrderActionField));
+		std::cout << "Send Report[Action] to " << rptHeaders.source_queue << std::endl;
+		pWrapper->uplink(rptHeaders, pReqRptOrderAction);
 	}
-	//1
+}
+
+void verifyAndUpdateOrderStatus(mco_trans_h t, FTD::CFtdcInputOrderActionField& inputOrderAction)
+{
+
+	MCO_RET rc;
+	Order dbOrder;
+	
+	if (inputOrderAction.FrontID != 0)
+	{
+		rc = Order::SessionIdx::find(t, inputOrderAction.FrontID, inputOrderAction.SessionID, inputOrderAction.OrderRef, dbOrder);
+		
+	}
+	else if (inputOrderAction.OrderSysID != 0)
+	{
+		rc = Order::SysIdx::find(t, inputOrderAction.OrderSysID, dbOrder);
+
+	}
+	else if (strlen(inputOrderAction.OrderExchangeID) != 0)
+	{
+		mco_cursor_t csr;
+		rc = Order::ExchangeIdx::search(t, &csr, MCO_EQ, inputOrderAction.ExchangeType, inputOrderAction.InvestorID, inputOrderAction.OrderExchangeID, strlen(inputOrderAction.OrderExchangeID));
+		if (rc == MCO_S_OK)
+			dbOrder.from_cursor(t, &csr);
+	}
+
+	if (rc != MCO_S_OK)
+	{
+		throw(dbcore::IndexFindError("未找到相应的原始委托"));
+	}
+
+	if (dbOrder.status == FTDC_OS_ALL_TRADED ||
+		dbOrder.status == FTDC_OS_CANCELLED ||
+		dbOrder.status == FTDC_OS_REJECTED)
+	{
+		throw(dbcore::StatusError("原始委托已经是终结状态"));
+	}
+
 }

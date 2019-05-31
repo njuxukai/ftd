@@ -125,7 +125,7 @@ class Order
 	unique tree<front_id, session_id, order_ref> SessionIdx;	
 	unique tree<order_sys_id> SysIdx;
 	unique tree<client_order_id> clOrdIDIdx;
-	tree<exchange_type, pbu_id, order_exchange_id> ExchangeIdx;
+	tree<exchange_type, investor_id, order_exchange_id> ExchangeIdx;
 	tree<investor_id> InvestorIdx;
 };
 

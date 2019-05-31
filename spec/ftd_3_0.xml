@@ -413,7 +413,7 @@
 			<item name="BranchID" comment="营业部编号"/>
 			<item name="ExchangeBranchID" comment="交易所营业部编号"/>
 			<item name="PbuID" comment="席位编号"/>
-      <item name="RptQueue" comment="报盘队列名"/>
+            <item name="RptQueue" comment="报盘队列名"/>
 			<item name="IPAddress" comment="IP地址"/>
 			<item name="MacAddress" comment="Mac地址"/>
 		</fieldDefine>
@@ -434,7 +434,8 @@
 			<item name="OrderSysID" comment="报单系统编码"/>
 			<item name="ActionDate" comment="操作日期"/>
 			<item name="ActionTime" comment="操作时间"/>
-			<item name="InvestUnitID" comment="投资单元编号"/>			
+			<item name="PbuID" comment="席位编号"/>
+            <item name="RptQueue" comment="报盘队列名"/>
 			<item name="IPAddress" comment="IP地址"/>
 			<item name="MacAddress" comment="Mac地址"/>
 		</fieldDefine>

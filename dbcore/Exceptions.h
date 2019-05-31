@@ -11,6 +11,7 @@
 #define MCO_ERROR_CODE_PASSWORD_ERROR 103
 #define MCO_ERROR_CODE_AUTHORIZATION_DENIED 104
 #define MCO_ERROR_CODE_GENERATE_SNO  105
+#define MCO_ERROR_CODE_STATUS_UNNORMAL 106
 namespace dbcore 
 {
 	/// Base MCO exception type.
@@ -47,6 +48,14 @@ namespace dbcore
 		{}
 	};
 
+	struct StatusError : public Exception
+	{
+		StatusError(const std::string& detail="")
+			:Exception(MCO_ERROR_CODE_STATUS_UNNORMAL,
+			"×´Ì¬´íÎó",
+			detail)
+			{}
+	};
 
 	struct AuthorizationDenied : public Exception
 	{
