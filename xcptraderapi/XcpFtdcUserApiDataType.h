@@ -338,8 +338,8 @@ typedef char TXcpFtdcSysOrderIdType[20 + 1];
 ///撤成
 #define XCP_FTDC_TCF_Cancel '0'
 
-///成交
-#define XCP_FTDC_TCF_Deal '1'
+///正常
+#define XCP_FTDC_TCF_None '1'
 
 typedef char TXcpFtdcTradeCancelFlagType;
 

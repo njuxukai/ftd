@@ -113,4 +113,13 @@ void verifyAndUpdateOrderStatus(mco_trans_h t, FTD::CFtdcInputOrderActionField& 
 		throw(dbcore::StatusError("原始委托已经是终结状态"));
 	}
 
+	if (dbOrder.cancel_flag == FTDC_TCF_Cancel)
+	{
+		throw(dbcore::StatusError("原始委托撤单标志为待撤"));
+	}
+	strcpy(inputOrderAction.ClOrdID, ((std::string)dbOrder.client_order_id).data());
+	strcpy(inputOrderAction.ActionClOrdID, generate_client_order_id(get_next_sno(SEQ_ORDER_TAG, t)).data());
+	strcpy(inputOrderAction.OrderExchangeID, ((std::string)dbOrder.order_exchange_id).data());
+
+	dbOrder.cancel_flag = FTDC_TCF_Cancel;
 }

@@ -121,7 +121,7 @@ class Order
 	AmountType amount_cum;
 	VolumeType volume_leaves;
 	VolumeType volume_cancelled;
-
+	uint1 cancel_flag;
 	unique tree<front_id, session_id, order_ref> SessionIdx;	
 	unique tree<order_sys_id> SysIdx;
 	unique tree<client_order_id> clOrdIDIdx;

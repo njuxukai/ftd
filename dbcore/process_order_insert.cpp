@@ -212,7 +212,7 @@ void verifyInputAndCreateOrder(ReqOrderInsert* pReq,
 	order.pbu_id = pReq->inputOrderField.PbuID;
 	order.branch_id = pReq->inputOrderField.BranchID;
 	order.exchange_branch_id = pReq->inputOrderField.ExchangeBranchID;
-	
+	order.cancel_flag = FTDC_TCF_None;
 
 	UserExecutionReport userReport;
 	userReport.create(t);

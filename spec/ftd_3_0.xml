@@ -432,6 +432,8 @@
 			<item name="OrderExchangeID" comment="报单交易所编码"/>
 			<item name="BranchID" comment="营业部编码"/>
 			<item name="OrderSysID" comment="报单系统编码"/>
+			<item name="ClOrdID" comment="原始订单ClientID"/>
+			<item name="ActionClOrdID" comment="撤单ClientID"/>
 			<item name="ActionDate" comment="操作日期"/>
 			<item name="ActionTime" comment="操作时间"/>
 			<item name="PbuID" comment="席位编号"/>
@@ -542,6 +544,7 @@
 			<item name="IPAddress" comment="IP地址"/>
 			<item name="MacAddress" comment="Mac地址"/>
 			<item name="TestTimestamp" comment="int64时间"/>
+			<item name="CancelFlag" comment="撤单记号"/>
 		</fieldDefine>
 		
 		<fieldDefine name="QryTradeField" fid="FID_QryTradeField" fidValue="0x0014" comment="报单成交查询请求域">
@@ -847,6 +850,7 @@
 		
 		<itemDefine name="Direction" type="FTDDirection" comment="报单价格方向"/>
 		
+
 		
 		<itemDefine name="ErrorCode" type="FTDErrorCode"  comment="错误代码"/>
 		<itemDefine name="ErrorText" type="FTDStringType&lt;100&gt;" comment="错误正文"/>
@@ -1080,7 +1084,7 @@
 		<typeDefine name="FTDSysOrderId" baseType="FTDStringType&lt;20&gt;" length="20" precision="0"/>
 		<typeDefine name="FTDTradeCancelFlag" baseType="FTDCharType" comment="&#47;" length="1" precision="0">
 			<enumValue name="0" comment="撤成" enname="Cancel"/>
-			<enumValue name="1" comment="成交" enname="Deal"/>
+			<enumValue name="1" comment="正常" enname="None"/>
 		</typeDefine>
 		<typeDefine name="FTDTime" baseType="FTDStringType&lt;8&gt;" comment="hh24nnsscc" length="8" precision="0"/>
 		<typeDefine name="FTDTimeOut" baseType="FTDNumberType&lt;3&gt;" length="3" precision="0"/>
