@@ -254,8 +254,9 @@ FIX50SP2::Message Application::generatePlatformInfo()
 
 void Application::onStepNewOrderSingleNew(const FTD::CFtdcInputOrderField& order, const FIX::SessionID& id)
 {
+	std::string orderExchangeID = getNextOrderID();
 	FTD::CFtdcInnerExecutionReportField report = { 0 };
-	formatExecutionReport(order, report);
+	formatExecutionReport(order, report, orderExchangeID);
 	report.OrderStatus = FTDC_OS_NEW;
 	FIX50SP2::Message message(FIX::MsgType("8"));
 	SZStep::ToFix::formatInnerExecutionReport(report, message);
@@ -268,22 +269,23 @@ void Application::onStepNewOrderSingleReject(const FTD::CFtdcInputOrderField& or
 
 void Application::onStepNewOrderSinglePartTrade(const FTD::CFtdcInputOrderField& order, const FIX::SessionID& id)
 {
+	std::string orderExchangeID = getNextOrderID();
+
 	FTD::CFtdcInnerExecutionReportField report = { 0 };
-	formatExecutionReport(order, report);
+	formatExecutionReport(order, report, orderExchangeID);
 	report.OrderStatus = FTDC_OS_NEW;
 	FIX50SP2::Message message(FIX::MsgType("8"));
 	SZStep::ToFix::formatInnerExecutionReport(report, message);
 	FIX::Session::sendToTarget(message, id);
 
 	FTD::CFtdcInnerExecutionReportField report2 = { 0 };
-	formatExecutionReport(order, report2);
-	
-	report2.VolumeLast = report2.VolumeTotalOrginal / 2;
-	report2.PriceLast = report2.PriceLast;
-
-	report2.VolumeCum = report2.VolumeCum;
-
-	report.OrderStatus = FTDC_OS_PART_TRADED;
+	formatExecutionReport(order, report2, orderExchangeID);
+	report2.ExecType = FTDC_ET_Trade;
+	report2.VolumeLast = report2.VolumeTotalOrginal / 3;
+	report2.PriceLast = report2.LimitPrice;
+	report2.VolumeCum = report2.VolumeLast;
+	report2.VolumeLeaves = report2.VolumeTotalOrginal - report2.VolumeCum;
+	report2.OrderStatus = FTDC_OS_PART_TRADED;
 	FIX50SP2::Message message2(FIX::MsgType("8"));
 	SZStep::ToFix::formatInnerExecutionReport(report2, message2);
 	FIX::Session::sendToTarget(message2, id);
@@ -302,6 +304,7 @@ void Application::formatExecutionReport(const FTD::CFtdcInputOrderField& order, 
 	report.ReportIndex = getNextReportIndex();
 	strcpy(report.OrderRestrictions, "1");
 	strcpy(report.ApplID, "010");
+	strcpy(report.OrderExchangeID, orderID.data());
 	if (order.InvestorID == order.UserID)
 	{
 		report.OwnerType = 1;
@@ -331,6 +334,7 @@ void Application::formatExecutionReport(const FTD::CFtdcInputOrderField& order, 
 	strcpy(report.SecurityAccount, order.SecurityAccount);
 	report.VolumeTotalOrginal = order.VolumeTotalOrginal;
 	report.PriceType = order.PriceType;
+	report.LimitPrice = order.LimitPrice;
 }
 
 int Application::getNextReportIndex()

@@ -215,6 +215,7 @@ class UserExecutionReport
 	int4 front_id;
 	int4 session_id;
 	int4 order_ref;
+	OrderExchangeIDType order_exchange_id;
 	SysSnoType order_sys_id;     //插入时关联
 	SysSnoType uer_sys_id;       //插入时分配
 	SysSnoType ier_sys_id;       //如果ExecType=Create;ier_sys_id = 0

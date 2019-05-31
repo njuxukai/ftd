@@ -87,7 +87,7 @@ void processQryPrivateIntialDataTransaction(const ReqQryPrivateInitialData* pReq
 			reportField.VolumeCum = report.volume_cum;
 			reportField.AmountCum = report.amount_cum;
 			reportField.ReportSysID = report.uer_sys_id;
-
+			strcpy(reportField.OrderExchangeID, ((std::string)report.order_exchange_id).data());
 			pRsp->executionReportFields.push_back(reportField);
 		}
 	}

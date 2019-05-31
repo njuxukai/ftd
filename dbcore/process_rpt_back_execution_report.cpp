@@ -87,6 +87,7 @@ void verifyAndUpdateFields(mco_trans_h t, FTD::CFtdcInnerExecutionReportField& i
 	dbInnerExecutionReport.exchange_type = innerReport.ExchangeType;
 	dbInnerExecutionReport.pbu_id = innerReport.PbuID;
 	dbInnerExecutionReport.exec_type = innerReport.ExecType;
+	dbInnerExecutionReport.order_exchange_id = innerReport.OrderExchangeID;
 	dbInnerExecutionReport.report_exchange_id = innerReport.ReportExchangeID;
 	dbInnerExecutionReport.order_sys_id = dbOrder.order_sys_id;
 	dbInnerExecutionReport.investor_id = dbOrder.investor_id;
@@ -100,8 +101,8 @@ void verifyAndUpdateFields(mco_trans_h t, FTD::CFtdcInnerExecutionReportField& i
 	//2 更新order
 	if (innerReport.ExecType == FTDC_ET_Trade)
 	{
-		dbOrder.volume_cum = dbOrder.volume_cum + dbInnerExecutionReport.volume_cum;
-		dbOrder.amount_cum = dbOrder.amount_cum + dbInnerExecutionReport.volume_cum * dbInnerExecutionReport.price_last;
+		dbOrder.volume_cum = dbOrder.volume_cum + dbInnerExecutionReport.volume_last;
+		dbOrder.amount_cum = dbOrder.amount_cum + dbInnerExecutionReport.volume_last * dbInnerExecutionReport.price_last;
 	}
 	
 	if (innerReport.ExecType == FTDC_ET_Trade && dbOrder.exchange_type == FTDC_ET_SH)
@@ -120,12 +121,19 @@ void verifyAndUpdateFields(mco_trans_h t, FTD::CFtdcInnerExecutionReportField& i
 	{
 		dbOrder.status = innerReport.OrderStatus;
 	}
+
+	if (strlen(innerReport.OrderExchangeID) > 0)
+	{
+		dbOrder.order_exchange_id = innerReport.OrderExchangeID;
+	}
 	//3 db 创造并填充userreport
 	UserExecutionReport dbUserReport;
 	dbUserReport.create(t);
 	dbUserReport.uer_sys_id = get_next_sno(SEQ_USER_EXECUTION_REPORT_TAG, t);
 	dbUserReport.ier_sys_id = dbInnerExecutionReport.ier_sys_id;
 	dbUserReport.exec_type = dbInnerExecutionReport.exec_type;
+	
+	dbUserReport.order_exchange_id = (std::string)dbOrder.order_exchange_id;
 	dbUserReport.investor_id = dbOrder.investor_id;
 	dbUserReport.order_sys_id = dbOrder.order_sys_id;
 	dbUserReport.volume_cum = dbOrder.volume_cum;
@@ -159,5 +167,6 @@ void verifyAndUpdateFields(mco_trans_h t, FTD::CFtdcInnerExecutionReportField& i
 	report.OrderStatus = dbUserReport.status;
 	report.SequenceSeries = dbUserReport.investor_id;
 	report.SequenceNo = dbUserReport.uer_sys_id;
+	strcpy(report.OrderExchangeID, ((std::string)dbUserReport.order_exchange_id).data());
 }
 

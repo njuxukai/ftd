@@ -180,6 +180,12 @@ namespace SampleClientGui
 
                 m_trader.ReqQrySecurityAccount(field, NextRequestID);
                 NextRequestID++;
+
+                ReqQryOrder();
+                ReqQryFund();
+                ReqQryPosition();
+                ReqQryTrade();
+
                 RaiseUserLogin(e);
             }
             
@@ -356,6 +362,7 @@ namespace SampleClientGui
                 }
                 receiveOrderBuffer.Clear();
                 RaiseOrderUpdate();
+                InitialOrderQryFinished = true;
             }
         }
 
@@ -376,7 +383,8 @@ namespace SampleClientGui
                 updateOrder(ref report, ref order, false);
             }
             currentOrderDict[key] = order;
-            RaiseOrderUpdate();
+            if (InitialOrderQryFinished)
+                RaiseOrderUpdate();
         }
 
         static void updateOrder(ref Xcp.ExecutionReportField report, ref Xcp.OrderField order, bool isAll)
@@ -508,6 +516,7 @@ namespace SampleClientGui
         public Int32 FrontID { get; set; }
         public Int32 SessionID { get; set; }
 
+        private bool InitialOrderQryFinished = false;
         private Dictionary<char, String> securityAccounts = new Dictionary<char, string>();
         private Xcp.Trader m_trader;
 
