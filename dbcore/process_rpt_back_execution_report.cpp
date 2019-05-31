@@ -91,6 +91,8 @@ void verifyAndUpdateFields(mco_trans_h t, FTD::CFtdcInnerExecutionReportField& i
 	dbInnerExecutionReport.report_exchange_id = innerReport.ReportExchangeID;
 	dbInnerExecutionReport.order_sys_id = dbOrder.order_sys_id;
 	dbInnerExecutionReport.investor_id = dbOrder.investor_id;
+	dbInnerExecutionReport.instrument_code = innerReport.InstrumentCode;
+	dbInnerExecutionReport.bs_flag = dbOrder.direction;
 	//
 	dbInnerExecutionReport.volume_last = innerReport.VolumeLast;
 	dbInnerExecutionReport.price_last = innerReport.PriceLast;
