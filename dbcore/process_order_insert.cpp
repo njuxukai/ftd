@@ -150,12 +150,15 @@ void verifyInputAndCreateOrder(ReqOrderInsert* pReq,
 	//
 	MCO_RET rc;
 	Order order;
+	
 	rc = Order_SessionIdx_find(t, pReq->inputOrderField.FrontID, pReq->inputOrderField.SessionID,
 		pReq->inputOrderField.OrderRef, &order);
 	if (rc == MCO_S_OK)
 	{
 		throw(dbcore::IndexFindError("委托主键已存在"));
 	}
+	
+	
 
 	// InputOrder信息填充
 	
@@ -210,6 +213,7 @@ void verifyInputAndCreateOrder(ReqOrderInsert* pReq,
 	order.order_sys_id = pReq->inputOrderField.OrderSysID;
 	order.client_order_id = pReq->inputOrderField.ClOrdID;
 	order.pbu_id = pReq->inputOrderField.PbuID;
+	order.rpt_queue = pReq->inputOrderField.RptQueue;
 	order.branch_id = pReq->inputOrderField.BranchID;
 	order.exchange_branch_id = pReq->inputOrderField.ExchangeBranchID;
 	order.cancel_flag = FTDC_TCF_None;

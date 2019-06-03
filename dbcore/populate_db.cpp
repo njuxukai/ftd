@@ -138,7 +138,7 @@ void populate_db_fund(mco_db_h db)
 			//MCO_COMMIT_NO_SYNC
 			fund.create(t);
 			fund.branch_id = 8080;
-			fund.investor_id = 99;
+			fund.investor_id = j;
 			fund.currency_type = FTDC_CT_RMB;
 			fund.amount_drawable = 10000000;
 			fund.amount_available = 10000000;

@@ -64,6 +64,7 @@ void processRptBackExectionReport(const PlainHeaders& headers, FTD::PackageSPtr 
 void verifyAndUpdateFields(mco_trans_h t, FTD::CFtdcInnerExecutionReportField& innerReport,
 	FTD::CFtdcOrderField& order, FTD::CFtdcExecutionReportField& report)
 {
+	
 	MCO_RET rc;
 	Order dbOrder;
 	//1 ≤È—Øorder
@@ -170,5 +171,6 @@ void verifyAndUpdateFields(mco_trans_h t, FTD::CFtdcInnerExecutionReportField& i
 	report.SequenceSeries = dbUserReport.investor_id;
 	report.SequenceNo = dbUserReport.uer_sys_id;
 	strcpy(report.OrderExchangeID, ((std::string)dbUserReport.order_exchange_id).data());
-}
+	
+	}
 

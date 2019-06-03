@@ -112,9 +112,11 @@ private:
 	void onStepNewOrderSingleReject(const FTD::CFtdcInputOrderField& order, const FIX::SessionID& id);
 	void onStepNewOrderSinglePartTrade(const FTD::CFtdcInputOrderField& order, const FIX::SessionID& id);
 	void onStepNewOrderSingleAllTrade(const FTD::CFtdcInputOrderField& order, const FIX::SessionID& id);
+	
 	void onStepReportSynchronization(const FIX::Message& message, const FIX::SessionID& id);
+	
 	void onStepOrderCancelRequest(const FIX::Message& message, const FIX::SessionID& id);
-
+	void onStepOrderAction(const FTD::CFtdcInputOrderActionField& action, const FIX::SessionID& id);
 private:
 	boost::uniform_01<boost::mt19937> m_randomGen;
 	std::string m_cfgFname;
@@ -127,6 +129,7 @@ private:
 	std::string getNextOrderID();
 	void formatExecutionReport(const FTD::CFtdcInputOrderField& order, FTD::CFtdcInnerExecutionReportField& report,
       const std::string orderID="");
+	void formatExecutionReport(const FTD::CFtdcInputOrderActionField& action, FTD::CFtdcInnerExecutionReportField& report);
 };
 
 #endif

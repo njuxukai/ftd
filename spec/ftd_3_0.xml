@@ -434,6 +434,9 @@
 			<item name="OrderSysID" comment="报单系统编码"/>
 			<item name="ClOrdID" comment="原始订单ClientID"/>
 			<item name="ActionClOrdID" comment="撤单ClientID"/>
+			<item name="VolumeTotalOrginal" comment="原始委托数量"/>
+			<item name="Direction" comment="方向"/>
+			<item name="SecurityAccount" comment="证券账号"/>
 			<item name="ActionDate" comment="操作日期"/>
 			<item name="ActionTime" comment="操作时间"/>
 			<item name="PbuID" comment="席位编号"/>

@@ -230,10 +230,11 @@ void Application::onStepReportSynchronization(const FIX::Message& message, const
 
 void Application::onStepOrderCancelRequest(const FIX::Message& message, const FIX::SessionID& sessionID)
 {
-	SZStep::ReportSynchronization reportSync;
-	bool convertResult = SZStep::FromFix::convertReportSynchronization(message, reportSync);
+	FTD::CFtdcInputOrderActionField action = { 0 };
+	bool convertResult = SZStep::FromFix::convertInputOrderActionField(message, action);
 	if (convertResult)
 	{
+		onStepOrderAction(action, sessionID);
 	}
 }
 
@@ -294,9 +295,25 @@ void Application::onStepNewOrderSinglePartTrade(const FTD::CFtdcInputOrderField&
 
 void Application::onStepNewOrderSingleAllTrade(const FTD::CFtdcInputOrderField& order, const FIX::SessionID& id)
 {
+	
+
 }
 
-//TODO
+void Application::onStepOrderAction(const FTD::CFtdcInputOrderActionField& action, const FIX::SessionID& id)
+{
+	//1 撤单成功
+	FTD::CFtdcInnerExecutionReportField report = { 0 };
+	formatExecutionReport(action, report);
+	report.PartitionNo = m_info.partitionIDs[0];
+	report.ReportIndex = getNextReportIndex();
+
+	FIX50SP2::Message message(FIX::MsgType("8"));
+	SZStep::ToFix::formatInnerExecutionReport(report, message);
+	FIX::Session::sendToTarget(message, id);
+	//2 TODO 撤单失败
+}
+
+
 void Application::formatExecutionReport(const FTD::CFtdcInputOrderField& order, FTD::CFtdcInnerExecutionReportField& report,
 	std::string orderID)
 {
@@ -335,6 +352,38 @@ void Application::formatExecutionReport(const FTD::CFtdcInputOrderField& order, 
 	report.VolumeTotalOrginal = order.VolumeTotalOrginal;
 	report.PriceType = order.PriceType;
 	report.LimitPrice = order.LimitPrice;
+}
+
+void Application::formatExecutionReport(const FTD::CFtdcInputOrderActionField& action, FTD::CFtdcInnerExecutionReportField& report)
+{
+	report.PartitionNo = m_info.partitionIDs[0];
+	report.ReportIndex = getNextReportIndex();
+	strcpy(report.OrderRestrictions, "1");
+	strcpy(report.ApplID, "010");
+	strcpy(report.OrderExchangeID, action.OrderExchangeID);
+	if (action.InvestorID == action.UserID)
+	{
+		report.OwnerType = 1;
+	}
+	else
+	{
+		report.OwnerType = 102;
+	}
+	strcpy(report.ReportExchangeID, getNextExecID().data());
+
+
+	report.ExecType = FTDC_ET_Cancelled;
+	report.OrderStatus = FTDC_OS_CANCELLED;
+	report.VolumeLeaves = 0;
+	report.VolumeCum = 0;
+	report.Direction = action.Direction;
+	strcpy(report.ClOrdID, action.ClOrdID);
+	strcpy(report.InstrumentCode, action.InstrumentCode);
+	report.ExchangeType = action.ExchangeType;
+	strcpy(report.SecurityAccount, action.SecurityAccount);
+	report.VolumeTotalOrginal = action.VolumeTotalOrginal;
+	report.PriceType = FTDC_OPT_HS_Limit;
+	report.LimitPrice = 0;
 }
 
 int Application::getNextReportIndex()

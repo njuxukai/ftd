@@ -82,25 +82,27 @@ void verifyAndUpdateOrderStatus(mco_trans_h t, FTD::CFtdcInputOrderActionField& 
 
 	MCO_RET rc;
 	Order dbOrder;
-	
+
 	if (inputOrderAction.FrontID != 0)
 	{
 		rc = Order::SessionIdx::find(t, inputOrderAction.FrontID, inputOrderAction.SessionID, inputOrderAction.OrderRef, dbOrder);
-		
+
 	}
 	else if (inputOrderAction.OrderSysID != 0)
 	{
 		rc = Order::SysIdx::find(t, inputOrderAction.OrderSysID, dbOrder);
 
 	}
+
+	
 	else if (strlen(inputOrderAction.OrderExchangeID) != 0)
 	{
 		mco_cursor_t csr;
 		rc = Order::ExchangeIdx::search(t, &csr, MCO_EQ, inputOrderAction.ExchangeType, inputOrderAction.InvestorID, inputOrderAction.OrderExchangeID, strlen(inputOrderAction.OrderExchangeID));
 		if (rc == MCO_S_OK)
-			dbOrder.from_cursor(t, &csr);
+		dbOrder.from_cursor(t, &csr);
 	}
-
+	
 	if (rc != MCO_S_OK)
 	{
 		throw(dbcore::IndexFindError("未找到相应的原始委托"));
@@ -119,7 +121,13 @@ void verifyAndUpdateOrderStatus(mco_trans_h t, FTD::CFtdcInputOrderActionField& 
 	}
 	strcpy(inputOrderAction.ClOrdID, ((std::string)dbOrder.client_order_id).data());
 	strcpy(inputOrderAction.ActionClOrdID, generate_client_order_id(get_next_sno(SEQ_ORDER_TAG, t)).data());
+	inputOrderAction.VolumeTotalOrginal = dbOrder.volume_total_original;
+	inputOrderAction.Direction = dbOrder.direction;
+	inputOrderAction.ExchangeType = dbOrder.exchange_type;
+	strcpy(inputOrderAction.SecurityAccount, ((std::string)dbOrder.security_account).data());
+	strcpy(inputOrderAction.InstrumentCode, ((std::string)dbOrder.instrument_code).data());
 	strcpy(inputOrderAction.OrderExchangeID, ((std::string)dbOrder.order_exchange_id).data());
-
+	inputOrderAction.PbuID = dbOrder.pbu_id;
+	strcpy(inputOrderAction.RptQueue, ((std::string)dbOrder.rpt_queue).data());
 	dbOrder.cancel_flag = FTDC_TCF_Cancel;
 }

@@ -42,8 +42,15 @@ void ReporterSZSTEPImpl::doSubmit(FTD::PackageSPtr pPackage)
 		FIX50SP2::Message newOrder(FIX::MsgType("D"));
 		SZStep::ToFix::formatInputOrderField(((FTD::ReqRptOrderInsert*)pPackage.get())->inputOrderField, newOrder);
 		FIX::Session::sendToTarget(newOrder, m_loggedSessionID);
+		return;
 	}
-	
+	if (pPackage->m_transactionId == TID_RptOrderAction && pPackage->isRequest())
+	{
+		FIX50SP2::Message orderAction(FIX::MsgType("F"));
+		SZStep::ToFix::formatInputOrderActionField(((FTD::ReqRptOrderAction*)pPackage.get())->inputOrderActionField, orderAction);
+		FIX::Session::sendToTarget(orderAction, m_loggedSessionID);
+		return;
+	}
 }
 
 void ReporterSZSTEPImpl::registerUplinkCallback(const ReporterUplinkCallback& function)

@@ -54,6 +54,7 @@ void processQryOrder(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWrapp
 
 void processQryOrderTransaction(ReqQryOrder* pReq, mco_trans_h t, RspQryOrder* pRsp)
 {
+	
 	int searchInvestorID = pReq->qryOrderField.InvestorID;
 	mco_cursor_t csr;
 	MCO_RET rc = Order::InvestorIdx::cursor(t, &csr);
@@ -88,4 +89,5 @@ void processQryOrderTransaction(ReqQryOrder* pReq, mco_trans_h t, RspQryOrder* p
 			pRsp->orderFields.push_back(orderField);
 		}
 	}
+	
 }
