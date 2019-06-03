@@ -45,7 +45,7 @@ void processRptBackExectionReport(const PlainHeaders& headers, FTD::PackageSPtr 
 	}
 	catch (dbcore::Exception& e)
 	{
-
+		std::cout << e.errorText << std::endl;
 	}
 	catch (McoException& e)
 	{

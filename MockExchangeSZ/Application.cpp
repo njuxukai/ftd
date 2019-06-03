@@ -370,7 +370,8 @@ void Application::formatExecutionReport(const FTD::CFtdcInputOrderActionField& a
 		report.OwnerType = 102;
 	}
 	strcpy(report.ReportExchangeID, getNextExecID().data());
-
+	strcpy(report.ClOrdID, action.ClOrdID);
+	strcpy(report.ActionClOrdID, action.ActionClOrdID);
 
 	report.ExecType = FTDC_ET_Cancelled;
 	report.OrderStatus = FTDC_OS_CANCELLED;
@@ -384,6 +385,8 @@ void Application::formatExecutionReport(const FTD::CFtdcInputOrderActionField& a
 	report.VolumeTotalOrginal = action.VolumeTotalOrginal;
 	report.PriceType = FTDC_OPT_HS_Limit;
 	report.LimitPrice = 0;
+	report.OrderRejReason = 0;
+	strcpy(report.OrderRejText, "³·µ¥³É¹¦");
 }
 
 int Application::getNextReportIndex()

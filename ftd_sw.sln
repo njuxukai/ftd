@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ftd", "ftd\ftd.vcxproj", "{D3B28290-1A56-4B7E-816E-9811C6E77693}"
 EndProject
@@ -69,6 +69,7 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "reporter", "reporter\reporter.vcxproj", "{62615C79-FC89-4E56-8E7B-CE15A7022392}"
 	ProjectSection(ProjectDependencies) = postProject
 		{D3B28290-1A56-4B7E-816E-9811C6E77693} = {D3B28290-1A56-4B7E-816E-9811C6E77693}
+		{D5D558EA-BBAC-4862-A946-D3881BACE3B7} = {D5D558EA-BBAC-4862-A946-D3881BACE3B7}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "quickfix", "quickfix\quickfix_vs14.vcxproj", "{D5D558EA-BBAC-4862-A946-D3881BACE3B7}"
@@ -76,6 +77,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rpt", "Rpt", "{9DFDDC75-71DE-4B0A-90C2-B5DA264F949A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MockExchangeSZ", "MockExchangeSZ\MockExchangeSZ.vcxproj", "{AC97D259-3231-4575-8CA5-BF9EF79B5A87}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D3B28290-1A56-4B7E-816E-9811C6E77693} = {D3B28290-1A56-4B7E-816E-9811C6E77693}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

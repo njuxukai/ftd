@@ -159,7 +159,7 @@ namespace SZStep
 		{
 			msg.getHeader().setField(FIX::MsgType("F"));
 			msg.setField(FIX::ApplID(SZStep::ApplID::XH));
-			msg.setField(FIX::ClOrdID(inputOrderAction.ClOrdID));
+			msg.setField(FIX::ClOrdID(inputOrderAction.ActionClOrdID));
 
 			//TODO OwnerType
 			if (inputOrderAction.UserID == inputOrderAction.InvestorID)
@@ -190,7 +190,7 @@ namespace SZStep
 			//OrderQty
 			msg.setField(FIX::OrderQty(inputOrderAction.VolumeTotalOrginal));
 			//OrigClOrdID
-			msg.setField(FIX::OrigClOrdID(inputOrderAction.ActionClOrdID));
+			msg.setField(FIX::OrigClOrdID(inputOrderAction.ClOrdID));
 			//OrderID
 			msg.setField(FIX::OrderID(inputOrderAction.OrderExchangeID));
 
@@ -520,11 +520,38 @@ namespace SZStep
 		}
 
 
-		bool convertInputOrderActionField(const FIX::Message& msg, FTD::CFtdcInputOrderActionField& req)
+		bool convertInputOrderActionField(const FIX::Message& msg, FTD::CFtdcInputOrderActionField& action)
 		{
 			bool convertResult = true;
 			try
 			{
+				strcpy(action.ActionClOrdID , FIX::StringConvertor::convert(msg.getField(FIX::FIELD::ClOrdID)).data());
+				strcpy(action.ClOrdID, FIX::StringConvertor::convert(msg.getField(FIX::FIELD::OrigClOrdID)).data());
+				char side = FIX::CharConvertor::convert(msg.getField(FIX::FIELD::Side));
+				if (side = FIX::Side_SELL)
+					action.Direction = FTDC_D_SELL;
+				else
+					action.Direction = FTDC_D_BUY;
+				strcpy(action.InstrumentCode, FIX::StringConvertor::convert(msg.getField(FIX::FIELD::SecurityID)).data());
+
+				int partyCount = FIX::IntConvertor::convert(msg.getField(FIX::FIELD::NoPartyIDs));
+				FIX::Group party(FIX::FIELD::NoPartyIDs, FIX::FIELD::PartyID);
+				for (int i = 1; i <= partyCount; i++)
+				{
+					msg.getGroup(i, party);
+					char sourceData = FIX::CharConvertor::convert(party.getField(FIX::FIELD::PartyIDSource));
+					std::string source = party.getField(FIX::FIELD::PartyID);
+					switch (sourceData)
+					{
+					case 'C':
+						action.PbuID = atoi(source.data());
+						break;
+					default:
+						break;
+					}
+				}
+				action.VolumeTotalOrginal = FIX::IntConvertor::convert(msg.getField(FIX::FIELD::OrderQty));
+				strcpy(action.OrderExchangeID, msg.getField(FIX::FIELD::OrderID).data());
 			}
 			catch (...)
 			{
