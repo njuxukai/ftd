@@ -97,7 +97,10 @@ void processOrderInsert(const PlainHeaders& headers, FTD::PackageSPtr pReq, DBWr
 		strcpy(rptHeaders.source_queue, pReqOrderInsert->inputOrderField.RptQueue);
 		std::shared_ptr<ReqRptOrderInsert> pReqRptOrderInsert = std::make_shared<ReqRptOrderInsert>();
 		memcpy(&pReqRptOrderInsert->inputOrderField, &pReqOrderInsert->inputOrderField, sizeof(CFtdcInputOrderField));
+#ifdef _DEBUG
 		std::cout << "Send Report to " << rptHeaders.source_queue << std::endl;
+#endif
+		
 		pWrapper->uplink(rptHeaders, pReqRptOrderInsert);
 	}
 	//อฦหอ

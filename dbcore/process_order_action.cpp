@@ -72,7 +72,9 @@ void processOrderAction(const PlainHeaders& headers, FTD::PackageSPtr pPackage, 
 		strcpy(rptHeaders.source_queue, pReqOrderAction->inputOrderActionField.RptQueue);
 		std::shared_ptr<ReqRptOrderAction> pReqRptOrderAction = std::make_shared<ReqRptOrderAction>();
 		memcpy(&pReqRptOrderAction->inputOrderActionField, &pReqOrderAction->inputOrderActionField, sizeof(CFtdcInputOrderActionField));
+#ifdef _DEBUG
 		std::cout << "Send Report[Action] to " << rptHeaders.source_queue << std::endl;
+#endif
 		pWrapper->uplink(rptHeaders, pReqRptOrderAction);
 	}
 }
