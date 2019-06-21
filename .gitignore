@@ -83,3 +83,4 @@ ipch/*
 *.rar
 /SampleClientGui/bin/Release
 /SampleClientGui/obj/Release
+/logger/log4cplus/include
