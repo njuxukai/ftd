@@ -53,12 +53,16 @@ private:
   {
     if( m_sockets.find(socket) != m_sockets.end() )
     {
+		std::cout << "__FILE__" << __FILE__ << "__LINE__" << __LINE__ << std::endl;
       m_strategy.onConnect( m_server, socket, m_server.accept(socket) );
     }
     else
     {
-      if( !m_strategy.onData( m_server, socket ) )
-        onError( monitor, socket );
+		if (!m_strategy.onData(m_server, socket))
+		{
+			std::cout << "__FILE__" << __FILE__ << "__LINE__" << __LINE__ <<std::endl;
+			onError(monitor, socket);
+		}
     }
   }
 

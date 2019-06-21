@@ -81,6 +81,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MockExchangeSZ", "MockExcha
 		{D3B28290-1A56-4B7E-816E-9811C6E77693} = {D3B28290-1A56-4B7E-816E-9811C6E77693}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "logger", "logger\logger.vcxproj", "{A8F4D2D9-2C78-4BFB-9AB9-A6E79D4ECABB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -267,6 +269,16 @@ Global
 		{AC97D259-3231-4575-8CA5-BF9EF79B5A87}.Release|x64.ActiveCfg = Release|Win32
 		{AC97D259-3231-4575-8CA5-BF9EF79B5A87}.Release|x86.ActiveCfg = Release|Win32
 		{AC97D259-3231-4575-8CA5-BF9EF79B5A87}.Release|x86.Build.0 = Release|Win32
+		{A8F4D2D9-2C78-4BFB-9AB9-A6E79D4ECABB}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{A8F4D2D9-2C78-4BFB-9AB9-A6E79D4ECABB}.Debug|x64.ActiveCfg = Debug|x64
+		{A8F4D2D9-2C78-4BFB-9AB9-A6E79D4ECABB}.Debug|x64.Build.0 = Debug|x64
+		{A8F4D2D9-2C78-4BFB-9AB9-A6E79D4ECABB}.Debug|x86.ActiveCfg = Debug|Win32
+		{A8F4D2D9-2C78-4BFB-9AB9-A6E79D4ECABB}.Debug|x86.Build.0 = Debug|Win32
+		{A8F4D2D9-2C78-4BFB-9AB9-A6E79D4ECABB}.Release|Any CPU.ActiveCfg = Release|Win32
+		{A8F4D2D9-2C78-4BFB-9AB9-A6E79D4ECABB}.Release|x64.ActiveCfg = Release|x64
+		{A8F4D2D9-2C78-4BFB-9AB9-A6E79D4ECABB}.Release|x64.Build.0 = Release|x64
+		{A8F4D2D9-2C78-4BFB-9AB9-A6E79D4ECABB}.Release|x86.ActiveCfg = Release|Win32
+		{A8F4D2D9-2C78-4BFB-9AB9-A6E79D4ECABB}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

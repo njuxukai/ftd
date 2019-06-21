@@ -29,7 +29,8 @@
 #include <set>
 #include <algorithm>
 #include <iostream>
-
+#include <sstream>
+#include "logger/logger.h"
 namespace FTD
 {
 SocketMonitor::SocketMonitor( int timeout )
@@ -199,6 +200,38 @@ void SocketMonitor::block( Strategy& strategy, bool poll, double timeout )
   FD_ZERO( &exceptSet );
   buildSet( m_connectSockets, exceptSet );
 
+  
+  std::ostringstream oss;
+  oss << "ReadSet:";
+  for (auto it = m_readSockets.begin(); it != m_readSockets.end(); it++)
+  {
+	  oss << *it << ";";
+  }
+  oss << std::endl;
+  root_log_debug(oss.str().data());
+
+  oss.str("");
+  oss << "WriteSet:";
+  for (auto it = m_connectSockets.begin(); it != m_connectSockets.end(); it++)
+  {
+	  oss << *it << ";";
+  }
+  for (auto it = m_writeSockets.begin(); it != m_writeSockets.end(); it++)
+  {
+	  oss << *it << ";";
+  }
+  oss << std::endl;
+  root_log_debug(oss.str().data());
+
+  oss.str("");
+  oss << "ExceptSet:";
+  for (auto it = m_connectSockets.begin(); it != m_connectSockets.end(); it++)
+  {
+	  oss << *it << ";";
+  }
+  oss << std::endl;
+  root_log_debug(oss.str().data());
+
   if ( sleepIfEmpty(poll) )
   {
     strategy.onTimeout( *this );
@@ -206,6 +239,7 @@ void SocketMonitor::block( Strategy& strategy, bool poll, double timeout )
   }
 
   int result = select( FD_SETSIZE, &readSet, &writeSet, &exceptSet, getTimeval(poll, timeout) );
+  //int result = select(FD_SETSIZE, &readSet, &writeSet, &exceptSet, NULL);
 
   if ( result == 0 )
   {

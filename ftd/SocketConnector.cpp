@@ -47,6 +47,7 @@ private:
   void onConnect( SocketMonitor&, int socket )
   {    
     m_strategy.onConnect( m_connector, socket );
+	std::cout << "__FILE__" << __FILE__ << "__LINE__" << __LINE__;
   }
 
   void onWrite( SocketMonitor&, int socket )
@@ -56,23 +57,31 @@ private:
 
   void onEvent( SocketMonitor&, int socket )
   {
-    if( !m_strategy.onData( m_connector, socket ) )
-      m_strategy.onDisconnect( m_connector, socket );
+	  if (!m_strategy.onData(m_connector, socket))
+	  {
+		  m_strategy.onDisconnect(m_connector, socket);
+		  std::cout << "__FILE__" << __FILE__ << "__LINE__" << __LINE__;
+		  return;
+	  }
+	  std::cout << "__FILE__" << __FILE__ << "__LINE__" << __LINE__;
   }
 
   void onError( SocketMonitor&, int socket )
   {
     m_strategy.onDisconnect( m_connector, socket );
+	std::cout << "__FILE__" << __FILE__ << "__LINE__" << __LINE__;
   }
 
   void onError( SocketMonitor& )
   {
     m_strategy.onError( m_connector );
+	std::cout << "__FILE__" << __FILE__ << "__LINE__" << __LINE__;
   }
 
   void onTimeout( SocketMonitor& )
   {
-    m_strategy.onTimeout( m_connector );
+	  m_strategy.onTimeout(m_connector);
+	  std::cout << "__FILE__" << __FILE__ << "__LINE__" << __LINE__;
   };
 
   SocketConnector& m_connector;

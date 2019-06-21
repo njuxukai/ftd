@@ -29,6 +29,7 @@
 #include "Utility.h"
 #include "Exceptions.h"
 
+#include <common\log.h>
 namespace FTD
 {
 SocketAcceptor::SocketAcceptor( Application& application,
