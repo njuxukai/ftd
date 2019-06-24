@@ -199,31 +199,7 @@ void SocketMonitor::block( Strategy& strategy, bool poll, double timeout )
   FD_ZERO( &exceptSet );
   buildSet(m_connectSockets, exceptSet);
 
-  //
-  std::cout << "ReadSet:";
-  for (auto it = m_readSockets.begin(); it != m_readSockets.end(); it++)
-  {
-	  std::cout << *it << ";";
-  }
-  std::cout << std::endl;
-
-  std::cout << "WriteSet:";
-  for (auto it = m_connectSockets.begin(); it != m_connectSockets.end(); it++)
-  {
-	  std::cout << *it << ";";
-  }
-  for (auto it = m_writeSockets.begin(); it != m_writeSockets.end(); it++)
-  {
-	  std::cout << *it << ";";
-  }
-  std::cout << std::endl;
-
-  std::cout << "ExceptSet:";
-  for (auto it = m_connectSockets.begin(); it != m_connectSockets.end(); it++)
-  {
-	  std::cout << *it << ";";
-  }
-  std::cout << std::endl;
+  
 
   if ( sleepIfEmpty(poll) )
   {

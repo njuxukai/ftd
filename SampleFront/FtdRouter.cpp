@@ -283,6 +283,7 @@ void FtdRouter::OnPackage(const ReqQrySecurityAccount& req, const SessionID& id)
 ******************************************************************************/
 void FtdRouter::OnPackage(RspUserLogin& package, const SessionID& id)
 {
+	root_log(LOG_DEBUG, "OnPackage RspUserLogin,front_id=%d", m_parameter.frontID);
 	package.rspUserLoginField.FrontID = m_parameter.frontID;
 	package.rspUserLoginField.SessionID = id;
 #ifdef _DEBUG

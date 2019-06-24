@@ -39,6 +39,7 @@ SocketMonitor::SocketMonitor( int timeout )
   socket_init();
 
   std::pair<int, int> sockets = socket_createpair();
+  root_log(LOG_DEBUG, "signal=%d,interrupt=%d", sockets.first, sockets.second);
   m_signal = sockets.first;
   m_interrupt = sockets.second;
   socket_setnonblock( m_signal );
@@ -181,6 +182,7 @@ void SocketMonitor::unsignal( int s )
 
 void SocketMonitor::block( Strategy& strategy, bool poll, double timeout )
 {
+	root_log(LOG_DEBUG, "timeout=%.3f", timeout);
   while ( m_dropped.size() )
   {
     strategy.onError( *this, m_dropped.front() );
@@ -207,8 +209,7 @@ void SocketMonitor::block( Strategy& strategy, bool poll, double timeout )
   {
 	  oss << *it << ";";
   }
-  oss << std::endl;
-  root_log_debug(oss.str().data());
+  root_log(LOG_DEBUG, oss.str().data());
 
   oss.str("");
   oss << "WriteSet:";
@@ -220,8 +221,7 @@ void SocketMonitor::block( Strategy& strategy, bool poll, double timeout )
   {
 	  oss << *it << ";";
   }
-  oss << std::endl;
-  root_log_debug(oss.str().data());
+  root_log(LOG_DEBUG, oss.str().data());
 
   oss.str("");
   oss << "ExceptSet:";
@@ -229,8 +229,7 @@ void SocketMonitor::block( Strategy& strategy, bool poll, double timeout )
   {
 	  oss << *it << ";";
   }
-  oss << std::endl;
-  root_log_debug(oss.str().data());
+  root_log(LOG_DEBUG, oss.str().data());
 
   if ( sleepIfEmpty(poll) )
   {
@@ -240,7 +239,7 @@ void SocketMonitor::block( Strategy& strategy, bool poll, double timeout )
 
   int result = select( FD_SETSIZE, &readSet, &writeSet, &exceptSet, getTimeval(poll, timeout) );
   //int result = select(FD_SETSIZE, &readSet, &writeSet, &exceptSet, NULL);
-
+  root_log(LOG_DEBUG, "Secs=%ld,uSecs=%ld", m_timeval.tv_sec, m_timeval.tv_usec);
   if ( result == 0 )
   {
     strategy.onTimeout( *this );

@@ -29,7 +29,7 @@
 #include "SessionFactory.h"
 #include <algorithm>
 #include <fstream>
-
+#include <logger/logger.h>
 namespace FTD
 {
 Initiator::Initiator( Application& application,
@@ -147,7 +147,7 @@ void Initiator::connect()
   if (m_nextConnectPortIdx >= m_ports.size())
 	  m_nextConnectPortIdx = m_nextConnectPortIdx % m_ports.size();
   doConnect(m_ports[m_nextConnectPortIdx], m_settings.get(m_ports[m_nextConnectPortIdx]));
-  std::cout << "Connecting to " << m_ports[m_nextConnectPortIdx].toString() << std::endl;
+  root_log(LOG_DEBUG, "Connecting to %s", m_ports[m_nextConnectPortIdx].toString().data());
   m_nextConnectPortIdx += 1;
   /*
   for ( ; i != disconnected.end(); ++i )

@@ -106,6 +106,7 @@ throw ( RuntimeError )
       throw RuntimeError( "Unable to create, bind, or listen to port " 
                          + IntConvertor::convert( (unsigned short)port ) + " (" + e.what() + ")" );
     }
+
     if( noDelay )
       socket_setsockopt( socket, TCP_NODELAY );
     if( sendBufSize )
