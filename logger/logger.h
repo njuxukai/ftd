@@ -1,6 +1,6 @@
 #pragma once
 
-
+ 
 #define CALL_CONVENTION  __stdcall
 #ifdef MALVA_EXPORT
 #define API_EXPORT __declspec(dllexport)
