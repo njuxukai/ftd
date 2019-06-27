@@ -45,7 +45,8 @@ Session::Session( Application& application,
                   PackageStoreFactory& packageStoreFactory,
                   const SessionID& sessionID,
 	              LogFactory* pLogFactory,
-	bool receiveReq)
+	bool receiveReq,
+	int logon_timeout)
 : m_application( application ),
   m_packageStoreFactory(packageStoreFactory),
   m_sessionID( sessionID ),
@@ -53,6 +54,7 @@ Session::Session( Application& application,
   m_pResponder( 0 ),
   m_packageBuffer()
 {
+  m_state.logonTimeout(logon_timeout);
   m_state.heartBtInt( 0 );
   m_state.initiate(!receiveReq );
   m_state.store(m_packageStoreFactory.create( m_sessionID ) );
@@ -85,6 +87,7 @@ void Session::next( const UtcTimeStamp& timeStamp )
 	//Initiator & Acceptor µÇÂ¼³¬Ê±
 	if (m_state.logonTimedOut())
 	{
+		std::cout << "Timed out waiting for logon response" << std::endl;
 		m_state.onEvent("Timed out waiting for logon response");
 		disconnect(DISCONNECT_LOGIN_TIMEOUT);
 		return;

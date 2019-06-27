@@ -109,7 +109,13 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>xcopy  $(SolutionDir)\export\$(Configuration)\xcptraderapi.*   /Y/I  $(SolutionDir)\export\$(Configuration)\$(ProjectName)\</PreBuildEvent>
+    <PreBuildEvent>xcopy  $(SolutionDir)\export\$(Configuration)\xcptraderapi.*   /Y/I  $(SolutionDir)\export\$(Configuration)\$(ProjectName)\
+
+
+xcopy  $(SolutionDir)\import\lib\win32\$(Configuration)\log4cplusD.*   /Y/I  $(SolutionDir)\export\$(Configuration)\$(ProjectName)\
+
+
+xcopy  $(SolutionDir)\export\$(Configuration)\logger.dll   /Y/I $(SolutionDir)\export\$(Configuration)\$(ProjectName)\</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

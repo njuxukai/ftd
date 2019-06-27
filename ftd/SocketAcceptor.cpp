@@ -29,6 +29,7 @@
 #include "Utility.h"
 #include "Exceptions.h"
 
+#include "logger/logger.h"
 namespace FTD
 {
 SocketAcceptor::SocketAcceptor( Application& application,
@@ -161,7 +162,7 @@ void SocketAcceptor::onStop()
 
 void SocketAcceptor::onConnect( SocketServer& server, int a, int s )
 {
-	std::cout << "Acceptor[OnConnect]\n";
+	root_log(LOG_DEBUG, "onConnect,acceptor=[%d],new socket=[%d]", a, s);
   if ( !socket_isValid( s ) ) return;
   SocketConnections::iterator i = m_connections.find( s );
   if ( i != m_connections.end() ) return;

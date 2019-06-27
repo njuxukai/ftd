@@ -30,6 +30,7 @@
 #include "Session.h"
 #include "Utility.h"
 
+#include "logger/logger.h"
 namespace FTD
 {
 
@@ -120,6 +121,7 @@ bool SocketConnection::read( SocketConnector& s )
   }
   catch( SocketRecvFailed& e )
   {
+	root_log(LOG_DEBUG, "[%d]SocketRecvFailed, %s",m_socket, e.what());
     m_pSession->getLog()->onEvent( e.what() );
     return false;
   }
@@ -128,10 +130,11 @@ bool SocketConnection::read( SocketConnector& s )
 
 bool SocketConnection::read( SocketAcceptor& a, SocketServer& s )
 {
+	bool read_result = false;
 	if (!m_pSession)
 	{
 		s.getMonitor().drop(m_socket);
-		return false;
+		return read_result;
 	}
   std::string msg;
 
@@ -193,20 +196,22 @@ bool SocketConnection::read( SocketAcceptor& a, SocketServer& s )
     {*/
       readFromSocket();
       readMessages( s.getMonitor() );
-      return true;
+	  read_result = true;
     //}
   }
   catch ( SocketRecvFailed& e )
   {
+	  root_log(LOG_DEBUG, "[%d]SocketRecvFailed,%s",m_socket, e.what());
     if( m_pSession )
       m_pSession->getLog()->onEvent( e.what() );
     s.getMonitor().drop( m_socket );
   }
-  catch ( InvalidMessage& )
+  catch ( InvalidMessage& e)
   {
+	  root_log(LOG_DEBUG, "[%d]InvalidMessage,%s",m_socket, e.what());
     s.getMonitor().drop( m_socket );
   }
-  return false;
+  return read_result;
 }
 
 bool SocketConnection::isValidSession()

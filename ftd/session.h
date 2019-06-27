@@ -32,7 +32,8 @@ public:
   Session( Application&, PackageStoreFactory&,
            const SessionID&,
            LogFactory* pLogFactory,
-	       bool receiveReq);
+	       bool receiveReq,
+	       int logon_timeout = 10);
   virtual ~Session();
 
   void logon() 

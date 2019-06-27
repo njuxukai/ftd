@@ -34,6 +34,7 @@
 #endif
 #include <exception>
 
+#include <logger/logger.h>
 namespace FTD
 {
 /// Handles events from SocketMonitor for server connections.
@@ -51,16 +52,17 @@ private:
 
   void onEvent( SocketMonitor& monitor, int socket )
   {
+	  root_log(LOG_DEBUG, "onEvent[%d]", socket);
     if( m_sockets.find(socket) != m_sockets.end() )
     {
-		std::cout << "__FILE__" << __FILE__ << "__LINE__" << __LINE__ << std::endl;
+		root_log(LOG_DEBUG, "socket[%d]是一个监听socket，在该socket上接受新的连接", socket);
       m_strategy.onConnect( m_server, socket, m_server.accept(socket) );
     }
     else
     {
 		if (!m_strategy.onData(m_server, socket))
 		{
-			std::cout << "__FILE__" << __FILE__ << "__LINE__" << __LINE__ <<std::endl;
+			root_log(LOG_DEBUG, "在socket[%d]上尝试接受数据失败，调用onError", socket);
 			onError(monitor, socket);
 		}
     }
@@ -106,6 +108,7 @@ int SocketServer::add( int port, bool reuse, bool noDelay,
     return m_portToInfo[port].m_socket;
 
   int socket = socket_createAcceptor( port, reuse );
+  root_log(LOG_DEBUG, "在端口[%d]上创建AcceptorSocket[%d]", port, socket);
   if( socket < 0 )
     throw SocketException();
   if( noDelay )

@@ -28,6 +28,7 @@
 #include "Settings.h"
 #include "SessionFactory.h"
 
+#include "logger/logger.h"
 namespace FTD
 {
 SocketInitiator::SocketInitiator( Application& application,
@@ -78,11 +79,12 @@ throw ( RuntimeError )
 
 void SocketInitiator::onStart()
 {
+	
   connect();
-
+  root_log(LOG_DEBUG, "first connect");
   while ( !isStopped() ) {
 	// m_connector.block(*this, false, 1.0);
-    m_connector.block( *this, false, 1.0 );
+    m_connector.block( *this, false, 8.0 );
     onTimeout( m_connector );
   }
 
@@ -234,6 +236,9 @@ void SocketInitiator::onTimeout( SocketConnector& )
 	  && (m_connections.size() + m_pendingConnections.size() == 0)
 	  && (now - m_lastConnect) >= m_reconnectInterval )
   {
+	  root_log(LOG_DEBUG, "当前满足重连条件:连接数[%d],待连接数[%d],重传间隔[%lld],重传间隔参数[%d]",
+		  m_connections.size(), m_pendingConnections.size(), now - m_lastConnect,
+		  m_reconnectInterval);
     connect();
     m_lastConnect = now;
 	//m_needReconnect = false;

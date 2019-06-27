@@ -31,6 +31,7 @@
 #include "Log.h"
 #include "Mutex.h"
 #include "FtdMessageUtil.h"
+#include "logger/logger.h"
 namespace FTD
 {
 /// Maintains all of state for the Session class.
@@ -43,8 +44,8 @@ public:
 : m_enabled( true ), m_receivedLogon( false ),
   m_sentLogout( false ), m_sentLogon( false ),
   m_sentReset( false ), m_receivedReset( false ),
-  m_initiate( false ), m_logonTimeout( 1 ), 
-  m_logoutTimeout( 2 ), m_testRequest( 0 ),
+  m_initiate( false ), m_logonTimeout( 10 ), 
+  m_logoutTimeout( 3 ), m_testRequest( 0 ),
   m_pStore( 0 ), m_pLog( 0 ) {}
 
   bool enabled() const { return m_enabled; }
@@ -69,7 +70,9 @@ public:
   void initiate( bool value ) { m_initiate = value; }
 
   int logonTimeout() const { return m_logonTimeout; }
-  void logonTimeout( int value ) { m_logonTimeout = value; }
+  void logonTimeout( int value ) { m_logonTimeout = value; 
+  root_log(LOG_DEBUG, "Setting: logonTimeout=%d", m_logonTimeout);
+  }
 
   int logoutTimeout() const { return m_logoutTimeout; }
   void logoutTimeout( int value ) { m_logoutTimeout = value; }
@@ -119,10 +122,16 @@ public:
 	  if (sentLogon() && receivedLogon())
 		  return false;
     UtcTimeStamp now;
-	if (initiate() && (now - lastReceivedTime() >= logonTimeout()))
+	if (initiate() && (now - lastReceivedTime() > logonTimeout()))
+	{
+		root_log(LOG_DEBUG, "Initiator,LastReceiveTillNow[%d],NanoSeconds[%lld],logonTimeout[%d]", now - lastReceivedTime(),now.m_time - lastReceivedTime().m_time, m_logonTimeout);
 		return true;
-	if (!initiate() && (now - lastSentTime() >= logonTimeout()))
+	}
+	if (!initiate() && (now - lastSentTime() > logonTimeout()))
+	{
+		root_log(LOG_DEBUG, "Acceptor,LastSentTillNow[%d],NanoSeconds[%lld],logonTimeout[%d]", now - lastSentTime(), now.m_time - lastSentTime().m_time, m_logonTimeout);
 		return true;
+	}
 	return false;
   }
 

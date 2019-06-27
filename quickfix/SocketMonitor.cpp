@@ -199,7 +199,7 @@ void SocketMonitor::block( Strategy& strategy, bool poll, double timeout )
   FD_ZERO( &exceptSet );
   buildSet(m_connectSockets, exceptSet);
 
- 
+  
 
   if ( sleepIfEmpty(poll) )
   {
