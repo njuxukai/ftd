@@ -84,7 +84,10 @@ void SocketInitiator::onStart()
   root_log(LOG_DEBUG, "first connect");
   while ( !isStopped() ) {
 	// m_connector.block(*this, false, 1.0);
-    m_connector.block( *this, false, 8.0 );
+    m_connector.block( *this, false, 1.0 );
+	//for cleaning dropped socket(Prevent reconnect with a dropped socket )
+	//root_log(LOG_DEBUG, "{{{In Between}}}");
+	//m_connector.block(*this, false, 1.0);
     onTimeout( m_connector );
   }
 
@@ -142,7 +145,7 @@ int SocketInitiator::doConnect( const PortID& p, const Dictionary& d )
 
 	
 	int socket = m_connector.connect(address, port, m_noDelay, m_sendBufSize, m_rcvBufSize, sourceAddress, sourcePort );
-
+	root_log(LOG_DEBUG, "´´½¨socket[%d]", socket);
 
 	SessionID s;
 	std::string randomString;
@@ -228,6 +231,8 @@ void SocketInitiator::onError( SocketConnector& connector )
 
 void SocketInitiator::onTimeout( SocketConnector& )
 {
+
+	root_log(LOG_DEBUG, "SocketInitiator::onTimeout");
   time_t now;
   ::time( &now );
 

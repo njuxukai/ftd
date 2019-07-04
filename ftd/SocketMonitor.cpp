@@ -182,13 +182,18 @@ void SocketMonitor::unsignal( int s )
 
 void SocketMonitor::block( Strategy& strategy, bool poll, double timeout )
 {
-	root_log(LOG_DEBUG, "timeout=%.3f", timeout);
+	root_log(LOG_DEBUG, "[[[SocketMonitor::block begin, timeout=%.3f]]]", timeout);
   while ( m_dropped.size() )
   {
     strategy.onError( *this, m_dropped.front() );
+	root_log(LOG_DEBUG, "SocketMonitor::block, call strategy.onError, 189 drop[%d]" ,m_dropped.front());
     m_dropped.pop();
-    if ( m_dropped.size() == 0 )
-      return ;
+	if (m_dropped.size() == 0)
+	{
+		
+		root_log(LOG_DEBUG, "[[[SocketMonitor::block end %d]]]", __LINE__);
+		return;
+	}
   }
 
   fd_set readSet;
@@ -233,6 +238,7 @@ void SocketMonitor::block( Strategy& strategy, bool poll, double timeout )
 
   if ( sleepIfEmpty(poll) )
   {
+	  root_log(LOG_DEBUG, "SocketMonitor::block, %d", __LINE__);
     strategy.onTimeout( *this );
     return;
   }
@@ -242,19 +248,34 @@ void SocketMonitor::block( Strategy& strategy, bool poll, double timeout )
   root_log(LOG_DEBUG, "Secs=%ld,uSecs=%ld", m_timeval.tv_sec, m_timeval.tv_usec);
   if ( result == 0 )
   {
+	  root_log(LOG_DEBUG, "SocketMonitor::block %d", __LINE__);
     strategy.onTimeout( *this );
     return;
   }
   else if ( result > 0 )
   {
+	root_log(LOG_DEBUG, "SocketMonitor::block, 3 processes begin %d", __LINE__);
     processExceptSet( strategy, exceptSet );
     processWriteSet( strategy, writeSet );
     processReadSet( strategy, readSet );
+	root_log(LOG_DEBUG, "SocketMonitor::block, 3 processes end %d", __LINE__);
   }
   else
   {
-    strategy.onError( *this );
+	  root_log(LOG_DEBUG, "SocketMonitor::block, call strategy.onError");
+	  strategy.onError(*this);
   }
+
+  while (m_dropped.size())
+  {
+	  strategy.onError(*this, m_dropped.front());
+	  root_log(LOG_DEBUG, "SocketMonitor::block, call strategy.onError, 267 drop[%d]", m_dropped.front());
+	  m_dropped.pop();
+	  if (m_dropped.size() == 0)
+		  break;
+  }
+  
+  root_log(LOG_DEBUG, "[[[SocketMonitor::block end]]]");
 }
 
 void SocketMonitor::processReadSet( Strategy& strategy, fd_set& readSet )
@@ -344,6 +365,7 @@ void SocketMonitor::processExceptSet( Strategy& strategy, fd_set& exceptSet )
   {
     int s = exceptSet.fd_array[ i ];
     strategy.onError( *this, s );
+	root_log(LOG_DEBUG, "SocketMonitor::processExceptSet, call strategy.onError, %d", s);
   }
 #else
     Sockets::iterator i;

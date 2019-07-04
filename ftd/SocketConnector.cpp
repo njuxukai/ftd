@@ -1,21 +1,4 @@
-/****************************************************************************
-** Copyright (c) 2001-2014
-**
-** This file is part of the QuickFIX FIX Engine
-**
-** This file may be distributed under the terms of the quickfixengine.org
-** license as defined by quickfixengine.org and appearing in the file
-** LICENSE included in the packaging of this file.
-**
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.quickfixengine.org/LICENSE for licensing information.
-**
-** Contact ask@quickfixengine.org if any conditions of this licensing are
-** not clear to you.
-**
-****************************************************************************/
+
 
 #ifdef _MSC_VER
 #include "stdafx.h"
@@ -32,6 +15,7 @@
 #include <sys/stat.h>
 #endif
 #include <iostream>
+#include "logger/logger.h"
 
 namespace FTD
 {
@@ -47,7 +31,6 @@ private:
   void onConnect( SocketMonitor&, int socket )
   {    
     m_strategy.onConnect( m_connector, socket );
-	std::cout << "__FILE__" << __FILE__ << "__LINE__" << __LINE__;
   }
 
   void onWrite( SocketMonitor&, int socket )
@@ -59,29 +42,28 @@ private:
   {
 	  if (!m_strategy.onData(m_connector, socket))
 	  {
+		  root_log(LOG_DEBUG, "SocketConnector::onEvent,onData Error");
 		  m_strategy.onDisconnect(m_connector, socket);
-		  std::cout << "__FILE__" << __FILE__ << "__LINE__" << __LINE__;
 		  return;
 	  }
-	  std::cout << "__FILE__" << __FILE__ << "__LINE__" << __LINE__;
   }
 
   void onError( SocketMonitor&, int socket )
   {
+	  root_log(LOG_DEBUG, "SocketConnector::onError[%d]", socket);
     m_strategy.onDisconnect( m_connector, socket );
-	std::cout << "__FILE__" << __FILE__ << "__LINE__" << __LINE__;
   }
 
   void onError( SocketMonitor& )
   {
+	  root_log(LOG_DEBUG, "SocketConnector::onError");
     m_strategy.onError( m_connector );
-	std::cout << "__FILE__" << __FILE__ << "__LINE__" << __LINE__;
   }
 
   void onTimeout( SocketMonitor& )
   {
+	  root_log(LOG_DEBUG, "SocketConnector::onTimeout");
 	  m_strategy.onTimeout(m_connector);
-	  std::cout << "__FILE__" << __FILE__ << "__LINE__" << __LINE__;
   };
 
   SocketConnector& m_connector;
