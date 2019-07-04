@@ -54,6 +54,7 @@ private:
   inline timeval* getTimeval( bool poll, double timeout );
   inline bool sleepIfEmpty( bool poll );
 
+  void clearDropped(Strategy& strategy);
   void processReadSet( Strategy&, fd_set& );
   void processWriteSet( Strategy&, fd_set& );
   void processExceptSet( Strategy&, fd_set& );

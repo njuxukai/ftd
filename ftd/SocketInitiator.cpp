@@ -82,12 +82,9 @@ void SocketInitiator::onStart()
 	
   connect();
   root_log(LOG_DEBUG, "first connect");
-  while ( !isStopped() ) {
-	// m_connector.block(*this, false, 1.0);
+  while ( !isStopped() ) 
+  {
     m_connector.block( *this, false, 1.0 );
-	//for cleaning dropped socket(Prevent reconnect with a dropped socket )
-	//root_log(LOG_DEBUG, "{{{In Between}}}");
-	//m_connector.block(*this, false, 1.0);
     onTimeout( m_connector );
   }
 

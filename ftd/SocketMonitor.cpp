@@ -180,22 +180,39 @@ void SocketMonitor::unsignal( int s )
   m_writeSockets.erase( s );
 }
 
+void SocketMonitor::clearDropped(Strategy& strategy)
+{
+	while (m_dropped.size())
+	{
+		strategy.onError(*this, m_dropped.front());
+		root_log(LOG_DEBUG, "SocketMonitor::block, call strategy.onError, 189 drop[%d]", m_dropped.front());
+		m_dropped.pop();
+	}
+}
+
 void SocketMonitor::block( Strategy& strategy, bool poll, double timeout )
 {
 	root_log(LOG_DEBUG, "[[[SocketMonitor::block begin, timeout=%.3f]]]", timeout);
+  
+  /*
   while ( m_dropped.size() )
   {
-    strategy.onError( *this, m_dropped.front() );
-	root_log(LOG_DEBUG, "SocketMonitor::block, call strategy.onError, 189 drop[%d]" ,m_dropped.front());
-    m_dropped.pop();
-	if (m_dropped.size() == 0)
+  strategy.onError( *this, m_dropped.front() );
+  root_log(LOG_DEBUG, "SocketMonitor::block, call strategy.onError, 189 drop[%d]" ,m_dropped.front());
+  m_dropped.pop();
+  if (m_dropped.size() == 0)
+  {
+
+  root_log(LOG_DEBUG, "[[[SocketMonitor::block end %d]]]", __LINE__);
+  return;
+  }
+  }
+  */
+	if (m_dropped.size())
 	{
-		
-		root_log(LOG_DEBUG, "[[[SocketMonitor::block end %d]]]", __LINE__);
+		clearDropped(strategy);
 		return;
 	}
-  }
-
   fd_set readSet;
   FD_ZERO( &readSet );
   buildSet( m_readSockets, readSet );
@@ -266,6 +283,7 @@ void SocketMonitor::block( Strategy& strategy, bool poll, double timeout )
 	  strategy.onError(*this);
   }
 
+  /*
   while (m_dropped.size())
   {
 	  strategy.onError(*this, m_dropped.front());
@@ -274,7 +292,12 @@ void SocketMonitor::block( Strategy& strategy, bool poll, double timeout )
 	  if (m_dropped.size() == 0)
 		  break;
   }
-  
+  */
+  if (m_dropped.size())
+  {
+	  clearDropped(strategy);
+	  return;
+  }
   root_log(LOG_DEBUG, "[[[SocketMonitor::block end]]]");
 }
 
