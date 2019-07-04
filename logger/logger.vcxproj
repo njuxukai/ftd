@@ -109,21 +109,29 @@
     <PostBuildEvent>
       <Command>echo test\ &gt; EXCLUDE
 
+
 echo log4cplus\ &gt; EXCLUDE
 
+
 echo stdafx.h &gt;&gt; EXCLUDE
+
 echo targetver.h &gt;&gt; EXCLUDE
 
+
 echo release\ &gt;&gt; EXCLUDE
+
 
 
 echo debug\ &gt;&gt; EXCLUDE
 
 
+
 echo double-conversion\ &gt;&gt; EXCLUDE
 
 
+
 xcopy *.h /S/Y/E/I /EXCLUDE:EXCLUDE ..\export\include\logger 
+
 
 del /F EXCLUDE</Command>
     </PostBuildEvent>
@@ -150,7 +158,7 @@ del /F EXCLUDE</Command>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>MALVA_EXPORT;WIN32;NDEBUG;_WINDOWS;_USRDLL;MALVALOGGER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>MALVA_EXPORT;_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;_WINDOWS;_USRDLL;MALVALOGGER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(ProjectDir)\log4cplus\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -161,6 +169,35 @@ del /F EXCLUDE</Command>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(ProjectDir)\log4cplus\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>echo test\ &gt; EXCLUDE
+
+
+echo log4cplus\ &gt; EXCLUDE
+
+
+echo stdafx.h &gt;&gt; EXCLUDE
+
+echo targetver.h &gt;&gt; EXCLUDE
+
+
+echo release\ &gt;&gt; EXCLUDE
+
+
+
+echo debug\ &gt;&gt; EXCLUDE
+
+
+
+echo double-conversion\ &gt;&gt; EXCLUDE
+
+
+
+xcopy *.h /S/Y/E/I /EXCLUDE:EXCLUDE ..\export\include\logger 
+
+
+del /F EXCLUDE</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>

@@ -57,7 +57,7 @@ void DBWrapperMcoImpl::initDB2()
 	sample_header("ExtremeDB opens.\n");
 	rc = sample_open_database(db_name, genericdb_get_dictionary(), DATABASE_SIZE, CACHE_SIZE,
 		MEMORY_PAGE_SIZE, PSTORAGE_PAGE_SIZE, 10, &m_dbmem);
-	sample_rc_check("\tOpen database", rc);
+	sample_rc_check("\tOpen database\n", rc);
 }
 
 
