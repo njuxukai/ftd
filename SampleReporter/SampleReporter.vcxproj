@@ -149,14 +149,20 @@ xcopy  $(SolutionDir)\spec\szstep1.11.xml /Y/I  ..\export\$(Configuration)\$(Pro
     <PreBuildEvent>
       <Command>xcopy  sample_reporter.cfg   /Y/I  ..\export\$(Configuration)\$(ProjectName)\
 
+
 xcopy  step\*.* /Y/I  ..\export\$(Configuration)\$(ProjectName)\step\ /s /e
+
 
 xcopy  ..\export\$(Configuration)\reporter.*   /Y/I  ..\export\$(Configuration)\$(ProjectName)\
 
+
 xcopy  ..\export\$(Configuration)\mqclient.*   /Y/I  ..\export\$(Configuration)\$(ProjectName)\
 
-xcopy  ..\import\lib\win32\debug\SimpleAmqpClient.2.*   /Y/I  ..\export\$(Configuration)\$(ProjectName)\
+
+xcopy  ..\import\lib\win32\$(Configuration)\SimpleAmqpClient.2.*   /Y/I  ..\export\$(Configuration)\$(ProjectName)\
+
 xcopy  $(SolutionDir)\spec\FIXT11.xml /Y/I  ..\export\$(Configuration)\$(ProjectName)\step\spec\
+
 xcopy  $(SolutionDir)\spec\szstep1.11.xml /Y/I  ..\export\$(Configuration)\$(ProjectName)\step\spec\</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>

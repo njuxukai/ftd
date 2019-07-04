@@ -105,16 +105,12 @@
       <Command>xcopy  echo_server.cfg   /Y/I  ..\export\$(Configuration)\$(ProjectName)\
 
 
+
 xcopy  ..\export\$(Configuration)\mqclient.dll   /Y/I  ..\export\$(Configuration)\$(ProjectName)\
 
 
-xcopy  ..\import\lib\win32\debug\SimpleAmqpClient.2.*   /Y/I  ..\export\$(Configuration)\$(ProjectName)\
 
-
-xcopy  ..\import\lib\win32\debug\log4cplusD.*   /Y/I  ..\export\$(Configuration)\$(ProjectName)\
-
-
-xcopy  ..\export\$(Configuration)\logger.dll   /Y/I  ..\export\$(Configuration)\$(ProjectName)\</Command>
+xcopy  ..\import\lib\win32\$(Configuration)\SimpleAmqpClient.2.*   /Y/I  ..\export\$(Configuration)\$(ProjectName)\</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -152,9 +148,13 @@ xcopy  ..\export\$(Configuration)\logger.dll   /Y/I  ..\export\$(Configuration)\
     <PreBuildEvent>
       <Command>xcopy  echo_server.cfg   /Y/I  ..\export\$(Configuration)\$(ProjectName)\
 
+
+
 xcopy  ..\export\$(Configuration)\mqclient.dll   /Y/I  ..\export\$(Configuration)\$(ProjectName)\
 
-xcopy  ..\import\lib\win32\release\SimpleAmqpClient.2.*   /Y/I  ..\export\$(Configuration)\$(ProjectName)\</Command>
+
+
+xcopy  ..\import\lib\win32\$(Configuration)\SimpleAmqpClient.2.*   /Y/I  ..\export\$(Configuration)\$(ProjectName)\</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

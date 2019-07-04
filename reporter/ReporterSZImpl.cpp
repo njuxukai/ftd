@@ -7,6 +7,7 @@
 #include "quickfix/FileLog.h"
 #include "quickfix/SocketInitiator.h"
 #include "quickfix/fix50sp2/NewOrderSingle.h"
+#include "quickfix/Exceptions.h"
 #include "SzStep.h"
 
 
@@ -73,13 +74,15 @@ void ReporterSZSTEPImpl::start()
 	bool parseResult = parseCfgFname();
 	if (parseResult)
 	{
-		FIX::SessionSettings settings(m_stepCfgFname);
-		FIX::MemoryStoreFactory storeFactory;
-		//FIX::FileStoreFactory storeFactory(settings);
-		FIX::FileLogFactory logFactory(settings);
-		//FIX::ScreenLogFactory logFactory(settings);
-		m_pInitiator = new FIX::SocketInitiator(*this, storeFactory, settings, logFactory);
-		m_pInitiator->start();
+
+			FIX::SessionSettings settings(m_stepCfgFname);
+			FIX::MemoryStoreFactory storeFactory;
+			//FIX::FileStoreFactory storeFactory(settings);
+			FIX::FileLogFactory logFactory(settings);
+			//FIX::ScreenLogFactory logFactory(settings);
+			m_pInitiator = new FIX::SocketInitiator(*this, storeFactory, settings, logFactory);
+			m_pInitiator->start();
+
 	}
 	
 }
