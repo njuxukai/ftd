@@ -214,7 +214,9 @@ bool Session::responderSend( const std::string& string )
 {
   if ( !m_pResponder ) 
 	  return false;
+#ifdef _DEBUG
   m_state.onOutgoing(string) ;
+#endif
   bool result =  m_pResponder->send(string);
   if (result)
   {
@@ -279,7 +281,9 @@ void Session::nextHeartbeat(const UtcTimeStamp& timestamp)
 
 void Session::next( const std::string& ftdMsg, const UtcTimeStamp& timeStamp, bool queued )
 {
+#ifdef _DEBUG
 	m_state.onIncoming(ftdMsg);
+#endif
 	m_state.lastReceivedTime(timeStamp);
 
 	FtdHeader ftdHeader = { 0 };
