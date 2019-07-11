@@ -20,25 +20,17 @@ public:
 	MalvaLogger();
 	~MalvaLogger();
 	static MalvaLogger* get_instance();
-	void set_log_level(int level) { log_level = level; }
-	int get_log_level()const { return log_level; }
-	void log_trace(const char* tag, const char* content);
-	void log_trace(const char* content);
-	void log_debug(const char* tag, const char* content);
-	void log_debug(const char* content);
-	void log_warn(const char* tag, const char* content);
-	void log_warn(const char* content);
-	void log_error(const char* tag, const char* content);
-	void log_error(const char* content);
-	void log_fatal(const char* tag, const char* content);
-	void log_fatal(const char* content);
-	void log_info(const char* tag, const char* content);
-	void log_info(const char* content);
+	void set_log_level(int level) { m_log_level = level; }
+	int get_log_level()const { return m_log_level; }
+
+	void tag_log(const char* name, int level, const char* fmt, ...);
+	void root_log(int level, const char* fmt, ...);
 private:
-	log4cplus::Logger root_logger;
+	void log(log4cplus::Logger& logger, int level, const char* fmt, ...);
+	log4cplus::Logger m_root_logger;
 	static std::mutex s_mutex;
 	static std::shared_ptr<MalvaLogger> s_instance;
-	int log_level;
+	int m_log_level;
 };
 
 void CALL_CONVENTION set_log_level(int log_level)
@@ -47,73 +39,22 @@ void CALL_CONVENTION set_log_level(int log_level)
 		MalvaLogger::get_instance()->set_log_level(log_level);
 }
 
-void CALL_CONVENTION tag_log(int log_level, const char* tag, const char* format, ...)
+void CALL_CONVENTION tag_log(const char* tag, int log_level, const char* format, ...)
 {
-	if (log_level < MalvaLogger::get_instance()->get_log_level())
-		return;
-	char buffer[1000];
 	va_list pArgs;
 	va_start(pArgs, format);
-	vsprintf(buffer, format, pArgs);
+	MalvaLogger::get_instance()->tag_log(tag, log_level,  format, pArgs);
 	va_end(pArgs);
-	switch (log_level)
-	{
-	case LOG_TRACE:
-		MalvaLogger::get_instance()->log_trace(tag, buffer);
-		break;
-	case LOG_DEBUG:
-		MalvaLogger::get_instance()->log_debug(tag, buffer);
-		break;
-	case LOG_INFO:
-		MalvaLogger::get_instance()->log_info(tag, buffer);
-		break;
-	case LOG_WARN:
-		MalvaLogger::get_instance()->log_warn(tag, buffer);
-		break;
-	case LOG_ERROR:
-		MalvaLogger::get_instance()->log_error(tag, buffer);
-		break;
-	case LOG_FATAL:
-		MalvaLogger::get_instance()->log_fatal(tag, buffer);
-		break;
-	default:
-		break;
-	}
 }
 
 void CALL_CONVENTION root_log(int log_level, const char* format, ...)
 {
-	if (log_level < MalvaLogger::get_instance()->get_log_level())
-		return;
-	char buffer[1000];
 	va_list pArgs;
 	va_start(pArgs, format);
-	vsprintf(buffer, format, pArgs);
+	MalvaLogger::get_instance()->root_log(log_level, format, pArgs);
 	va_end(pArgs);
-	switch (log_level)
-	{
-	case LOG_TRACE:
-		MalvaLogger::get_instance()->log_trace(buffer);
-		break;
-	case LOG_DEBUG:
-		MalvaLogger::get_instance()->log_debug(buffer);
-		break;
-	case LOG_INFO:
-		MalvaLogger::get_instance()->log_info(buffer);
-		break;
-	case LOG_WARN:
-		MalvaLogger::get_instance()->log_warn(buffer);
-		break;
-	case LOG_ERROR:
-		MalvaLogger::get_instance()->log_error(buffer);
-		break;
-	case LOG_FATAL:
-		MalvaLogger::get_instance()->log_fatal(buffer);
-		break;
-	default:
-		break;
-	}
 }
+
 
 
 std::mutex MalvaLogger::s_mutex;
@@ -122,9 +63,9 @@ std::shared_ptr<MalvaLogger> MalvaLogger::s_instance;
 
 MalvaLogger::MalvaLogger()
 {
-	log_level = LOG_TRACE;
+	m_log_level = LOG_TRACE;
 	log4cplus::PropertyConfigurator::doConfigure(LOG4CPLUS_TEXT(PROPERTY_FILE));
-	root_logger = log4cplus::Logger::getRoot();
+	m_root_logger = log4cplus::Logger::getRoot();
 }
 
 MalvaLogger::~MalvaLogger()
@@ -143,63 +84,62 @@ MalvaLogger* MalvaLogger::get_instance()
 	return s_instance.get();
 }
 
-void MalvaLogger::log_trace(const char* name, const char* content)
+void MalvaLogger::log(log4cplus::Logger& logger, int level, const char* fmt, ...)
 {
-	LOG4CPLUS_TRACE(log4cplus::Logger::getInstance(name), content);	
+
+	va_list pArgs;
+	va_start(pArgs, fmt);
+
+	switch (level)
+	{
+	case LOG_TRACE:
+		LOG4CPLUS_TRACE_FMT(logger, fmt, pArgs);
+		break;
+	case LOG_DEBUG:
+		LOG4CPLUS_DEBUG_FMT(logger, fmt, pArgs);
+		break;
+	case LOG_INFO:
+		LOG4CPLUS_INFO_FMT(logger, fmt, pArgs);
+		break;
+	case LOG_WARN:
+		LOG4CPLUS_WARN_FMT(logger, fmt, pArgs);
+		break;
+	case LOG_ERROR:
+		LOG4CPLUS_ERROR_FMT(logger, fmt, pArgs);
+		break;
+	case LOG_FATAL:
+		LOG4CPLUS_FATAL_FMT(logger, fmt, pArgs);
+		break;
+	case LOG_OFF:
+	default:
+		break;
 }
 
-void MalvaLogger::log_trace(const char* content)
-{
-	LOG4CPLUS_TRACE(root_logger, content);
+va_end(pArgs);
 }
 
-void MalvaLogger::log_debug(const char* name, const char* content)
+void MalvaLogger::tag_log(const char* name, int level, const char* fmt, ...)
 {
-	LOG4CPLUS_DEBUG(log4cplus::Logger::getInstance(name), content);
+	if (level < m_log_level)
+		return;
+	auto logger = log4cplus::Logger::getInstance(name);
+
+	va_list pArgs;
+	va_start(pArgs, fmt);
+	log(logger, level, fmt, pArgs);
+	va_end(pArgs);
+
 }
 
-void MalvaLogger::log_debug(const char* content)
+void MalvaLogger::root_log(int level, const char* fmt, ...)
 {
-	LOG4CPLUS_DEBUG(root_logger, content);
+	if (level < m_log_level)
+	    return;
+
+	va_list pArgs;
+	va_start(pArgs, fmt);
+	log(m_root_logger, level, fmt, pArgs);
+	va_end(pArgs);
+
 }
 
-
-void MalvaLogger::log_info(const char* name, const char* content)
-{
-	LOG4CPLUS_INFO(log4cplus::Logger::getInstance(name), content);
-}
-
-void MalvaLogger::log_info(const char* content)
-{
-	LOG4CPLUS_INFO(root_logger, content);
-}
-
-void MalvaLogger::log_warn(const char* name, const char* content)
-{
-	LOG4CPLUS_WARN(log4cplus::Logger::getInstance(name), content);
-}
-
-void MalvaLogger::log_warn(const char* content)
-{
-	LOG4CPLUS_WARN(root_logger, content);
-}
-
-void MalvaLogger::log_error(const char* name, const char* content)
-{
-	LOG4CPLUS_ERROR(log4cplus::Logger::getInstance(name), content);
-}
-
-void MalvaLogger::log_error(const char* content)
-{
-	LOG4CPLUS_ERROR(root_logger, content);
-}
-
-void MalvaLogger::log_fatal(const char* name, const char* content)
-{
-	LOG4CPLUS_FATAL(log4cplus::Logger::getInstance(name), content);
-}
-
-void MalvaLogger::log_fatal(const char* content)
-{
-	LOG4CPLUS_FATAL(root_logger, content);
-}

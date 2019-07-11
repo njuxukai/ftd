@@ -1,7 +1,7 @@
 #pragma once
 
  
-#define CALL_CONVENTION  __stdcall
+#define CALL_CONVENTION  __cdecl
 #ifdef MALVA_EXPORT
 #define API_EXPORT __declspec(dllexport)
 #else
@@ -14,14 +14,14 @@
 #define LOG_WARN 3
 #define LOG_ERROR 4
 #define LOG_FATAL 5
+#define LOG_OFF 6
 
 #ifdef __cplusplus
 extern "C"{
 #endif
 	API_EXPORT void CALL_CONVENTION set_log_level(int log_level);
-	API_EXPORT void CALL_CONVENTION tag_log(int log_level, const char* tag, const char* format, ...);
+	API_EXPORT void CALL_CONVENTION tag_log(const char* tag_name, int log_level,  const char* format, ...);
 	API_EXPORT void CALL_CONVENTION  root_log(int log_level, const char* format, ...);
-
 
 #ifdef __cplusplus
 }
