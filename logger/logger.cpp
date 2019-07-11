@@ -35,7 +35,7 @@ private:
 
 void CALL_CONVENTION set_log_level(int log_level)
 {
-	if (log_level >= LOG_TRACE && log_level <= LOG_FATAL)
+	if (log_level >= LOG_TRACE && log_level <= LOG_OFF)
 		MalvaLogger::get_instance()->set_log_level(log_level);
 }
 
