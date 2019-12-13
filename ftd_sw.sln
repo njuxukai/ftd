@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ftd", "ftd\ftd.vcxproj", "{D3B28290-1A56-4B7E-816E-9811C6E77693}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -85,6 +85,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MockExchangeSZ", "MockExcha
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "logger", "logger\logger.vcxproj", "{A8F4D2D9-2C78-4BFB-9AB9-A6E79D4ECABB}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xcpmduserapi", "xcpmduserapi\xcpmduserapi.vcxproj", "{046A03DD-3641-472D-8928-FDF0E7C2B639}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -287,6 +289,16 @@ Global
 		{A8F4D2D9-2C78-4BFB-9AB9-A6E79D4ECABB}.Release|x64.Build.0 = Release|x64
 		{A8F4D2D9-2C78-4BFB-9AB9-A6E79D4ECABB}.Release|x86.ActiveCfg = Release|Win32
 		{A8F4D2D9-2C78-4BFB-9AB9-A6E79D4ECABB}.Release|x86.Build.0 = Release|Win32
+		{046A03DD-3641-472D-8928-FDF0E7C2B639}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{046A03DD-3641-472D-8928-FDF0E7C2B639}.Debug|x64.ActiveCfg = Debug|x64
+		{046A03DD-3641-472D-8928-FDF0E7C2B639}.Debug|x64.Build.0 = Debug|x64
+		{046A03DD-3641-472D-8928-FDF0E7C2B639}.Debug|x86.ActiveCfg = Debug|Win32
+		{046A03DD-3641-472D-8928-FDF0E7C2B639}.Debug|x86.Build.0 = Debug|Win32
+		{046A03DD-3641-472D-8928-FDF0E7C2B639}.Release|Any CPU.ActiveCfg = Release|Win32
+		{046A03DD-3641-472D-8928-FDF0E7C2B639}.Release|x64.ActiveCfg = Release|x64
+		{046A03DD-3641-472D-8928-FDF0E7C2B639}.Release|x64.Build.0 = Release|x64
+		{046A03DD-3641-472D-8928-FDF0E7C2B639}.Release|x86.ActiveCfg = Release|Win32
+		{046A03DD-3641-472D-8928-FDF0E7C2B639}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -304,5 +316,6 @@ Global
 		{DB05A59A-FE74-4EF8-97DD-434FDB278C30} = {9DFDDC75-71DE-4B0A-90C2-B5DA264F949A}
 		{62615C79-FC89-4E56-8E7B-CE15A7022392} = {9DFDDC75-71DE-4B0A-90C2-B5DA264F949A}
 		{AC97D259-3231-4575-8CA5-BF9EF79B5A87} = {9DFDDC75-71DE-4B0A-90C2-B5DA264F949A}
+		{046A03DD-3641-472D-8928-FDF0E7C2B639} = {46E2ED4A-0FDA-403F-AD5F-116574478FDD}
 	EndGlobalSection
 EndGlobal

@@ -86,3 +86,5 @@ ipch/*
 /logger/log4cplus/include
 *.psess
 *.vspx
+/xcpmduserapi/XcpFtdcUserApiStruct.h
+/xcpmduserapi/XcpFtdcUserApiDataType.h

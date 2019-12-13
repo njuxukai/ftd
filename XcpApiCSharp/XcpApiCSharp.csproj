@@ -42,6 +42,10 @@
   <ItemGroup>
     <Compile Include="ApiEnum.cs" />
     <Compile Include="ApiStructure.cs" />
+    <Compile Include="MdUser.cs" />
+    <Compile Include="MdUserDelegate.cs" />
+    <Compile Include="MdUserDllWrapper.cs" />
+    <Compile Include="MdUserEventArgs.cs" />
     <Compile Include="Trader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TraderDelegate.cs" />

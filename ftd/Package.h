@@ -17,12 +17,16 @@ namespace FTD
 		const uint32_t m_mode;
 		uint16_t m_sequenceSeries;
 	    uint32_t m_sequenceNO;
+
 		Package(uint8_t version_, uint32_t transactionId_, uint32_t mode_) :
 			m_version(version_), m_transactionId(transactionId_), m_mode(mode_)
 		{
 			m_sequenceSeries = 0;
 			m_sequenceNO = 0;
 		}
+
+		
+
 		virtual ~Package() {};
 		virtual Package* clone() const = 0;
 		virtual void clear() = 0;
@@ -115,8 +119,11 @@ namespace FTD
 		std::vector<std::string> m_ftdcMessages;
 	private:
 
+		Package() = delete;
 		Package(const Package&) = delete;
+		Package(Package&&) = delete;
 		Package& operator=(const Package&) = delete;
+		Package& operator=(Package&&) = delete;
 
 		void mergeFtdcMessage(const FtdcHeader& ftdcHeader, const std::string& ftdcContent, bool& mergeSucceed, bool& packageFinished)
 		{

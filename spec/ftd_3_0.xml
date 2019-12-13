@@ -271,6 +271,32 @@
 			<field name="ErrorField" maxOccur="1" minOccur="0" comment="错误域"/>
 		</packageDefine>
 		
+		<packageDefine name="ReqSubMarketData" tid="TID_SubMarketData" model="dialog" comment="订阅证券行情请求">
+			<field name="InstrumentField" maxOccur="任意" minOccur="1" comment="报单信息域"/>
+      <field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求来源域"/>
+    </packageDefine>
+		
+		<packageDefine name="RspSubMarketData" tid="TID_SubMarketData" model="dialog" comment="订阅证券行情应答">
+      <field name="InstrumentField" maxOccur="任意" minOccur="0" comment="报单信息域"/>
+			<field name="ErrorField" maxOccur="任意" minOccur="0" comment="错误域"/>
+      <field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求来源域"/>
+		</packageDefine>
+		
+		<packageDefine name="ReqUnsubMarketData" tid="TID_UnsubMarketData" model="dialog" comment="退订证券行情请求">
+			<field name="InstrumentField" maxOccur="任意" minOccur="1" comment="报单信息域"/>
+      <field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求来源域"/>
+		</packageDefine>
+		
+		<packageDefine name="RspUnsubMarketData" tid="TID_UnsubMarketData" model="dialog" comment="退订证券行情应答">
+      <field name="InstrumentField" maxOccur="任意" minOccur="0" comment="报单信息域"/>
+      <field name="ErrorField" maxOccur="任意" minOccur="0" comment="错误域"/>
+      <field name="RequestSourceField" maxOccur="1" minOccur="1" comment="请求来源域"/>
+		</packageDefine>
+		
+		<packageDefine name="IncMarketData" tid="TID_IncMarketData" model="private" comment="行情更新">
+			<field name="MarketDataField" maxOccur="任意" minOccur="1" comment="行情报告域"/>
+		</packageDefine>
+		
 	</packages>
 	
 	<tids>
@@ -306,6 +332,9 @@
 		<tidDefine name="TID_RptBackExecutionReport" value="4003"/>
 		<tidDefine name="TID_RptBackBusinessReject" value="4004"/>
 		<tidDefine name="TID_RptBackInnerOrderCancelReject" value="4005"/>
+		<tidDefine name="TID_SubMarketData" value="2016"/>
+		<tidDefine name="TID_UnsubMarketData" value="2017"/>
+		<tidDefine name="TID_IncMarketData" value="3002"/>
 	</tids>
 	
 		<fields>
@@ -819,6 +848,14 @@
 	  <fieldDefine name="InnerOrderCancelRejectField" fid="FID_InnerOrderCancelRejectField" fidValue="0x002D" comment="撤单拒绝回报域">
 	  </fieldDefine>
 	  
+
+	  
+	  <fieldDefine name="MarketDataField" fid="FID_MarketDataField" fidValue="0x0031" comment="快照行情域">
+	  <item name="ExchangeType" comment="市场代码"/>
+	  <item name="InstrumentCode" comment="证券代码"/>	
+	  <item name="PriceLast" comment="最新价"/>
+	  </fieldDefine>
+
 	</fields>
 		
 		
