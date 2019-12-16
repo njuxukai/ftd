@@ -5,6 +5,7 @@ path = '../spec/'
 files = ['ftd_3_0.xml',]
 target_path = '../ftd/'
 host_targe_path = '../xcptraderapi/'
+host_targe_path2 = '../xcpmduserapi/'
 host_csharp_target_path = '../XcpApiCSharp/'
 testcase_target_path = '../test_unit/'
 project_code = 'Xcp'
@@ -68,6 +69,7 @@ if __name__ == "__main__":
     for file in files:
         generate_ftd(path, file, target_path)
         generate_host_files(path, file, host_targe_path)
+        generate_host_files(path, file, host_targe_path2)
         generate_testcase(path,file, testcase_target_path)
         generate_csharp_files(path, file, host_csharp_target_path)
         #generate_ftd(path, file, target_path2)

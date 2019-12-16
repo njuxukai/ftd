@@ -4,6 +4,8 @@
 #include <ftd/session.h>
 
 #include "FrontFunctions.h"
+#include "MdSubManager.h"
+
 
 using namespace FTD;
 
@@ -13,8 +15,12 @@ struct FtdRouterParameter
 {
 	std::string cfgFname;
 	int frontID;
-	std::set<SessionID> allowedSessionIDs;
+	std::set<int> allowedBrokerIDs;
 	bool uplinkMultiFlag;
+	bool isTradeFront;
+	bool isMdFront;
+	bool mdFrontSkipAuth;
+	int userMdQuota;
 };
 
 class FtdRouter : public FTD::Application, public FTD::PackageCracker
@@ -37,6 +43,7 @@ public:
 
 	void processDownlinkPrivateAndBoardcast(const PlainHeaders& headers, const std::string& body);
 
+	void processDownlinkMarketData(const PlainHeaders& headers, const std::string& body);
 	//void DeliveryFtdcMessage(const )
 	virtual void onCreate(const SessionID&);
 	///connected
@@ -77,6 +84,10 @@ public:
 	virtual void OnPackage(const ReqQryTrade& package, const SessionID& id);
 
 	virtual void OnPackage(const ReqQrySecurityAccount& package, const SessionID& id);
+
+	virtual void OnPackage(const ReqSubMarketData& package, const SessionID& id);
+
+	virtual void OnPackage(const ReqUnsubMarketData& package, const SessionID& id);
 
 	virtual void OnPackage(RspUserLogin& package, const SessionID& id);
 
@@ -122,6 +133,7 @@ private:
 	
 	FTD::Acceptor* m_acceptor;
 	std::map<int, std::set<SessionID>> m_subMap;
+	MdSubManager m_mdSubManager;
 	//消息队列上传回调
 	RouterUplinkCallback m_uplinkCallback;
 	//处理下行的管理信息

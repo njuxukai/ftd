@@ -2,11 +2,11 @@
 //
 
 #include "stdafx.h"
-#include "TraderClient.h"
+#include "MdUserClient.h"
 
 int main()
 {
-	TraderClient client;
+	MdUserClient client;
 	ApiParameter parameter = { 0 };
 	parameter.loginField.UserID = 100;
 	strcpy(parameter.loginField.Password, "test");
@@ -21,8 +21,6 @@ int main()
 		int c = getchar();
 		if (c == 'a')
 		{
-			int result = client.manualTestInputOrder();
-			std::cout << "result=" << result << std::endl;
 		}
 	}
     return 0;

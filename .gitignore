@@ -88,3 +88,6 @@ ipch/*
 *.vspx
 /xcpmduserapi/XcpFtdcUserApiStruct.h
 /xcpmduserapi/XcpFtdcUserApiDataType.h
+*.user
+*.filters
+

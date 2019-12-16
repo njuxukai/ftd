@@ -194,7 +194,7 @@ void CXcpFtdcMdUserApiImpl::onLogout(const FTD::SessionID&)
 {}
 
 /// Notification of admin message being sent to target
-void CXcpFtdcMdUserApiImpl::toAdmin(FTD::Package&, const FTD::SessionID&)
+void CXcpFtdcMdUserApiImpl::toAdmin(FTD::Package& package, const FTD::SessionID& id)
 {}
 
 /// Notification of app message being sent to target
@@ -261,6 +261,7 @@ int CXcpFtdcMdUserApiImpl::ReqUserLogin(CXcpFtdcReqUserLoginField* pReqUserLogin
 	FTD::ReqUserLogin package;
 	package.clear();
 	memcpy(&package.reqUserLoginField, pReqUserLogin, sizeof(CXcpFtdcReqUserLoginField));
+	package.reqUserLoginField.TargetFrontTag = FTDC_FT_Md;
 	return send(package, false);
 }
 
@@ -407,9 +408,5 @@ void CXcpFtdcMdUserApiImpl::OnPackage(const FTD::IncMarketData& package, const F
 {
 	if (!m_pSpi)
 		return;
-	int size = package.marketDataFields.size();
-	for (int i = 0; i < size; i++)
-	{
-		m_pSpi->OnMaketData((CXcpFtdcMarketDataField*)&package.marketDataFields[i]);
-	}
+	m_pSpi->OnMaketData((CXcpFtdcMarketDataField*)&package.marketDataField);	
 }

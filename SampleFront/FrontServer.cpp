@@ -88,13 +88,19 @@ bool FrontServer::parseCfgFile(const std::string& fname)
 		m_routeParameter.frontID = frontDict.getInt("FrontID");
 		for (auto it = frontDict.begin(); it != frontDict.end(); it++)
 		{
-			if (it->first.find("BrokerID") == 0)
+			if (it->first.find("BROKERID") == 0)
 			{
-				m_routeParameter.allowedSessionIDs.insert(IntConvertor::convert(it->second));
+				m_routeParameter.allowedBrokerIDs.insert(IntConvertor::convert(it->second));
 			}
 		}
+		m_routeParameter.uplinkMultiFlag = frontDict.getBool("UplinkMultiFlag");
+		m_routeParameter.isMdFront = frontDict.getBool("IsMdFront");
+		m_routeParameter.isTradeFront = frontDict.getBool("IsTradeFront");
+		m_routeParameter.mdFrontSkipAuth = frontDict.getBool("MdFrontSkipAuth");
+		m_routeParameter.userMdQuota = frontDict.getInt("UserMdQuota");
+
 		section = settings.get("QUEUE");
-		if (section.size() == 0)
+		if(section.size() == 0)
 			return false;
 		Dictionary queueDict = section[0];
 		m_qParameter.host = queueDict.getString("Host");
@@ -108,7 +114,7 @@ bool FrontServer::parseCfgFile(const std::string& fname)
 		m_boardcastExchange = queueDict.getString("BoardcastExchange");
 	}
 
-	catch (...)
+	catch (std::exception& e)
 	{
 		parseResult = false;
 	}

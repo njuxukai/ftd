@@ -294,7 +294,7 @@
 		</packageDefine>
 		
 		<packageDefine name="IncMarketData" tid="TID_IncMarketData" model="private" comment="行情更新">
-			<field name="MarketDataField" maxOccur="任意" minOccur="1" comment="行情报告域"/>
+			<field name="MarketDataField" maxOccur="1" minOccur="1" comment="行情报告域"/>
 		</packageDefine>
 		
 	</packages>
@@ -366,6 +366,7 @@
 			<item name="MacAddress" comment="Mac地址"/>
 			<item name="OneTimePassword" comment="动态密码"/>
 			<item name="ClientIPAddress" comment="终端IP地址"/>
+      <item name="TargetFrontTag" comment="目标Front类型"/>
 			<item name="LoginMark" comment="登录备注"/>
 		</fieldDefine>
 		
@@ -906,6 +907,7 @@
 		<itemDefine name="ExecType" type="FTDExecType" comment="执行类型"/>	
 		
 		<itemDefine name="FrontID" type="FTDIntType" comment="Front编号"/>
+    <itemDefine name="TargetFrontTag" type="FTDFrontTag" comment="目标Front类型"/>
 		<itemDefine name="HeartbeatInterval" type="FTDIntType" comment="心跳间隔"/>
 		<itemDefine name="InterfaceProductInfo" type="FTDStringType&lt;10&gt;" comment="接口端产品信息"/>
 		<itemDefine name="InvestorID" type="FTDIntType" comment="投资者编码"/>
@@ -1014,7 +1016,10 @@
 	</items>
 	
 	<types>
-
+    <typeDefine name="FTDFrontTag" baseType="FTDCharType" length="1" precision="0">
+      <enumValue name="1" comment="交易Client" enname="Trade"/>
+      <enumValue name="2" comment="行情Client" enname="Md"/>
+    </typeDefine>
 		<typeDefine name="FTDActionFlag" baseType="FTDCharType" length="1" precision="0">
 			<enumValue name="0" comment="删除"/>
 			<enumValue name="1" comment="挂起"/>

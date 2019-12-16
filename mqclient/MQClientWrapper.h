@@ -61,6 +61,7 @@ typedef std::shared_ptr<PlainHeaders> PlainHeadersSPtr;
 #define QMSG_TYPE_RSP '1'
 #define QMSG_TYPE_PRIVATE '2'
 #define QMSG_TYPE_BOARDCAST '3'
+#define QMSG_TYPE_MARKET_DATA '4'
 
 #define QMSG_FLAG_MULTI_FTDC '0'
 #define QMSG_FLAG_SINGLE_FTDC '1'

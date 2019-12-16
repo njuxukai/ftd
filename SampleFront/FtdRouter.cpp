@@ -90,6 +90,11 @@ void FtdRouter::processDownlink(const PlainHeaders& headers, const std::string& 
 		processDownlinkPrivateAndBoardcast(headers, body);
 		return;
 	}
+	if (headers.msg_type == QMSG_TYPE_MARKET_DATA)
+	{
+		processDownlinkMarketData(headers, body);
+		return;
+	}
 }
 /*
 必须调用 Session->send(Package&)，使Session的状态变化
@@ -152,6 +157,35 @@ void FtdRouter::processDownlinkPrivateAndBoardcast(const PlainHeaders& headers, 
 	}
 }
 
+void FtdRouter::processDownlinkMarketData(const PlainHeaders& headers, const std::string& body)
+{
+	if (!m_parameter.isMdFront)
+		return;
+	//行情数据目前支持单个证券一个pack 20191214
+	if (headers.multi_flag == QMSG_FLAG_MULTI_FTDC)
+	{
+		return;
+	}
+	Package* pPack = m_downlinkAdminBuffer.OnFtdcMessage(body);
+	if (pPack && pPack->m_transactionId == TID_IncMarketData)
+	{
+		IncMarketData* pMd = (IncMarketData*)pPack;
+		CFtdcInstrumentField instrument = { 0 };
+		instrument.ExchangeType = pMd->marketDataField.ExchangeType;
+		strcpy(instrument.InstrumentCode, pMd->marketDataField.InstrumentCode);
+		std::set<FTD::SessionID> subSessionIDs = m_mdSubManager.getSubSessionSet(instrument);
+		if (subSessionIDs.size() > 0)
+		{
+			std::string ftdMsg = FtdMessageUtil::formatFtdMessage(body);
+			for (auto id : subSessionIDs)
+			{
+				Session::sendToTarget(ftdMsg, id);
+			}
+		}		
+	}	
+}
+
+
 void FtdRouter::onCreate(const SessionID& id)
 {
 	std::cout << boost::format("SessionID[%d]创建\n") % id;
@@ -167,15 +201,23 @@ void FtdRouter::onConnect(const SessionID& id)
 void FtdRouter::onDisconnect(const SessionID& id, int reason)
 {
 	unresigterSequenceSubscription(id);
+	m_mdSubManager.sessionOffline(id);
 	std::cout << boost::format("SessionID[%d]断开,原因[%d]\n") % id %reason;
 }
 
 /// Notification of a session successfully logging on
 void FtdRouter::onLogon(const SessionID& id)
-{}
+{
+	if (m_parameter.isMdFront)
+	{
+		m_mdSubManager.setSessionQuota(id, m_parameter.userMdQuota);
+	}
+}
 /// Notification of a session logging off or disconnecting
 void FtdRouter::onLogout(const SessionID& id)
-{}
+{
+	///TODO 行情订阅关掉
+}
 /// called by: session->sendRaw(Package&)
 void FtdRouter::toAdmin(Package& package, const SessionID& id)
 {
@@ -209,7 +251,33 @@ void FtdRouter::onHeartBeatWarning()
 ******************************************************************************/
 void FtdRouter::OnPackage(const ReqUserLogin& req, const SessionID& id)
 {
+	
 	std::cout << "At router, ON Package[ReqUserLogin]\n";
+	// broker id error
+	if (m_parameter.allowedBrokerIDs.find(req.reqUserLoginField.BrokerID)
+		== m_parameter.allowedBrokerIDs.end())
+	{
+		RspUserLogin rsp;
+		rsp.rspUserLoginField.BrokerID = req.reqUserLoginField.BrokerID;
+		rsp.rspUserLoginField.UserID = req.reqUserLoginField.UserID;
+		rsp.pErrorField = CFtdcErrorFieldPtr(new CFtdcErrorField());
+		rsp.pErrorField->ErrorCode = -100;
+		strcpy(rsp.pErrorField->ErrorText, "BrokerID错误");
+		Session::sendToTarget(rsp, id);
+		return;
+	}
+	//1 自身具备MdFront角色 2 跳过认证
+	if (m_parameter.isMdFront && m_parameter.mdFrontSkipAuth 
+		&& req.reqUserLoginField.TargetFrontTag == FTDC_FT_Md)
+	{
+		RspUserLogin rsp;
+		rsp.rspUserLoginField.BrokerID = req.reqUserLoginField.BrokerID;
+		rsp.rspUserLoginField.UserID = req.reqUserLoginField.UserID;
+		rsp.pErrorField = CFtdcErrorFieldPtr(new CFtdcErrorField());
+		memset(rsp.pErrorField.get(), 0, sizeof(CFtdcErrorField));
+		Session::sendToTarget(rsp, id);
+		return;
+	}
 	std::shared_ptr<ReqUserLogin> pCopy = std::shared_ptr<ReqUserLogin>((ReqUserLogin*)req.clone());
 	pCopy->reqUserLoginField.FrontID = m_parameter.frontID;
 	pCopy->reqUserLoginField.SessionID = id;
@@ -277,6 +345,41 @@ void FtdRouter::OnPackage(const ReqQrySecurityAccount& req, const SessionID& id)
 		std::shared_ptr<ReqQrySecurityAccount>((ReqQrySecurityAccount*)req.clone());
 	uplink(*pCopy, id);
 }
+
+void FtdRouter::OnPackage(const ReqSubMarketData& package, const SessionID& id)
+{
+	//订阅
+	RspSubMarketData rsp;
+	rsp.requestSourceField.RequestID = package.requestSourceField.RequestID;
+	CFtdcErrorField error = { 0 };
+	int size = package.instrumentFields.size();
+	for (int i = 0; i < size; i++)
+	{
+		m_mdSubManager.sessionSubInstrument(id, package.instrumentFields[i], error.ErrorCode,
+			error.ErrorText);
+		rsp.instrumentFields.push_back(package.instrumentFields[i]);
+		rsp.errorFields.push_back(error);
+	}
+	Session::sendToTarget(rsp, id);
+}
+
+void FtdRouter::OnPackage(const ReqUnsubMarketData& package, const SessionID& id)
+{
+	//退订
+	RspUnsubMarketData rsp;
+	rsp.requestSourceField.RequestID = package.requestSourceField.RequestID;
+	CFtdcErrorField error = { 0 };
+	int size = package.instrumentFields.size();
+	for (int i = 0; i < size; i++)
+	{
+		m_mdSubManager.sessionUnsubInstrument(id, package.instrumentFields[i], error.ErrorCode,
+			error.ErrorText);
+		rsp.instrumentFields.push_back(package.instrumentFields[i]);
+		rsp.errorFields.push_back(error);
+	}
+	Session::sendToTarget(rsp, id);
+}
+
 /******************************************************************************
 ***即将发送到session上的Package，这里应只接受管理消息RspUseLogin
 ***  注: 应用消息直接转发至各session(rsp按sessionid;private,boardcast按series_id)

@@ -19,11 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{3025E94C-F349-43A3-B592-0E7DFAE7EDEC}</ProjectGuid>
+    <ProjectGuid>{E2B4CBAF-D842-4C1A-80CF-C2144CCC39B2}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>SampleServer</RootNamespace>
+    <RootNamespace>SampleClient</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
-    <ProjectName>SampleFront</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -72,8 +71,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IntDir>$(SolutionDir)\build\$(ProjectName)\$(Configuration)\</IntDir>
     <OutDir>$(SolutionDir)\export\$(Configuration)\$(ProjectName)\</OutDir>
+    <IntDir>$(SolutionDir)\build\$(ProjectName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -91,26 +90,18 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions);</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\import\include\;$(SolutionDir)\export\include\;$(McobjectDir)\include;$(McobjectDir)\samples\native\common;$(McobjectDir)\include\ha</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\export\include\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)\export\$(Configuration)\;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>logger.lib;ftd.lib;mqclient.lib;ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\export\$(Configuration)\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>xcpmduserapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>xcopy  echo_server.cfg   /Y/I  ..\export\$(Configuration)\$(ProjectName)\
-
-
-
-xcopy  ..\export\$(Configuration)\mqclient.dll   /Y/I  ..\export\$(Configuration)\$(ProjectName)\
-
-
-
-xcopy  ..\import\lib\win32\$(Configuration)\SimpleAmqpClient.2.*   /Y/I  ..\export\$(Configuration)\$(ProjectName)\</Command>
+      <Command>xcopy  ..\export\$(Configuration)\xcpmduserapi.dll   /Y/I  ..\export\$(Configuration)\$(ProjectName)\</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -133,28 +124,20 @@ xcopy  ..\import\lib\win32\$(Configuration)\SimpleAmqpClient.2.*   /Y/I  ..\expo
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\import\include\;$(SolutionDir)\export\include\;$(McobjectDir)\include;$(McobjectDir)\samples\native\common;$(McobjectDir)\include\ha</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\export\include\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)\export\$(Configuration)\;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>logger.lib;ftd.lib;mqclient.lib;ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\export\$(Configuration)\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>xcptraderapi.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>xcopy  echo_server.cfg   /Y/I  ..\export\$(Configuration)\$(ProjectName)\
-
-
-
-xcopy  ..\export\$(Configuration)\mqclient.dll   /Y/I  ..\export\$(Configuration)\$(ProjectName)\
-
-
-
-xcopy  ..\import\lib\win32\$(Configuration)\SimpleAmqpClient.2.*   /Y/I  ..\export\$(Configuration)\$(ProjectName)\</Command>
+      <Command>xcopy  ..\export\$(Configuration)\xcptraderapi.dll   /Y/I  ..\export\$(Configuration)\$(ProjectName)\</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -178,26 +161,19 @@ xcopy  ..\import\lib\win32\$(Configuration)\SimpleAmqpClient.2.*   /Y/I  ..\expo
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="FrontServer.h" />
-    <ClInclude Include="FtdRouter.h" />
-    <ClInclude Include="MdSubManager.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="MdUserClient.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="FrontServer.cpp" />
-    <ClCompile Include="FtdRouter.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="MdSubManager.cpp" />
+    <ClCompile Include="SampleClient.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="echo_server.cfg" />
+    <ClCompile Include="MdUserClient.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

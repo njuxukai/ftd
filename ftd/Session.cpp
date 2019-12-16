@@ -404,8 +404,9 @@ void Session::onSendLogin(Package& package)
 			return;
 		}
 		else
-		{
+		{			
 			m_state.heartBtInt(rspUserLogin.rspUserLoginField.HeartbeatInterval);
+			m_application.onLogon(m_sessionID);
 		}
 	}
 	//std::cout << "Log on sent\n";
