@@ -3,7 +3,7 @@
 #include <common/usual_macro.h>
 #include <mqclient/MQClientWrapper.h>
 #include "FtdRouter.h"
-
+#include <set>
 
 class FrontServer
 {
@@ -27,8 +27,7 @@ private:
 	QueueParameter m_qParameter;
 	std::string m_reqQueue;
 	std::string m_rspQueue;
-	std::string m_privateExchange;
-	std::string m_boardcastExchange;
-
+	//fan out exchanges
+	std::set<std::string> m_subExchanges;
 	DISABLE_COPY_AND_ASSIGN(FrontServer)
 };

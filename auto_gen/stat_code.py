@@ -2,15 +2,22 @@
 
 import os
 code_dirs = ['../ftd', 
-             '../xcptraderapi', 
+             '../xcptraderapi',
+             '../xcpmduserapi', 
              '../mqclient',
              '.',
              '../include/', 
              '../XcpApiCSharp/',
              '../dbcore', 
-             '../SampleClient', 
+             '../SampleClient',
+             '../SampleClientGui', 
              '../SampleServer', 
-             '../SampleCore']
+             '../SampleCore',
+             '../SampleFront',
+             '../SZStep',
+             '../SampleReporter',
+             '../MockExchangeSZ',
+             '../MockMdPublisher']
 code_types = set(['.cpp', '.h', '.py', '.cs'])
 
 def stat_dir(dir, stat, stated_file_set):

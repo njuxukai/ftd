@@ -14,9 +14,10 @@ FrontServer::FrontServer(const std::string& cfgFname)
 		m_pSender = SendClient::CreateClient(m_qParameter);
 		m_pReceiver = ReceiveClient::CreateClient(m_qParameter);
 		m_pReceiver->registerDirectQueue(m_rspQueue);
-		m_pReceiver->registerFanoutExchange(m_privateExchange);
-		m_pReceiver->registerFanoutExchange(m_boardcastExchange);
-
+		//m_pReceiver->registerFanoutExchange(m_privateExchange);
+		//m_pReceiver->registerFanoutExchange(m_boardcastExchange);
+		for (auto it = m_subExchanges.begin(); it != m_subExchanges.end(); it++)
+			m_pReceiver->registerFanoutExchange(*it);
 		m_pRouter = std::make_shared<FtdRouter>(m_routeParameter);
 		m_pRouter->registerUplinkCallback(std::bind(&FrontServer::routerUplinkCallback, this,
 			std::placeholders::_1, std::placeholders::_2));
@@ -110,8 +111,14 @@ bool FrontServer::parseCfgFile(const std::string& fname)
 
 		m_reqQueue = queueDict.getString("ReqQueue");
 		m_rspQueue = queueDict.getString("RspQueue");
-		m_privateExchange = queueDict.getString("PrivateExchange");
-		m_boardcastExchange = queueDict.getString("BoardcastExchange");
+
+		for (auto it = queueDict.begin(); it != queueDict.end(); it++)
+		{
+			if (it->first.find("SUBEXCHANGE") == 0)
+			{
+				m_subExchanges.insert(it->second);
+			}
+		}
 	}
 
 	catch (std::exception& e)
