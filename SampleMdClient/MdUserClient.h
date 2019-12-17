@@ -78,7 +78,9 @@ public:
 
 	///订阅行情请求响应
 	virtual void OnRspSubMarketData(CXcpFtdcInstrumentField* pInstrument, CXcpFtdcErrorField* pRspInfo, int nRequestID, bool isLast);
-	private:
+	
+	virtual void OnMaketData(CXcpFtdcMarketDataField* pmd);
+private:
 	CXcpFtdcMdUserApi* m_pApi;
 	ApiParameter m_parameter;
 	SessionContext m_sessionContext;

@@ -16,9 +16,9 @@ std::string parseMdProducerTypeString(const char* fname)
 		Settings::Sections section;
 		Dictionary dict;
 
-		section = settings.get("MdProducer");
+		section = settings.get("PRODUCER");
 		if (section.size() != 1)
-			return false;
+			return "";
 		Dictionary reporterDict = section[0];
 		typeString = reporterDict.getString("Type");
 	}

@@ -11,8 +11,8 @@ int main(int argc, char** argv)
 	{
 		file = argv[1];
 	}
-	MdPublisher publisher(file);
-	publisher.start();
+	MdPublisher publisher(file.data());
+	publisher.Init();
 
 	while (1 == 1)
 	{

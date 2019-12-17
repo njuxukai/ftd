@@ -96,3 +96,11 @@ void MdUserClient::OnRspSubMarketData(CXcpFtdcInstrumentField* pInstrument, CXcp
 	}
 }
 
+void MdUserClient::OnMaketData(CXcpFtdcMarketDataField* pmd)
+{
+	std::cout << boost::format("[%s][%d][LastPrice=%lf]")
+		% pmd->InstrumentCode
+		% pmd->ExchangeType
+		% pmd->PriceLast
+		<< std::endl;
+}
